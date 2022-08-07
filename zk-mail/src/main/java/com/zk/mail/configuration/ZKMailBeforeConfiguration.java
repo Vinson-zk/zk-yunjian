@@ -36,6 +36,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
@@ -64,10 +65,12 @@ import com.zk.log.interceptor.ZKLogAccessInterceptor;
         ZKMailRedisConfiguration.class, 
         ZKMailAfterConfiguration.class,
         ServletWebServerFactoryAutoConfiguration.class })
-@ImportResource(locations = { "classpath:zk.log.properties",
+@ImportResource(locations = { 
         "classpath:xmlConfig/spring_ctx_application.xml",
         "classpath:xmlConfig/spring_ctx_mail_application.xml", 
         "classpath:xmlConfig/spring_ctx_mvc.xml" })
+@PropertySource(encoding = "UTF-8", value = { 
+        "classpath:zk.log.properties"})
 public class ZKMailBeforeConfiguration {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
@@ -82,6 +85,10 @@ public class ZKMailBeforeConfiguration {
     // # 文件上传，最大处理内存大小； 1M=1048576
     @Value("${zk.mail.file.upload.multipartResolver.maxInMemorySize:40960}")
     int maxInMemorySize;
+
+    // # 文件上传，单个文件上传最大大小； 10M=10485760
+    @Value("${zk.mail.file.upload.multipartResolver.maxUploadSizePerFile:10485760}")
+    int maxUploadSizePerFile;
 
     // # 文件上传，处理字符集
     @Value("${zk.mail.file.upload.multipartResolver.defaultEncoding:UTF-8}")
@@ -227,8 +234,11 @@ public class ZKMailBeforeConfiguration {
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         multipartResolver.setDefaultEncoding(this.defaultEncoding);
+        // 设置总上传数据总大小
         multipartResolver.setMaxUploadSize(this.maxUploadSize);
         multipartResolver.setMaxInMemorySize(this.maxInMemorySize);
+        // 设置单个文件最大大小
+        multipartResolver.setMaxUploadSizePerFile(maxUploadSizePerFile);
         return multipartResolver;
     }
 

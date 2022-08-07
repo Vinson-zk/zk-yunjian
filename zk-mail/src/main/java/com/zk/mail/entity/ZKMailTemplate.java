@@ -31,6 +31,7 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ZKTable(name = "t_mail_template", alias = "mailTemplate", orderBy = " c_create_date ASC ")
+//@Alias("ZKMailTemplate")
 public class ZKMailTemplate extends ZKBaseEntity<String, ZKMailTemplate> {
 	
 	static ZKSqlProvider sqlProvider;
@@ -160,7 +161,7 @@ public class ZKMailTemplate extends ZKBaseEntity<String, ZKMailTemplate> {
 	 * 邮件内容，可以使用 ${替换参数}
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
-    @Length(min = 1, max = 2048, message = "{zk.core.data.validation.length.max}")
+    @Length(min = 1, max = 2048, message = "{zk.core.data.validation.length}")
 	@ZKColumn(name = "c_content", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
 	String content;	
 	

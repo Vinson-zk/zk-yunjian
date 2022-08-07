@@ -41,6 +41,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.Ordered;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
@@ -70,6 +71,7 @@ import com.zk.server.central.interceptor.ZKViewVariateInterceptor;
 */
 @ImportResource(locations = { "classpath:xmlConfig/spring_ctx_sc_application.xml",
         "classpath:xmlConfig/spring_ctx_sc_mvc.xml", "classpath:xmlConfig/spring_ctx_sc_dynamic_mybatis.xml" })
+@PropertySource(encoding = "UTF-8", value = { "classpath:zk.ser.cen.jdbc.properties" })
 //@ImportAutoConfiguration(classes = { ZKMongoAutoConfiguration.class })
 @AutoConfigureBefore(value = { 
 //        ZKMongoAutoConfiguration.class,

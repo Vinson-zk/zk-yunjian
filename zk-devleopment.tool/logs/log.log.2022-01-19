@@ -1,1 +1,0 @@
-INFO  -> 2022-01-19 11:42:12.453[Thread-8][org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor] - Shutting down ExecutorService 'applicationTaskExecutor'

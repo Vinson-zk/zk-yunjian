@@ -179,4 +179,28 @@ public class ZKEncryptUtilsTest {
         }
     }
 
+    @Test
+    public void testMd5Encode() {
+        try {
+
+            // admin:21232f297a57a5a743894a0e4a801fc3
+            String source = "";
+            byte[] result;
+
+//            source = "gf@sW2022";
+            source = "test";
+            result = ZKEncryptUtils.md5Encode(source.getBytes());
+            TestCase.assertNotNull(result);
+
+            System.out.println(" ------------------------------------------------------------------------");
+            System.out.println(
+                    String.format("[^_^: 2022-0704-001] '测试 md5Encode' -> %s", ZKEncodingUtils.encodeHex(result)));
+
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            TestCase.assertTrue(false);
+        }
+    }
+
 }

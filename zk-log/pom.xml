@@ -9,7 +9,7 @@
 		<relativePath>../zk-parent</relativePath>
 	</parent>
 	<artifactId>zk-log</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>zk-log</name>
 	<description>zk log project</description>
 	

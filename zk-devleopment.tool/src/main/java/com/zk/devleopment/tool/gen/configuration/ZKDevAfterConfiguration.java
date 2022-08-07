@@ -9,7 +9,7 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKCodeGenAfterConfiguration.java 
+* @Title: ZKDevAfterConfiguration.java 
 * @author Vinson 
 * @Package com.zk.devleopment.tool.gen.configuration 
 * @Description: TODO(simple description this file what to do. ) 
@@ -18,28 +18,24 @@
 */
 package com.zk.devleopment.tool.gen.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.zk.log.interceptor.ZKLogAccessInterceptor;
-
 /** 
-* @ClassName: ZKCodeGenAfterConfiguration 
+* @ClassName: ZKDevAfterConfiguration 
 * @Description: TODO(simple description this class what to do. ) 
 * @author Vinson 
 * @version 1.0 
 */
 @Configuration
-public class ZKCodeGenAfterConfiguration implements WebMvcConfigurer {
+public class ZKDevAfterConfiguration implements WebMvcConfigurer {
 
-    @Autowired
-    private ZKLogAccessInterceptor logAccessInterceptor;
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(this.logAccessInterceptor).addPathPatterns("/**");
-    }
+//    @Autowired
+//    private ZKLogAccessInterceptor logAccessInterceptor;
+//
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(this.logAccessInterceptor).addPathPatterns("/**");
+//    }
 
 }

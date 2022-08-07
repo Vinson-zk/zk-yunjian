@@ -83,24 +83,24 @@ public class ZKThirdParty extends ZKBaseEntity<String, ZKThirdParty> {
     // 微信第三方平台账号的 app secret
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_wx_app_secret", isUpdate = false, isQuery = false)
+    @ZKColumn(name = "c_wx_app_secret", isUpdate = true, isQuery = false)
     private String wxAppSecret;
 
     // 微信平台配置的消息校验 token
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_wx_token", isUpdate = false, isQuery = false)
+    @ZKColumn(name = "c_wx_token", isUpdate = true, isQuery = false)
     private String wxToken;
 
     // 微信消息加解密 key
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_wx_aes_key", isUpdate = false, isQuery = false)
+    @ZKColumn(name = "c_wx_aes_key", isUpdate = true, isQuery = false)
     private String wxAesKey;
 
     // 第三方平台令牌
     @ZKColumn(name = "c_wx_ticket", isUpdate = false, isQuery = false)
-    @Length(max = 64, message = "{zk.core.data.validation.length.max}")
+//    @Length(max = 256, message = "{zk.core.data.validation.length.max}")
     private String wxTicket;
 
     // 第三方平台令牌更新时间

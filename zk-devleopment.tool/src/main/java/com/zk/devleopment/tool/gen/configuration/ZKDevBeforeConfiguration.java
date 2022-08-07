@@ -9,7 +9,7 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKCodeGenConfiguration.java 
+* @Title: ZKDevBeforeConfiguration.java 
 * @author Vinson 
 * @Package com.zk.code.generate.configuration 
 * @Description: TODO(simple description this file what to do. ) 
@@ -54,10 +54,9 @@ import com.zk.db.dynamic.spring.transaction.ZKDynamicTransactionManager;
 import com.zk.framework.serCen.ZKSerCenEncrypt;
 import com.zk.framework.serCen.eureka.ZKEurekaTransportClientFactories;
 import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
-import com.zk.log.interceptor.ZKLogAccessInterceptor;
 
 /** 
-* @ClassName: ZKCodeGenConfiguration 
+* @ClassName: ZKDevBeforeConfiguration 
 * @Description: TODO(simple description this class what to do. ) 
 * @author Vinson 
 * @version 1.0 
@@ -69,12 +68,12 @@ import com.zk.log.interceptor.ZKLogAccessInterceptor;
 //@ImportAutoConfiguration(classes = { ZKMongoAutoConfiguration.class })
 @AutoConfigureBefore(value = { 
 //        ZKMongoAutoConfiguration.class, 
-        ZKCodeGenAfterConfiguration.class,
-        ZKCodeGenShiroConfiguration.class,
+        ZKDevAfterConfiguration.class,
+        ZKDevShiroConfiguration.class,
         EnableWebMvcConfiguration.class, 
         ServletWebServerFactoryAutoConfiguration.class
         })
-public class ZKCodeGenConfiguration {
+public class ZKDevBeforeConfiguration {
 
     @Value("${zk.sys.db.dynamic.jdbc.username_w}")
     private String dbUserName_w;
@@ -322,19 +321,19 @@ public class ZKCodeGenConfiguration {
         return new ZKExceptionHandlerResolver();
     }
 
-    /**
-     * 记录日志拦截器
-     *
-     * @Title: logAccessInterceptor
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Jun 14, 2022 11:59:49 AM
-     * @return
-     * @return ZKLogAccessInterceptor
-     */
-    @Bean
-    public ZKLogAccessInterceptor logAccessInterceptor() {
-        return new ZKLogAccessInterceptor();
-    }
+//    /**
+//     * 记录日志拦截器
+//     *
+//     * @Title: logAccessInterceptor
+//     * @Description: TODO(simple description this method what to do.)
+//     * @author Vinson
+//     * @date Jun 14, 2022 11:59:49 AM
+//     * @return
+//     * @return ZKLogAccessInterceptor
+//     */
+//    @Bean
+//    public ZKLogAccessInterceptor logAccessInterceptor() {
+//        return new ZKLogAccessInterceptor();
+//    }
 
 }

@@ -33,7 +33,7 @@
 	<!-- begin mybatis 配置  -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="zkDynamicDataSource"/>
-        <property name="typeAliasesPackage" value="com.zk"></property>
+        <property name="typeAliasesPackage" value="com.**.entity"></property>
         <property name="typeAliasesSuperType" value="com.zk.base.entity.ZKBaseEntity"></property>
         <property name="mapperLocations" value="classpath:mappers/**/*.xml"/>
 		<property name="configLocation" value="classpath:xmlConfig/mybatis/mybatis_config.xml"></property>

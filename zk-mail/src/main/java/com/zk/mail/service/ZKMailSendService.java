@@ -314,9 +314,7 @@ public class ZKMailSendService {
      */
     @Transactional(readOnly = false)
     protected void send(boolean async, String sendMailAddr, String recipientMailAddr, String sendFlag,
-            String companyCode,
-            ZKMailTemplate mailTemplate,
-            Map<String, Object> params, DataSource... attachments) {
+            String companyCode, ZKMailTemplate mailTemplate, Map<String, Object> params, DataSource... attachments) {
         try {
             ZKMailSendHistory mailSendHistory = ZKMailSendHistory.as(sendFlag, mailTemplate, params);
             if (ZKStringUtils.isEmpty(sendMailAddr)) {

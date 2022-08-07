@@ -21,6 +21,7 @@ package com.zk.zuul.configuration;
 import javax.servlet.Filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
@@ -32,11 +33,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.utils.ZKLocaleUtils;
 import com.zk.core.web.filter.ZKCrosFilter;
+import com.zk.core.web.resolver.ZKExceptionHandlerResolver;
 import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.framework.serCen.ZKSerCenEncrypt;
 import com.zk.framework.serCen.eureka.ZKEurekaTransportClientFactories;
@@ -68,6 +71,22 @@ public class ZKZuulBeforeConfiguration {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    // # 文件上传，最大上传大小，需要比邮件附件单个的文件大小配置值要大；50M=52428800
+    @Value("${zk.mail.file.upload.multipartResolver.maxInMemorySize:52428800}")
+    long maxUploadSize;
+
+    // # 文件上传，最大处理内存大小； 1M=1048576
+    @Value("${zk.mail.file.upload.multipartResolver.maxInMemorySize:40960}")
+    int maxInMemorySize;
+
+    // # 文件上传，单个文件上传最大大小； 10M=10485760
+    @Value("${zk.mail.file.upload.multipartResolver.maxUploadSizePerFile:10485760}")
+    int maxUploadSizePerFile;
+
+    // # 文件上传，处理字符集
+    @Value("${zk.mail.file.upload.multipartResolver.defaultEncoding:UTF-8}")
+    String defaultEncoding;
 
 //    @PostConstruct
 //    public void postConstruct() {
@@ -155,6 +174,43 @@ public class ZKZuulBeforeConfiguration {
 //        zkCrosFilterInitParams.put(ParamsName.allowHeaders, "__SID,locale,Lang,X-Requested-With");
 //        filterRegistrationBean.setInitParameters(zkCrosFilterInitParams);
         return filterRegistrationBean;
+    }
+
+    /**
+     * 异常处理适配器
+     *
+     * @Title: zkExceptionHandlerResolver
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Aug 21, 2020 11:13:24 AM
+     * @return
+     * @return ZKExceptionHandlerResolver
+     */
+    @Bean
+    public ZKExceptionHandlerResolver zkExceptionHandlerResolver() {
+        return new ZKExceptionHandlerResolver();
+    }
+
+    /**
+     * 文件上传 适配器
+     *
+     * @Title: multipartResolver
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date May 27, 2022 10:13:32 AM
+     * @return CommonsMultipartResolver
+     */
+    @Bean
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setDefaultEncoding(this.defaultEncoding);
+        // 设置总上传数据总大小
+        multipartResolver.setMaxUploadSize(this.maxUploadSize);
+        multipartResolver.setMaxInMemorySize(this.maxInMemorySize);
+        // 设置单个文件最大大小
+        multipartResolver.setMaxUploadSizePerFile(maxUploadSizePerFile);
+
+        return multipartResolver;
     }
 
 }

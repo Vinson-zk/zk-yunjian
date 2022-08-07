@@ -31,7 +31,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zk.server.central.configuration.ZKSerCenConfiguration;
@@ -62,8 +61,6 @@ import com.zk.server.central.configuration.ZKSerCenShiroConfiguration;
 //      ZKMongoAutoConfiguration.class, 
         ZKSerCenMvcConfiguration.class, 
         ZKSerCenShiroConfiguration.class })
-@PropertySource(encoding = "UTF-8", value = { "classpath:zk.ser.cen.jdbc.properties",
-        "classpath:zk.ser.cen.mongo.properties" })
 //@AutoConfigureOrder(value = Ordered.HIGHEST_PRECEDENCE)
 @ComponentScan(basePackages = { "com.zk.server.central.*" })
 public class ZKSerCenSpringBootMain {

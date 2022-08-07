@@ -33,8 +33,8 @@ public interface ZKFuncKeyConfigDao extends ZKBaseDao<String, ZKFuncKeyConfig> {
      * @return ZKFuncKeyConfig
      */
     @Select(value = {
-            "<script>SELECT ${sCols} FROM ${tn} ${alias} WHERE ${alias}.c_func_key = #{FuncKey} <if test='delFlag != null'> and ${alias}.c_del_flag = #{delFlag} </if> </script>" })
+            "<script>SELECT ${sCols} FROM ${tn} ${alias} WHERE ${alias}.c_func_key = #{funcKey} <if test='delFlag != null'> and ${alias}.c_del_flag = #{delFlag} </if> </script>" })
     ZKFuncKeyConfig getByFuncKey(@Param("tn") String tn, @Param("alias") String alias, @Param("sCols") String sCols,
-            @Param("FuncKey") String FuncKey, @Param("delFlag") Integer delFlag);
+            @Param("funcKey") String funcKey, @Param("delFlag") Integer delFlag);
 	
 }

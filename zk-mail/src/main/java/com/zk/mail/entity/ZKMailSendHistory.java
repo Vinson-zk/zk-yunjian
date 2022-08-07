@@ -113,7 +113,7 @@ public class ZKMailSendHistory extends ZKBaseEntity<String, ZKMailSendHistory> {
 	 * 邮件内容
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
-	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
+    @Length(min = 1, max = 2048, message = "{zk.core.data.validation.length}")
 	@ZKColumn(name = "c_content", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
 	String content;	
 	/**

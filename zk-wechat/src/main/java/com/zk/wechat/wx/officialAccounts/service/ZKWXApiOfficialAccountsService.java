@@ -176,7 +176,7 @@ public class ZKWXApiOfficialAccountsService {
         outAccountUser.setWxSubscribeTimeStr(resJson.getString(MsgAttr.userInfo.subscribe_time));
         if (!ZKStringUtils.isEmpty(outAccountUser.getWxSubscribeTimeStr())) {
             outAccountUser.setWxSubscribeDate(
-                    ZKDateUtils.parseDate(Integer.valueOf(outAccountUser.getWxSubscribeTimeStr()) * 1000));
+                    ZKDateUtils.parseDate(Long.valueOf(outAccountUser.getWxSubscribeTimeStr()) * 1000));
         }
         // unionid 只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。
         outAccountUser.setWxUnionid(resJson.getString(MsgAttr.userInfo.unionid));

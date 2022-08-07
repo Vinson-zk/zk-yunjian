@@ -286,21 +286,28 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-			<!-- spring boot 运行插件 -->
+			<!-- spring boot 运行插件 
 			<plugin>
 			    <groupId>org.springframework.boot</groupId>
 			    <artifactId>spring-boot-maven-plugin</artifactId>
 			    <configuration>
 			    	<mainClass>com.zk.server.central.ZKSerCenSpringBootMain</mainClass>
 				</configuration>
-			</plugin>
+			</plugin> -->
+			<plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+			    	<mainClass>com.zk.server.central.ZKSerCenSpringBootMain</mainClass>
+			    </configuration> 
+            </plugin>
 			<!-- plugin 资源配置文件处理 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<configuration>
 					<encoding>UTF-8</encoding>
-					<useDefaultDelimiters>true</useDefaultDelimiters>
+					<useDefaultDelimiters>false</useDefaultDelimiters>
 					<resources>
 						<resource>
 							<filtering>true</filtering>

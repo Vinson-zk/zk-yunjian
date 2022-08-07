@@ -75,7 +75,7 @@ import com.zk.log.interceptor.ZKLogAccessInterceptor;
         "classpath:zk.wechat.wx.pay.properties" })
 public class ZKWechatBeforeConfiguration {
 
-    protected static Logger log = LoggerFactory.getLogger(ZKWechatBeforeConfiguration.class);
+    protected Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private ApplicationContext applicationContext;

@@ -21,7 +21,10 @@ package com.zk.wechat.contrller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zk.core.utils.ZKEnvironmentUtils;
+import com.zk.core.utils.ZKMsgUtils;
 import com.zk.core.web.ZKMsgRes;
+import com.zk.core.web.utils.ZKWebUtils;
 
 /** 
 * @ClassName: ZKWechatIndexController 
@@ -29,14 +32,15 @@ import com.zk.core.web.ZKMsgRes;
 * @author Vinson 
 * @version 1.0 
 */
-@RestController
 //https://gfwechat.zhgxfz.com/zk/wechat/wx/pay/jsApi
+@RestController
 @RequestMapping("${zk.path.admin}/${zk.path.wechat}/${zk.wechat.version}")
 public class ZKWechatIndexController {
 
     @RequestMapping({ "", "index" })
     public ZKMsgRes index() {
-        return ZKMsgRes.asOk(null);
+        return ZKMsgRes.asOk(ZKMsgUtils.getMessage("zk.wechat.msg.welcome", null, ZKWebUtils.getLocale())
+                + ZKEnvironmentUtils.getString("spring.application.name", "zk wechat"));
     }
 
 }

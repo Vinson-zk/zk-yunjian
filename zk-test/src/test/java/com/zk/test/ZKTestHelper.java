@@ -33,15 +33,100 @@ import com.zk.core.utils.ZKDateUtils;
 */
 public class ZKTestHelper {
 
+    class Node {
+        public int data;
+        public Node next;
+        public Node(int d, Node next) {
+            this.data = d;
+            this.next = next;
+        }
+    }
+
     @Test
     public void test() {
-        String timeStr = "1653218795";
+        String timeStr = "1657537721";
         Date d = ZKDateUtils.parseDate(Long.valueOf(timeStr) * 1000);
-
         System.out.println("[^_^:20220522-2016-001] 1653218795 -> date : " + d.getTime());
         System.out.println("[^_^:20220522-2016-001] 1653218795 -> date : " + ZKDateUtils.formatDate(d));
 
+        d = ZKDateUtils.parseDate(Integer.valueOf(timeStr) * 1000);
+        System.out.println("[^_^:20220522-2016-002] 1653218795 -> date : " + d.getTime());
+        System.out.println("[^_^:20220522-2016-002] 1653218795 -> date : " + ZKDateUtils.formatDate(d));
+
     }
+
+    @Test
+    public void testNode() {
+//        String timeStr = "1653218795";
+//        Date d = ZKDateUtils.parseDate(Long.valueOf(timeStr) * 1000);
+//
+//        System.out.println("[^_^:20220522-2016-001] 1653218795 -> date : " + d.getTime());
+//        System.out.println("[^_^:20220522-2016-001] 1653218795 -> date : " + ZKDateUtils.formatDate(d));
+
+        // 21365
+        Node head = new Node(5, null);
+
+        head = new Node(6, head);
+        head = new Node(3, head);
+        head = new Node(1, head);
+        head = new Node(2, head);
+        s(head);
+    }
+
+    public static Node s(Node head) {
+        Node t = head;
+        while (t.next != null) {
+            System.out.print(t.data + "->");
+            t = t.next;
+        }
+        System.out.println(t.data + "->null");
+        System.out.println("=====================");
+        Node s = head.next;
+//        head.next = null;
+//        s = s1(head, s);
+        s = s2(head);
+        t = s;
+        while(t.next != null) {
+            System.out.print(t.data + "->");
+            t = t.next;
+        }
+        System.out.print(t.data + "->null");
+
+        return null;
+    }
+
+    public static Node s2(Node head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        else {
+            Node next = head.next;
+            Node t = s2(next);
+            head.next = next.next;
+            next.next = head;
+
+            return t;
+        }
+    }
+
+    public static Node s1(Node head, Node next) {
+        if (next == null) {
+            return head;
+        }
+        else {
+            if (next.next != null) {
+                Node cNext = next.next;
+//                head.next = next.next;
+                next.next = head;
+                return s1(next, cNext);
+            }
+            else {
+                next.next = head;
+                return next;
+            }
+        }
+    }
+
 
     @Test
     public void genPwd() {

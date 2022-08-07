@@ -96,9 +96,15 @@ public class ZKFeignSpringFormEncoder extends SpringFormEncoder {
             @SuppressWarnings("unchecked")
             List<MultipartFile> files = (List<MultipartFile>) object;
             if (files != null) {
-                Map<String, Object> data = Collections.singletonMap(files.size() == 0 ? "" : files.get(0).getName(),
+                if (files.isEmpty()) {
+                    Map<String, Object> data = Collections.singletonMap("", "");
+                    super.encode(data, MAP_STRING_WILDCARD, template);
+                }
+                else {
+                    Map<String, Object> data = Collections.singletonMap(files.isEmpty() ? "" : files.get(0).getName(),
                         object);
-                super.encode(data, MAP_STRING_WILDCARD, template);
+                    super.encode(data, MAP_STRING_WILDCARD, template);
+                }
                 return;
             }
         }

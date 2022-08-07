@@ -42,11 +42,6 @@ import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.utils.ZKStringUtils;
 import com.zk.core.web.ZKMsgRes;
 import com.zk.core.web.utils.ZKWebUtils;
-import com.zk.security.principal.ZKSecDefaultServerPrincipal;
-import com.zk.security.principal.ZKSecPrincipal;
-import com.zk.security.principal.pc.ZKSecDefaultPrincipalCollection;
-import com.zk.security.principal.pc.ZKSecPrincipalCollection;
-import com.zk.security.ticket.ZKSecTicket;
 import com.zk.security.ticket.ZKSecTicketManager;
 import com.zk.wechat.officialAccounts.entity.ZKOfficialAccountsUser;
 import com.zk.wechat.platformBusiness.entity.ZKFuncKeyConfig;
@@ -325,6 +320,12 @@ public class ZKWXThirdPartyController {
                     // 关注公众号状态
                     redirectSB.append("&subscribe=");
                     redirectSB.append(officialAccountsUser.getWxSubscribe());
+                    // 功能 funcKey
+                    redirectSB.append("&funcKey=");
+                    redirectSB.append(funcKey);
+                    // openId
+                    redirectSB.append("&openid=");
+                    redirectSB.append(officialAccountsUser.getWxOpenid());
                     
 //                    // 还是无微信服务身份
 //                    HttpSession session = hReq.getSession();
@@ -374,11 +375,12 @@ public class ZKWXThirdPartyController {
      * @param req
      * @return String
      */
-    @RequestMapping(value = "miniprogram/jscode2session/{thirdPartyAppId}/{authAppId}", method = RequestMethod.POST)
-    @ResponseBody
-    public ZKMsgRes authUserReceive(@PathVariable("thirdPartyAppId") String thirdPartyAppId,
-            @PathVariable(value = "authAppId") String authAppId, @RequestParam(value = "jsCode") String jsCode,
-            HttpServletRequest req) {
+    @RequestMapping(value = "miniprogram/jscode2session/{thirdPartyAppId}/{authAppId}/{funcKey}", method = RequestMethod.POST)
+    public String authUserReceive(@PathVariable("thirdPartyAppId") String thirdPartyAppId,
+            @PathVariable(value = "authAppId") String authAppId,
+            @PathVariable(value = "funcKey", required = false) String funcKey,
+            @RequestParam(value = "jsCode") String jsCode,
+            HttpServletRequest req, HttpServletResponse hRes) {
 
         if (ZKStringUtils.isEmpty(jsCode)) {
             log.error(
@@ -390,28 +392,89 @@ public class ZKWXThirdPartyController {
         // 取小程序用户的 openid sessionkey Unionid
         ZKOfficialAccountsUser officialAccountsUser = this.wxThirdPartyService.getUserJscode2session(thirdPartyAppId,
                 authAppId, jsCode);
-        return ZKMsgRes.asOk(officialAccountsUser);
-    }
-
-    public ZKSecTicket getServerTk() {
-        ZKSecPrincipalCollection sPc = new ZKSecDefaultPrincipalCollection();
-        // 取微服务间令牌
-        String sTkId = tm.generateTkId().toString();
-//        String sTkId = (String) tm.generateTkId(appName);
-        ZKSecTicket sTk = tm.getTicket(sTkId);
-        if (sTk == null) {
-            // 微服务还未有令牌，创建微服务令牌
-            sTk = tm.createSecTicket(sTkId, ZKSecTicket.KeySecurityType.Server);
-            // 创建一个微服务身份；
-            ZKSecDefaultServerPrincipal<String> sP = new ZKSecDefaultServerPrincipal<String>(appName,
-                    ZKSecPrincipal.OS_TYPE.UNKNOWN, appName, ZKSecPrincipal.KeyType.Distributed_server, appName);
-            sP.setPrimary(true);
-
-            sPc.add("distributedRealm", sP);
-            log.info("[^_^:20220609-0925-001] 服务[{}]请求其他微服务，创建微服务身份", this.appName);
+        ZKMsgRes res = null;
+        if (ZKStringUtils.isEmpty(funcKey)) {
+            res = ZKMsgRes.asOk(officialAccountsUser);
         }
-        return sTk;
+        else {
+            // 查询配置的funckey 对应的重定向地址
+            ZKFuncKeyConfig funcKeyConfig = funcKeyConfigService.getByFuncKey(funcKey, ZKBaseEntity.DEL_FLAG.normal);
+            if (funcKeyConfig != null) {
+                if (funcKeyConfig.getStatus().intValue() == ZKFuncKeyConfig.KeyStatus.normal) {
+                    String redirectUrl = funcKeyConfig.getRedirectProxyUrl();
+                    StringBuffer redirectSB = new StringBuffer();
+                    redirectSB = redirectSB.append("redirect:");
+                    redirectSB.append(funcKeyConfig.getRedirectProxyUrl());
+                    if (redirectUrl.indexOf("?") > -1) {
+                        redirectSB.append("&wxid=");
+                    }
+                    else {
+                        redirectSB.append("?wxid=");
+                    }
+                    redirectSB.append(officialAccountsUser.getPkId());
+                    // 国际化语言
+                    redirectSB.append("&locale=");
+                    redirectSB.append(officialAccountsUser.getWxLanguage());
+                    // 功能 funcKey
+                    redirectSB.append("&funcKey=");
+                    redirectSB.append(funcKey);
+                    // openId
+                    redirectSB.append("&openid=");
+                    redirectSB.append(officialAccountsUser.getWxOpenid());
+
+//                    // 还是无微信服务身份
+//                    HttpSession session = hReq.getSession();
+//                    ZKSecTicket tk = this.getServerTk();
+//                    session.setAttribute(ZKSecConstants.PARAM_NAME.TicketId, tk == null ? "" : tk.getTkId());
+
+                    return redirectSB.toString();
+                }
+                else {
+//                    ZKWebUtils.redirectUrl(request, response, url);
+                    // 此功能已被禁用。重写向到统一的功能禁用页 zk.wechat.110004=功能已停用，请联系管理员
+                    res = ZKMsgRes.as("zk.wechat.110004");
+                }
+            }
+            else {
+                // 功能不存在 zk.wechat.110005=功能不存在，请联系管理员
+                res = ZKMsgRes.as("zk.wechat.110005");
+            }
+        }
+        if (res != null) {
+            ZKWebUtils.renderString(hRes, res.toString(), ZKContentType.XHTML_UTF8.getContentType());
+        }
+        return null;
     }
+
+//    /**
+//     * 取微服务令牌
+//     *
+//     * @Title: getServerTk
+//     * @Description: TODO(simple description this method what to do.)
+//     * @author Vinson
+//     * @date Jul 3, 2022 12:21:09 AM
+//     * @return
+//     * @return ZKSecTicket
+//     */
+//    public ZKSecTicket getServerTk() {
+//        ZKSecPrincipalCollection sPc = new ZKSecDefaultPrincipalCollection();
+//        // 取微服务间令牌
+//        String sTkId = tm.generateTkId().toString();
+////        String sTkId = (String) tm.generateTkId(appName);
+//        ZKSecTicket sTk = tm.getTicket(sTkId);
+//        if (sTk == null) {
+//            // 微服务还未有令牌，创建微服务令牌
+//            sTk = tm.createSecTicket(sTkId, ZKSecTicket.KeySecurityType.Server);
+//            // 创建一个微服务身份；
+//            ZKSecDefaultServerPrincipal<String> sP = new ZKSecDefaultServerPrincipal<String>(appName,
+//                    ZKSecPrincipal.OS_TYPE.UNKNOWN, appName, ZKSecPrincipal.KeyType.Distributed_server, appName);
+//            sP.setPrimary(true);
+//
+//            sPc.add("distributedRealm", sP);
+//            log.info("[^_^:20220609-0925-001] 服务[{}]请求其他微服务，创建微服务身份", this.appName);
+//        }
+//        return sTk;
+//    }
 
 }
 

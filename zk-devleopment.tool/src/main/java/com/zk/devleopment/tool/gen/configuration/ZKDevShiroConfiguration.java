@@ -9,7 +9,7 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKCodeGenShiroConfiguration.java 
+* @Title: ZKDevShiroConfiguration.java 
 * @author Vinson 
 * @Package com.zk.code.generate.configuration 
 * @Description: TODO(simple description this file what to do. ) 
@@ -25,14 +25,14 @@ import org.springframework.core.Ordered;
 import com.zk.core.web.filter.ZKDelegatingFilterProxyRegistrationBean;
 
 /** 
-* @ClassName: ZKCodeGenShiroConfiguration 
+* @ClassName: ZKDevShiroConfiguration 
 * @Description: TODO(simple description this class what to do. ) 
 * @author Vinson 
 * @version 1.0 
 */
 //@Configuration
 @ImportResource(locations = { "classpath:xmlConfig/spring_ctx_shiro.xml" })
-public class ZKCodeGenShiroConfiguration {
+public class ZKDevShiroConfiguration {
 
     /**
      * 拦截器 - DelegatingFilterProxyRegistrationBean

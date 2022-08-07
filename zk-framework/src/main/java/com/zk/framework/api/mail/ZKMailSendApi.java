@@ -51,6 +51,17 @@ public interface ZKMailSendApi {
             @RequestParam(value = "recipientMailAddr", required = false) String recipientMailAddr,
             @RequestParam(value = "companyCode", required = false) String companyCode,
             @RequestParam(value = "locale", required = false) String locale,
+            @RequestParam Map<String, Object> params);
+
+    @RequestMapping(method = RequestMethod.POST, consumes = {
+            MediaType.MULTIPART_FORM_DATA_VALUE }, path = ZKApiConstants.YunJian_App.mail.apiPrefix
+                    + "/mailSend/mailSend/{typeCode}")
+    ZKMsgRes mailSendByTypeCode(@PathVariable(value = "typeCode") String typeCode,
+            @RequestParam(value = "sendFlag", required = false) String sendFlag,
+            @RequestParam(value = "sendMailAddr", required = false) String sendMailAddr,
+            @RequestParam(value = "recipientMailAddr", required = false) String recipientMailAddr,
+            @RequestParam(value = "companyCode", required = false) String companyCode,
+            @RequestParam(value = "locale", required = false) String locale,
             @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments,
             @RequestParam Map<String, Object> params);
 
