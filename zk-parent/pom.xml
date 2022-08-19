@@ -153,13 +153,13 @@
 		<repository>
 			<id>mvn-gf-nexus</id>
 			<name>gxfz Nexus Release Repository</name>
-			<url>http://10.0.34.48:8081/repository/mvn-gf-release/</url>
+			<url>http://192.168.0.127:8081/repository/mvn-gf-release/</url>
 		</repository>
 		<snapshotRepository>
 			<!-- 上传快照版本时，在版本后面加上 [-SNAPSHOT]；不加时，会上传到 release 中 -->
 			<id>mvn-gf-nexus</id>
 			<name>gxfz Nexus Snapshot Repository</name>
-			<url>http://10.0.34.48:8081/repository/mvn-gf-snapshot/</url>
+			<url>http://192.168.0.127:8081/repository/mvn-gf-snapshot/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	
