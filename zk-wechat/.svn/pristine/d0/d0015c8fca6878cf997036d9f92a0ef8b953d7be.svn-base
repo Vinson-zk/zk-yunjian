@@ -1,0 +1,11 @@
+
+# 微信相关证书和文件存放目录；注：此目录下，启用应用的用户需要有创建目录和文件的权限;
+zk.wechat.wx.file.path=/home/wechat/cert
+#zk.wechat.wx.file.path=src/test/resources/wxCert
+
+# 微信服务器请求地址
+zk.wechat.server.addr=gfwechat.zhgxfz.com
+
+# =================== 普通 配置 =================== 
+# 应用端口
+server.port=8081

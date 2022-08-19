@@ -1,0 +1,168 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>com.zk</groupId>
+    <artifactId>zk-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+		<relativePath>../zk-parent</relativePath>
+  </parent>
+  
+  <artifactId>zk-devleopmentTool</artifactId>
+  <version>${version.zk.devleopmentTool}</version>
+  <name>zk-devleopmentTool</name>
+  <description>Vinson project zk-devleopmentTool</description>
+  
+  <dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.zk</groupId>
+				<artifactId>zk-dependencies</artifactId>
+				<version>${version.zk.dependencies}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-core</artifactId>
+			<version>${version.zk.core}</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-mongo</artifactId>
+			<version>${version.zk.mongo}</version>
+		</dependency> -->
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-db</artifactId>
+			<version>${version.zk.db}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-base</artifactId>
+			<version>${version.zk.base}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-framework</artifactId>
+			<version>${version.zk.framework}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-log</artifactId>
+			<version>${version.zk.log}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		
+		<!-- begin jackson json -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jaxb-annotations</artifactId>
+		</dependency>
+		<!-- end jackson json -->
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<!-- plugin 发布 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<!-- spring boot 运行插件 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+			        <mainClass>com.zk.devleopment.tool.ZKDevleopmentToolSpringBootMain</mainClass>
+			    </configuration>
+            </plugin> 
+            <!-- 打包项目外部配置文件； 虽然直接在 resources 下也可实现，但在 Maven update project 时， 会报错误：mvn 
+			update Could not update project xxx configuration java.lang.NullPointerE -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<configuration>
+					<resources>
+						<resource>
+							<directory>src/main/resources</directory>
+							<filtering>false</filtering>
+							<includes>
+								<include>**/**</include>
+							</includes>
+						</resource>
+					</resources>
+				</configuration>
+				<executions>
+					<execution>
+						<id>my-own-very-cool-id-for-this-step</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>add-resource</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>${zk.resources.path}/default</directory>
+									<filtering>false</filtering>
+									<includes>
+										<include>**</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+        </plugins>
+	</build>
+	
+</project>

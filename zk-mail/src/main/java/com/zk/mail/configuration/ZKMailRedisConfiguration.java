@@ -72,12 +72,10 @@ public class ZKMailRedisConfiguration {
     @ConditionalOnBean(name = "jedisPoolConfig")
     public JedisPool jedisPool(JedisPoolConfig jedisPoolConfig) {
 
-        logger.info("[^_^:20210809-1255-001] ====================================================");
-        logger.info("[^_^:20210809-1255-001] === Redis 连接信息 =======================================");
-        logger.info("[^_^:20210809-1255-001] ====================================================");
-        logger.info("[^_^:20210809-1255-001] hosr:{}, port:{}, password:{}", host, port, password);
-        logger.info("[^_^:20210809-1255-001] JedisPoolConfig:{}", ZKJsonUtils.writeObjectJson(jedisPoolConfig));
-        logger.info("[^_^:20210809-1255-001] ====================================================");
+        System.out.println("[^_^:20210809-1255-001] ====================================================");
+        System.out.println(String.format("[^_^:20210809-1255-001] Redis 连接信息 hosr:%s, port:%s, password:%s", host, port, password));
+        System.out.println("[^_^:20210809-1255-001] Redis 连接信息 JedisPoolConfig: " + ZKJsonUtils.writeObjectJson(jedisPoolConfig));
+        System.out.println("[^_^:20210809-1255-001] ====================================================");
 
         /** 单机模式 */
         JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password);

@@ -1,0 +1,352 @@
+
+
+
+/*************************************************************************/
+/* 菜单 */
+-- 指定父菜单ID
+set @parentId = NULL;
+-- 此功能的根菜单
+set @dateStr = '2021-11-03 22:01:16';
+
+-- --------------------------------------------------------------------------
+-- 支付
+-- c_code 填写父菜单的 代码；插入为指定菜单的子菜单
+select c_pk_id into @parentId from t_sys_res_menu where c_code = 'xxx';
+-- select max(c_pk_id) into @firstId FROM `zk-sys`.t_sys_res_menu;
+
+set @firstId = 5823591480714854912;
+INSERT INTO `t_sys_res_menu` (`c_pk_id`,`c_create_user_id`,`c_update_user_id`,`c_create_date`,`c_update_date`,`c_del_flag`,`c_version`,`c_remarks`,`c_p_desc`,`c_spare1`,`c_spare2`,`c_spare3`,`c_spare_json`,
+`c_name`,
+`c_code`,
+`c_parent_id`,
+`c_nav_code`,
+`c_func_module_code`,
+`c_func_name`,
+`c_path`,
+`c_is_index`,`c_exact`, `c_is_frame`,`c_is_show`,`c_icon`,`c_sort`,`c_permission`) 
+VALUES 
+	(@firstId,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"支付业务类型\", \"en-US\": \"PayGetBusinessType\"}',
+	'PayGetBusinessType',
+	@parentId,
+	'wechat',
+	'wechat',
+	'payGetBusinessTypeIndex',
+	'payGetBusinessType',
+	0,1,0,1,'ApartmentOutlined',1,NULL),
+	(5823591480731632128,
+	NULL,NULL, @dateStr, @dateStr,0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"明细\", \"en-US\": \"Detail\"}',
+	'PayGetBusinessType_Detail',
+	@firstId,
+	'wechat',
+	'wechat',
+	'payGetBusinessTypeDetail',
+	'detail/:pkId',
+	0,0,0,0,'UnorderedListOutlined',1,NULL),
+	(5823591480731632129,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"编辑\", \"en-US\": \"Edit\"}',
+	'PayGetBusinessType_Edit',
+	@firstId,
+	'wechat',
+	'wechat',
+	'payGetBusinessTypeEdit',
+	'edit/:pkId',
+	0,0,0,0,'FormOutlined',1,NULL);
+
+set @firstId = 5823591501820592640;
+INSERT INTO `t_sys_res_menu` (`c_pk_id`,`c_create_user_id`,`c_update_user_id`,`c_create_date`,`c_update_date`,`c_del_flag`,`c_version`,`c_remarks`,`c_p_desc`,`c_spare1`,`c_spare2`,`c_spare3`,`c_spare_json`,
+`c_name`,
+`c_code`,
+`c_parent_id`,
+`c_nav_code`,
+`c_func_module_code`,
+`c_func_name`,
+`c_path`,
+`c_is_index`,`c_exact`, `c_is_frame`,`c_is_show`,`c_icon`,`c_sort`,`c_permission`) 
+VALUES 
+	(@firstId,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"支付通知\", \"en-US\": \"PayGetNotify\"}',
+	'PayGetNotify',
+	@parentId,
+	'wechat',
+	'wechat',
+	'payGetNotifyIndex',
+	'payGetNotify',
+	0,1,0,1,'NotificationOutlined',1,NULL),
+	(5823591501837369856,
+	NULL,NULL, @dateStr, @dateStr,0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"明细\", \"en-US\": \"Detail\"}',
+	'PayGetNotify_Detail',
+	@firstId,
+	'wechat',
+	'wechat',
+	'payGetNotifyDetail',
+	'detail/:pkId',
+	0,0,0,0,'UnorderedListOutlined',1,NULL);
+
+set @firstId = 5823591523966517760;
+INSERT INTO `t_sys_res_menu` (`c_pk_id`,`c_create_user_id`,`c_update_user_id`,`c_create_date`,`c_update_date`,`c_del_flag`,`c_version`,`c_remarks`,`c_p_desc`,`c_spare1`,`c_spare2`,`c_spare3`,`c_spare_json`,
+`c_name`,
+`c_code`,
+`c_parent_id`,
+`c_nav_code`,
+`c_func_module_code`,
+`c_func_name`,
+`c_path`,
+`c_is_index`,`c_exact`, `c_is_frame`,`c_is_show`,`c_icon`,`c_sort`,`c_permission`) 
+VALUES 
+	(@firstId,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"支付记录\", \"en-US\": \"PayGetOrder\"}',
+	'PayGetOrder',
+	@parentId,
+	'wechat',
+	'wechat',
+	'payGetOrderIndex',
+	'payGetOrder',
+	0,1,0,1,'BarsOutlined',1,NULL),
+	(5823591523983294976,
+	NULL,NULL, @dateStr, @dateStr,0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"明细\", \"en-US\": \"Detail\"}',
+	'PayGetOrder_Detail',
+	@firstId,
+	'wechat',
+	'wechat',
+	'payGetOrderDetail',
+	'detail/:pkId',
+	0,0,0,0,'UnorderedListOutlined',1,NULL);
+
+set @firstId = 5823591553813185024;
+INSERT INTO `t_sys_res_menu` (`c_pk_id`,`c_create_user_id`,`c_update_user_id`,`c_create_date`,`c_update_date`,`c_del_flag`,`c_version`,`c_remarks`,`c_p_desc`,`c_spare1`,`c_spare2`,`c_spare3`,`c_spare_json`,
+`c_name`,
+`c_code`,
+`c_parent_id`,
+`c_nav_code`,
+`c_func_module_code`,
+`c_func_name`,
+`c_path`,
+`c_is_index`,`c_exact`, `c_is_frame`,`c_is_show`,`c_icon`,`c_sort`,`c_permission`) 
+VALUES 
+	(@firstId,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"支付关系组\", \"en-US\": \"PayGroup\"}',
+	'PayGroup',
+	@parentId,
+	'wechat',
+	'wechat',
+	'payGroupIndex',
+	'payGroup',
+	0,1,0,1,'LinkOutlined',1,NULL),
+	(5823591553813185025,
+	NULL,NULL, @dateStr, @dateStr,0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"明细\", \"en-US\": \"Detail\"}',
+	'PayGroup_Detail',
+	@firstId,
+	'wechat',
+	'wechat',
+	'payGroupDetail',
+	'detail/:pkId',
+	0,0,0,0,'UnorderedListOutlined',1,NULL),
+	(5823591553813185026,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"编辑\", \"en-US\": \"Edit\"}',
+	'PayGroup_Edit',
+	@firstId,
+	'wechat',
+	'wechat',
+	'payGroupEdit',
+	'edit/:pkId',
+	0,0,0,0,'FormOutlined',1,NULL);
+
+set @firstId = 5823591461874041344;
+INSERT INTO `t_sys_res_menu` (`c_pk_id`,`c_create_user_id`,`c_update_user_id`,`c_create_date`,`c_update_date`,`c_del_flag`,`c_version`,`c_remarks`,`c_p_desc`,`c_spare1`,`c_spare2`,`c_spare3`,`c_spare_json`,
+`c_name`,
+`c_code`,
+`c_parent_id`,
+`c_nav_code`,
+`c_func_module_code`,
+`c_func_name`,
+`c_path`,
+`c_is_index`,`c_exact`, `c_is_frame`,`c_is_show`,`c_icon`,`c_sort`,`c_permission`) 
+VALUES 
+	(@firstId,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"商户号\", \"en-US\": \"PayMerchant\"}',
+	'PayMerchant',
+	@parentId,
+	'wechat',
+	'wechat',
+	'payMerchantIndex',
+	'payMerchant',
+	0,1,0,1,'GoldOutlined',1,NULL),
+	(5823591463954416128,
+	NULL,NULL, @dateStr, @dateStr,0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"明细\", \"en-US\": \"Detail\"}',
+	'PayMerchant_Detail',
+	@firstId,
+	'wechat',
+	'wechat',
+	'payMerchantDetail',
+	'detail/:pkId',
+	0,0,0,0,'UnorderedListOutlined',1,NULL),
+	(5823591463954416129,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"编辑\", \"en-US\": \"Edit\"}',
+	'PayMerchant_Edit',
+	@firstId,
+	'wechat',
+	'wechat',
+	'payMerchantEdit',
+	'edit/:pkId',
+	0,0,0,0,'FormOutlined',1,NULL);
+
+-- --------------------------------------------------------------------------
+-- 微信第三方平台
+
+-- c_code 填写父菜单的 代码；插入为指定菜单的子菜单
+select c_pk_id into @parentId from t_sys_res_menu where c_code = 'xxx';
+-- select max(c_pk_id) into @firstId FROM `zk-sys`.t_sys_res_menu;
+
+set @firstId = 5823591533462422016;
+INSERT INTO `t_sys_res_menu` (`c_pk_id`,`c_create_user_id`,`c_update_user_id`,`c_create_date`,`c_update_date`,`c_del_flag`,`c_version`,`c_remarks`,`c_p_desc`,`c_spare1`,`c_spare2`,`c_spare3`,`c_spare_json`,
+`c_name`,
+`c_code`,
+`c_parent_id`,
+`c_nav_code`,
+`c_func_module_code`,
+`c_func_name`,
+`c_path`,
+`c_is_index`,`c_exact`, `c_is_frame`,`c_is_show`,`c_icon`,`c_sort`,`c_permission`) 
+VALUES 
+	(@firstId,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"开放平台\", \"en-US\": \"ThirdParty\"}',
+	'ThirdParty',
+	@parentId,
+	'wechat',
+	'wechat',
+	'thirdPartyIndex',
+	'thirdParty',
+	0,1,0,1,'IdcardOutlined',1,NULL),
+	(5823591533462422017,
+	NULL,NULL, @dateStr, @dateStr,0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"明细\", \"en-US\": \"Detail\"}',
+	'ThirdParty_Detail',
+	@firstId,
+	'wechat',
+	'wechat',
+	'thirdPartyDetail',
+	'detail/:pkId',
+	0,0,0,0,'UnorderedListOutlined',1,NULL),
+	(5823591533462422018,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"编辑\", \"en-US\": \"Edit\"}',
+	'ThirdParty_Edit',
+	@firstId,
+	'wechat',
+	'wechat',
+	'thirdPartyEdit',
+	'edit/:pkId',
+	0,0,0,0,'FormOutlined',1,NULL);
+
+set @firstId = 5824622041709412864;
+INSERT INTO `t_sys_res_menu` (`c_pk_id`,`c_create_user_id`,`c_update_user_id`,`c_create_date`,`c_update_date`,`c_del_flag`,`c_version`,`c_remarks`,`c_p_desc`,`c_spare1`,`c_spare2`,`c_spare3`,`c_spare_json`,
+`c_name`,
+`c_code`,
+`c_parent_id`,
+`c_nav_code`,
+`c_func_module_code`,
+`c_func_name`,
+`c_path`,
+`c_is_index`,`c_exact`, `c_is_frame`,`c_is_show`,`c_icon`,`c_sort`,`c_permission`) 
+VALUES 
+	(@firstId,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"目标授权方\", \"en-US\": \"ThirdPartyAuthAccount\"}',
+	'ThirdPartyAuthAccount',
+	@parentId,
+	'wechat',
+	'wechat',
+	'thirdPartyAuthAccountIndex',
+	'thirdPartyAuthAccount',
+	0,1,0,1,'ContactsOutlined',1,NULL),
+	(5824622041709412865,
+	NULL,NULL, @dateStr, @dateStr,0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"明细\", \"en-US\": \"Detail\"}',
+	'ThirdPartyAuthAccount_Detail',
+	@firstId,
+	'wechat',
+	'wechat',
+	'thirdPartyAuthAccountDetail',
+	'detail/:pkId',
+	0,0,0,0,'UnorderedListOutlined',1,NULL);
+
+set @firstId = 5824622031760523776;
+INSERT INTO `t_sys_res_menu` (`c_pk_id`,`c_create_user_id`,`c_update_user_id`,`c_create_date`,`c_update_date`,`c_del_flag`,`c_version`,`c_remarks`,`c_p_desc`,`c_spare1`,`c_spare2`,`c_spare3`,`c_spare_json`,
+`c_name`,
+`c_code`,
+`c_parent_id`,
+`c_nav_code`,
+`c_func_module_code`,
+`c_func_name`,
+`c_path`,
+`c_is_index`,`c_exact`, `c_is_frame`,`c_is_show`,`c_icon`,`c_sort`,`c_permission`) 
+VALUES 
+	(@firstId,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"目标授权方用户\", \"en-US\": \"ThirdPartyAuthAccountUser\"}',
+	'ThirdPartyAuthAccountUser',
+	@parentId,
+	'wechat',
+	'wechat',
+	'thirdPartyAuthAccountUserIndex',
+	'thirdPartyAuthAccountUser',
+	0,1,0,1,'UserOutlined',1,NULL),
+	(5824622031777300992,
+	NULL,NULL, @dateStr, @dateStr,0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"明细\", \"en-US\": \"Detail\"}',
+	'ThirdPartyAuthAccountUser_Detail',
+	@firstId,
+	'wechat',
+	'wechat',
+	'thirdPartyAuthAccountUserDetail',
+	'detail/:pkId',
+	0,0,0,0,'UnorderedListOutlined',1,NULL);
+
+set @firstId = 5824622020788224512;
+INSERT INTO `t_sys_res_menu` (`c_pk_id`,`c_create_user_id`,`c_update_user_id`,`c_create_date`,`c_update_date`,`c_del_flag`,`c_version`,`c_remarks`,`c_p_desc`,`c_spare1`,`c_spare2`,`c_spare3`,`c_spare_json`,
+`c_name`,
+`c_code`,
+`c_parent_id`,
+`c_nav_code`,
+`c_func_module_code`,
+`c_func_name`,
+`c_path`,
+`c_is_index`,`c_exact`, `c_is_frame`,`c_is_show`,`c_icon`,`c_sort`,`c_permission`) 
+VALUES 
+	(@firstId,
+	NULL,NULL, @dateStr, @dateStr, 0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"用户地理位置\", \"en-US\": \"ThirdPartyAuthAccountUserGps\"}',
+	'ThirdPartyAuthAccountUserGps',
+	@parentId,
+	'wechat',
+	'wechat',
+	'thirdPartyAuthAccountUserGpsIndex',
+	'thirdPartyAuthAccountUserGps',
+	0,1,0,1,'EnvironmentOutlined',1,NULL),
+	(5824622024395325952,
+	NULL,NULL, @dateStr, @dateStr,0,0,NULL,NULL,NULL,NULL,NULL,NULL,
+	'{\"zh-CN\": \"明细\", \"en-US\": \"Detail\"}',
+	'ThirdPartyAuthAccountUserGps_Detail',
+	@firstId,
+	'wechat',
+	'wechat',
+	'thirdPartyAuthAccountUserGpsDetail',
+	'detail/:pkId',
+	0,0,0,0,'UnorderedListOutlined',1,NULL);
+
+

@@ -88,7 +88,6 @@ public class ZKWechatBeforeConfiguration {
     @Autowired
     public void before(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
         log.info("[^_^:20200805-1808-001] -------- configuration before begin... ... " + this.getClass());
-
         ZKEnvironmentUtils.initContext(applicationContext);
 //        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("en_US"));
 //        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("zh_CN"));

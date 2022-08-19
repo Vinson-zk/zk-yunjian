@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.zk</groupId>
+		<artifactId>zk-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../zk-parent</relativePath>
+	</parent>
+	<artifactId>zk-wechat</artifactId>
+	<version>${version.zk.wechat}</version>
+	<name>zk-wechat</name>
+	<description>Vinson project zk-wechat</description>
+	
+	<properties>
+		<!-- 可以从 parent 中继承 -->
+	</properties>
+	
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<package.env>dev</package.env>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>gf</id>
+			<properties>
+				<package.env>gf</package.env>
+			</properties>
+		</profile>
+	</profiles>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.zk</groupId>
+				<artifactId>zk-dependencies</artifactId>
+				<version>${version.zk.dependencies}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-core</artifactId>
+			<version>${version.zk.core}</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-mongo</artifactId>
+			<version>${version.zk.mongo}</version>
+		</dependency> -->
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-db</artifactId>
+			<version>${version.zk.db}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-base</artifactId>
+			<version>${version.zk.base}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.zk</groupId>
+					<artifactId>zk-mongo</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-cache</artifactId>
+			<version>${version.zk.cache}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.zk</groupId>
+					<artifactId>zk-mongo</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.data</groupId>
+					<artifactId>spring-data-mongodb</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-framework</artifactId>
+			<version>${version.zk.framework}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency> 
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+		</dependency>
+	
+		<!-- ***** spring boot begin -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<!-- 排除自带的logback依赖 -->
+			<exclusions>
+	            <exclusion>
+	                <groupId>org.springframework.boot</groupId>
+	                <artifactId>spring-boot-starter-logging</artifactId>
+	            </exclusion>
+	        </exclusions> 
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-configuration-processor</artifactId>
+    	</dependency>
+    	<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-freemarker</artifactId>
+    	</dependency> 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<!-- 热部署模块；optional 需要为 true 热部署才有效 -->
+		<!-- <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-devtools</artifactId>
+		    <optional>true</optional> 
+		</dependency> -->
+		<!-- ##### spring boot end -->
+		
+		<!-- ***** mybatis begin -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+        </dependency>
+        <!-- ##### mybatis end -->
+        
+        <!-- ***** connection pool begin -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>tools</artifactId>
+                    <groupId>com.alibaba</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- ##### connection pool end -->
+        
+        <!-- ***** begin jdbc driver -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- ##### jdbc driver end -->
+		
+		<!-- ***** jsp begin -->
+		<dependency>
+		    <groupId>org.apache.tomcat.embed</groupId>
+		    <artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>jstl</artifactId>
+		</dependency>
+       	<!-- ##### jsp end -->
+		
+		<!-- ***** log4j begin -->
+		<dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-log4j</artifactId>
+	    </dependency>
+	    <dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-log4j12</artifactId>
+		    <!-- <scope>test</scope> -->
+		</dependency>
+	    <!-- <dependency>
+	        <groupId>org.apache.logging.log4j</groupId>
+	        <artifactId>log4j-api</artifactId>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.apache.logging.log4j</groupId>
+	        <artifactId>log4j-core</artifactId>
+	    </dependency>
+	    <dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-web</artifactId>
+	    </dependency> -->
+	    <!-- ##### log4j end -->
+	    
+	    <!-- ***** shiro begin -->
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-spring</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-core</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-web</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-ehcache</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-cas</artifactId>
+		</dependency>
+		<!-- ##### shiro end -->
+	    
+	    <!-- ***** fasterxml.jackson begin -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jaxb-annotations</artifactId>
+		</dependency>
+		<!-- ##### fasterxml.jackson end -->
+	
+		<!-- ***** other begin -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		</dependency>
+		<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+			</dependency>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+   			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- ##### other end -->
+		
+		<dependency>
+			<groupId>com.qq.weixin.mp.aes</groupId>
+			<artifactId>aes-jre1.6</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+		</dependency>
+			
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- plugin 生成可引用 jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default</id>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- plugin 生成源文件 jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<configuration>
+					<skipSource>false</skipSource>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- plugin 发布 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<!-- plugin spring-boot 打包成可执行 jar 和 可依赖的 jar -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<skip>${isDeploy}</skip>
+					<executable>false</executable>
+					<classifier>exec</classifier>
+					<mainClass>com.zk.wechat.ZKWechatSpringBootMain</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals><!-- repackage, run, start, stop, build-info -->
+					</execution>
+				</executions>
+			</plugin>
+			<!-- plugin 资源配置文件处理 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<useDefaultDelimiters>true</useDefaultDelimiters>
+					<resources>
+						<resource>
+							<filtering>true</filtering>
+							<directory>${basedir}/src/main/resources</directory>
+							<targetPath>${project.build.directory}/classes</targetPath>
+						</resource>
+						<resource>
+							<filtering>true</filtering>
+							<directory>${basedir}/src/env/${package.env}</directory>
+							<targetPath>${project.build.directory}/classes</targetPath>
+						</resource>
+					</resources>
+				</configuration>
+ 			</plugin>
+            
+        </plugins>
+		
+	</build>
+	
+</project>

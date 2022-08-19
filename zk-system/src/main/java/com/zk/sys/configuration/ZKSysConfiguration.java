@@ -116,7 +116,6 @@ public class ZKSysConfiguration {
     @Autowired
     public void before(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
         System.out.println("[^_^:20200805-1808-001] -------- configuration before begin... ... " + this.getClass());
-
         ZKEnvironmentUtils.initContext(applicationContext);
 //        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("en_US"));
 //        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("zh_CN"));
@@ -229,11 +228,9 @@ public class ZKSysConfiguration {
         dds_r.setUsername(this.dbUserName_r);
         dds_r.setPassword(dbPwd_r);
 
-        log.info("[^_^:20220521-1147-001] ====================================================");
-        log.info("[^_^:20220521-1147-001] === 数据库信息 =======================================");
-        log.info("[^_^:20220521-1147-001] ====================================================");
-        log.info("[^_^:20220521-1147-001] 数据库：" + dds_w.getUrl());
-        log.info("[^_^:20220521-1147-001] ====================================================");
+        System.out.println("[^_^:20220521-1147-001] ====================================================");
+        System.out.println("[^_^:20220521-1147-001] 数据库链接：" + dds_w.getUrl());
+        System.out.println("[^_^:20220521-1147-001] ====================================================");
 
         zkDynamicDataSource.setWriteDataSource(dds_w);
         zkDynamicDataSource.setReadDataSource(dds_r);
