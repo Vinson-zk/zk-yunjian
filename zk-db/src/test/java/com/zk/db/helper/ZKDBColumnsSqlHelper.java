@@ -27,7 +27,7 @@ package com.zk.db.helper;
 public class ZKDBColumnsSqlHelper {
     
     public static final String testColumns = "c_id AS id, "
-            + "c_type AS type, "
+            + "c_int AS mInt, "
             + "c_value AS value, "
             + "c_remarks AS remarks, "
             + "c_json AS json, "

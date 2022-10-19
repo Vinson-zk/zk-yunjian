@@ -2,7 +2,7 @@
  * 
  */
 package com.zk.sys.res.service;
- 
+
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +21,9 @@ import com.zk.sys.res.entity.ZKSysResDictType;
 
 /**
  * ZKSysResDictService
- * @author 
- * @version 
+ * 
+ * @author
+ * @version
  */
 @Service
 @Transactional(readOnly = true)
@@ -41,12 +42,11 @@ public class ZKSysResDictService extends ZKBaseTreeService<String, ZKSysResDict,
                 if (ZKSysResDict.DEL_FLAG.normal == oldDict.getDelFlag().intValue()) {
                     // 字典代码已存在
                     log.error("[>_<:20211114-2130-001] 字典代码已存在；typeCode: {} dictCode: {} ", sysResDict.getTypeCode(),
-                            sysResDict.getDictCode());
+                        sysResDict.getDictCode());
                     Map<String, String> validatorMsg = Maps.newHashMap();
                     validatorMsg.put("dictCode", ZKMsgUtils.getMessage("zk.sys.000003", sysResDict.getDictCode()));
                     throw ZKCodeException.asDataValidator(validatorMsg);
-                }
-                else {
+                } else {
                     // 字典代码被逻辑删除，重新启用
                     sysResDict.setDelFlag(ZKSysResDict.DEL_FLAG.normal);
                     sysResDict.setPkId(oldDict.getPkId());
@@ -77,9 +77,8 @@ public class ZKSysResDictService extends ZKBaseTreeService<String, ZKSysResDict,
             log.info("[^_^:20211114-2118-002] 字典代码为空；");
             return null;
         }
-        return this.dao.getByTypeCodeAndDictCode(ZKSysResDict.initSqlProvider().getTableName(),
-                ZKSysResDict.initSqlProvider().getTableAlias(), ZKSysResDict.initSqlProvider().getSqlBlockSelCols(),
-                typeCode, dictCode);
+        return this.dao.getByTypeCodeAndDictCode(ZKSysResDict.sqlHelper().getTableName(),
+            ZKSysResDict.sqlHelper().getTableAlias(), ZKSysResDict.sqlHelper().getBlockSqlCols(), typeCode, dictCode);
     }
 
     /**
@@ -101,10 +100,11 @@ public class ZKSysResDictService extends ZKBaseTreeService<String, ZKSysResDict,
         }
         return e;
     }
-	
+
     /**
      * 树形查询
      */
+    @Override
     public List<ZKSysResDict> doFindTree(ZKSysResDict sysResDic) {
         return this.dao.findTree(sysResDic);
     }

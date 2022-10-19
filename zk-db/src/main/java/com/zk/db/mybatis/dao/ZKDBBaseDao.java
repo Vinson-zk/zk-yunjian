@@ -25,7 +25,7 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
-import com.zk.db.commons.ZKDBBaseEntity;
+import com.zk.db.entity.ZKDBBaseEntity;
 import com.zk.db.mybatis.provider.ZKDBMybatisSqlProvider;
 
 /** 

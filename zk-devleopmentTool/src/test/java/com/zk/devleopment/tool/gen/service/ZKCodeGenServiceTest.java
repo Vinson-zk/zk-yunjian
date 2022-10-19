@@ -19,6 +19,7 @@
 package com.zk.devleopment.tool.gen.service;
 
 import org.junit.Test;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import com.zk.devleopment.tool.ZKDevleopmentToolTestHelper;
 
@@ -33,7 +34,11 @@ public class ZKCodeGenServiceTest {
     @Test
     public void testGenCode() {
 
-        ZKCodeGenService s = ZKDevleopmentToolTestHelper.getMainCtx().getBean(ZKCodeGenService.class);
+        ConfigurableApplicationContext ctx = ZKDevleopmentToolTestHelper.getMainCtx();
+        ZKCodeGenService s = ctx.getBean(ZKCodeGenService.class);
+
+//        ZKModuleService  ms = ctx.getBean(ZKModuleService.class);
+//        ZKTableInfoService  tis = ctx.getBean(ZKTableInfoService.class);
 
         String moduleId;
         String[] tableIds;

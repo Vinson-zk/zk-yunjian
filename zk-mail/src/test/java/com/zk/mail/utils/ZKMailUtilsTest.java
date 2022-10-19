@@ -38,34 +38,57 @@ import junit.framework.TestCase;
  */
 public class ZKMailUtilsTest {
 
+    // 126
+    public Properties get126Properties(){
+        String host = "smtp.126.com";
+        // # 发送邮件服务器端口
+        String port = "465";
+        // # 发送邮件方式 SSL TLS
+        String type = "SSL";
+        boolean validate = true;
+        return ZKMailUtils.getProperties(host, port, type, validate);
+    }
+
+    //
+    public Properties getQQProperties(){
+        String host = "smtp.exmail.qq.com";
+        // # 发送邮件服务器端口
+        String port = "465";
+        // # 发送邮件方式 SSL TLS
+        String type = "SSL";
+        boolean validate = true;
+        return ZKMailUtils.getProperties(host, port, type, validate);
+    }
+
     @Test
     public void testSendMail() {
         try {
-            String host = "smtp.126.com";
-            // # 发送邮件服务器端口
-            String port = "465";
-            // # 发送邮件方式 SSL TLS
-            String type = "SSL";
+
             // # 发送邮件账号信息，账号、密码、名称
             String account = "binary_space@126.com";
             // # DABDSDVNUZPVLCRD qaz123wsx CJBDKRMXRZPGQESW
             String password = "DABDSDVNUZPVLCRD";
-            boolean validate = true;
-            
+            Properties mailProperties = this.get126Properties();
+
+            account = "xzrs@zhgxfz.com";
+            password = "Zjb&0128";
+            mailProperties = this.getQQProperties();
+
             String sendAddress = account;
-            String sendName = "sendName";
-            String subject = "subject";
-            String content = "content";
+            String sendName = "sendName-Vinson-测试";
+            String subject = "subject-Vinson-测试";
+            String content = "content-Vinson-测试";
             String recipientMailAddr = "binary_space@126.com";
+            recipientMailAddr = "it@zhgxfz.com";
+
             InputStream is = new ByteArrayInputStream("inputStream-Attachments".getBytes());
 //            File file = new File("testFileAttachments.txt");
 //            ZKFileUtils.writeFile("testFileAttachments.txt".getBytes(), file, true);
 
-            Properties mailProperties = ZKMailUtils.getProperties(host, port, type, validate);
             ZKMailAuthenticator mailAuthenticator = ZKMailUtils.getMailAuthenticator(account, password);
+
             boolean res = ZKMailUtils.sendMail(recipientMailAddr, mailProperties, mailAuthenticator, sendAddress,
-                    sendName, subject, content, false,
-                    new ZKStreamDataSource("testAttachments.txt", ZKContentType.TEXT_PLAIN_UTF8.getContentType(),
+                    sendName, subject, content, false, new ZKStreamDataSource("testAttachments.txt", ZKContentType.TEXT_PLAIN_UTF8.getContentType(),
                             is, null));
 
             TestCase.assertTrue(res);
@@ -75,5 +98,6 @@ public class ZKMailUtilsTest {
             TestCase.assertTrue(false);
         }
     }
+
 
 }

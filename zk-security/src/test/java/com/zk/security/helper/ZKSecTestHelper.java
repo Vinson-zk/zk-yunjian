@@ -19,12 +19,12 @@
 package com.zk.security.helper;
 
 import org.junit.Test;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.zk.security.helper.service.TestService;
-import com.zk.security.mgt.ZKSecSecurityManager;
 import com.zk.security.ticket.ZKSecTicketManager;
-import com.zk.security.web.mgt.ZKSecWebSecurityManager;
+import com.zk.security.utils.ZKSecTestHelperTestCtx;
 
 import junit.framework.TestCase;
 
@@ -36,53 +36,43 @@ import junit.framework.TestCase;
 */
 public class ZKSecTestHelper {
 
-    public static final String[] config_sprint_paths = new String[] { "classpath:test_spring_context.xml" };
-
-    public static FileSystemXmlApplicationContext ctxSprint;
-
-    public static final String[] config_sec_paths = new String[] { "classpath:sec/test_spring_context_sec.xml",
-            "classpath:test_spring_context.xml" };
-
-    public static FileSystemXmlApplicationContext ctxSec;
-
-    public static final String[] config_sec_web_paths = new String[] { "classpath:sec/test_spring_context_sec_web.xml",
-            "classpath:test_spring_context.xml" };
-
-    public static FileSystemXmlApplicationContext ctxSecWeb;
-
-    static {
-        try {
-            ctxSprint = new FileSystemXmlApplicationContext(config_sprint_paths);
-            TestCase.assertNotNull(ctxSprint);
-
-            ctxSec = new FileSystemXmlApplicationContext(config_sec_paths);
-            TestCase.assertNotNull(ctxSec);
-
-            ctxSecWeb = new FileSystemXmlApplicationContext(config_sec_web_paths);
-            TestCase.assertNotNull(ctxSecWeb);
-
-            ZKSecSecurityManager securityManager = ctxSec.getBean(ZKSecSecurityManager.class);
-            TestCase.assertNotNull(securityManager);
-
-            ZKSecWebSecurityManager webSecurityManager = ctxSecWeb.getBean(ZKSecWebSecurityManager.class);
-            TestCase.assertNotNull(webSecurityManager);
-
+    public static final String[] config_sprint_paths = new String[] { "classpath:test_spring_ctx.xml" };
+    private static FileSystemXmlApplicationContext ctxSpring = null;
+    public static FileSystemXmlApplicationContext getCtxSpring(){
+        if(ctxSpring == null){
+            ctxSpring = new FileSystemXmlApplicationContext(config_sprint_paths);
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        return ctxSpring;
+    }
+
+    private static ConfigurableApplicationContext ctxSecWeb = null;
+    public static ConfigurableApplicationContext getCtxSecWeb(){
+        if(ctxSecWeb == null){
+            ctxSecWeb = ZKSecTestHelperSpringBootMain.run(new String[]{});
         }
+        return ctxSecWeb;
+    }
+
+    private static ConfigurableApplicationContext ctxSec = null;
+    public static ConfigurableApplicationContext getCtxSec(){
+        if(ctxSec == null){
+            ctxSec = ZKSecTestHelperTestCtx.run(new String[]{});
+        }
+        return ctxSec;
     }
 
     @Test
     public void test() {
-
         try {
-            ZKSecTicketManager tm = ctxSec.getBean("ticketManager", ZKSecTicketManager.class);
+            TestCase.assertNotNull(getCtxSpring());
+            TestCase.assertNotNull(getCtxSecWeb());
+            TestCase.assertNotNull(getCtxSec());
+
+            ZKSecTicketManager tm = getCtxSecWeb().getBean("ticketManager", ZKSecTicketManager.class);
             TestCase.assertNotNull(tm);
 
-            TestService ts = ctxSec.getBean(TestService.class);
+            TestService ts = getCtxSecWeb().getBean(TestService.class);
             TestCase.assertNotNull(ts.getTicketManager());
-
         }
         catch(Exception e) {
             e.printStackTrace();

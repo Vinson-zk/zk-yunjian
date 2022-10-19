@@ -18,6 +18,9 @@
 */
 package com.zk.devleopment.tool.gen.dao;
 
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
 import com.zk.base.dao.ZKBaseDao;
 import com.zk.db.annotation.ZKMyBatisDao;
 import com.zk.devleopment.tool.gen.entity.ZKModule;
@@ -30,5 +33,8 @@ import com.zk.devleopment.tool.gen.entity.ZKModule;
 */
 @ZKMyBatisDao
 public interface ZKModuleDao extends ZKBaseDao<String, ZKModule> {
+
+    @Select({ "SELECT ${sCols} FROM ${tn} ${alias} WHERE c_module_name = #{moduleName} "})
+    ZKModule getByModuleName(@Param("sCols") String sCols, @Param("tn") String tn, @Param("alias") String alias, @Param("moduleName") String moduleName);
 
 }

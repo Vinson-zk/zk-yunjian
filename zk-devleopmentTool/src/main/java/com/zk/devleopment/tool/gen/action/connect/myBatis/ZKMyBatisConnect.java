@@ -11,7 +11,7 @@
 *
 * @Title: ZKMyBatisConnect.java 
 * @author Vinson 
-* @Package com.zk.code.generate.connect.myBatis 
+* @Package com.zk.devleopment.tool.gen.action.connect.myBatis 
 * @Description: TODO(simple description this file what to do.) 
 * @date Mar 17, 2020 9:07:18 PM 
 * @version V1.0 
@@ -22,8 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.PersistenceException;
+
 import org.apache.ibatis.session.SqlSession;
 
+import com.zk.core.exception.ZKCodeException;
 import com.zk.devleopment.tool.gen.action.connect.api.ZKDatabaseConnect;
 
 /** 
@@ -60,8 +63,11 @@ public class ZKMyBatisConnect implements ZKDatabaseConnect {
             paramsMap.put("name", tableName);
             System.out.println("[^_^:20210331-0903-001] schema: " + sqlSession.getConnection().getSchema());
             List<Map<String, Object>> columnSourceList = sqlSession
-                    .selectList("com.zk.code.generate.dao.TableInfoDao.findTableList", paramsMap);
+                    .selectList("com.zk.devleopment.tool.gen.action.dao.TableInfoDao.findTableList", paramsMap);
             return columnSourceList;
+        }catch (PersistenceException e){
+            e.printStackTrace();
+            throw ZKCodeException.as("zk.codeGen.000005", "模块数据库连接异常", (Object[])null, null);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -69,6 +75,7 @@ public class ZKMyBatisConnect implements ZKDatabaseConnect {
         return null;
     }
 
+    @Override
     public List<Map<String, Object>> getColumnSourceList(String dbType, String tableName) {
         try {
             Map<String, String> paramsMap = new HashMap<String, String>();
@@ -76,8 +83,11 @@ public class ZKMyBatisConnect implements ZKDatabaseConnect {
             paramsMap.put("name", tableName);
             System.out.println("[^_^:20200318-1447-001] schema: " + sqlSession.getConnection().getSchema());
             List<Map<String, Object>> columnSourceList = sqlSession
-                    .selectList("com.zk.code.generate.dao.TableInfoDao.findTableColumnList", paramsMap);
+                    .selectList("com.zk.devleopment.tool.gen.action.dao.TableInfoDao.findTableColumnList", paramsMap);
             return columnSourceList;
+        }catch (PersistenceException e){
+            e.printStackTrace();
+            throw ZKCodeException.as("zk.codeGen.000005", "模块数据库连接异常", (Object[])null, null);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -85,14 +95,18 @@ public class ZKMyBatisConnect implements ZKDatabaseConnect {
         return null;
     }
 
+    @Override
     public List<String> getPkSourceList(String dbType, String tableName) {
         try {
             Map<String, String> paramsMap = new HashMap<String, String>();
             paramsMap.put("dbType", dbType);
             paramsMap.put("name", tableName);
-            List<String> pkSourceList = sqlSession.selectList("com.zk.code.generate.dao.TableInfoDao.findTablePK",
+            List<String> pkSourceList = sqlSession.selectList("com.zk.devleopment.tool.gen.action.dao.TableInfoDao.findTablePK",
                     paramsMap);
             return pkSourceList;
+        }catch (PersistenceException e){
+            e.printStackTrace();
+            throw ZKCodeException.as("zk.codeGen.000005", "模块数据库连接异常", (Object[])null, null);
         }
         catch(Exception e) {
             e.printStackTrace();

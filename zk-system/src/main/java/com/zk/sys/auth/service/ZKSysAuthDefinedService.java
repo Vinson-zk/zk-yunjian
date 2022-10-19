@@ -56,6 +56,7 @@ public class ZKSysAuthDefinedService extends ZKBaseService<String, ZKSysAuthDefi
     @Autowired
     ZKSysAuthUserTypeService sysAuthUserTypeService;
 
+    @Override
     @Transactional(readOnly = false)
     public int save(ZKSysAuthDefined authDefined) throws ZKValidatorException {
 
@@ -83,9 +84,9 @@ public class ZKSysAuthDefinedService extends ZKBaseService<String, ZKSysAuthDefi
         if (ZKStringUtils.isEmpty(code)) {
             return null;
         }
-        return this.dao.getByCode(ZKSysAuthDefined.initSqlProvider().getTableName(),
-                ZKSysAuthDefined.initSqlProvider().getTableAlias(),
-                ZKSysAuthDefined.initSqlProvider().getSqlBlockSelCols(), code);
+        return this.dao.getByCode(ZKSysAuthDefined.sqlHelper().getTableName(),
+                ZKSysAuthDefined.sqlHelper().getTableAlias(),
+                ZKSysAuthDefined.sqlHelper().getBlockSqlCols(), code);
 
     }
 

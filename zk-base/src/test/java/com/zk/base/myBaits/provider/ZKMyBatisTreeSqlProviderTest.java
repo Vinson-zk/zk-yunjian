@@ -18,10 +18,8 @@
 */
 package com.zk.base.myBaits.provider;
 
+import com.zk.base.helper.entity.ZKBaseHelperTreeEntity;
 import org.junit.Test;
-
-import com.zk.base.helper.entity.ZKBaseTreeEntityHelper;
-
 import junit.framework.TestCase;
 
 /** 
@@ -37,7 +35,6 @@ public class ZKMyBatisTreeSqlProviderTest {
         try {
             
             /*
-
 FROM t_test a 
 <where><trim prefixOverrides="and|or"><if test=" pkId != null and pkId != ''">a.c_pk_id = #{pkId}</if><if test=" parentId != null and parentId != ''"> AND a.c_parent_id = #{parentId}</if><if test=" delFlag != null"> AND a.c_del_flag = #{delFlag}</if><if test="parentId == null or parentId == ''"><if test="parentIdIsEmpty != null  and  parentIdIsEmpty == true ">(a.c_parent_id is null  OR a.c_parent_id = "")</if></if></trim></where> 
 =======================================
@@ -47,15 +44,14 @@ FROM t_test a
 FROM t_test a 
 <where><if test="parentId == null or parentId == ''">(a.c_parent_id is null  OR a.c_parent_id = "")</if> OR a.c_parent_id not in (SELECT _t.c_pk_id FROM t_test _t <where><trim prefixOverrides="and|or"><if test=" pkId != null and pkId != ''">_t.c_pk_id = #{pkId}</if><if test=" parentId != null and parentId != ''"> AND _t.c_parent_id = #{parentId}</if><if test=" delFlag != null"> AND _t.c_del_flag = #{delFlag}</if></trim></where>)</where>   </script>
 =======================================
-            
             */
             
             ZKMyBatisTreeSqlProvider treeSqlProvider = new ZKMyBatisTreeSqlProvider();
             
-            ZKBaseTreeEntityHelper e = new ZKBaseTreeEntityHelper();
+            ZKBaseHelperTreeEntity e = new ZKBaseHelperTreeEntity();
             String str;
 
-            str = e.getSqlProvider().getSqlBlockSelList();
+            str = e.getSqlHelper().getBlockSqlSelelctList();
             System.out.println("[^_^:20220418-2021-001] getSqlBlockSelList: " + str);
             System.out.println("=======================================");
 
@@ -63,7 +59,7 @@ FROM t_test a
             System.out.println("[^_^:20220418-2021-002] selectTree: " + str);
             System.out.println("=======================================");
             
-            str = treeSqlProvider.selectTreeNoLevel(e);
+            str = treeSqlProvider.selectTreeFilter(e);
             System.out.println("[^_^:20220418-2021-003] selectTreeNoLevel:" + str);
             System.out.println("=======================================");
 

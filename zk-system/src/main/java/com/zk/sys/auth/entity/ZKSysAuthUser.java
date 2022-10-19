@@ -3,18 +3,21 @@
  */
 package com.zk.sys.auth.entity;
 
-import java.lang.String;
-import com.zk.core.utils.ZKIdUtils;
-import com.zk.db.commons.ZKDBQueryType;
-
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
+import javax.xml.bind.annotation.XmlTransient;
 
-import com.zk.db.annotation.ZKTable;
-import com.zk.db.annotation.ZKColumn;
-import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.base.entity.ZKBaseEntity;
+import com.zk.core.utils.ZKIdUtils;
+import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
+import com.zk.db.annotation.ZKTable;
+import com.zk.db.commons.ZKDBOptComparison;
+import com.zk.db.commons.ZKSqlConvertDelegating;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 用户权限表
@@ -24,18 +27,24 @@ import com.zk.base.entity.ZKBaseEntity;
 @ZKTable(name = "t_sys_auth_user", alias = "sysAuthUser", orderBy = " c_create_date ASC ")
 public class ZKSysAuthUser extends ZKBaseEntity<String, ZKSysAuthUser> {
 	
-	static ZKSqlProvider sqlProvider;
-	
-    @Override 
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+	static ZKDBSqlHelper sqlHelper;
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    @Override
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
-    
-    public static ZKSqlProvider initSqlProvider() {
-        if(sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKSysAuthUser());
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKSysAuthUser());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
     
     private static final long serialVersionUID = 1L;
@@ -45,41 +54,41 @@ public class ZKSysAuthUser extends ZKBaseEntity<String, ZKSysAuthUser> {
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_group_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_group_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String groupCode;	
 	/**
 	 * 公司ID 
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_company_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_company_id", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String companyId;	
 	/**
 	 * 公司代码
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_company_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_company_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String companyCode;	
 	/**
 	 * 用户ID 
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_user_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_user_id", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String userId;	
 	/**
 	 * 权限ID 
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_auth_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_auth_id", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String authId;	
 	/**
 	 * 权限代码
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_auth_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_auth_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String authCode;	
 	
 	public ZKSysAuthUser() {

@@ -70,7 +70,7 @@ public class ZKSysAuthUserTypeService extends ZKBaseService<String, ZKSysAuthUse
         if (userType == null) {
             // zk.sys.010013=职级不存在
             log.error("[>_<:20220504-1212-002] zk.sys.010013=职级不存在");
-            throw new ZKCodeException("zk.sys.010013");
+            throw ZKCodeException.as("zk.sys.010013");
         }
         // 先删除 需要删除的关联关系
         if (delAuths == null) {
@@ -97,7 +97,7 @@ public class ZKSysAuthUserTypeService extends ZKBaseService<String, ZKSysAuthUse
         if (ZKStringUtils.isEmpty(userTypeId)) {
             return Collections.emptyList();
         }
-        return this.dao.findAuthCodesByUserTypeId(ZKSysAuthUserType.initSqlProvider().getTableName(), userTypeId,
+        return this.dao.findAuthCodesByUserTypeId(ZKSysAuthUserType.sqlHelper().getTableName(), userTypeId,
                 ZKSysAuthUserType.DEL_FLAG.normal);
     }
 
@@ -106,7 +106,7 @@ public class ZKSysAuthUserTypeService extends ZKBaseService<String, ZKSysAuthUse
         if (ZKStringUtils.isEmpty(userTypeId)) {
             return Collections.emptyList();
         }
-        return this.dao.findAuthIdsByUserTypeId(ZKSysAuthUserType.initSqlProvider().getTableName(), userTypeId,
+        return this.dao.findAuthIdsByUserTypeId(ZKSysAuthUserType.sqlHelper().getTableName(), userTypeId,
                 ZKSysAuthUserType.DEL_FLAG.normal);
     }
 
@@ -115,15 +115,15 @@ public class ZKSysAuthUserTypeService extends ZKBaseService<String, ZKSysAuthUse
         if (ZKStringUtils.isEmpty(userTypeId)) {
             return Collections.emptyList();
         }
-        return this.dao.findApiCodesByUserTypeId(ZKSysAuthUserType.initSqlProvider().getTableName(),
-                ZKSysAuthFuncApi.initSqlProvider().getTableName(), userTypeId, ZKSysAuthUserType.DEL_FLAG.normal);
+        return this.dao.findApiCodesByUserTypeId(ZKSysAuthUserType.sqlHelper().getTableName(),
+                ZKSysAuthFuncApi.sqlHelper().getTableName(), userTypeId, ZKSysAuthUserType.DEL_FLAG.normal);
     }
 
     // 根据关联关系查询 权限关系实体
     public ZKSysAuthUserType getRelationByAuthIdAndUserTypeId(String authId, String userTypeId) {
-        return this.dao.getRelationByAuthIdAndUserTypeId(ZKSysAuthUserType.initSqlProvider().getTableName(),
-                ZKSysAuthUserType.initSqlProvider().getTableAlias(),
-                ZKSysAuthUserType.initSqlProvider().getSqlBlockSelCols(), authId, userTypeId);
+        return this.dao.getRelationByAuthIdAndUserTypeId(ZKSysAuthUserType.sqlHelper().getTableName(),
+                ZKSysAuthUserType.sqlHelper().getTableAlias(),
+                ZKSysAuthUserType.sqlHelper().getBlockSqlCols(), authId, userTypeId);
     }
 
     // 根据权限代码ID 删除关联关系
@@ -131,7 +131,7 @@ public class ZKSysAuthUserTypeService extends ZKBaseService<String, ZKSysAuthUse
     public int diskDelByAuthId(String authId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByAuthId(ZKSysAuthUserType.initSqlProvider().getTableName(), authId);
+        return this.dao.diskDelByAuthId(ZKSysAuthUserType.sqlHelper().getTableName(), authId);
     }
 
     // 根据 用户类型ID 删除关联关系
@@ -139,7 +139,7 @@ public class ZKSysAuthUserTypeService extends ZKBaseService<String, ZKSysAuthUse
     public int diskDelByUserTypeId(String userTypeId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByUserTypeId(ZKSysAuthUserType.initSqlProvider().getTableName(), userTypeId);
+        return this.dao.diskDelByUserTypeId(ZKSysAuthUserType.sqlHelper().getTableName(), userTypeId);
     }
 
     // 根据权限代码ID和用户类型ID 物理删除
@@ -147,7 +147,7 @@ public class ZKSysAuthUserTypeService extends ZKBaseService<String, ZKSysAuthUse
     public int diskDelByAuthIdAndUserTypeId(String authId, String userTypeId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByAuthIdAndUserTypeId(ZKSysAuthUserType.initSqlProvider().getTableName(), authId,
+        return this.dao.diskDelByAuthIdAndUserTypeId(ZKSysAuthUserType.sqlHelper().getTableName(), authId,
                 userTypeId);
     }
 

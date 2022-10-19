@@ -211,7 +211,7 @@ public class ZKWXUtils {
     public static void checkResStatusCode(int resStatusCode) {
         if (resStatusCode < 200 || resStatusCode > 299) {
             logger.error("[>_<:20211105-0016-001] 请求微信平台链接异常, resposeStatusCode:{}", resStatusCode);
-            throw new ZKCodeException("zk.wechat.110001", "请求微信平台链接异常, resposeStatusCode:{}", resStatusCode);
+            throw ZKCodeException.as("zk.wechat.110001", "请求微信平台链接异常, resposeStatusCode:{}", resStatusCode);
         }
     }
 
@@ -230,7 +230,7 @@ public class ZKWXUtils {
         if (msgMap != null && msgMap.get(MsgAttr.Error.errcode) != null
                 && !"0".equals(msgMap.get(MsgAttr.Error.errcode).toString())) {
             logger.error("[>_<:20211105-0016-002] 微信返回消息异常！微信异常信息：{}", ZKJsonUtils.writeObjectJson(msgMap));
-            throw new ZKCodeException("wx." + msgMap.get(MsgAttr.Error.errcode),
+            throw ZKCodeException.as("wx." + msgMap.get(MsgAttr.Error.errcode),
                     msgMap.get(MsgAttr.Error.errmsg).toString());
         }
     }
@@ -239,7 +239,7 @@ public class ZKWXUtils {
         if (resMsg != null && resMsg.containsKey(MsgAttr.Error.errcode)
                 && !"0".equals(resMsg.getString(MsgAttr.Error.errcode))) {
             logger.error("[>_<:20211105-0016-002] 微信返回消息异常！微信异常信息：{}", resMsg.toJSONString());
-            throw new ZKCodeException("wx." + resMsg.getString(MsgAttr.Error.errcode),
+            throw ZKCodeException.as("wx." + resMsg.getString(MsgAttr.Error.errcode),
                     resMsg.getString(MsgAttr.Error.errcode));
         }
     }

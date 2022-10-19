@@ -60,7 +60,7 @@ public class ZKSysAuthCompanyService extends ZKBaseService<String, ZKSysAuthComp
         if (company == null) {
             // zk.sys.010006=部门不存在
             log.error("[>_<:20220504-1212-003] 部门不存在");
-            throw new ZKCodeException("zk.sys.010006");
+            throw ZKCodeException.as("zk.sys.010006");
         }
         // 先删除 需要删除的关联关系
         if (delAuths == null) {
@@ -84,33 +84,33 @@ public class ZKSysAuthCompanyService extends ZKBaseService<String, ZKSysAuthComp
 
     // 查询公司拥有的权限ID
     public List<String> findAuthIdsByCompanyId(String companyId, Integer ownerType) {
-        return this.dao.findAuthIdsByCompanyId(ZKSysAuthCompany.initSqlProvider().getTableName(), companyId, ownerType,
+        return this.dao.findAuthIdsByCompanyId(ZKSysAuthCompany.sqlHelper().getTableName(), companyId, ownerType,
                 ZKSysAuthCompany.DEL_FLAG.normal);
     }
 
     // 根据关联关系查询 权限关系实体
     public ZKSysAuthCompany getRelationByAuthIdAndCompanyId(String authId, String companyId) {
-        return this.dao.getRelationByAuthIdAndCompanyId(ZKSysAuthCompany.initSqlProvider().getTableName(),
-                ZKSysAuthCompany.initSqlProvider().getTableAlias(),
-                ZKSysAuthCompany.initSqlProvider().getSqlBlockSelCols(), authId, companyId);
+        return this.dao.getRelationByAuthIdAndCompanyId(ZKSysAuthCompany.sqlHelper().getTableName(),
+                ZKSysAuthCompany.sqlHelper().getTableAlias(),
+                ZKSysAuthCompany.sqlHelper().getBlockSqlCols(), authId, companyId);
     }
 
     // 根据权限代码ID 删除关联关系
     @Transactional(readOnly = false)
     public int diskDelByAuthId(String authId) {
-        return this.dao.diskDelByAuthId(ZKSysAuthCompany.initSqlProvider().getTableName(), authId);
+        return this.dao.diskDelByAuthId(ZKSysAuthCompany.sqlHelper().getTableName(), authId);
     }
 
     // 根据公司ID 删除关联关系
     @Transactional(readOnly = false)
     public int diskDelByCompanyId(String companyId) {
-        return this.dao.diskDelByCompanyId(ZKSysAuthCompany.initSqlProvider().getTableName(), companyId);
+        return this.dao.diskDelByCompanyId(ZKSysAuthCompany.sqlHelper().getTableName(), companyId);
     }
 
     // 根据权限代码ID和菜单ID 物理删除
     @Transactional(readOnly = false)
     public int diskDelByAuthIdAndCompanyId(String authId, String companyId) {
-        return this.dao.diskDelByAuthIdAndCompanyId(ZKSysAuthCompany.initSqlProvider().getTableName(), authId,
+        return this.dao.diskDelByAuthIdAndCompanyId(ZKSysAuthCompany.sqlHelper().getTableName(), authId,
                 companyId);
     }
 	

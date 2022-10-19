@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zk.base.service.ZKBaseService;
+import com.zk.core.utils.ZKStringUtils;
 import com.zk.devleopment.tool.gen.dao.ZKModuleDao;
 import com.zk.devleopment.tool.gen.entity.ZKModule;
 
@@ -35,4 +36,20 @@ import com.zk.devleopment.tool.gen.entity.ZKModule;
 @Transactional(readOnly = true)
 public class ZKModuleService extends ZKBaseService<String, ZKModule, ZKModuleDao> {
 
+    /**
+     * 根据模块名称取模块实体
+     * @MethodName getByModuleName
+     * @param moduleName
+     * @return com.zk.devleopment.tool.gen.entity.ZKModule
+     * @throws
+     * @Author bs
+     * @DATE 2022-09-03 15:42:819
+     */
+    public ZKModule getByModuleName(String moduleName){
+        if(ZKStringUtils.isEmpty(moduleName)){
+            return null;
+        }
+        return this.dao.getByModuleName(ZKModule.sqlHelper().getTableName(), ZKModule.sqlHelper().getBlockSqlCols(),
+            ZKModule.sqlHelper().getTableAlias(), moduleName);
+    }
 }

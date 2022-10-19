@@ -106,12 +106,12 @@ public class ZKSecSampleRealm extends ZKSecAbstractRealm {
             return pc;
         }
 
-//      sec.000006=用户不存在
+//      zk.sec.000001=用户不存在
         if (!"admin".equals(authcUserToken.getUsername()) && !"test".equals(authcUserToken.getUsername())) {
             throw new ZKSecCodeException("zk.sec.000001");
         }
 
-//      sec.000007=密码错误
+//      zk.sec.000002=密码错误
         if (!"admin".equals(new String(authcUserToken.getPwd()))
                 && !"test".equals(new String(authcUserToken.getPwd()))) {
             throw new ZKSecCodeException("zk.sec.000002");
@@ -140,7 +140,7 @@ public class ZKSecSampleRealm extends ZKSecAbstractRealm {
         for (ZKSecPrincipal<?> p : principalCollection) {
             if (p instanceof ZKSecUserPrincipal<?>) {
                 if ("admin".equals(((ZKSecUserPrincipal<?>) p).getUsername())) {
-                    if ("secPermissionCode".equals(permissionCode)) {
+                    if ("test_permissionCode".equals(permissionCode)) {
                         return true;
                     }
                 }

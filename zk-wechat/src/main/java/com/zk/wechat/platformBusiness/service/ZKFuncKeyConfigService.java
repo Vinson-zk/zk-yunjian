@@ -2,7 +2,7 @@
  * 
  */
 package com.zk.wechat.platformBusiness.service;
- 
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,9 @@ import com.zk.wechat.platformBusiness.entity.ZKFuncKeyType;
 
 /**
  * ZKFuncKeyConfigService
- * @author 
- * @version 
+ * 
+ * @author
+ * @version
  */
 @Service
 @Transactional(readOnly = true)
@@ -49,9 +50,9 @@ public class ZKFuncKeyConfigService extends ZKBaseService<String, ZKFuncKeyConfi
         if (ZKStringUtils.isEmpty(funcKey)) {
             return null;
         }
-        return this.dao.getByFuncKey(ZKFuncKeyConfig.initSqlProvider().getTableName(),
-                ZKFuncKeyConfig.initSqlProvider().getTableAlias(),
-                ZKFuncKeyConfig.initSqlProvider().getSqlBlockSelCols(), funcKey, delFlag);
+        return this.dao.getByFuncKey(ZKFuncKeyConfig.sqlHelper().getTableName(),
+            ZKFuncKeyConfig.sqlHelper().getTableAlias(), ZKFuncKeyConfig.sqlHelper().getBlockSqlCols(), funcKey,
+            delFlag);
     }
 
     @Override
@@ -66,13 +67,12 @@ public class ZKFuncKeyConfigService extends ZKBaseService<String, ZKFuncKeyConfi
                     Map<String, String> validatorMsg = Maps.newHashMap();
                     validatorMsg.put("funcKey", ZKMsgUtils.getMessage("zk.wechat.110002", funcKeyConfig.getFuncKey()));
                     throw ZKCodeException.asDataValidator(validatorMsg);
-                }
-                else {
+                } else {
                     funcKeyConfig.setDelFlag(ZKBaseEntity.DEL_FLAG.normal);
                     funcKeyConfig.setPkId(old.getPkId());
                 }
             }
-            
+
             ZKFuncKeyType funcKeyType = funcKeyTypeService.get(funcKeyConfig.getFuncTypeId());
             if (funcKeyType != null) {
                 funcKeyConfig.setFuncTypeId(funcKeyType.getPkId());
@@ -83,6 +83,4 @@ public class ZKFuncKeyConfigService extends ZKBaseService<String, ZKFuncKeyConfi
         return super.save(funcKeyConfig);
     }
 
-	
-	
 }

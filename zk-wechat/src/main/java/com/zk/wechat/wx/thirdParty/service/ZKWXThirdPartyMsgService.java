@@ -103,12 +103,12 @@ public class ZKWXThirdPartyMsgService {
                     .element(ZKWXThirdPartyConstants.MsgAttr.ComponentVerifyTicket.ComponentVerifyTicket)
                     .getStringValue();
             if (ZKStringUtils.isEmpty(componentVerifyTicket)) {
-                throw new ZKCodeException("zk.wechat.010002", "微信平台推送的令牌为空");
+                throw ZKCodeException.as("zk.wechat.010002", "微信平台推送的令牌为空");
             }
             appId = rootElement.element(ZKWXThirdPartyConstants.MsgAttr.ComponentVerifyTicket.AppId)
                     .getStringValue();
             if (ZKStringUtils.isEmpty(appId)) {
-                throw new ZKCodeException("zk.wechat.010003", "微信平台推送的令牌时APPID为空");
+                throw ZKCodeException.as("zk.wechat.010003", "微信平台推送的令牌时APPID为空");
             }
             // 存储 第三方APPID 的 令牌。
             log.info("[^_^:20180907-0829-001] 微信平台向第三方平台发送的令牌；appid:{}; componentVerifyTicket:{}", appId,
@@ -118,7 +118,7 @@ public class ZKWXThirdPartyMsgService {
         catch(Exception e) {
             e.printStackTrace();
             log.error("[>_<:20180907-0747-001] 处理微信开放平台向第三方开发推送的信息异常！{}", rootElement.asXML());
-            throw new ZKCodeException("zk.wechat.010004", "处理微信开放平台向第三方开发者推送的令牌信息异常", new String[] { appId },
+            throw ZKCodeException.as("zk.wechat.010004", "处理微信开放平台向第三方开发者推送的令牌信息异常", new String[] { appId },
                     e.getMessage());
         }
     }
@@ -156,7 +156,7 @@ public class ZKWXThirdPartyMsgService {
         catch(Exception e) {
             e.printStackTrace();
             log.error("[>_<:20180913-1704-001] 处理公众号授权成功消息异常！{}", rootElement.asXML());
-            throw new ZKCodeException("zk.wechat.010010", "处理公众号授权成功消息异常", e.getMessage());
+            throw ZKCodeException.as("zk.wechat.010010", "处理公众号授权成功消息异常", e.getMessage());
         }
     }
 
@@ -189,7 +189,7 @@ public class ZKWXThirdPartyMsgService {
         catch(Exception e) {
             e.printStackTrace();
             log.error("[>_<:20180913-1704-002] 处理公众号授权取消消息异常！{}", rootElement.asXML());
-            throw new ZKCodeException("zk.wechat.010009", "处理公众号授权取消消息异常", e.getMessage());
+            throw ZKCodeException.as("zk.wechat.010009", "处理公众号授权取消消息异常", e.getMessage());
         }
     }
 
@@ -227,7 +227,7 @@ public class ZKWXThirdPartyMsgService {
         catch(Exception e) {
             log.error("[>_<:20180913-1704-003] 处理公众号授权变更消息异常！{}", rootElement.asXML());
             e.printStackTrace();
-            throw new ZKCodeException("zk.wechat.010008", "处理公众号授权变更消息异常", e.getMessage());
+            throw ZKCodeException.as("zk.wechat.010008", "处理公众号授权变更消息异常", e.getMessage());
         }
     }
 

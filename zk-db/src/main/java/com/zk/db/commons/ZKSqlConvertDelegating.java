@@ -19,6 +19,7 @@
 package com.zk.db.commons;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +27,8 @@ import org.slf4j.LoggerFactory;
 import com.zk.core.commons.data.ZKOrder;
 import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.utils.ZKStringUtils;
-import com.zk.db.annotation.ZKDBAnnotationProvider;
 import com.zk.db.mybatis.ZKMybatisSqlHelper.envKey;
-import com.zk.db.mybatis.mysql.ZKMysqlSqlConvert;
+import com.zk.db.mybatis.mysql.ZKDBMysqlSqlConvert;
 
 /** 
 * @ClassName: ZKSqlConvertDelegating 
@@ -47,11 +47,12 @@ public class ZKSqlConvertDelegating implements ZKSqlConvert {
     }
 
     public ZKSqlConvertDelegating(String dbType) {
+
         if (ZKStringUtils.isEmpty(dbType)) {
             dbType = ZKEnvironmentUtils.getString(envKey.jdbcType, ZKDBConstants.defaultJdbcType);
         }
         if ("mysql".equals(dbType)) {
-            sqlConvert = new ZKMysqlSqlConvert();
+            sqlConvert = new ZKDBMysqlSqlConvert();
         }
 
         if (sqlConvert == null) {
@@ -59,78 +60,75 @@ public class ZKSqlConvertDelegating implements ZKSqlConvert {
         }
     }
 
-    protected static Logger logger = LoggerFactory.getLogger(ZKMysqlSqlConvert.class);
+    protected static Logger logger = LoggerFactory.getLogger(ZKSqlConvertDelegating.class);
 
     /********************************************************/
-    /*** 一些 完整的 sql 语句；一般只要生成一次即可；所以就保存下来 **/
+    /*** 通过注解直接转换成 sql **/
     /********************************************************/
     @Override
-    public String convertSqlInsert(ZKDBAnnotationProvider annotationProvider) {
-        return sqlConvert.convertSqlInsert(annotationProvider);
+    public String convertSqlInsert(ZKDBMapInfo mapInfo){
+        return this.sqlConvert.convertSqlInsert(mapInfo);
     }
 
     @Override
-    public String convertSqlUpdate(ZKDBAnnotationProvider annotationProvider) {
-        return sqlConvert.convertSqlUpdate(annotationProvider);
+    public String convertSqlUpdate(ZKDBMapInfo mapInfo){
+        return this.sqlConvert.convertSqlUpdate(mapInfo);
     }
 
     @Override
-    public String convertSqlDel(ZKDBAnnotationProvider annotationProvider, String delSetSql) {
-        return sqlConvert.convertSqlDel(annotationProvider, delSetSql);
+    public String convertSqlDel(ZKDBMapInfo mapInfo, String delSetSql){
+        return this.sqlConvert.convertSqlDel(mapInfo, delSetSql);
     }
 
     @Override
-    public String convertSqlDiskDel(ZKDBAnnotationProvider annotationProvider) {
-        return sqlConvert.convertSqlDiskDel(annotationProvider);
+    public String convertSqlDiskDel(ZKDBMapInfo mapInfo){
+        return this.sqlConvert.convertSqlDiskDel(mapInfo);
     }
+
+    @Override
+    public String convertSqlSelCols(ZKDBMapInfo mapInfo, String tableAlias){
+        return this.sqlConvert.convertSqlSelCols(mapInfo, tableAlias);
+    }
+
+    @Override
+    public String convertPkCondition(ZKDBMapInfo mapInfo, String tableAlias){
+        return this.sqlConvert.convertPkCondition(mapInfo, tableAlias);
+    }
+
 
     /********************************************************/
-    /***  **/
-    /********************************************************/
-
-//    // 查询目标，带有 FROM
-//    public String convertSqlFrom(ZKDBAnnotationProvider annotationProvider, String tableAlias) {
-//        return sqlConvert.convertSqlFrom(annotationProvider, tableAlias);
-//    }
-
-    // 查询目标，不带有 FROM
-    @Override
-    public String convertSqlSelTable(ZKDBAnnotationProvider annotationProvider, String tableAlias) {
-        return sqlConvert.convertSqlSelTable(annotationProvider, tableAlias);
-    }
-
-    // 查询结果映射
-    @Override
-    public String convertSqlSelCols(ZKDBAnnotationProvider annotationProvider, String tableAlias) {
-        return sqlConvert.convertSqlSelCols(annotationProvider, tableAlias);
-    }
-
-    // 查询主键条件; 带有 WHERE
-    @Override
-    public String convertSqlPkWhere(ZKDBAnnotationProvider annotationProvider, String tableAlias) {
-        return sqlConvert.convertSqlPkWhere(annotationProvider, tableAlias);
-    }
-
-    // 生成 查询条件 sql; 带有 WHERE
-    @Override
-    public String convertSqlWhere(ZKDBQueryConditionWhere where, String tableAlias) {
-        return sqlConvert.convertSqlWhere(where, tableAlias);
-    }
-
-    // 这里将根据字段名映射到数据库字段；所以这里 ZKOrder 中填写的是 JAVA 实体字段名； 带有 ORDER BY
-    @Override
-    public String convertSqlOrderBy(ZKDBAnnotationProvider annotationProvider, Collection<ZKOrder> sorts,
-            String tableAlias, boolean isDefault) {
-        return sqlConvert.convertSqlOrderBy(annotationProvider, sorts, tableAlias, isDefault);
-    }
-
-    /********************************************************/
-    /***  **/
+    /*** 动态 转换 **/
     /********************************************************/
 
     @Override
-    public ZKDBQueryConditionWhere getWhere(ZKDBAnnotationProvider annotationProvider) {
-        return sqlConvert.getWhere(annotationProvider);
+    public void convertQueryCondition(StringBuffer sb, ZKDBQueryCol queryCol, String tableAlias){
+        this.sqlConvert.convertQueryCondition(sb, queryCol, tableAlias);
     }
+
+    @Override
+    public void convertQueryCondition(ZKDBOptLogic queryLogic, StringBuffer sb, ZKDBQueryCol queryCol,
+                                      String tableAlias){
+        this.sqlConvert.convertQueryCondition(queryLogic, sb, queryCol, tableAlias);
+    }
+
+    @Override
+    public String convertSqlOrderBy(ZKDBMapInfo mapInfo, Collection<ZKOrder> sorts, String tableAlias,
+        boolean isDefault) {
+        return this.sqlConvert.convertSqlOrderBy(mapInfo, sorts, tableAlias, isDefault);
+    }
+
+    /********************************************************/
+    /*** 解析类上的注解 **/
+    /********************************************************/
+    @Override
+    public ZKDBQueryWhere resolveQueryCondition(ZKDBMapInfo mapInfo) {
+        return this.sqlConvert.resolveQueryCondition(mapInfo);
+    }
+
+    @Override
+    public ZKDBQueryWhere resolveQueryCondition(ZKDBMapInfo mapInfo, List<String> filterAttrNames){
+        return this.sqlConvert.resolveQueryCondition(mapInfo, filterAttrNames);
+    }
+    
 
 }

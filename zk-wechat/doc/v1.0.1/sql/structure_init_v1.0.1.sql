@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `zk-wechat` /*!40100 DEFAULT CHARACTER SET utf8mb
 USE `zk-wechat`;
 -- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
 --
--- Host: 10.211.55.10    Database: zk-wechat
+-- Host: 10.211.55.11    Database: zk-wechat
 -- ------------------------------------------------------
 -- Server version	8.0.21
 

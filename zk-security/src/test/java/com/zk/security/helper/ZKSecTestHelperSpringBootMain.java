@@ -20,14 +20,11 @@ package com.zk.security.helper;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import com.zk.mongo.configuration.ZKMongoAutoConfiguration;
 
 /** 
 * @ClassName: ZKSecTestHelperSpringBootMain 
@@ -36,8 +33,6 @@ import com.zk.mongo.configuration.ZKMongoAutoConfiguration;
 * @version 1.0 
 */
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class, MongoAutoConfiguration.class })
-@ImportAutoConfiguration(classes = { ZKSecTestHelperMongoConfiguration.class, ZKMongoAutoConfiguration.class,
-        ZKSecTestHelperConfigurationBefore.class, ZKSecTestHelperConfigurationAfter.class })
 public class ZKSecTestHelperSpringBootMain {
 
     public static void main(String[] args) {

@@ -89,7 +89,6 @@ public class ZKWebUtils extends org.springframework.web.util.WebUtils {
         if (requestAttributes != null && requestAttributes instanceof ServletRequestAttributes) {
             return ((ServletRequestAttributes) requestAttributes).getRequest();
         }
-
         return null;
     }
 
@@ -414,7 +413,7 @@ public class ZKWebUtils extends org.springframework.web.util.WebUtils {
      * @author Vinson
      * @date Sep 2, 2019 9:35:48 AM
      * @param localeResolver
-     * @param httpServletRequest
+     * @param hReq
      * @return
      * @return Locale
      */

@@ -41,7 +41,7 @@ public class ZKMyBatisSessionFactoryTest {
             ZKModule zkModule = null;
             SqlSession session = null;
 
-            ZKMyBatisSessionFactory.createSessionFactory(ZKCodeGenConstant.config);
+            ZKMyBatisSessionFactory.createSessionFactory(ZKDevleopmentToolTestHelper.config);
             session = ZKMyBatisSessionFactory.openSession();
             TestCase.assertNotNull(session);
 

@@ -33,10 +33,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /** 
 * @ClassName: ZKSerCenCertificate 
@@ -47,22 +49,23 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_sc_server_certificate", orderBy = " c_pk_id ASC")
 public class ZKSerCenCertificate extends ZKBaseEntity<String, ZKSerCenCertificate> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKSerCenCertificate());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKSerCenCertificate());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
+
     /**
      * @Fields serialVersionUID : TODO(simple description what to do.)
      */
@@ -83,11 +86,11 @@ public class ZKSerCenCertificate extends ZKBaseEntity<String, ZKSerCenCertificat
     }
 
     // 有效期结束开始日期
-    @ZKColumn(name = "c_valid_start_date", isUpdate = true)
+    @ZKColumn(name = "c_valid_start_date", update = @ZKUpdate(true))
     private Date validStartDate;
 
     // 有效期结束日期
-    @ZKColumn(name = "c_valid_end_date", isUpdate = true)
+    @ZKColumn(name = "c_valid_end_date", update = @ZKUpdate(true))
     private Date validEndDate;
 
     // 证书状态；0-正常；1-禁用
@@ -99,7 +102,8 @@ public class ZKSerCenCertificate extends ZKBaseEntity<String, ZKSerCenCertificat
     // 服务名称
     @NotNull(message = "{data.validation.notNull}")
     @Length(max = 100, message = "{data.validation.length:0:100}")
-    @ZKColumn(name = "c_server_name", isUpdate = false, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_server_name", update = @ZKUpdate(false),
+            query = @ZKQuery(value = true, queryType = ZKDBOptComparison.LIKE))
     private String serverName;
 
     // 公钥
@@ -111,22 +115,26 @@ public class ZKSerCenCertificate extends ZKBaseEntity<String, ZKSerCenCertificat
     private String privateKey;
 
     /** 查询 ***************** **/
-    @ZKColumn(name = "c_valid_start_date", isResult = false, isInsert = false, isQuery = true, javaType = Date.class, queryType = ZKDBQueryType.GTE)
+    @ZKColumn(name = "c_valid_start_date", isResult = false, isInsert = false, javaType = Date.class,
+            query = @ZKQuery(value = true, queryType = ZKDBOptComparison.GTE))
     public Date getValidStartDateBegin() {
         return this.getParamByName("validStartDateBegin");
     }
 
-    @ZKColumn(name = "c_valid_start_date", isResult = false, isInsert = false, isQuery = true, javaType = Date.class, queryType = ZKDBQueryType.LTE)
+    @ZKColumn(name = "c_valid_start_date", isResult = false, isInsert = false, javaType = Date.class,
+            query = @ZKQuery(value = true, queryType = ZKDBOptComparison.LTE))
     public Date getValidStartDateEnd() {
         return this.getParamByName("validStartDateEnd");
     }
 
-    @ZKColumn(name = "c_valid_end_date", isResult = false, isInsert = false, isQuery = true, javaType = Date.class, queryType = ZKDBQueryType.GTE)
+    @ZKColumn(name = "c_valid_end_date", isResult = false, isInsert = false, javaType = Date.class,
+            query = @ZKQuery(value = true, queryType = ZKDBOptComparison.GTE))
     public Date getValidEndDateBegin() {
         return this.getParamByName("validEndDateBegin");
     }
 
-    @ZKColumn(name = "c_valid_end_date", isResult = false, isInsert = false, isQuery = true, javaType = Date.class, queryType = ZKDBQueryType.LTE)
+    @ZKColumn(name = "c_valid_end_date", isResult = false, isInsert = false, javaType = Date.class,
+            query = @ZKQuery(value = true, queryType = ZKDBOptComparison.LTE))
     public Date getValidEndDateEnd() {
         return this.getParamByName("validEndDateEnd");
     }

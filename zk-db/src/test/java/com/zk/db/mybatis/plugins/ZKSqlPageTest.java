@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.zk.db.helper.dao.ZKDBTestDao;
 import org.junit.Test;
 
 import com.zk.core.commons.data.ZKJson;
@@ -50,8 +51,12 @@ public class ZKSqlPageTest {
 
     public static ZKMybatisSessionFactory mybatisSessionFactory = null;
 
-    static {
-        mybatisSessionFactory = ZKDBTestConfig.getZKMybatisSessionFactory();
+    public static ZKMybatisSessionFactory getMybatisSessionFactory(){
+        if(mybatisSessionFactory == null){
+            mybatisSessionFactory = ZKDBTestConfig.getXmlConfigSessionFactory();
+//            mybatisSessionFactory = ZKDBTestConfig.getJavaConfigSessionFactory();
+        }
+        return mybatisSessionFactory;
     }
 
     @Test
@@ -64,13 +69,13 @@ public class ZKSqlPageTest {
             String specialStr;
             ZKJson json, json2, json3;
 
-            Set<Long> types = new HashSet<>();
+            Set<Long> mInts = new HashSet<>();
 
             System.out
                     .println("=== 删除 ============================================================================== ");
             // 物理删除 t_test 表中所有数据，防脏数据干扰
-            count = ZKMybatisOperation.delete(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.del", null);
+            count = ZKMybatisOperation.delete(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".del", null);
             System.out
                     .println("=== 插入 ============================================================================== ");
 
@@ -100,34 +105,35 @@ public class ZKSqlPageTest {
             for (int i = 1; i <= insertCount; ++i) {
                 paramsMap = new HashMap<>();
                 paramsMap.put("id", i + "");
-                paramsMap.put("type", i % 9l);
-                types.add(i % 9l);
+                paramsMap.put("id2", i + "");
+                paramsMap.put("mInt", i % 9l);
+                mInts.add(i % 9l);
                 paramsMap.put("value", value + i);
                 paramsMap.put("remarks", remarks);
                 paramsMap.put("json", json);
                 count = 0;
-                count = ZKMybatisOperation.insert(mybatisSessionFactory.openSession(),
-                        "com.zk.db.helper.dao.ZKDBDao.insert", paramsMap);
+                count = ZKMybatisOperation.insert(getMybatisSessionFactory().openSession(),
+                        ZKDBTestDao.class.getName() + ".insert", paramsMap);
                 TestCase.assertEquals(1, count);
             }
             System.out.println(
                     "=== 分页查询 ============================================================================== ");
             // list 查询所有，排序为 null
             paramsMap = new HashMap<>();
-            paramsMap.put("types", types);
+            paramsMap.put("mInts", mInts);
             paramsMap.put("value", value);
             paramsMap.put("remarks", remarks);
             paramsMap.put("json", json);
-            List<?> list = ZKMybatisOperation.selectList(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.find", paramsMap);
+            List<?> list = ZKMybatisOperation.selectList(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".find", paramsMap);
             System.out.println("[^_^:2018030613-1232-001-1]" + ZKJsonUtils.writeObjectJson(list));
             TestCase.assertEquals(insertCount, list.size());
 
             // 查询第一页，排序为 null
             ZKPage<?> page = new ZKPage<>();
             paramsMap.put(ZKDBConstants.PARAM_NAME.Page, page);
-            list = ZKMybatisOperation.selectList(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.find", paramsMap);
+            list = ZKMybatisOperation.selectList(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".find", paramsMap);
             System.out.println("[^_^:2018030613-1232-001-2]" + ZKJsonUtils.writeObjectJson(list));
             TestCase.assertEquals(insertCount, page.getTotalCount());
             TestCase.assertEquals(page.getPageSize(), list.size());
@@ -140,8 +146,8 @@ public class ZKSqlPageTest {
             paramsMap.put(ZKDBConstants.PARAM_NAME.Page, page);
             page.setPageSize(pageSize);
             page.setPageNo(pageNo);
-            list = ZKMybatisOperation.selectList(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.find", paramsMap);
+            list = ZKMybatisOperation.selectList(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".find", paramsMap);
             System.out.println("[^_^:2018030613-1232-001-3]" + ZKJsonUtils.writeObjectJson(list));
             TestCase.assertEquals(insertCount, page.getTotalCount());
             TestCase.assertEquals(page.getPageSize(), pageSize);
@@ -154,8 +160,8 @@ public class ZKSqlPageTest {
             paramsMap.put(ZKDBConstants.PARAM_NAME.Page, page);
             page.setPageSize(pageSize);
             page.setPageNo(pageNo);
-            list = ZKMybatisOperation.selectList(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.find", paramsMap);
+            list = ZKMybatisOperation.selectList(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".find", paramsMap);
             System.out.println("[^_^:2018030613-1232-001-4]" + ZKJsonUtils.writeObjectJson(list));
             TestCase.assertEquals(insertCount, page.getTotalCount());
             TestCase.assertEquals(page.getPageSize(), pageSize);
@@ -168,8 +174,8 @@ public class ZKSqlPageTest {
             paramsMap.put(ZKDBConstants.PARAM_NAME.Page, page);
             page.setPageSize(pageSize);
             page.setPageNo(pageNo);
-            list = ZKMybatisOperation.selectList(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.find", paramsMap);
+            list = ZKMybatisOperation.selectList(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".find", paramsMap);
             System.out.println("[^_^:2018030613-1232-001-4]" + ZKJsonUtils.writeObjectJson(list));
             TestCase.assertEquals(insertCount, page.getTotalCount());
             TestCase.assertEquals(page.getPageSize(), pageSize);
@@ -185,8 +191,8 @@ public class ZKSqlPageTest {
             paramsMap.put(ZKDBConstants.PARAM_NAME.Page, page);
             page.setPageSize(pageSize);
             page.setPageNo(pageNo);
-            list = ZKMybatisOperation.selectList(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.find", paramsMap);
+            list = ZKMybatisOperation.selectList(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".find", paramsMap);
             System.out.println("[^_^:2018030613-1232-001-3]" + ZKJsonUtils.writeObjectJson(list));
             TestCase.assertEquals(insertCount, page.getTotalCount());
             TestCase.assertEquals(page.getPageSize(), pageSize);
@@ -202,8 +208,8 @@ public class ZKSqlPageTest {
             paramsMap.put(ZKDBConstants.PARAM_NAME.Page, page);
             page.setPageSize(pageSize);
             page.setPageNo(pageNo);
-            list = ZKMybatisOperation.selectList(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.find", paramsMap);
+            list = ZKMybatisOperation.selectList(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".find", paramsMap);
             System.out.println("[^_^:2018030613-1232-001-3]" + ZKJsonUtils.writeObjectJson(list));
             TestCase.assertEquals(insertCount, page.getTotalCount());
             TestCase.assertEquals(page.getPageSize(), pageSize);
@@ -216,13 +222,13 @@ public class ZKSqlPageTest {
             sorters = new ArrayList<ZKOrder>();
             sorters.add(ZKOrder.asOrder("c_remarks", ZKSortMode.DESC));
             sorters.add(ZKOrder.asOrder("c_id", "DESC"));
-            sorters.add(ZKOrder.asOrder("c_type", "sdaf"));
+            sorters.add(ZKOrder.asOrder("c_int", "sdaf"));
             page.setSorters(sorters);
             paramsMap.put(ZKDBConstants.PARAM_NAME.Page, page);
             page.setPageSize(pageSize);
             page.setPageNo(pageNo);
-            list = ZKMybatisOperation.selectList(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.find", paramsMap);
+            list = ZKMybatisOperation.selectList(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".find", paramsMap);
             System.out.println("[^_^:2018030613-1232-001-3]" + ZKJsonUtils.writeObjectJson(list));
             TestCase.assertEquals(insertCount, page.getTotalCount());
             TestCase.assertEquals(page.getPageSize(), pageSize);

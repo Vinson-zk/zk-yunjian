@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `zk-bs` /*!40100 DEFAULT CHARACTER SET utf8mb4 CO
 USE `zk-bs`;
 -- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
 --
--- Host: 10.211.55.10    Database: zk-bs
+-- Host: 10.211.55.11    Database: zk-bs
 -- ------------------------------------------------------
 -- Server version	8.0.21
 

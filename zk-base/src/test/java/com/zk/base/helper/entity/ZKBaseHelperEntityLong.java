@@ -20,7 +20,7 @@ package com.zk.base.helper.entity;
 
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /** 
 * @ClassName: ZKBaseHelperEntityLong 
@@ -35,18 +35,18 @@ public class ZKBaseHelperEntityLong extends ZKBaseEntity<Long, ZKBaseHelperEntit
      */
     private static final long serialVersionUID = 1L;
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
   
-    public static ZKSqlProvider initSqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKBaseHelperEntityLong());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKBaseHelperEntityLong());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
 }

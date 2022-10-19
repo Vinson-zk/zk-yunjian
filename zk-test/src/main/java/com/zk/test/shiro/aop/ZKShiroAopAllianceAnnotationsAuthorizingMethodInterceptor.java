@@ -20,6 +20,7 @@ package com.zk.test.shiro.aop;
 
 import java.util.Collection;
 
+import com.zk.core.exception.ZKCodeException;
 import org.apache.shiro.aop.MethodInvocation;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.aop.AuthorizingAnnotationMethodInterceptor;
@@ -50,7 +51,7 @@ public class ZKShiroAopAllianceAnnotationsAuthorizingMethodInterceptor
             }
         }
         catch(AuthorizationException e) {
-            throw new ZKMsgException("zk.test.000003", "您没有操作权限", null, e);
+            throw ZKCodeException.as("zk.test.000003", "您没有操作权限", null, e);
         }
     }
 

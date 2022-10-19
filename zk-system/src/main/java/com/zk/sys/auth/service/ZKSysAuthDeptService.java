@@ -70,7 +70,7 @@ public class ZKSysAuthDeptService extends ZKBaseService<String, ZKSysAuthDept, Z
         if (dept == null) {
             // zk.sys.010006=部门不存在
             log.error("[>_<:20220504-1212-002] 部门不存在");
-            throw new ZKCodeException("zk.sys.010006");
+            throw ZKCodeException.as("zk.sys.010006");
         }
         // 先删除 需要删除的关联关系
         if (delAuths == null) {
@@ -97,7 +97,7 @@ public class ZKSysAuthDeptService extends ZKBaseService<String, ZKSysAuthDept, Z
         if (ZKStringUtils.isEmpty(deptId)) {
             return Collections.emptyList();
         }
-        return this.dao.findAuthCodesByDeptId(ZKSysAuthDept.initSqlProvider().getTableName(), deptId,
+        return this.dao.findAuthCodesByDeptId(ZKSysAuthDept.sqlHelper().getTableName(), deptId,
                 ZKSysAuthDept.DEL_FLAG.normal);
     }
 
@@ -106,7 +106,7 @@ public class ZKSysAuthDeptService extends ZKBaseService<String, ZKSysAuthDept, Z
         if (ZKStringUtils.isEmpty(deptId)) {
             return Collections.emptyList();
         }
-        return this.dao.findAuthIdsByDeptId(ZKSysAuthDept.initSqlProvider().getTableName(), deptId,
+        return this.dao.findAuthIdsByDeptId(ZKSysAuthDept.sqlHelper().getTableName(), deptId,
                 ZKSysAuthDept.DEL_FLAG.normal);
     }
 
@@ -115,14 +115,14 @@ public class ZKSysAuthDeptService extends ZKBaseService<String, ZKSysAuthDept, Z
         if (ZKStringUtils.isEmpty(deptId)) {
             return Collections.emptyList();
         }
-        return this.dao.findApiCodesByDeptId(ZKSysAuthDept.initSqlProvider().getTableName(),
-                ZKSysAuthFuncApi.initSqlProvider().getTableName(), deptId, ZKSysAuthUserType.DEL_FLAG.normal);
+        return this.dao.findApiCodesByDeptId(ZKSysAuthDept.sqlHelper().getTableName(),
+                ZKSysAuthFuncApi.sqlHelper().getTableName(), deptId, ZKSysAuthUserType.DEL_FLAG.normal);
     }
 
     // 根据关联关系查询 权限关系实体
     public ZKSysAuthDept getRelationByAuthIdAndDeptId(String authId, String deptId) {
-        return this.dao.getRelationByAuthIdAndDeptId(ZKSysAuthDept.initSqlProvider().getTableName(),
-                ZKSysAuthDept.initSqlProvider().getTableAlias(), ZKSysAuthDept.initSqlProvider().getSqlBlockSelCols(),
+        return this.dao.getRelationByAuthIdAndDeptId(ZKSysAuthDept.sqlHelper().getTableName(),
+                ZKSysAuthDept.sqlHelper().getTableAlias(), ZKSysAuthDept.sqlHelper().getBlockSqlCols(),
                 authId, deptId);
     }
 
@@ -131,7 +131,7 @@ public class ZKSysAuthDeptService extends ZKBaseService<String, ZKSysAuthDept, Z
     public int diskDelByAuthId(String authId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByAuthId(ZKSysAuthDept.initSqlProvider().getTableName(), authId);
+        return this.dao.diskDelByAuthId(ZKSysAuthDept.sqlHelper().getTableName(), authId);
     }
 
     // 根据部门ID 删除关联关系
@@ -139,7 +139,7 @@ public class ZKSysAuthDeptService extends ZKBaseService<String, ZKSysAuthDept, Z
     public int diskDelByDeptId(String deptId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByDeptId(ZKSysAuthDept.initSqlProvider().getTableName(), deptId);
+        return this.dao.diskDelByDeptId(ZKSysAuthDept.sqlHelper().getTableName(), deptId);
     }
 
     // 根据权限代码ID和部门ID 物理删除
@@ -147,6 +147,6 @@ public class ZKSysAuthDeptService extends ZKBaseService<String, ZKSysAuthDept, Z
     public int diskDelByAuthIdAndDeptId(String authId, String deptId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByAuthIdAndDeptId(ZKSysAuthDept.initSqlProvider().getTableName(), authId, deptId);
+        return this.dao.diskDelByAuthIdAndDeptId(ZKSysAuthDept.sqlHelper().getTableName(), authId, deptId);
     }
 }

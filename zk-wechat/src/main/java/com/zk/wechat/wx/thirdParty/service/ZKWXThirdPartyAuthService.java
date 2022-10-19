@@ -85,14 +85,14 @@ public class ZKWXThirdPartyAuthService {
         ZKSysOrgCompany company = this.thirdPartyService.getCompanyByCode(companyCode);
         if (company == null) {
             log.error("[>_<:20220518-0020-001] 目标公司[]不存在", companyCode);
-            throw new ZKCodeException("zk.wechat.010013", "目标公司[{0}]不存在", companyCode);
+            throw ZKCodeException.as("zk.wechat.010013", "目标公司[{0}]不存在", companyCode);
         }
 
         if (ZKStringUtils.isEmpty(thirdPartyAppid)) {
             thirdPartyAppid = ZKEnvironmentUtils.getString(ConfigKey.thirdPartyDefaultAppid);
             if (ZKStringUtils.isEmpty(thirdPartyAppid)) {
                 log.error("[>_<_^:20211104-1719-002] 第三方平台账号 thirdPartyAppid 为空");
-                throw new ZKCodeException("zk.wechat.010005", "第三方平台APPID为空，无法完成授权");
+                throw ZKCodeException.as("zk.wechat.010005", "第三方平台APPID为空，无法完成授权");
             }
             else {
                 log.info("[^_^:20211104-1719-001] 第三方平台账号 thirdPartyAppid 为空，取平台默认第三方平台账号：{}", thirdPartyAppid);
@@ -188,7 +188,7 @@ public class ZKWXThirdPartyAuthService {
                 .getWXTPPreAuthCode(ZKWXTPPreAuthCode.makeIdentification(thirdPartyAppid, preAuthCode));
         if (zkPreAuthCode == null) {
             log.error("[>_<:20220518-0047-001] zk.wechat.010014=预授权码已过期或不存在");
-            throw new ZKCodeException("zk.wechat.010014", "预授权码已过期或不存在");
+            throw ZKCodeException.as("zk.wechat.010014", "预授权码已过期或不存在");
         }
         else {
             // 设置公司信息

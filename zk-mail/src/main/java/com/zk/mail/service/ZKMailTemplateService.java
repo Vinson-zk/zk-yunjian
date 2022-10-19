@@ -77,8 +77,8 @@ public class ZKMailTemplateService extends ZKBaseService<String, ZKMailTemplate,
         if (ZKStringUtils.isEmpty(typeCode)) {
             return null;
         }
-        return this.dao.getByTypeCode(ZKMailTemplate.initSqlProvider().getTableName(),
-                ZKMailTemplate.initSqlProvider().getTableAlias(), ZKMailTemplate.initSqlProvider().getSqlBlockSelCols(),
+        return this.dao.getByTypeCode(ZKMailTemplate.sqlHelper().getTableName(),
+                ZKMailTemplate.sqlHelper().getTableAlias(), ZKMailTemplate.sqlHelper().getBlockSqlCols(),
                 typeCode, companyCode, locale, delFlag);
     }
 
@@ -142,7 +142,7 @@ public class ZKMailTemplateService extends ZKBaseService<String, ZKMailTemplate,
             else {
                 if (mailType.getStatus().intValue() != ZKMailType.KeyStatus.normal) {
                     log.error("[>_<:20220526-1634-003] zk.mail.000002=邮件类型[{}]被禁用；", mailTemplate.getTypeCode());
-                    throw new ZKCodeException("zk.mail.000002", "邮件类型[{}]被禁用", mailTemplate.getTypeCode());
+                    throw ZKCodeException.as("zk.mail.000002", "邮件类型[{}]被禁用", mailTemplate.getTypeCode());
                 }
                 else {
                     mailTemplate.setTypeId(mailType.getPkId());

@@ -50,8 +50,11 @@ public class ZKJavaCodeGenUtils {
 
     /**
      * 生成 java 类 Service 文件 单元测试文件
-     * 
-     * @param tableInfo
+     *
+     * @param rootPath
+     * @param templatePath
+     * @param zkModule
+     * @param zkTableInfo
      * @throws Exception
      */
     public static File genServiceTest(String rootPath, String templatePath, ZKModule zkModule, ZKTableInfo zkTableInfo)
@@ -75,7 +78,10 @@ public class ZKJavaCodeGenUtils {
     /**
      * 生成 java 类实体文件
      * 
-     * @param tableInfo
+     * @param rootPath
+     * @param templatePath
+     * @param zkModule
+     * @param zkTableInfo
      * @throws Exception
      */
     public static File genEntity(String rootPath, String templatePath, ZKModule zkModule, ZKTableInfo zkTableInfo)
@@ -105,8 +111,11 @@ public class ZKJavaCodeGenUtils {
 
     /**
      * 生成 java 类 dao 文件；
-     * 
-     * @param tableInfo
+     *
+     * @param rootPath
+     * @param templatePath
+     * @param zkModule
+     * @param zkTableInfo
      * @throws Exception
      */
     public static File genDao(String rootPath, String templatePath, ZKModule zkModule, ZKTableInfo zkTableInfo)
@@ -136,8 +145,11 @@ public class ZKJavaCodeGenUtils {
 
     /**
      * 生成 java 类 Service 文件
-     * 
-     * @param tableInfo
+     *
+     * @param rootPath
+     * @param templatePath
+     * @param zkModule
+     * @param zkTableInfo
      * @throws Exception
      */
     public static File genService(String rootPath, String templatePath, ZKModule zkModule, ZKTableInfo zkTableInfo)
@@ -167,8 +179,11 @@ public class ZKJavaCodeGenUtils {
 
     /**
      * 生成 java 类 接口 controller 文件
-     * 
-     * @param tableInfo
+     *
+     * @param rootPath
+     * @param templatePath
+     * @param zkModule
+     * @param zkTableInfo
      * @throws Exception
      */
     public static File genController(String rootPath, String templatePath, ZKModule zkModule, ZKTableInfo zkTableInfo)

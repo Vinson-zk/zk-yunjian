@@ -32,7 +32,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="mysql_DruidDataSource"/>
         <property name="typeAliasesPackage" value="com.zk.db.helper" />
-        <property name="typeAliasesSuperType" value="com.zk.db.helper.entity.ZKDBEntity" />
+        <property name="typeAliasesSuperType" value="com.zk.db.entity.ZKDBBaseEntity" />
         <property name="mapperLocations" value="classpath*:mappers/**/*.xml"/>
 		<property name="configLocation"  value="classpath:mybatis/test_mybatis_config.xml" />
     </bean>

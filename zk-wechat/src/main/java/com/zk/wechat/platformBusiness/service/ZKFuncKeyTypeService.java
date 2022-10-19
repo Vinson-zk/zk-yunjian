@@ -44,9 +44,9 @@ public class ZKFuncKeyTypeService extends ZKBaseService<String, ZKFuncKeyType, Z
         if (ZKStringUtils.isEmpty(funcTypeCode)) {
             return null;
         }
-        return this.dao.getByFuncTypeCode(ZKFuncKeyType.initSqlProvider().getTableName(),
-                ZKFuncKeyType.initSqlProvider().getTableAlias(),
-                ZKFuncKeyType.initSqlProvider().getSqlBlockSelCols(), funcTypeCode, delFlag);
+        return this.dao.getByFuncTypeCode(ZKFuncKeyType.sqlHelper().getTableName(),
+            ZKFuncKeyType.sqlHelper().getTableAlias(), ZKFuncKeyType.sqlHelper().getBlockSqlCols(), funcTypeCode,
+            delFlag);
     }
 
     @Override
@@ -57,14 +57,12 @@ public class ZKFuncKeyTypeService extends ZKBaseService<String, ZKFuncKeyType, Z
             ZKFuncKeyType old = this.getByFuncTypeCode(funcKeyType.getFuncTypeCode(), null);
             if (old != null) {
                 if (old.getDelFlag().intValue() == ZKBaseEntity.DEL_FLAG.normal) {
-                    log.error("[>_<:20220524-1510-001] zk.wechat.110003=功能类型代码[{}]已存在；",
-                            funcKeyType.getFuncTypeCode());
+                    log.error("[>_<:20220524-1510-001] zk.wechat.110003=功能类型代码[{}]已存在；", funcKeyType.getFuncTypeCode());
                     Map<String, String> validatorMsg = Maps.newHashMap();
                     validatorMsg.put("funcTypeCode",
-                            ZKMsgUtils.getMessage("zk.wechat.110002", funcKeyType.getFuncTypeCode()));
+                        ZKMsgUtils.getMessage("zk.wechat.110002", funcKeyType.getFuncTypeCode()));
                     throw ZKCodeException.asDataValidator(validatorMsg);
-                }
-                else {
+                } else {
                     funcKeyType.setDelFlag(ZKBaseEntity.DEL_FLAG.normal);
                     funcKeyType.setPkId(old.getPkId());
                 }

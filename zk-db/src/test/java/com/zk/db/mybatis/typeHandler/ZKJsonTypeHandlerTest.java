@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zk.db.helper.dao.ZKDBTestDao;
+import com.zk.db.helper.entity.ZKDBTestSampleEntity;
 import org.junit.Test;
 
 import com.zk.core.commons.data.ZKJson;
@@ -33,7 +35,6 @@ import com.zk.core.utils.ZKJsonUtils;
 import com.zk.db.ZKMybatisOperation;
 import com.zk.db.ZKMybatisSessionFactory;
 import com.zk.db.helper.ZKDBTestConfig;
-import com.zk.db.helper.entity.ZKDBEntity;
 
 import junit.framework.TestCase;
 
@@ -47,8 +48,12 @@ public class ZKJsonTypeHandlerTest {
 
     public static ZKMybatisSessionFactory mybatisSessionFactory = null;
 
-    static {
-        mybatisSessionFactory = ZKDBTestConfig.getZKMybatisSessionFactory();
+    public static ZKMybatisSessionFactory getMybatisSessionFactory(){
+        if(mybatisSessionFactory == null){
+            mybatisSessionFactory = ZKDBTestConfig.getXmlConfigSessionFactory();
+//            mybatisSessionFactory = ZKDBTestConfig.getJavaConfigSessionFactory();
+        }
+        return mybatisSessionFactory;
     }
 
     @Test
@@ -58,15 +63,15 @@ public class ZKJsonTypeHandlerTest {
             int count = 0;
             String id = "100";
 
-            long type = 1;
+            long mInt = 1;
             String value = "value_插入测试_" + id;
             String remarks = "remarks_备注";
             String updateStr = "value_插入测试_update_自恨寻芳到已迟，往年曾见未开时。";
             ZKJson json, json2, json3;
             String specialStr;
-            List<Long> types = new ArrayList<>();
-            types.add(type);
-            types.add(2l);
+            List<Long> mInts = new ArrayList<>();
+            mInts.add(mInt);
+            mInts.add(2l);
 
             json = new ZKJson();
             specialStr = "~!@#$%^&*()_+{}|:\"<>?`1234567890-=[]\\;',.//*' --";
@@ -92,43 +97,45 @@ public class ZKJsonTypeHandlerTest {
 
             paramsMap = new HashMap<>();
             paramsMap.put("id", id);
+            paramsMap.put("id2", id);
             System.out.println("=== 删除 ================================== ");
             // 物理删除 t_test 表中所有数据，防脏数据干扰
-            count = ZKMybatisOperation.delete(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.del", null);
+            count = ZKMybatisOperation.delete(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".del", null);
             System.out.println("=== 插入 ================================== ");
             // 插入
-            paramsMap.put("type", type);
+            paramsMap.put("mInt", mInt);
             paramsMap.put("value", value);
             paramsMap.put("remarks", remarks);
             paramsMap.put("json", json);
             count = 0;
-            count = ZKMybatisOperation.insert(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.insert", paramsMap);
+            count = ZKMybatisOperation.insert(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".insert", paramsMap);
             TestCase.assertEquals(1, count);
             paramsMap.put("id", id + 1);
             count = 0;
-            count = ZKMybatisOperation.insert(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.insert", paramsMap);
+            count = ZKMybatisOperation.insert(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".insert", paramsMap);
             TestCase.assertEquals(1, count);
             System.out.println("=== 修改 ================================== ");
             // 修改
             paramsMap = new HashMap<>();
             paramsMap.put("id", id);
-            paramsMap.put("type", type);
+            paramsMap.put("mInt", mInt);
             paramsMap.put("value", updateStr);
             paramsMap.put("remarks", remarks);
             paramsMap.put("json", json);
-            count = ZKMybatisOperation.update(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.update", paramsMap);
+            count = ZKMybatisOperation.update(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".update", paramsMap);
             TestCase.assertEquals(1, count);
 
             paramsMap.put("id", id + 2);
+            paramsMap.put("id2", id + 2);
             json.put("otherKey", "otherKey");
             paramsMap.put("remarks", remarks);
             count = 0;
-            count = ZKMybatisOperation.insert(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.insert", paramsMap);
+            count = ZKMybatisOperation.insert(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".insert", paramsMap);
             TestCase.assertEquals(1, count);
 
             System.out.println("=== 查询 ================================== ");
@@ -156,16 +163,16 @@ public class ZKJsonTypeHandlerTest {
 //            json.put("a-b", "dd");
 
             paramsMap = new HashMap<>();
-            paramsMap.put("types", types);
+            paramsMap.put("mInts", mInts);
             paramsMap.put("remarks", remarks);
             paramsMap.put("json", json);
-            List<?> list = ZKMybatisOperation.selectList(mybatisSessionFactory.openSession(),
-                    "com.zk.db.helper.dao.ZKDBDao.find", paramsMap);
+            List<?> list = ZKMybatisOperation.selectList(getMybatisSessionFactory().openSession(),
+                    ZKDBTestDao.class.getName() + ".find", paramsMap);
             System.out.println("[^_^:20180306-0904-001-1]" + ZKJsonUtils.writeObjectJson(list));
             TestCase.assertEquals(3, list.size());
 
             @SuppressWarnings("unchecked")
-            List<ZKDBEntity> entityList = (List<ZKDBEntity>) list;
+            List<ZKDBTestSampleEntity> entityList = (List<ZKDBTestSampleEntity>) list;
             String expectedStr = "jv1[" + specialStr + "]jv1 -end";
             TestCase.assertEquals(expectedStr, ((Map<?, ?>) entityList.get(0).getJson().get("jk-1-json")).get("jk-1"));
 

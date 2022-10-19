@@ -59,8 +59,8 @@ public class ZKPlatformCertService extends ZKBaseService<String, ZKPlatformCert,
      * @return ZKPlatformCert
      */
     public ZKPlatformCert getBySerial(String mchid, String serialNo) {
-        return this.dao.getBySerial(ZKPlatformCert.sqlProvider().getTableName(),
-                ZKPlatformCert.sqlProvider().getSqlBlockSelCols(""), mchid, serialNo, ZKPlatformCert.DEL_FLAG.normal);
+        return this.dao.getBySerial(ZKPlatformCert.sqlHelper().getTableName(),
+                ZKPlatformCert.sqlHelper().getBlockSqlCols(""), mchid, serialNo, ZKPlatformCert.DEL_FLAG.normal);
     }
     
     // 取最近生效的证书，有两个时，取失效日期最晚的；

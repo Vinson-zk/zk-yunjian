@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -42,7 +43,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         DataSourceAutoConfiguration.class
         , TransactionAutoConfiguration.class
         , HibernateJpaAutoConfiguration.class
-//        , MongoAutoConfiguration.class
+        , MongoAutoConfiguration.class
 //        , WebMvcAutoConfiguration.class
 })
 @EnableEurekaClient

@@ -71,7 +71,7 @@ public interface ZKSecAuthService<ID> {
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
      * @date May 10, 2022 10:25:44 AM
-     * @param userId
+     * @param user
      * @return ZKAuthPermission
      */
     public ZKAuthPermission getByAuthUser(ZKUser<ID> user);

@@ -18,13 +18,12 @@
 */
 package com.zk.core.exception;
 
-import com.zk.core.utils.ZKStringUtils;
-
-/** 
-* @ClassName: ZKUnknownException 
-* @Description: TODO(simple description this class what to do.) 
-* @author Vinson 
-* @version 1.0 
+/**
+ * 自定义运行时异常，为方便抓取异常时，区分系统抛出的异常和业务异常
+ * @ClassName: ZKUnknownException
+ * @Description: TODO(simple description this class what to do.)
+ * @author Vinson
+ * @version 1.0
 */
 public class ZKUnknownException extends RuntimeException {
 
@@ -33,38 +32,37 @@ public class ZKUnknownException extends RuntimeException {
      */
     private static final long serialVersionUID = 1L;
 
-    private String msg;
+    /**
+     * 异常分类
+     */
+    public static interface KeyExceptionType {
+        public static final int general = 0;
+    }
+
+    /**
+     * 异常的分类，暂未使用，0-未知；方便后继将异常按大类处理，如类型 1-弹出提示，2-xxx
+     */
+    int type;
 
     public ZKUnknownException(String msg) {
-        this.msg = msg;
+        this(KeyExceptionType.general, msg, null);
+
     }
 
     public ZKUnknownException(Throwable cause) {
-        super(cause);
+        this(KeyExceptionType.general, null, cause);
     }
 
     public ZKUnknownException(String msg, Throwable cause) {
-        super(cause);
-        this.msg = msg;
+        this(KeyExceptionType.general, msg, cause);
     }
 
-    @Override
-    public String getMessage() {
-        return ZKStringUtils.isEmpty(msg) ? super.getMessage() : this.msg;
+    public ZKUnknownException(int type, String msg, Throwable cause) {
+        super(msg, cause);
+        this.type = type;
     }
 
-    protected void setMsg(String msg) {
-        this.msg = msg;
+    public int getType() {
+        return type;
     }
-
-    // 取异常的消息，仅带有消息
-    public String getMsg() {
-        return this.msg;
-    }
-
-//  @Override
-//  public void printStackTrace(){
-//      super.printStackTrace();
-//  }
-
 }

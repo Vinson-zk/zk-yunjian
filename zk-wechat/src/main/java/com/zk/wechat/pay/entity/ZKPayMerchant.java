@@ -23,6 +23,7 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Transient;
@@ -35,7 +36,6 @@ import com.zk.core.utils.ZKDateUtils;
 import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKTable;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
 
 /**
  * 微信商户号
@@ -48,21 +48,21 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_wx_merchant", alias = "wxMerchant")
 public class ZKPayMerchant extends ZKBaseEntity<String, ZKPayMerchant> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKPayMerchant());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKPayMerchant());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
     
     /**

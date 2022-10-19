@@ -21,6 +21,7 @@ package com.zk.wechat.pay.entity;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Transient;
 
@@ -29,7 +30,6 @@ import com.zk.base.entity.ZKBaseEntity;
 import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKTable;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
 
 /**
  * 微信支付-收款时，支付用户表，在 jsapi 使用支付时，支付记录才有对应的支付用户
@@ -43,21 +43,21 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_wx_pay_get_payer", alias = "wxPayGetPayer")
 public class ZKPayGetPayer extends ZKBaseEntity<String, ZKPayGetPayer> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKPayGetPayer());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKPayGetPayer());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     /**

@@ -22,11 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** 
-* @ClassName: ZKThreadPool 
-* @Description: TODO(simple description this class what to do. ) 
-* @author Vinson 
-* @version 1.0 
-*/
+ * 不建议使用，不完善
+ * @ClassName: ZKThreadPool
+ * @Description: TODO(simple description this class what to do. )
+ * @author Vinson
+ * @version 1.0
+ */
+@Deprecated
 public class ZKThreadPool extends Thread {
 
     final static List<ZKThreadPool> tPool = new ArrayList<>();

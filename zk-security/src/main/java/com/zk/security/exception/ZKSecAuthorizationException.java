@@ -58,6 +58,7 @@ public class ZKSecAuthorizationException extends ZKSecUnknownException {
         this.authCode = authCode;
     }
 
+    @Override
     public int getType() {
         return type;
     }

@@ -75,6 +75,8 @@ public class ZKSecWebSecurityManager extends ZKSecDefaultSecurityManager {
         ZKSecTicket tk = null;
         if (tkId != null) {
             tk = this.getTicketManager().getTicket(tkId);
+        }else{
+            request.setAttribute(ZKSecConstants.SEC_KEY.SecIsHaveTicket, true);
         }
 
         /*** 2、创建主体 ***/
@@ -105,7 +107,7 @@ public class ZKSecWebSecurityManager extends ZKSecDefaultSecurityManager {
     /**
      * 从请求中取令牌ID
      * 
-     * @param servletRequest
+     * @param request
      * @return
      */
     private Serializable resolveTicket(HttpServletRequest request) {

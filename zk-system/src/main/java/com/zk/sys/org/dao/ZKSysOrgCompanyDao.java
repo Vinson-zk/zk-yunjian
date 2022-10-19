@@ -6,15 +6,7 @@ package com.zk.sys.org.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Many;
-import org.apache.ibatis.annotations.One;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 
 import com.zk.base.dao.ZKBaseTreeDao;
@@ -37,22 +29,8 @@ public interface ZKSysOrgCompanyDao extends ZKBaseTreeDao<String, ZKSysOrgCompan
      */
     @SelectProvider(type = ZKMyBatisTreeSqlProvider.class, method = "selectTree")
     @Results(id = "treeResult", value = {
-            @Result(column = "{parentId=pkId}", property = "children", javaType = List.class, many = @Many(select = "com.zk.sys.org.dao.ZKSysOrgCompanyDao.findTreeChild", fetchType = FetchType.EAGER)) })
+            @Result(column = "{parentId=pkId}", property = "children", javaType = List.class, many = @Many(select = "com.zk.sys.org.dao.ZKSysOrgCompanyDao.findTree", fetchType = FetchType.EAGER)) })
     List<ZKSysOrgCompany> findTree(ZKSysOrgCompany sysOrgCompany);
-
-    /**
-     * 树形查询的子节点查询
-     *
-     * @Title: findTreeChild
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Jan 6, 2021 10:09:10 PM
-     * @param sysMenu
-     * @return List<T>
-     */
-    @SelectProvider(type = ZKMyBatisTreeSqlProvider.class, method = "selectTree")
-    @ResultMap("treeResult")
-    List<ZKSysOrgCompany> findTreeChild(ZKSysOrgCompany sysOrgCompany);
 
 	/**
      * 查询详情，包含父节点 fetchType = FetchType.EEAGER

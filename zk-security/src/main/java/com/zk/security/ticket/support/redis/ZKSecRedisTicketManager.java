@@ -142,7 +142,8 @@ public class ZKSecRedisTicketManager extends ZKSecAbstractTicketManager implemen
         else {
             logger.error("[>_<:20210816-1048-002] ZKCreate ZKSecTicket fail -> {}; validTime:{}, type:{}, status:{} ",
                     tkId, validTime, type, status);
-            throw new ZKSecTicketException("sec.000003", null, null, "ZKCreate ZKSecTicket fail");
+
+            throw new ZKSecTicketException("zk.sec.000019", "生成令牌异常，请联系管理员", null, "ZKCreate ZKSecTicket fail");
         }
         return new ZKSecDelegatingTicker(this, tkId);
     }

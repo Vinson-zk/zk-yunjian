@@ -27,6 +27,10 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.zk.db.annotation.ZKQuery;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Transient;
 
@@ -35,9 +39,7 @@ import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.utils.ZKStringUtils;
 import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
 
 /**
  * @ClassName: ZKTableInfo
@@ -48,21 +50,21 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_dt_code_gen_table_info", alias = "tableInfo", orderBy = " c_create_date ASC ")
 public class ZKTableInfo extends ZKBaseEntity<String, ZKTableInfo> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKTableInfo());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKTableInfo());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     /**
@@ -82,11 +84,12 @@ public class ZKTableInfo extends ZKBaseEntity<String, ZKTableInfo> {
     /*** 表信息 */
     /**********************************************************************************/
     /**
-     * 表名
+     * 表名；和模块名组成唯一ID
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_table_name", isUpdate = false, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_table_name",
+            query = @ZKQuery(value = true, queryType = ZKDBOptComparison.LIKE))
     String tableName;
 
     /**
@@ -94,14 +97,14 @@ public class ZKTableInfo extends ZKBaseEntity<String, ZKTableInfo> {
      */
 //    @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 0, max = 512, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_table_comments", isUpdate = true)
+    @ZKColumn(name = "c_table_comments", update = @ZKUpdate(true))
     String tableComments = "";
 
     /**
      * 主键字段名
      */
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_pk_col_name", isUpdate = true)
+    @ZKColumn(name = "c_pk_col_name", update = @ZKUpdate(true))
     String pkColName;
 
     /**********************************************************************************/
@@ -112,28 +115,28 @@ public class ZKTableInfo extends ZKBaseEntity<String, ZKTableInfo> {
      * java 实体类名，首字母大写
      */
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_class_name", isUpdate = true)
+    @ZKColumn(name = "c_class_name", update = @ZKUpdate(true))
     String className;
 
     /**
      * java 功能子模块名, 默认没有；
      */
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_sub_module_name", isUpdate = true)
+    @ZKColumn(name = "c_sub_module_name", update = @ZKUpdate(true))
     String subModuleName;
 
     /**
      * 功能名，首字母大写
      */
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_func_name", isUpdate = true)
+    @ZKColumn(name = "c_func_name", update = @ZKUpdate(true))
     String funcName;
 
     /**
      * 是否是树形结构; true-是树形结构；false-不是树形结构；默认: false；
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_is_tree", isUpdate = true)
+    @ZKColumn(name = "c_is_tree", update = @ZKUpdate(true))
     boolean isTree = false;
 
     /**
@@ -141,15 +144,16 @@ public class ZKTableInfo extends ZKBaseEntity<String, ZKTableInfo> {
      */
 //    @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_label", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_label", update = @ZKUpdate(true))
     String label;
 
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_icon", isUpdate = true)
+    @ZKColumn(name = "c_icon", update = @ZKUpdate(true))
     String icon;
 
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_nav_code", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_nav_code", update = @ZKUpdate(true),
+            query = @ZKQuery(value = true, queryType = ZKDBOptComparison.LIKE))
     String navCode;
 
     /**********************************************************************************/
@@ -161,7 +165,8 @@ public class ZKTableInfo extends ZKBaseEntity<String, ZKTableInfo> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 20, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_module_id", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_module_id", update = @ZKUpdate(true),
+            query = @ZKQuery(value = true, queryType = ZKDBOptComparison.EQ))
     String moduleId;
 
     /**

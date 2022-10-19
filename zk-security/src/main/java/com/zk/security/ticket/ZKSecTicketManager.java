@@ -144,7 +144,7 @@ public interface ZKSecTicketManager extends ZKDestroyable {
      * 根据身份ID取当前身份所拥有的所有令牌
      * 
      * @param principal
-     * @param filterTicket
+     * @param filterTickets
      *            需要过虑的令牌
      * @return
      */

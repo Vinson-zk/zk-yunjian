@@ -121,7 +121,7 @@ public class ZKWXOfficialAccountsUserService {
             log.error(
                     "[>_<_^:20220520-0116-001] 目标授权方未向第三方平台授权，无法获取 AuthAccountAccessToken; thirdPartyAppid：{}，accountAppid：{}",
                     thirdPartyAppId, appId);
-            throw new ZKCodeException("zk.wechat.010011", "目标授权方未向第三方平台授权，无法获取 AuthAccountAccessToken");
+            throw ZKCodeException.as("zk.wechat.010011", "目标授权方未向第三方平台授权，无法获取 AuthAccountAccessToken");
         }
         officialAccountUser.setWxThirdPartyAppid(thirdPartyAppId);
         officialAccountUser.setWxOfficialAccountAppid(appId);

@@ -187,7 +187,7 @@ public abstract class ZKSecAbstractSecurityManager implements ZKSecSecurityManag
      * 
      * @param subject
      * @param token
-     * @param ae
+     * @param se
      */
     public void onFailedLogin(ZKSecSubject subject, ZKSecAuthenticationToken token, ZKSecCodeException se) {
         // 1、登录失败，创建一个追踪令牌
@@ -215,6 +215,7 @@ public abstract class ZKSecAbstractSecurityManager implements ZKSecSecurityManag
      *            主体
      * @return
      */
+    @Override
     public void logOut(ZKSecSubject subject) {
         // 1、记住我处理
         if (getRememberMeManager() != null) {

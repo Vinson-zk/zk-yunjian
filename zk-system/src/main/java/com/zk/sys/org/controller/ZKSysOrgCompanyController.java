@@ -45,7 +45,7 @@ public class ZKSysOrgCompanyController extends ZKBaseController {
         ZKSysOrgCompany sysOrgCompany = this.sysOrgCompanyService.getByCode(companyCode);
         if (sysOrgCompany == null) {
             log.error("[^_^:20220018-1411-001] 公司[{}]不存在;", companyCode);
-            throw new ZKCodeException("zk.sys.010003", "公司不存在");
+            throw ZKCodeException.as("zk.sys.010003", "公司不存在");
         }
         return ZKMsgRes.asOk(sysOrgCompany);
     }

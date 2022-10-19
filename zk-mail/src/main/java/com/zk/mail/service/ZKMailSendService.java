@@ -93,7 +93,7 @@ public class ZKMailSendService {
         if (length > this.attachmentCount) {
             // 邮件附件过多; zk.mail.000010=邮件附件最多允许[{0}]个
             log.error("[>_<:20220527-0915-001] 邮件附件过多; zk.mail.000010=邮件附件最多允许[{}]个", this.attachmentCount);
-            throw new ZKCodeException("zk.mail.000010", "邮件附件最多允许[{}]个", this.attachmentCount);
+            throw ZKCodeException.as("zk.mail.000010", "邮件附件最多允许[{}]个", this.attachmentCount);
 //            return false;
         }
         return true;
@@ -116,8 +116,7 @@ public class ZKMailSendService {
             // 邮件附件过大 zk.mail.000011=邮件附件最大允许[{0}]M
             log.error("[>_<:20220527-0915-001] 邮件附件过大 zk.mail.000011=邮件附件最大允许[{}]M",
                     (this.attachmentSize / 1024 / 1024));
-            throw new ZKCodeException("zk.mail.000011", "邮件附件最大允许[{0}]M", (this.attachmentSize / 1024 / 1024));
-//            return false;
+            throw ZKCodeException.as("zk.mail.000011", "邮件附件最大允许[{0}]M", (this.attachmentSize / 1024 / 1024));
         }
         return true;
     }
@@ -265,24 +264,24 @@ public class ZKMailSendService {
         ZKMailType mailType = mailTypeService.getByCode(typeCode, ZKBaseEntity.DEL_FLAG.normal);
         if (mailType == null) {
             log.error("[>_<:20220526-2058-001] zk.mail.000004=邮件类型[{}]不存在；", typeCode);
-            throw new ZKCodeException("zk.mail.000004", "邮件类型不存在", typeCode);
+            throw ZKCodeException.as("zk.mail.000004", "邮件类型不存在", typeCode);
         }
 
         if (mailType.getStatus().intValue() != ZKMailType.KeyStatus.normal) {
             log.error("[>_<:20220526-2058-002] zk.mail.000002=邮件类型[{}]被禁用；", typeCode);
-            throw new ZKCodeException("zk.mail.000002", "邮件类型被禁用", typeCode);
+            throw ZKCodeException.as("zk.mail.000002", "邮件类型被禁用", typeCode);
         }
 
         ZKMailTemplate mailTemplate = this.mailTemplateService.getByTypeCode(typeCode, companyCode, locale,
                 ZKBaseEntity.DEL_FLAG.normal);
         if (mailTemplate == null) {
             log.error("[>_<:20220526-2058-003] zk.mail.000007=邮件模板[{0}][{1}][{2}]不存在；", typeCode, companyCode, locale);
-            throw new ZKCodeException("zk.mail.000007", "邮件模板[{0}][{1}][{2}]不存在", typeCode, companyCode, locale);
+            throw ZKCodeException.as("zk.mail.000007", "邮件模板[{0}][{1}][{2}]不存在", typeCode, companyCode, locale);
         }
 
         if (mailTemplate.getStatus().intValue() != ZKMailType.KeyStatus.normal) {
             log.error("[>_<:20220526-2058-003] zk.mail.000008=邮件模板[{0}][{1}][{2}]已被禁用；", typeCode, companyCode, locale);
-            throw new ZKCodeException("zk.mail.000008", "邮件模板[{0}][{1}][{2}]已被禁用", typeCode, companyCode, locale);
+            throw ZKCodeException.as("zk.mail.000008", "邮件模板[{0}][{1}][{2}]已被禁用", typeCode, companyCode, locale);
         }
         this.send(async, sendMailAddr, recipientMailAddr, sendFlag, companyCode, mailTemplate, params, attachments);
     }
@@ -336,7 +335,7 @@ public class ZKMailSendService {
         catch(Exception e) {
             log.error("[>_<:20220526-2125-001] 发送邮件失败！");
             e.printStackTrace();
-            throw new ZKCodeException("zk.mail.000009", "发送邮件失败", null, null, e);
+            throw ZKCodeException.as("zk.mail.000009", "发送邮件失败", null, null, e);
         }
     }
 

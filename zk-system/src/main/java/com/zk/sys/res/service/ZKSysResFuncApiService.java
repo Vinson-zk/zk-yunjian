@@ -2,7 +2,7 @@
  * 
  */
 package com.zk.sys.res.service;
- 
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,9 @@ import com.zk.sys.res.entity.ZKSysResFuncApi;
 
 /**
  * ZKSysResFuncApiService
- * @author 
- * @version 
+ * 
+ * @author
+ * @version
  */
 @Service
 @Transactional(readOnly = true)
@@ -46,8 +47,7 @@ public class ZKSysResFuncApiService extends ZKBaseService<String, ZKSysResFuncAp
                     Map<String, String> validatorMsg = Maps.newHashMap();
                     validatorMsg.put("code", ZKMsgUtils.getMessage("zk.sys.000004", sysResFuncApi.getCode()));
                     throw ZKCodeException.asDataValidator(validatorMsg);
-                }
-                else {
+                } else {
                     sysResFuncApi.setPkId(old.getPkId());
                     sysResFuncApi.setDelFlag(ZKSysResFuncApi.DEL_FLAG.normal);
                 }
@@ -76,9 +76,8 @@ public class ZKSysResFuncApiService extends ZKBaseService<String, ZKSysResFuncAp
      * @return ZKSysResFuncApi
      */
     public ZKSysResFuncApi getBySysAndCode(String apiCode) {
-        return this.dao.getBySysAndCode(ZKSysResFuncApi.initSqlProvider().getTableName(),
-                ZKSysResFuncApi.initSqlProvider().getTableAlias(),
-                ZKSysResFuncApi.initSqlProvider().getSqlBlockSelCols(), apiCode);
+        return this.dao.getBySysAndCode(ZKSysResFuncApi.sqlHelper().getTableName(),
+            ZKSysResFuncApi.sqlHelper().getTableAlias(), ZKSysResFuncApi.sqlHelper().getBlockSqlCols(), apiCode);
     }
 
     @Override
@@ -98,5 +97,5 @@ public class ZKSysResFuncApiService extends ZKBaseService<String, ZKSysResFuncAp
         ZKUserCacheUtils.cleanAllAuth();
         return super.diskDel(sysResFuncApi);
     }
-	
+
 }

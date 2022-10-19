@@ -61,7 +61,7 @@ public class ZKSysAuthNavService extends ZKBaseService<String, ZKSysAuthNav, ZKS
         if (authDefined == null) {
             // zk.sys.020011=权限不存在
             log.error("[>_<:20220504-1112-001] 权限不存在");
-            throw new ZKCodeException("zk.sys.020011", "权限不存在");
+            throw ZKCodeException.as("zk.sys.020011", "权限不存在");
         }
         // 先删除 需要删除的关联关系
         if (delNavs == null) {
@@ -88,7 +88,7 @@ public class ZKSysAuthNavService extends ZKBaseService<String, ZKSysAuthNav, ZKS
         if (ZKStringUtils.isEmpty(authId)) {
             return Collections.emptyList();
         }
-        return this.dao.findNavIdsByAuthId(ZKSysAuthNav.initSqlProvider().getTableName(), authId,
+        return this.dao.findNavIdsByAuthId(ZKSysAuthNav.sqlHelper().getTableName(), authId,
                 ZKSysAuthNav.DEL_FLAG.normal);
     }
 
@@ -97,27 +97,27 @@ public class ZKSysAuthNavService extends ZKBaseService<String, ZKSysAuthNav, ZKS
         if (ZKStringUtils.isEmpty(authId) || ZKStringUtils.isEmpty(navId)) {
             return null;
         }
-        return this.dao.getRelationByAuthIdAndNavId(ZKSysAuthNav.initSqlProvider().getTableName(),
-                ZKSysAuthNav.initSqlProvider().getTableAlias(), ZKSysAuthNav.initSqlProvider().getSqlBlockSelCols(),
+        return this.dao.getRelationByAuthIdAndNavId(ZKSysAuthNav.sqlHelper().getTableName(),
+                ZKSysAuthNav.sqlHelper().getTableAlias(), ZKSysAuthNav.sqlHelper().getBlockSqlCols(),
                 authId, navId);
     }
 
     // 根据权限代码ID 删除关联关系
     @Transactional(readOnly = false)
     public int diskDelByAuthId(String authId) {
-        return this.dao.diskDelByAuthId(ZKSysAuthNav.initSqlProvider().getTableName(), authId);
+        return this.dao.diskDelByAuthId(ZKSysAuthNav.sqlHelper().getTableName(), authId);
     }
 
     // 根据导航栏目ID 删除关联关系
     @Transactional(readOnly = false)
     public int diskDelByNavId(String navId) {
-        return this.dao.diskDelByNavId(ZKSysAuthNav.initSqlProvider().getTableName(), navId);
+        return this.dao.diskDelByNavId(ZKSysAuthNav.sqlHelper().getTableName(), navId);
     }
 
     // 根据权限代码ID和导航栏目ID 物理删除
     @Transactional(readOnly = false)
     public int diskDelByAuthIdAndNavId(String authId, String navId) {
-        return this.dao.diskDelByAuthIdAndNavId(ZKSysAuthNav.initSqlProvider().getTableName(), authId, navId);
+        return this.dao.diskDelByAuthIdAndNavId(ZKSysAuthNav.sqlHelper().getTableName(), authId, navId);
     }
 	
 	

@@ -61,7 +61,7 @@ public class ZKBaseHelperEntityTest {
             // 实际值
             String actualValue = "";
 
-            expected = "{\"delFlag\":0,\"version\":0}";
+            expected = "{\"delFlag\":0,\"version\":0,\"isNewRecord\":true}";
             actualValue = ZKJsonUtils.writeObjectJson(helperEntity);
             System.out.println("[^_^:20190808-1543-003] string: " + actualValue);
             TestCase.assertEquals(expected, actualValue);
@@ -71,21 +71,21 @@ public class ZKBaseHelperEntityTest {
             zkJson.put("zkJson1", "zkJson");
             zkJson.put("zkJson2", 1);
             helperEntity.setSpareJson(zkJson);
-            expected = "{\"remarks\":\"remarks\",\"spareJson\":{\"zkJson2\":1,\"zkJson1\":\"zkJson\"},\"delFlag\":0,\"version\":0}";
+            expected = "{\"remarks\":\"remarks\",\"spareJson\":{\"zkJson2\":1,\"zkJson1\":\"zkJson\"},\"delFlag\":0,\"version\":0,\"isNewRecord\":true}";
             actualValue = ZKJsonUtils.writeObjectJson(helperEntity);
             System.out.println("[^_^:20190808-1543-004] string: " + actualValue);
             TestCase.assertEquals(expected, actualValue);
 
             helperEntity.setRemarks(null);
             helperEntity.setSpareJson(null);
-            expected = "{\"delFlag\":0,\"version\":0}";
+            expected = "{\"delFlag\":0,\"version\":0,\"isNewRecord\":true}";
             actualValue = ZKJsonUtils.writeObjectJson(helperEntity);
             System.out.println("[^_^:20190808-1543-005] string: " + actualValue);
             TestCase.assertEquals(expected, actualValue);
 
             helperEntity.setRemarks("");
             helperEntity.setSpareJson(new ZKJson());
-            expected = "{\"delFlag\":0,\"version\":0}";
+            expected = "{\"delFlag\":0,\"version\":0,\"isNewRecord\":true}";
             actualValue = ZKJsonUtils.writeObjectJson(helperEntity);
             System.out.println("[^_^:20190808-1543-006] string: " + actualValue);
             TestCase.assertEquals(expected, actualValue);
@@ -93,7 +93,7 @@ public class ZKBaseHelperEntityTest {
             helperEntity.setUpdateDate(new Date());
             expected = "{\"updateDate\":\""
                     + ZKDateUtils.formatDate(helperEntity.getUpdateDate(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss)
-                    + "\",\"delFlag\":0,\"version\":0}";
+                    + "\",\"delFlag\":0,\"version\":0,\"isNewRecord\":true}";
             actualValue = ZKJsonUtils.writeObjectJson(helperEntity);
             System.out.println("[^_^:20190808-1543-007] string: " + actualValue);
             TestCase.assertEquals(expected, actualValue);

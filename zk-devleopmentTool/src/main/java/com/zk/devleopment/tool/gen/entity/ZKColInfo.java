@@ -34,10 +34,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.utils.ZKStringUtils;
 import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import com.zk.devleopment.tool.gen.action.ZKConvertUtils;
 
 /**
@@ -49,21 +51,21 @@ import com.zk.devleopment.tool.gen.action.ZKConvertUtils;
 @ZKTable(name = "t_dt_code_gen_table_col_info", alias = "colInfo", orderBy = " c_col_sort ASC ")
 public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKColInfo());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKColInfo());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     /**
@@ -88,7 +90,7 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_col_name", isUpdate = false, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_col_name", query = @ZKQuery(value = true, queryType = ZKDBOptComparison.LIKE))
     String colName;
 
     /**
@@ -96,7 +98,7 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 512, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_col_jdbc_type", isUpdate = false, isQuery = false)
+    @ZKColumn(name = "c_col_jdbc_type")
     String colJdbcType;
 
     /**
@@ -104,21 +106,21 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
      */
 //    @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 0, max = 512, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_col_comments", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_col_comments", update = @ZKUpdate(true))
     String colComments = "";
 
     /**
      * 表：是否是主键；计算得出来的；false-不是；true-主键；默认 false;
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_col_is_pk", isUpdate = false, isQuery = false)
+    @ZKColumn(name = "c_col_is_pk")
     boolean colIsPK = false;
 
     /**
      * 表：是否可为空；false-不为空；true-可为空；默认 false
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_col_is_null", isUpdate = false, isQuery = false)
+    @ZKColumn(name = "c_col_is_null")
     boolean colIsNull = false;
 
     /**
@@ -126,7 +128,7 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 999999, message = "{zk.core.data.validation.range}")
-    @ZKColumn(name = "c_col_sort", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_col_sort", update = @ZKUpdate(true))
     int colSort = 999999;
 
     /**********************************************************************************/
@@ -138,7 +140,7 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_attr_name", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_attr_name", update = @ZKUpdate(true))
     String attrName = "";
 
     /**
@@ -146,14 +148,14 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_attr_type", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_attr_type", update = @ZKUpdate(true))
     String attrType = "String";
 
     /**
      * 判断是否是父类中的字段; false-不是; true-是; 默认：false
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_attr_is_base", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_attr_is_base", update = @ZKUpdate(true))
     boolean attrIsBaseField = false;
 
     /**
@@ -162,21 +164,21 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
      * 默认：null
      */
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_attr_query_type", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_attr_query_type", update = @ZKUpdate(true))
     String attrQueryType;
 
     /**
      * 是否为插入字段; false-不插入；true-插入字段；默认 true
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_attr_is_insert", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_attr_is_insert", update = @ZKUpdate(true))
     boolean attrIsInsert = true;
 
     /**
      * 是否编辑字段；false-不是编辑字段；true-编辑字段；默认 true;
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_attr_is_update", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_attr_is_update", update = @ZKUpdate(true))
     boolean attrIsUpdate = true;
 
     /**********************************************************************************/
@@ -187,7 +189,7 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 20, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_table_id", isUpdate = false, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_table_id", query = @ZKQuery(value = true, queryType = ZKDBOptComparison.EQ))
     String tableId;
 
     /**
@@ -195,7 +197,7 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
      */
 //    @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_label", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_label", update = @ZKUpdate(true))
     String label;
 
     /**
@@ -203,7 +205,7 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_edit_strategy", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_edit_strategy", update = @ZKUpdate(true))
     String editStrategy = ZKColInfo.KeyEditStrategy.noEdit;
 
     /**
@@ -211,7 +213,7 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_search_strategy", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_search_strategy", update = @ZKUpdate(true))
     String searchStrategy = ZKColInfo.KeySearchStrategy.noSearch;
 
     /**********************************************************************************/
@@ -404,7 +406,7 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
     }
 
     /**
-     * @param tableName
+     * @param tableId
      *            the tableName to set
      */
     public void setTableId(String tableId) {
@@ -657,6 +659,16 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
             r.add("com.fasterxml.jackson.annotation.JsonFormat");
             r.add("com.fasterxml.jackson.annotation.JsonInclude");
         }
+        // 字段映射注解
+        r.add("com.zk.db.annotation.ZKColumn");
+        // 字段修改注解信息
+        if(this.getAttrIsUpdate()){
+            r.add("com.zk.db.annotation.ZKUpdate");
+        }
+        // 字段查询注解信息
+        if(!ZKStringUtils.isEmpty(this.getAttrQueryType())){
+            r.add("com.zk.db.annotation.ZKQuery");
+        }
         return r;
     }
 
@@ -664,7 +676,7 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
         Set<String> r = new HashSet<String>();
         // 查询类型
         if (!ZKStringUtils.isEmpty(this.getAttrQueryType())) {
-            r.add("com.zk.db.commons.ZKDBQueryType");
+            r.add("com.zk.db.commons.ZKDBOptComparison");
         }
         // 日期类型
         if ("Date".equals(this.getAttrType())) {
@@ -720,31 +732,26 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
 //        formats = "%Y-%m-%d %H:%i:%S", 
         StringBuffer sb = new StringBuffer();
         sb = sb.append("@ZKColumn(");
+        // 字段基本信息
         sb = sb.append("name = \"").append(this.getColName()).append("\", ");
         sb = sb.append("isInsert = ").append(this.getAttrIsInsert()).append(", ");
-        sb = sb.append("isUpdate = ").append(this.getAttrIsUpdate()).append(", ");
-        sb = sb.append("javaType = ").append(this.getAttrType().replaceAll("<(.*)>", "")).append(".class, ");
+        sb = sb.append("javaType = ").append(this.getAttrType().replaceAll("<(.*)>", "")).append(".class");
         if ("Date".equals(this.getAttrType())) {
-            sb = sb.append("formats = \"").append("%Y-%m-%d %H:%i:%S").append("\", ");
+            sb = sb.append(", formats = \"").append("%Y-%m-%d %H:%i:%S").append("\"");
         }
-
-        if (ZKStringUtils.isEmpty(this.getAttrQueryType())) {
-            sb = sb.append("isQuery = ").append(false);
+        // 字段修改注解信息
+        if(this.getAttrIsUpdate()){
+            // 字段修改
+            sb = sb.append(", update = @ZKUpdate(true)");
         }
-        else {
-            sb = sb.append("isQuery = ").append(true).append(", ");
-            sb = sb.append("queryType = ZKDBQueryType.").append(this.getAttrQueryType());
+        // 字段查询注解信息
+        if(!ZKStringUtils.isEmpty(this.getAttrQueryType())){
+            // 字段是查询条件
+            sb = sb.append(", query = @ZKQuery(queryType = ZKDBOptComparison.").append(this.getAttrQueryType());
+            sb = sb.append(")");
         }
-
         sb = sb.append(")");
         annotStr = sb.toString();
-//        annotStr = String.format(
-//                "@ZKColumn(name = \"%s\", isInsert = %s, isUpdate = %s, javaType = %s.class, isQuery = %s%s)",
-//                this.getColName(), this.getAttrIsInsert(), this.getAttrIsUpdate(),
-//                this.getAttrType().replaceAll("<(.*)>", ""),
-//                (ZKStringUtils.isEmpty(this.getAttrQueryType()) != true),
-//                (ZKStringUtils.isEmpty(this.getAttrQueryType()) ? ""
-//                        : String.format(", queryType = ZKDBQueryType.%s", this.getAttrQueryType())));
 
         filedAnnotations.add(annotStr);
         return filedAnnotations;

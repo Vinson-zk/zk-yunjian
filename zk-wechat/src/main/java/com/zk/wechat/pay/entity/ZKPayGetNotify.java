@@ -30,8 +30,9 @@ import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKTable;
+import com.zk.db.annotation.ZKUpdate;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 微信支付-收款记录的回调通知
@@ -44,22 +45,23 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_wx_pay_get_notify", alias = "wxPayGetNotify")
 public class ZKPayGetNotify extends ZKBaseEntity<String, ZKPayGetNotify> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKPayGetNotify());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKPayGetNotify());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
+
     /**
      * @Fields serialVersionUID : TODO(simple description what to do.)
      */
@@ -141,16 +143,16 @@ public class ZKPayGetNotify extends ZKBaseEntity<String, ZKPayGetNotify> {
     // 处理状态；0-未处理；1-处理成功；2-重复通知不处理；3-校验签名异常；
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 9, message = "{zk.core.data.validation.rang.int}")
-    @ZKColumn(name = "c_dispose_status", isUpdate = true)
+    @ZKColumn(name = "c_dispose_status", update = @ZKUpdate(true))
     Integer disposeStatus;
 
     // 解密明文
-    @ZKColumn(name = "c_resource", isUpdate = true)
+    @ZKColumn(name = "c_resource", update = @ZKUpdate(true))
     ZKJson resource;
 
     // 校验签名时，后台系统生成的签名；
     @Length(min = 1, max = 2048, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_signature", isUpdate = true)
+    @ZKColumn(name = "c_signature", update = @ZKUpdate(true))
     String signature;
 
     /**

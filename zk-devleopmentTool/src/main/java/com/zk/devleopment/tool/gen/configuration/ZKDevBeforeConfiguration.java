@@ -179,6 +179,10 @@ public class ZKDevBeforeConfiguration {
         configurationPropertiesBinder.postProcessBeforeInitialization(dds_w, "parentDataSource");
         configurationPropertiesBinder.postProcessBeforeInitialization(dds_r, "parentDataSource");
 
+        System.out.println("[^_^:20221010-0021-001] ====================================================");
+        System.out.println("[^_^:20221010-0021-001] 数据库链接：" + dds_w.getUrl());
+        System.out.println("[^_^:20221010-0021-001] ====================================================");
+
         dds_w.setUsername(this.dbUserName_w);
         dds_w.setPassword(dbPwd_w);
 

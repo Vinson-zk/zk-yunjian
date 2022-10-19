@@ -12,10 +12,12 @@ import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.utils.ZKIdUtils;
 import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 授权账号，公众号或小程序
@@ -25,8 +27,6 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
  */
 @ZKTable(name = "t_wx_official_accounts", alias = "officialsAccount", orderBy = " c_create_date ASC ")
 public class ZKOfficialAccounts extends ZKBaseEntity<String, ZKOfficialAccounts> {
-	
-	static ZKSqlProvider sqlProvider;
 	
     /**
      * 授权方账号类型
@@ -65,16 +65,18 @@ public class ZKOfficialAccounts extends ZKBaseEntity<String, ZKOfficialAccounts>
 
     }
 
+	static ZKDBSqlHelper sqlHelper;
+
     @Override 
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
     
-    public static ZKSqlProvider initSqlProvider() {
-        if(sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKOfficialAccounts());
+    public static ZKDBSqlHelper sqlHelper() {
+        if(sqlHelper == null) {
+			sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKOfficialAccounts());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
     
     private static final long serialVersionUID = 1L;
@@ -83,19 +85,19 @@ public class ZKOfficialAccounts extends ZKBaseEntity<String, ZKOfficialAccounts>
 	 * 数据域平台标识；第三方数据绑定标识
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_data_space_platform", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_data_space_platform", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String dataSpacePlatform;	
 	/**
 	 * 数据域分组标识；第三方数据绑定标识
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_data_space_group", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_data_space_group", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String dataSpaceGroup;	
 	/**
 	 * 数据域拥有标识；第三方数据绑定标识
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_data_space_owner", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_data_space_owner", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String dataSpaceOwner;	
 
 	/**
@@ -103,7 +105,7 @@ public class ZKOfficialAccounts extends ZKBaseEntity<String, ZKOfficialAccounts>
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_group_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_group_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     String groupCode;
 
     /**
@@ -111,7 +113,7 @@ public class ZKOfficialAccounts extends ZKBaseEntity<String, ZKOfficialAccounts>
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_company_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_company_id", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String companyId;
 
     /**
@@ -119,7 +121,7 @@ public class ZKOfficialAccounts extends ZKBaseEntity<String, ZKOfficialAccounts>
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_company_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_company_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String companyCode;
 
     /**
@@ -127,7 +129,7 @@ public class ZKOfficialAccounts extends ZKBaseEntity<String, ZKOfficialAccounts>
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 9, message = "{zk.core.data.validation.rang.int}")
-    @ZKColumn(name = "c_add_type", isInsert = true, isUpdate = false, javaType = Integer.class, isQuery = false)
+    @ZKColumn(name = "c_add_type", isInsert = true, javaType = Integer.class)
     Integer addType;
 
     /**
@@ -135,14 +137,14 @@ public class ZKOfficialAccounts extends ZKBaseEntity<String, ZKOfficialAccounts>
      */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_third_party_appid", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_wx_third_party_appid", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String wxThirdPartyAppid;	
 	/**
 	 * 微信第三方平台，目标授权方账号
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_wx_account_appid", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_wx_account_appid", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     String wxAccountAppid;
 
 	/**
@@ -150,43 +152,43 @@ public class ZKOfficialAccounts extends ZKBaseEntity<String, ZKOfficialAccounts>
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Range(min = 0, max = 999999999, message = "{zk.core.data.validation.rang.int}")
-	@ZKColumn(name = "c_wx_auth_account_type", isInsert = true, isUpdate = false, javaType = Long.class, isQuery = false)
+	@ZKColumn(name = "c_wx_auth_account_type", isInsert = true, javaType = Long.class)
     Integer wxAuthAccountType;
 
 	/**
 	 * 微信第三方平台，目标授权方账号的刷新令牌，获取授权信息时得到
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_authorizer_refresh_token", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_wx_authorizer_refresh_token", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
 	String wxAuthorizerRefreshToken;	
 	/**
 	 * 目标授权方账号。授权的权限集
 	 */
-	@ZKColumn(name = "c_wx_func_info", isInsert = true, isUpdate = true, javaType = ZKJson.class, isQuery = false)
+	@ZKColumn(name = "c_wx_func_info", isInsert = true, javaType = ZKJson.class, update = @ZKUpdate(true))
     ZKJson wxFuncInfo;
 
 	/**
 	 * 昵称: nick_name
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_nick_name", isInsert = true, isUpdate = true, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_wx_nick_name", isInsert = true, javaType = String.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String wxNickName;	
 	/**
 	 * 头像: head_img
 	 */
     @Length(min = 0, max = 512, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_head_img", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_wx_head_img", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
 	String wxHeadImg;	
 	/**
 	 * 授权方在微信平台的类型: service_type_info
 	 */
-	@ZKColumn(name = "c_wx_service_type_info", isInsert = true, isUpdate = true, javaType = Long.class, isQuery = false)
+	@ZKColumn(name = "c_wx_service_type_info", isInsert = true, javaType = Long.class, update = @ZKUpdate(true))
     ZKJson wxServiceTypeInfo;
 
 	/**
 	 * 认证类型:  verify_type_info
 	 */
-	@ZKColumn(name = "c_wx_verify_type_info", isInsert = true, isUpdate = true, javaType = Long.class, isQuery = false)
+	@ZKColumn(name = "c_wx_verify_type_info", isInsert = true, javaType = Long.class, update = @ZKUpdate(true))
     ZKJson wxVerifyTypeInfo;
 
 	/**
@@ -194,37 +196,37 @@ public class ZKOfficialAccounts extends ZKBaseEntity<String, ZKOfficialAccounts>
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 128, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_user_name", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_wx_user_name", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
 	String wxUserName;	
 	/**
 	 * 主体名称：principal_name
 	 */
 	@Length(min = 0, max = 128, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_principal_name", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_wx_principal_name", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
 	String wxPrincipalName;	
 	/**
 	 * 用以了解功能的开通状况：business_info
 	 */
-	@ZKColumn(name = "c_wx_business_info", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_wx_business_info", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
     ZKJson wxBusinessInfo;
 
 	/**
 	 * 二维码图片的 URL，开发者最好自行也进行保存：qrcode_url
 	 */
     @Length(min = 0, max = 512, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_qrcode_url", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_wx_qrcode_url", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
 	String wxQrcodeUrl;	
 	/**
 	 * 公众号所设置的微信号，可能为空：alias
 	 */
 	@Length(min = 0, max = 128, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_alias", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_wx_alias", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
 	String wxAlias;	
 	/**
 	 * 小程序帐号介绍，可能为空：signature
 	 */
 	@Length(min = 0, max = 128, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_signature", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_wx_signature", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
 	String wxSignature;	
 	
 	public ZKOfficialAccounts() {

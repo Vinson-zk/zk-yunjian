@@ -17,38 +17,42 @@ import com.zk.core.commons.data.ZKJson;
 import com.zk.core.utils.ZKIdUtils;
 import com.zk.core.utils.ZKUtils;
 import com.zk.db.annotation.ZKColumn;
-import com.zk.db.annotation.ZKDBAnnotationProvider;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryConditionWhere;
-import com.zk.db.commons.ZKDBQueryType;
-import com.zk.db.commons.ZKSqlConvert;
-import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKDBQueryConditionCol;
-import com.zk.db.mybatis.commons.ZKDBQueryConditionIfByClass;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.*;
+import com.zk.db.mybatis.commons.ZKDBQueryScript;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 应用系统配置项条目
- * @author 
- * @version 
+ * 
+ * @author
+ * @version
  */
 @ZKTable(name = "t_sys_set_item", alias = "sysSetItem", orderBy = " c_create_date ASC ")
 public class ZKSysSetItem extends ZKBaseEntity<String, ZKSysSetItem> {
-	
-	static ZKSqlProvider sqlProvider;
-	
-    @Override 
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+
+    static ZKDBSqlHelper sqlHelper;
+
+    @Transient
+    @XmlTransient
+    @JsonIgnore
+    @Override
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
-    
-    public static ZKSqlProvider initSqlProvider() {
-        if(sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKSysSetItem());
+
+    @Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKSysSetItem());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
-    
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -86,13 +90,14 @@ public class ZKSysSetItem extends ZKBaseEntity<String, ZKSysSetItem> {
         public static final int vIntArray = 4;
 
     }
-	
+
     /**
      * 配置项组别ID
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_collection_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_collection_id", isInsert = true, javaType = String.class,
+        query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String collectionId;
 
     /**
@@ -100,129 +105,137 @@ public class ZKSysSetItem extends ZKBaseEntity<String, ZKSysSetItem> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_collection_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_collection_code", isInsert = true, javaType = String.class,
+        query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String collectionCode;
 
-	/**
+    /**
      * 配置项类型：0-平台配置；1-通用配置；2-公司专属配置；
      */
-	@NotNull(message = "{zk.core.data.validation.notNull}")
-	@Range(min = 0, max = 999999999, message = "{zk.core.data.validation.rang.int}")
-	@ZKColumn(name = "c_type", isInsert = true, isUpdate = true, javaType = Integer.class, isQuery = true, queryType = ZKDBQueryType.EQ)
-	Integer type;	
-	/**
-	 * 配置项名称
-	 */
-	@NotNull(message = "{zk.core.data.validation.notNull}")
-	@NotEmpty(message = "{zk.core.data.validation.notNull}")
-	@ZKColumn(name = "c_name", isInsert = true, isUpdate = true, javaType = ZKJson.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
-	ZKJson name;	
-	
+    @NotNull(message = "{zk.core.data.validation.notNull}")
+    @Range(min = 0, max = 999999999, message = "{zk.core.data.validation.rang.int}")
+    @ZKColumn(name = "c_type", isInsert = true, javaType = Integer.class, update = @ZKUpdate(true),
+        query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
+    Integer type;
+    /**
+     * 配置项名称
+     */
+    @NotNull(message = "{zk.core.data.validation.notNull}")
+    @NotEmpty(message = "{zk.core.data.validation.notNull}")
+    @ZKColumn(name = "c_name", isInsert = true, javaType = ZKJson.class, update = @ZKUpdate(true),
+        query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
+    ZKJson name;
+
     /**
      * 配置项代码；组别下全表唯一；
      */
-	@NotNull(message = "{zk.core.data.validation.notNull}")
-	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_code", isInsert = true, isUpdate = true, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
-	String code;	
-	/**
-	 * 配置项说明
-	 */
-	@ZKColumn(name = "c_set_desc", isInsert = true, isUpdate = true, javaType = ZKJson.class, isQuery = false)
-	ZKJson setDesc;	
-	
+    @NotNull(message = "{zk.core.data.validation.notNull}")
+    @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
+    @ZKColumn(name = "c_code", isInsert = true, javaType = String.class, update = @ZKUpdate(true),
+        query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
+    String code;
+    /**
+     * 配置项说明
+     */
+    @ZKColumn(name = "c_set_desc", isInsert = true, javaType = ZKJson.class, update = @ZKUpdate(true))
+    ZKJson setDesc;
+
     /**
      * 配置值类型：0-字符串；1-boolean 布尔值；2-整数；3-字符数组；4-数字数组；
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 9, message = "{zk.core.data.validation.rang.int}")
-    @ZKColumn(name = "c_value_type", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+    @ZKColumn(name = "c_value_type", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
     Integer valueType;
 
     /**
      * 配置值：通用配置类型时，公司可以自定义配置值
      */
-	@NotNull(message = "{zk.core.data.validation.notNull}")
+    @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 256, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_value", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
-	String value;	
-	
+    @ZKColumn(name = "c_value", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
+    String value;
+
     /**
      * 集团代码：仅公司专属配置类型时，有值
      */
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_group_code", isInsert = true, isUpdate = true, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
-	String groupCode;	
-	
+    @ZKColumn(name = "c_group_code", isInsert = true, javaType = String.class, update = @ZKUpdate(true),
+        query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
+    String groupCode;
+
     /**
      * 公司代码：仅公司专属配置类型时，有值
      */
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_compamy_code", isInsert = true, isUpdate = true, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
-	String compamyCode;	
-	
-	public ZKSysSetItem() {
-		super();
-	}
+    @ZKColumn(name = "c_compamy_code", isInsert = true, javaType = String.class, update = @ZKUpdate(true),
+        query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
+    String compamyCode;
 
-	public ZKSysSetItem(String pkId){
-		super(pkId);
-	}
-	
-	/**
+    public ZKSysSetItem() {
+        super();
+    }
+
+    public ZKSysSetItem(String pkId) {
+        super(pkId);
+    }
+
+    /**
      * 配置项类型：0-平台配置；1-通用配置；2-公司专属配置；
-     */	
-	public Integer getType() {
-		return type;
-	}
-	
-	/**
+     */
+    public Integer getType() {
+        return type;
+    }
+
+    /**
      * 配置项类型：0-平台配置；1-通用配置；2-公司专属配置；
-     */	
-	public void setType(Integer type) {
-		this.type = type;
-	}
-	/**
-	 * 配置项名称	
-	 */	
-	public ZKJson getName() {
-		return name;
-	}
-	
-	/**
-	 * 配置项名称
-	 */	
-	public void setName(ZKJson name) {
-		this.name = name;
-	}
-	
+     */
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    /**
+     * 配置项名称
+     */
+    public ZKJson getName() {
+        return name;
+    }
+
+    /**
+     * 配置项名称
+     */
+    public void setName(ZKJson name) {
+        this.name = name;
+    }
+
     /**
      * 配置项代码；组别下全表唯一；
-     */	
-	public String getCode() {
-		return code;
-	}
-	
-	/**
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
      * 配置项代码；组别下全表唯一；
-     */	
-	public void setCode(String code) {
-		this.code = code;
-	}
-	/**
-	 * 配置项说明	
-	 */	
-	public ZKJson getSetDesc() {
-		return setDesc;
-	}
-	
-	/**
-	 * 配置项说明
-	 */	
-	public void setSetDesc(ZKJson setDesc) {
-		this.setDesc = setDesc;
-	}
-	
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    /**
+     * 配置项说明
+     */
+    public ZKJson getSetDesc() {
+        return setDesc;
+    }
+
+    /**
+     * 配置项说明
+     */
+    public void setSetDesc(ZKJson setDesc) {
+        this.setDesc = setDesc;
+    }
+
     /**
      * @return valueType sa
      */
@@ -240,54 +253,54 @@ public class ZKSysSetItem extends ZKBaseEntity<String, ZKSysSetItem> {
 
     /**
      * 配置值：通用配置类型时，公司可以自定义配置值
-     */	
-	public String getValue() {
-		return value;
-	}
-	
-	/**
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
      * 配置值：通用配置类型时，公司可以自定义配置值
-     */	
-	public void setValue(String value) {
-		this.value = value;
-	}
-	
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     /**
      * 集团代码：仅公司专属配置类型时，有值
-     */	
-	public String getGroupCode() {
-		return groupCode;
-	}
-	
-	/**
+     */
+    public String getGroupCode() {
+        return groupCode;
+    }
+
+    /**
      * 集团代码：仅公司专属配置类型时，有值
-     */	
-	public void setGroupCode(String groupCode) {
-		this.groupCode = groupCode;
-	}
-	
+     */
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
+    }
+
     /**
      * 公司代码：仅公司专属配置类型时，有值
-     */	
-	public String getCompamyCode() {
-		return compamyCode;
-	}
-	
-	/**
+     */
+    public String getCompamyCode() {
+        return compamyCode;
+    }
+
+    /**
      * 公司代码：仅公司专属配置类型时，有值
-     */	
-	public void setCompamyCode(String compamyCode) {
-		this.compamyCode = compamyCode;
-	}
-	
-	/**
-	 * 根据主键类型，重写主键生成；
-	 */
-	@Override
-	protected String genId() {
+     */
+    public void setCompamyCode(String compamyCode) {
+        this.compamyCode = compamyCode;
+    }
+
+    /**
+     * 根据主键类型，重写主键生成；
+     */
+    @Override
+    protected String genId() {
         return ZKIdUtils.genLongStringId();
     }
-	
+
     /**
      * 配置项组别ID
      */
@@ -342,12 +355,14 @@ public class ZKSysSetItem extends ZKBaseEntity<String, ZKSysSetItem> {
     @Transient
     @JsonIgnore
     @XmlTransient
-    public ZKDBQueryConditionWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBAnnotationProvider annotationProvider) {
-        ZKDBQueryConditionWhere where = super.getZKDbWhere(sqlConvert, annotationProvider);
-        ZKDBQueryConditionWhere sWhere = ZKDBQueryConditionWhere.asOr("(", ")",
-                ZKDBQueryConditionCol.as(ZKDBQueryType.LIKE, "c_name", "searchValue", String.class, null, false),
-                ZKDBQueryConditionCol.as(ZKDBQueryType.LIKE, "c_code", "searchValue", String.class, null, false));
-        where.put(ZKDBQueryConditionIfByClass.as(sWhere, "searchValue", String.class, false));
+    public ZKDBQueryWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
+        ZKDBQueryWhere where = sqlConvert.resolveQueryCondition(mapInfo);
+        // 制作一个根据名称和代码同时查询的 查询条件，用过度 java 属性 searchValue 为传参数值
+        ZKDBQueryWhere sWhere = ZKDBQueryWhere.asOr("(", ")",
+            ZKDBQueryCol.as(ZKDBOptComparison.LIKE, "c_name", "searchValue", String.class, null, false),
+            ZKDBQueryCol.as(ZKDBOptComparison.LIKE, "c_code", "searchValue", String.class, null, false));
+
+        where.put(ZKDBQueryScript.asIf(sWhere, 0, "searchValue", String.class));
         return where;
     }
 
@@ -376,8 +391,7 @@ public class ZKSysSetItem extends ZKBaseEntity<String, ZKSysSetItem> {
         if (this.getValueType() == Key_ValueType.vInt) {
             if (this.getValue() == null) {
                 return 0;
-            }
-            else {
+            } else {
                 return Integer.valueOf(this.getValue());
             }
         }

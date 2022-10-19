@@ -25,7 +25,6 @@ package com.zk.core.commons;
 * @version 1.0 
 */
 public enum ZKLanguageType {
-
     zh_CN("zh_CN", "简体中文", ""),
     zh_TW("zh_TW", "繁体中文", ""),
     zh("zh", "中文", ""),

@@ -72,21 +72,23 @@ public class ZKSamplePlugins implements Interceptor {
     /**
      * 简单包装参数
      *
-     * @param object
+     * @param parameter
      * @return
      */
-    private static Object wrapCollection(final Object object) {
-        if (object instanceof List) {
+    private static Object wrapCollection(final Object parameter) {
+        if (parameter instanceof List) {
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("list", object);
+            map.put("list", parameter);
             return map;
         }
-        else if (object != null && object.getClass().isArray()) {
+        else if (parameter != null && parameter.getClass().isArray()) {
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("zkray", object);
+            map.put("zkray", parameter);
             return map;
+        }else if(parameter instanceof Map){
+            ((Map)parameter).put("_zk_str", "#{v}");
         }
-        return object;
+        return parameter;
     }
 
     @Override

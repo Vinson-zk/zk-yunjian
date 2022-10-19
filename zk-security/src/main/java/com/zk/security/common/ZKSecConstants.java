@@ -124,6 +124,11 @@ public class ZKSecConstants {
          */
         public static final String SecException = "Sec_Exception";
 
+        /**
+         * 请示是否包含令牌ID
+         */
+        public static final String SecIsHaveTicket = "Sec_IsHaveTicket";
+
     }
 
 }

@@ -20,14 +20,7 @@ package com.zk.sys.res.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Many;
-import org.apache.ibatis.annotations.One;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 
 import com.zk.base.dao.ZKBaseTreeDao;
@@ -51,22 +44,8 @@ public interface ZKSysMenuDao extends ZKBaseTreeDao<String, ZKSysMenu> {
      */
     @SelectProvider(type = ZKMyBatisTreeSqlProvider.class, method = "selectTree")
     @Results(id = "treeResult", value = {
-            @Result(column = "{parentId=pkId}", property = "children", javaType = List.class, many = @Many(select = "com.zk.sys.res.dao.ZKSysMenuDao.findTreeChild", fetchType = FetchType.EAGER)) })
+            @Result(column = "{parentId=pkId}", property = "children", javaType = List.class, many = @Many(select = "com.zk.sys.res.dao.ZKSysMenuDao.findTree", fetchType = FetchType.EAGER)) })
     List<ZKSysMenu> findTree(ZKSysMenu sysMenu);
-
-    /**
-     * 树形查询的子节点查询
-     *
-     * @Title: findTreeChild
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Jan 6, 2021 10:09:10 PM
-     * @param sysMenu
-     * @return List<T>
-     */
-    @SelectProvider(type = ZKMyBatisTreeSqlProvider.class, method = "selectTree")
-    @ResultMap("treeResult")
-    List<ZKSysMenu> findTreeChild(ZKSysMenu sysMenu);
 
     /**
      * 查询菜单详情，包含父节点 fetchType = FetchType.EEAGER
@@ -84,7 +63,6 @@ public interface ZKSysMenuDao extends ZKBaseTreeDao<String, ZKSysMenu> {
      * @author Vinson
      * @date Aug 4, 2020 10:14:01 PM
      * @param code
-     * @return
      * @return ZKSysMenu
      */
     @Select(value = { "SELECT ${sCols} FROM ${tn} WHERE c_code = #{code}" })

@@ -14,10 +14,12 @@ import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.utils.ZKIdUtils;
 import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 微信平台，功能 key 类型
@@ -29,18 +31,18 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_wx_pb_func_key_type", alias = "funcKeyType", orderBy = " c_create_date ASC ")
 public class ZKFuncKeyType extends ZKBaseEntity<String, ZKFuncKeyType> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider initSqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKFuncKeyType());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKFuncKeyType());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     private static final long serialVersionUID = 1L;
@@ -65,7 +67,7 @@ public class ZKFuncKeyType extends ZKBaseEntity<String, ZKFuncKeyType> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_func_type_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_func_type_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     String funcTypeCode;
 
     /**
@@ -73,7 +75,7 @@ public class ZKFuncKeyType extends ZKBaseEntity<String, ZKFuncKeyType> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @NotEmpty(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_func_type_name", isInsert = true, isUpdate = true, javaType = ZKJson.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_func_type_name", isInsert = true, javaType = ZKJson.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     ZKJson funcTypeName;
 
     /**
@@ -81,13 +83,13 @@ public class ZKFuncKeyType extends ZKBaseEntity<String, ZKFuncKeyType> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 9, message = "{zk.core.data.validation.rang.int}")
-    @ZKColumn(name = "c_status", isInsert = true, isUpdate = true, javaType = Integer.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_status", isInsert = true, javaType = Integer.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     Integer status;
 
     /**
      * 功能类型说明
      */
-    @ZKColumn(name = "c_func_type_desc", isInsert = true, isUpdate = true, javaType = ZKJson.class, isQuery = false)
+    @ZKColumn(name = "c_func_type_desc", isInsert = true, javaType = ZKJson.class, update = @ZKUpdate(true))
     ZKJson funcTypeDesc;
 
     public ZKFuncKeyType() {

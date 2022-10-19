@@ -61,7 +61,7 @@ public class ZKSysAuthMenuService extends ZKBaseService<String, ZKSysAuthMenu, Z
         if (authDefined == null) {
             // zk.sys.020011=权限不存在
             log.error("[>_<:20220504-1112-001] 权限不存在");
-            throw new ZKCodeException("zk.sys.020011", "权限不存在");
+            throw ZKCodeException.as("zk.sys.020011", "权限不存在");
         }
         // 先删除 需要删除的关联关系
         if (delMenus == null) {
@@ -98,7 +98,7 @@ public class ZKSysAuthMenuService extends ZKBaseService<String, ZKSysAuthMenu, Z
         if (ZKStringUtils.isEmpty(authId)) {
             return Collections.emptyList();
         }
-        return this.dao.findMenuIdsByAuthId(ZKSysAuthMenu.initSqlProvider().getTableName(), authId,
+        return this.dao.findMenuIdsByAuthId(ZKSysAuthMenu.sqlHelper().getTableName(), authId,
                 ZKSysAuthMenu.DEL_FLAG.normal);
     }
 
@@ -118,8 +118,8 @@ public class ZKSysAuthMenuService extends ZKBaseService<String, ZKSysAuthMenu, Z
         if (ZKStringUtils.isEmpty(authId) || ZKStringUtils.isEmpty(menuId)) {
             return null;
         }
-        return this.dao.getRelationByAuthIdAndMenuId(ZKSysAuthMenu.initSqlProvider().getTableName(),
-                ZKSysAuthMenu.initSqlProvider().getTableAlias(), ZKSysAuthMenu.initSqlProvider().getSqlBlockSelCols(),
+        return this.dao.getRelationByAuthIdAndMenuId(ZKSysAuthMenu.sqlHelper().getTableName(),
+                ZKSysAuthMenu.sqlHelper().getTableAlias(), ZKSysAuthMenu.sqlHelper().getBlockSqlCols(),
                 authId, menuId);
     }
 
@@ -136,7 +136,7 @@ public class ZKSysAuthMenuService extends ZKBaseService<String, ZKSysAuthMenu, Z
      */
     @Transactional(readOnly = false)
     public int diskDelByAuthId(String authId) {
-        return this.dao.diskDelByAuthId(ZKSysAuthMenu.initSqlProvider().getTableName(), authId);
+        return this.dao.diskDelByAuthId(ZKSysAuthMenu.sqlHelper().getTableName(), authId);
     }
 
     /**
@@ -152,7 +152,7 @@ public class ZKSysAuthMenuService extends ZKBaseService<String, ZKSysAuthMenu, Z
      */
     @Transactional(readOnly = false)
     public int diskDelByMenuId(String menuId) {
-        return this.dao.diskDelByMenuId(ZKSysAuthMenu.initSqlProvider().getTableName(), menuId);
+        return this.dao.diskDelByMenuId(ZKSysAuthMenu.sqlHelper().getTableName(), menuId);
     }
 
     /**
@@ -169,7 +169,7 @@ public class ZKSysAuthMenuService extends ZKBaseService<String, ZKSysAuthMenu, Z
      */
     @Transactional(readOnly = false)
     public int diskDelByAuthIdAndMenuId(String authId, String menuId) {
-        return this.dao.diskDelByAuthIdAndMenuId(ZKSysAuthMenu.initSqlProvider().getTableName(), authId, menuId);
+        return this.dao.diskDelByAuthIdAndMenuId(ZKSysAuthMenu.sqlHelper().getTableName(), authId, menuId);
     }
 
 

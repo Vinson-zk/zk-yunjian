@@ -2,7 +2,7 @@
  * 
  */
 package com.zk.sys.settings.service;
- 
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,9 @@ import com.zk.sys.settings.entity.ZKSysSetItem;
 
 /**
  * ZKSysSetItemService
- * @author 
- * @version 
+ * 
+ * @author
+ * @version
  */
 @Service
 @Transactional(readOnly = true)
@@ -45,9 +46,8 @@ public class ZKSysSetItemService extends ZKBaseService<String, ZKSysSetItem, ZKS
      * @return ZKSysSetItem
      */
     public ZKSysSetItem getByCode(String collectionCode, String Code) {
-        return this.dao.getByCode(ZKSysSetItem.initSqlProvider().getTableName(),
-                ZKSysSetItem.initSqlProvider().getTableAlias(), ZKSysSetItem.initSqlProvider().getSqlBlockSelCols(),
-                collectionCode, Code);
+        return this.dao.getByCode(ZKSysSetItem.sqlHelper().getTableName(), ZKSysSetItem.sqlHelper().getTableAlias(),
+            ZKSysSetItem.sqlHelper().getBlockSqlCols(), collectionCode, Code);
     }
 
     @Override
@@ -64,14 +64,13 @@ public class ZKSysSetItemService extends ZKBaseService<String, ZKSysSetItem, ZKS
             ZKSysSetCollection setCollection = this.sysSetCollectionService.get(setItem.getCollectionId());
             if (setCollection == null) {
                 log.error("[>_<:20220510-0108-001] 配置项组别不存在，组别[{}]", setItem.getPkId());
-                throw new ZKCodeException("zk.sys.030001", "配置项组别不存在");
-            }
-            else {
+                throw ZKCodeException.as("zk.sys.030001", "配置项组别不存在");
+            } else {
                 setItem.setCollectionCode(setCollection.getCode());
             }
-            
-         // 新增，校验代码是否存在
-         ZKSysSetItem old = this.getByCode(setItem.getCollectionCode(), setItem.getCode());
+
+            // 新增，校验代码是否存在
+            ZKSysSetItem old = this.getByCode(setItem.getCollectionCode(), setItem.getCode());
             if (old != null) {
                 if (ZKSysSetCollection.DEL_FLAG.normal == old.getDelFlag().intValue()) {
                     // 配置项代码已存在
@@ -79,8 +78,7 @@ public class ZKSysSetItemService extends ZKBaseService<String, ZKSysSetItem, ZKS
                     Map<String, String> validatorMsg = Maps.newHashMap();
                     validatorMsg.put("code", ZKMsgUtils.getMessage("zk.sys.030002", setItem.getCode()));
                     throw ZKCodeException.asDataValidator(validatorMsg);
-                }
-                else {
+                } else {
                     // 逻辑删除，重新启用
                     setItem.setDelFlag(ZKSysSetItem.DEL_FLAG.normal);
                     setItem.setPkId(old.getPkId());
@@ -95,5 +93,5 @@ public class ZKSysSetItemService extends ZKBaseService<String, ZKSysSetItem, ZKS
 
         return super.save(setItem);
     }
-	
+
 }

@@ -5,19 +5,24 @@ package com.zk.mail.entity;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.data.annotation.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.utils.ZKIdUtils;
 import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 发送邮件的类型
@@ -28,18 +33,24 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_mail_type", alias = "mailType", orderBy = " c_create_date ASC ")
 public class ZKMailType extends ZKBaseEntity<String, ZKMailType> {
 	
-	static ZKSqlProvider sqlProvider;
-	
-    @Override 
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+	static ZKDBSqlHelper sqlHelper;
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    @Override
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
-    
-    public static ZKSqlProvider initSqlProvider() {
-        if(sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKMailType());
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKMailType());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
     
     private static final long serialVersionUID = 1L;
@@ -64,26 +75,26 @@ public class ZKMailType extends ZKBaseEntity<String, ZKMailType> {
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_type_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_type_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String typeCode;	
 	/**
 	 * 类型名称
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@NotEmpty(message = "{zk.core.data.validation.notNull}")
-	@ZKColumn(name = "c_type_name", isInsert = true, isUpdate = true, javaType = ZKJson.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_type_name", isInsert = true, javaType = ZKJson.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	ZKJson typeName;	
 	/**
 	 * 状态：0-启用；1-禁用；
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 9, message = "{zk.core.data.validation.rang.int}")
-	@ZKColumn(name = "c_status", isInsert = true, isUpdate = true, javaType = Integer.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_status", isInsert = true, javaType = Integer.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	Integer status;	
 	/**
 	 * 类型说明
 	 */
-	@ZKColumn(name = "c_type_desc", isInsert = true, isUpdate = true, javaType = ZKJson.class, isQuery = false)
+	@ZKColumn(name = "c_type_desc", isInsert = true, javaType = ZKJson.class, update = @ZKUpdate(true))
 	ZKJson typeDesc;	
 	
 	public ZKMailType() {

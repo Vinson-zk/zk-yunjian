@@ -18,7 +18,11 @@
 */
 package com.zk.db.mybatis.provider;
 
-import com.zk.db.commons.ZKDBBaseEntity;
+import com.zk.core.utils.ZKStringUtils;
+import com.zk.db.commons.ZKSqlConvert;
+import com.zk.db.commons.ZKSqlConvert.SqlKeyword;
+import com.zk.db.entity.ZKDBBaseEntity;
+import com.zk.db.mybatis.commons.ZKDBScriptKey;
 
 /** 
 * @ClassName: ZKDBMybatisSqlProvider 
@@ -29,49 +33,50 @@ import com.zk.db.commons.ZKDBBaseEntity;
 public class ZKDBMybatisSqlProvider {
 
     public String insert(ZKDBBaseEntity<?> entity) {
-        return entity.getSqlProvider().getSqlInsert();
+        return entity.getSqlHelper().getSqlInsert();
     }
 
     public String update(ZKDBBaseEntity<?> entity) {
-        return entity.getSqlProvider().getSqlUpdate();
+        return entity.getSqlHelper().getSqlUpdate();
     }
 
     public String del(ZKDBBaseEntity<?> entity) {
-        return entity.getSqlProvider().getSqlDel();
+        return entity.getSqlHelper().getSqlDel();
     }
 
     public String diskDel(ZKDBBaseEntity<?> entity) {
-        return entity.getSqlProvider().getSqlDiskDel();
+        return entity.getSqlHelper().getSqlDiskDel();
     }
 
     public String get(ZKDBBaseEntity<?> entity) {
-        return entity.getSqlProvider().getSqlGet();
+        return entity.getSqlHelper().getSqlGet();
     }
 
     public String selectList(ZKDBBaseEntity<?> entity) {
 
 //        System.out.println("======== " + ZKJsonUtils.writeObjectJson(entity));
-
 //        return "<script>SELECT t0.c_json AS \"json\", t0.c_id AS \"id\", t0.c_type AS \"type\", t0.c_value AS \"value\", t0.c_remarks AS \"remarks\" FROM t_test t0 <where><if test=' type != null '>AND t0.c_type = #{type}</if></where> </script>";
-
 //        return "SELECT t0.c_json AS \"json\", t0.c_id AS \"id\", t0.c_type AS \"type\", t0.c_value AS \"value\", t0.c_remarks AS \"remarks\" FROM t_test t0 WHERE t0.c_type = #{type}";
-//      
 
-//        return entity.getSqlConvert()
-//                .selectList((entity.getPage() == null || entity.getPage().getSort() == null) ? Collections.emptyList()
-//                        : entity.getPage().getSort());
+        StringBuffer sb = new StringBuffer();
+        sb.append(ZKDBScriptKey.Script[0]);
+        sb.append(entity.getSqlHelper().getBlockSqlSelelctList());
+        ZKDBMybatisSqlProvider.appendOrderBySql(entity, sb);
+        sb.append(ZKDBScriptKey.Script[1]);
+        return sb.toString();
+    }
 
-//        /***************** */
-//        if (entity.getPage() == null || entity.getPage().getSort() == null) {
-//            return entity.getSqlConvert().selectList(Collections.emptyList());
-//        }
-//        else {
-//            return entity.getSqlConvert().selectList(entity.getPage().getSort());
-//        }
-
-        /***************** */
-        // 转换 list sql
-        return "<script>" + entity.getSqlProvider().getSqlBlockSelList() + entity.getSqlProvider().convertOrderBySql(entity) + "</script>";
+    public static void appendOrderBySql(ZKDBBaseEntity<?> entity, StringBuffer sb){
+        if (entity.getPage() == null || entity.getPage().getSorters() == null) {
+            if(!ZKStringUtils.isEmpty(entity.getSqlHelper().getBlockSqlOrderBy())){
+                sb.append(ZKSqlConvert.SqlKeyword.orderBy);
+                sb.append(entity.getSqlHelper().getBlockSqlOrderBy());
+            }
+        }
+        else {
+            sb.append(ZKSqlConvert.SqlKeyword.orderBy);
+            sb.append(entity.getSqlHelper().getBlockSqlOrderBy(entity.getPage().getSorters()));
+        }
     }
 
 }

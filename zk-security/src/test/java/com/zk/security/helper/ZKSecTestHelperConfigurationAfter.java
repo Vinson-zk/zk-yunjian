@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
@@ -37,6 +38,7 @@ import com.zk.core.web.utils.ZKWebUtils;
 * @author Vinson 
 * @version 1.0 
 */
+@Configuration
 @ImportResource(locations = { "classpath:test_spring_ctx_sec.xml" })
 @AutoConfigureAfter(value = { ZKSecTestHelperConfigurationBefore.class })
 public class ZKSecTestHelperConfigurationAfter {

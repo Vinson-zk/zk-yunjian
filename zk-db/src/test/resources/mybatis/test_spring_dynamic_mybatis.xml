@@ -34,7 +34,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="zkDynamicDataSource"/>
         <property name="typeAliasesPackage" value="com.zk.db.helper"></property>
-        <property name="typeAliasesSuperType" value="com.zk.db.helper.entity.ZKDBEntity"></property>
+        <property name="typeAliasesSuperType" value="com.zk.db.entity.ZKDBBaseEntity"></property>
         <property name="mapperLocations" value="classpath*:mappers/**/*.xml"/>
 		<property name="configLocation" value="classpath:mybatis/test_mybatis_config.xml"></property>
 		<property name="plugins">

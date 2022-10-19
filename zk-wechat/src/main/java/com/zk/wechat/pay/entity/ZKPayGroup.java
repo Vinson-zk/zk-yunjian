@@ -33,10 +33,12 @@ import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 支付关系组；其对象，绑定对应的商户号 mchid 和 应用ID appid
@@ -49,21 +51,21 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_wx_pay_group", alias = "wxPayGroup")
 public class ZKPayGroup extends ZKBaseEntity<String, ZKPayGroup> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKPayGroup());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKPayGroup());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     /**
@@ -102,13 +104,13 @@ public class ZKPayGroup extends ZKBaseEntity<String, ZKPayGroup> {
     // 支付关系组 商户ID 在微信支付平台的商户号 mchid
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 32, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_wx_mchid", isUpdate = false)
+    @ZKColumn(name = "c_wx_mchid")
     String wxMchid;
 
     // 支付关系组 应用ID 小程序ID或其他 在微信支付平台的应用ID
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 32, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_wx_appid", isUpdate = false)
+    @ZKColumn(name = "c_wx_appid")
     String wxAppId;
 
     // 支付关系组 代码；全表唯一，也是请求是的路径参数；
@@ -119,7 +121,7 @@ public class ZKPayGroup extends ZKBaseEntity<String, ZKPayGroup> {
 
     // 支付关系组 的名称
     @NotNull(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_name", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_name", update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     ZKJson name;
 
     // 状态；0-启用；1-禁用； disabled，enabled

@@ -63,7 +63,7 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
     /**
      * 认证，登录
      * 
-     * @param token
+     * @param authcToken
      * @return
      */
     @Override
@@ -79,7 +79,7 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
     /**
      * 认证，登录
      * 
-     * @param token
+     * @param authcToken
      * @return
      * @throws com.zk.security.exception.ZKSecCodeException
      */
@@ -93,6 +93,7 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
      * @return
      * @see com.zk.security.realm.ZKSecRealm#getZKSecAuthorizationInfo(com.zk.security.principal.pc.ZKSecPrincipalCollection)
      */
+    @Override
     public ZKSecAuthorizationInfo getZKSecAuthorizationInfo(ZKSecPrincipalCollection principalCollection) {
         ZKSecAuthorizationInfo authorizationInfo = null;
         if (this.getAuthorizationInfoStore() != null) {
@@ -127,18 +128,31 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
      *            权限代码
      * @return
      */
+    @Override
     public boolean checkPermission(ZKSecPrincipalCollection principalCollection, String permissionCode) {
-        return false;
+        ZKSecAuthorizationInfo authorizationInfo = this.getZKSecAuthorizationInfo(principalCollection);
+        boolean b = false;
+        if (authorizationInfo != null) {
+            // 鉴定是否拥有权限代码
+            if (!b && authorizationInfo.getAuthCodes() != null) {
+                b = authorizationInfo.getAuthCodes().contains(permissionCode);
+            }
+        }
+        if (!b) {
+            return this.doCheckPermission(principalCollection, permissionCode);
+        }
+        return b;
     }
 
     /**
      * 鉴定 api 权限 代码
      * 
-     * @param pc
+     * @param principalCollection
      * @param apiCode
      *            api 权限 代码
      * @return true-鉴定成功；反之鉴定失败
      */
+    @Override
     public boolean checkApiCode(ZKSecPrincipalCollection principalCollection, String apiCode) {
         ZKSecAuthorizationInfo authorizationInfo = this.getZKSecAuthorizationInfo(principalCollection);
         boolean b = false;
@@ -155,7 +169,6 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
             return this.doCheckApiCode(principalCollection, apiCode);
         }
         return b;
-
     }
 
     /**

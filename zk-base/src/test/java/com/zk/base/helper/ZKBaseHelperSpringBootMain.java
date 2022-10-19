@@ -23,8 +23,12 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.ImportResource;
 
 /** 
 * @ClassName: ZKBaseHelperSpringBootMain 
@@ -32,8 +36,22 @@ import org.springframework.context.ConfigurableApplicationContext;
 * @author Vinson 
 * @version 1.0 
 */
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
-@ImportAutoConfiguration(classes = { ZKBaseHelperConfiguration.class })
+@SpringBootApplication(exclude = {
+        DataSourceAutoConfiguration.class,
+        MongoAutoConfiguration.class })
+@ImportAutoConfiguration(classes = {
+//        ZKBaseHelperMongoConfiguration.class,  // 测试 mongo 时，需要引入这个配置
+})
+//@ComponentScan({"com.zk.base.helper.entity", "com.zk.base.helper.controller", "com.zk.base.helper.dao"})
+@ComponentScan(
+        basePackages = {
+                "com.zk.base.helper.entity", "com.zk.base.helper.controller", "com.zk.base.helper.dao"
+        },
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.zk.base.helper.mongo.*.*")
+        }
+)
+@ImportResource(locations = { "classpath:test_spring_context_dynamic_mybatis.xml" })
 public class ZKBaseHelperSpringBootMain {
 
     public static void main(String[] args) {

@@ -33,31 +33,16 @@ public class ZKSecCodeException extends ZKCodeException {
      */
     private static final long serialVersionUID = 1L;
 
-//    /**
-//     * 默认为创建系统异常
-//     */
-//    public ZKSecCodeException() {
-//        super();
-//    }
-//
-//    /**
-//     * 根据未知异常，默认为创建系统异常
-//     * @param cause
-//     */ 
-//    public ZKSecCodeException(Throwable cause) {
-//        super(cause);
-//    }
-
     /**
      * 创建指定代码异常
      * @param code
      */
     public ZKSecCodeException(String code) {
-        super(code);
+        super(KeyExceptionType.general, code, null, null, null, null);
     }
 
     public ZKSecCodeException(String code, String msg, Object[] msgArgs, Object data) {
-        super(code, msg, msgArgs, data);
+        super(KeyExceptionType.general, code, msg, msgArgs, data, null);
     }
 
     /**
@@ -68,7 +53,7 @@ public class ZKSecCodeException extends ZKCodeException {
      * @param data 异常数据
      */
     public ZKSecCodeException(String code, String msg, Object[] msgArgs, Object data, Throwable cause) {
-        super(code, msg, msgArgs, data, cause);
+        super(KeyExceptionType.general, code, msg, msgArgs, data, cause);
     }
 
 }

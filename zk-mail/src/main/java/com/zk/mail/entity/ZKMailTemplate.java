@@ -19,10 +19,12 @@ import com.zk.core.utils.ZKFreeMarkersUtils;
 import com.zk.core.utils.ZKIdUtils;
 import com.zk.core.utils.ZKStringUtils;
 import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 发送邮件的模板
@@ -34,18 +36,24 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 //@Alias("ZKMailTemplate")
 public class ZKMailTemplate extends ZKBaseEntity<String, ZKMailTemplate> {
 	
-	static ZKSqlProvider sqlProvider;
-	
-    @Override 
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+	static ZKDBSqlHelper sqlHelper;
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    @Override
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
-    
-    public static ZKSqlProvider initSqlProvider() {
-        if(sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKMailTemplate());
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKMailTemplate());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
     
     private static final long serialVersionUID = 1L;
@@ -94,40 +102,40 @@ public class ZKMailTemplate extends ZKBaseEntity<String, ZKMailTemplate> {
 	 * 集团代码
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_group_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_group_code", isInsert = true, javaType = String.class)
 	String groupCode;	
 	/**
 	 * 公司ID
 	 */
 	@Length(min = 0, max = 32, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_company_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_company_id", isInsert = true, javaType = String.class)
 	String companyId;	
 	/**
 	 * 公司代码
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_company_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_company_code", isInsert = true, javaType = String.class)
 	String companyCode;	
 	/**
 	 * 邮件类型ID
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_type_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_type_id", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String typeId;	
 	/**
 	 * 邮件类型代码
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_type_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_type_code", isInsert = true, javaType = String.class)
 	String typeCode;	
 
 	/**
      * 邮件语言，ENUM(‘default’, zh_CN', 'en_US', 'zh_TW')
      */
     @Length(min = 0, max = 16, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_locale", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+    @ZKColumn(name = "c_locale", isInsert = true, javaType = String.class)
     String locale;
 
     /**
@@ -135,34 +143,34 @@ public class ZKMailTemplate extends ZKBaseEntity<String, ZKMailTemplate> {
      */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Range(min = 0, max = 999999999, message = "{zk.core.data.validation.rang.int}")
-	@ZKColumn(name = "c_status", isInsert = true, isUpdate = true, javaType = Integer.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_status", isInsert = true, javaType = Integer.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	Integer status;	
 	/**
 	 * 发件邮箱，默认使用 发送邮件服务器发送账号
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_send_address", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_send_address", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
 	String sendAddress;	
 	/**
 	 * 发送邮件名称，可以使用 ${替换参数}
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 512, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_send_name", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_send_name", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
 	String sendName;	
 	/**
 	 * 发送邮件主题，可以使用 ${替换参数}
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 512, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_subject", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_subject", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
 	String subject;	
 	/**
 	 * 邮件内容，可以使用 ${替换参数}
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 2048, message = "{zk.core.data.validation.length}")
-	@ZKColumn(name = "c_content", isInsert = true, isUpdate = true, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_content", isInsert = true, javaType = String.class, update = @ZKUpdate(true))
 	String content;	
 	
 	public ZKMailTemplate() {

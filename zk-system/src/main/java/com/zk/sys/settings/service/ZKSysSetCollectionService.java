@@ -2,7 +2,7 @@
  * 
  */
 package com.zk.sys.settings.service;
- 
+
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -17,14 +17,14 @@ import com.zk.sys.settings.entity.ZKSysSetCollection;
 
 /**
  * ZKSysSetCollectionService
- * @author 
- * @version 
+ * 
+ * @author
+ * @version
  */
 @Service
 @Transactional(readOnly = true)
 public class ZKSysSetCollectionService extends ZKBaseService<String, ZKSysSetCollection, ZKSysSetCollectionDao> {
 
-	
     /**
      * 根据组别代码查询配置项组别
      *
@@ -37,9 +37,8 @@ public class ZKSysSetCollectionService extends ZKBaseService<String, ZKSysSetCol
      * @return ZKSysSetCollection
      */
     public ZKSysSetCollection getByCode(String Code) {
-        return this.dao.getByCode(ZKSysSetCollection.initSqlProvider().getTableName(),
-                ZKSysSetCollection.initSqlProvider().getTableAlias(),
-                ZKSysSetCollection.initSqlProvider().getSqlBlockSelCols(), Code);
+        return this.dao.getByCode(ZKSysSetCollection.sqlHelper().getTableName(),
+            ZKSysSetCollection.sqlHelper().getTableAlias(), ZKSysSetCollection.sqlHelper().getBlockSqlCols(), Code);
     }
 
     @Override
@@ -55,8 +54,7 @@ public class ZKSysSetCollectionService extends ZKBaseService<String, ZKSysSetCol
                     Map<String, String> validatorMsg = Maps.newHashMap();
                     validatorMsg.put("code", ZKMsgUtils.getMessage("zk.sys.030003", setCollection.getCode()));
                     throw ZKCodeException.asDataValidator(validatorMsg);
-                }
-                else {
+                } else {
                     // 逻辑删除，重新启用
                     setCollection.setDelFlag(ZKSysSetCollection.DEL_FLAG.normal);
                     setCollection.setPkId(old.getPkId());

@@ -35,9 +35,9 @@ public class ZKOfficialAccountsService extends ZKBaseService<String, ZKOfficialA
      * @return ZKOfficialAccounts
      */
     public ZKOfficialAccounts getByAccountAppid(String thirdPartyAppId, String accountAppid) {
-        return this.dao.getByAccountAppid(ZKOfficialAccounts.initSqlProvider().getTableName(),
-                ZKOfficialAccounts.initSqlProvider().getTableAlias(),
-                ZKOfficialAccounts.initSqlProvider().getSqlBlockSelCols(), thirdPartyAppId, accountAppid);
+        return this.dao.getByAccountAppid(ZKOfficialAccounts.sqlHelper().getTableName(),
+                ZKOfficialAccounts.sqlHelper().getTableAlias(),
+                ZKOfficialAccounts.sqlHelper().getBlockSqlCols(), thirdPartyAppId, accountAppid);
     }
 	
 }

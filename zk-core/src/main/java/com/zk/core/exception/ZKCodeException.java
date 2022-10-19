@@ -1,21 +1,17 @@
-/**   
- * Copyright (c) 2004-2014 Vinson Technologies, Inc.
- * address: 
- * All rights reserved. 
+/**
+ * Copyright (c) 2004-2014 Vinson Technologies, Inc. address: All rights reserved.
  * 
- * This software is the confidential and proprietary information of 
- * Vinson Technologies, Inc. ("Confidential Information").  You shall not 
- * disclose such Confidential Information and shall use it only in 
- * accordance with the terms of the license agreement you entered into 
- * with Vinson. 
+ * This software is the confidential and proprietary information of Vinson Technologies, Inc. ("Confidential
+ * Information"). You shall not disclose such Confidential Information and shall use it only in accordance with the
+ * terms of the license agreement you entered into with Vinson.
  *
- * @Title: ZKCodeException.java 
- * @author Vinson 
- * @Package com.zk.core.exception 
- * @Description: TODO(simple description this file what to do.) 
- * @date Dec 3, 2019 2:42:18 PM 
- * @version V1.0   
-*/
+ * @Title: ZKCodeException.java
+ * @author Vinson
+ * @Package com.zk.core.exception
+ * @Description: TODO(simple description this file what to do.)
+ * @date Dec 3, 2019 2:42:18 PM
+ * @version V1.0
+ */
 package com.zk.core.exception;
 
 import java.util.Map;
@@ -65,27 +61,37 @@ public class ZKCodeException extends ZKUnknownException {
      * @return ZKCodeException
      */
     public static ZKCodeException asDataValidator(Map<String, String> validatorMsg) {
-        return new ZKCodeException("zk.000002", "", null, validatorMsg);
+        return as("zk.000002", "", null, validatorMsg);
     }
 
-    public ZKCodeException(String code) {
-        this(code, null);
+    public static ZKCodeException as(String code) {
+        return as(KeyExceptionType.general, code, null, null, null, null);
     }
 
-    public ZKCodeException(String code, String msg) {
-        this(code, msg, null, null);
+    public static ZKCodeException as(String code, String msg) {
+        return as(KeyExceptionType.general, code, msg, null, null, null);
     }
 
-    public ZKCodeException(String code, String msg, Object... msgArgs) {
-        this(code, msg, msgArgs, null);
+    public static ZKCodeException as(String code, String msg, Object... msgArgs) {
+        return as(KeyExceptionType.general, code, msg, msgArgs, null, null);
     }
 
-    public ZKCodeException(String code, String msg, Object[] msgArgs, Object data) {
-        this(code, msg, msgArgs, data, null);
+    public static ZKCodeException as(String code, String msg, Object[] msgArgs, Object data) {
+        return as(KeyExceptionType.general, code, msg, msgArgs, data, null);
     }
 
-    public ZKCodeException(String code, String msg, Object[] msgArgs, Object data, Throwable cause) {
-        super(msg, cause);
+    public static ZKCodeException as(String code, String msg, Object[] msgArgs, Object data, Throwable cause) {
+        return as(KeyExceptionType.general, code, msg, msgArgs, data, cause);
+    }
+
+    ///
+    public static ZKCodeException as(int type, String code, String msg, Object[] msgArgs, Object data,
+        Throwable cause) {
+        return new ZKCodeException(type, code, msg, msgArgs, data, cause);
+    }
+
+    protected ZKCodeException(int type, String code, String msg, Object[] msgArgs, Object data, Throwable cause) {
+        super(type, msg, cause);
         this.code = code;
         this.msgArgs = msgArgs;
         this.data = data;
@@ -93,14 +99,17 @@ public class ZKCodeException extends ZKUnknownException {
 
     @Override
     public String toString() {
-        return String.format("{code:%s, msg:%s, msgArgs:%s, data:%s}", this.getCode(), super.getMessage(),
-                this.getMsgArgsStr(), this.getDataStr());
+        StringBuffer sb = new StringBuffer();
+        sb.append("{type:").append(this.getType()).append(", code:").append(this.getCode()).append(", msg:")
+            .append(super.getMessage()).append(", msgArgs:").append(this.getMsgArgsStr()).append(", data:")
+            .append(this.getDataStr()).append("}");
+        return sb.toString();
     }
 
-    @Override
-    public String getMessage() {
-        return toString();
-    }
+//    @Override
+//    public String getMessage() {
+//        return this.toString();
+//    }
 
     /**
      * @return code
@@ -110,26 +119,14 @@ public class ZKCodeException extends ZKUnknownException {
     }
 
     /**
-     * @param code
-     *            the code to set
-     */
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    /**
      * @return msgArgs
      */
     public Object[] getMsgArgs() {
         return msgArgs;
     }
 
-    /**
-     * @param msgArgs
-     *            the msgArgs to set
-     */
-    public void setMsgArgs(Object... msgArgs) {
-        this.msgArgs = msgArgs;
+    public void setData(Object data) {
+        this.data = data;
     }
 
     /**
@@ -139,33 +136,23 @@ public class ZKCodeException extends ZKUnknownException {
         return data;
     }
 
-    /**
-     * @param data
-     *            the data to set
-     */
-    public void setData(Object data) {
-        this.data = data;
-    }
-
     @JsonIgnore
     public String getDataStr() {
         if (this.data != null) {
             if (this.data instanceof String) {
-                return (String) this.data;
+                return (String)this.data;
             }
-            else {
-                return ZKJsonUtils.writeObjectJson(this.data);
-            }
+            return ZKJsonUtils.writeObjectJson(this.data);
         }
-        return null;
+        return "";
     }
 
     @JsonIgnore
-    public String getMsgArgsStr() {
+    private String getMsgArgsStr() {
         if (this.msgArgs != null) {
             return ZKJsonUtils.writeObjectJson(this.msgArgs);
         }
-        return null;
+        return "";
     }
 
 }

@@ -101,12 +101,12 @@ public class ZKTableInfoService extends ZKBaseService<String, ZKTableInfo, ZKTab
         ZKTableInfo ti = this.get(new ZKTableInfo(tableId));
         if (ti == null) {
             log.error("[^_^:20210401-0842-003] 表:{}, 信息不存在；", tableId);
-            throw new ZKCodeException("zk.codeGen.000002", "表信息不存在", tableId);
+            throw ZKCodeException.as("zk.codeGen.000002", "表信息不存在", tableId);
         }
         ZKModule m = this.zkModuleService.get(new ZKModule(ti.getModuleId()));
         if (m == null) {
             log.error("[^_^:20210401-0704-003] 功能模块:{}, 不存在；", ti.getModuleId());
-            throw new ZKCodeException("zk.codeGen.000001", "功能模块不存在", ti.getModuleId());
+            throw ZKCodeException.as("zk.codeGen.000001", "功能模块不存在", ti.getModuleId());
         }
         return updateTableInfo(m, ti);
     }
@@ -116,7 +116,7 @@ public class ZKTableInfoService extends ZKBaseService<String, ZKTableInfo, ZKTab
         Map<String, Object> dbTableInfo = ZKGetTableInfoUtils.getDbTableInfo(module, tableInfo.getTableName());
         if (dbTableInfo == null || dbTableInfo.isEmpty()) {
             log.error("[^_^:20210401-0704-003] 表:{}, 信息不存在；", tableInfo.getTableName());
-            throw new ZKCodeException("zk.codeGen.000002", "表信息不存在", tableInfo.getTableName());
+            throw ZKCodeException.as("zk.codeGen.000002", "表信息不存在", tableInfo.getTableName());
         }
         List<String> pkList = ZKGetTableInfoUtils.getPkSourceList(module, tableInfo.getTableName());
 
@@ -129,20 +129,22 @@ public class ZKTableInfoService extends ZKBaseService<String, ZKTableInfo, ZKTab
 
     /**
      * 根据表名，取列信息；注：不包含表的字段信息
-    *
-    * @Title: getByTableName 
-    * @Description: TODO(simple description this method what to do.) 
-    * @author Vinson 
-    * @date Mar 31, 2021 9:59:43 AM 
-    * @param tb
-    * @return
-    * @return ZKTableInfoDao
+     *
+     * @Title: getByTableName
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Mar 31, 2021 9:59:43 AM
+     * @param moduleId
+     * @param tableName
+     * @return
+     * @return ZKTableInfoDao
      */
     public ZKTableInfo getByTableName(String moduleId, String tableName) {
-        return this.dao.getByTableName(ZKTableInfo.sqlProvider().getTableName(),
-                ZKTableInfo.sqlProvider().getSqlBlockSelCols(""), moduleId, tableName);
+        return this.dao.getByTableName(ZKTableInfo.sqlHelper().getTableName(),
+                ZKTableInfo.sqlHelper().getBlockSqlCols(""), moduleId, tableName);
     }
 
+    @Override
     @Transactional(readOnly = false)
     public int diskDel(ZKTableInfo ti) {
         this.zkColInfoService.diskDelByTableId(ti.getPkId());

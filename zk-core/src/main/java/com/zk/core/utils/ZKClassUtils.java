@@ -23,17 +23,9 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +42,7 @@ import org.springframework.util.ClassUtils;
  */
 public class ZKClassUtils extends ClassUtils {
 
-    protected static Logger logger = LoggerFactory.getLogger(ZKClassUtils.class);
+    protected static Logger log = LoggerFactory.getLogger(ZKClassUtils.class);
 
     public static interface Param_Name {
         /**
@@ -104,6 +96,7 @@ public class ZKClassUtils extends ClassUtils {
      */
     private static abstract class ExceptionIgnoringAccessor implements ClassLoaderAccessor {
 
+        @Override
         @SuppressWarnings("rawtypes")
         public Class loadClass(String classNameStr) {
             Class clazz = null;
@@ -113,8 +106,8 @@ public class ZKClassUtils extends ClassUtils {
                     clazz = cl.loadClass(classNameStr);
                 }
                 catch(ClassNotFoundException e) {
-                    if (logger.isTraceEnabled()) {
-                        logger.trace(
+                    if (log.isTraceEnabled()) {
+                        log.trace(
                                 "Unable to load clazz named [" + classNameStr + "] from class loader [" + cl + "]");
                     }
                 }
@@ -136,8 +129,8 @@ public class ZKClassUtils extends ClassUtils {
                 return doGetClassLoader();
             }
             catch(Throwable t) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Unable to acquire ClassLoader.", t);
+                if (log.isDebugEnabled()) {
+                    log.debug("Unable to acquire ClassLoader.", t);
                 }
             }
             return null;
@@ -339,8 +332,8 @@ public class ZKClassUtils extends ClassUtils {
         }
         catch(Exception e) {
             e.printStackTrace();
-            logger.error("getTypeValue() value: " + value + " to " + vClass.getName() + " error ");
-            logger.error(e.getMessage());
+            log.error("getTypeValue() value: " + value + " to " + vClass.getName() + " error ");
+            log.error(e.getMessage());
             return null;
         }
     }
@@ -399,23 +392,23 @@ public class ZKClassUtils extends ClassUtils {
         InputStream is = THREAD_CL_ACCESSOR.getResourceStream(name);
 
         if (is == null) {
-            if (logger.isTraceEnabled()) {
-                logger.trace("Resource [" + name + "] was not found via the thread context ClassLoader.  Trying the "
+            if (log.isTraceEnabled()) {
+                log.trace("Resource [" + name + "] was not found via the thread context ClassLoader.  Trying the "
                         + "current ClassLoader...");
             }
             is = CLASS_CL_ACCESSOR.getResourceStream(name);
         }
 
         if (is == null) {
-            if (logger.isTraceEnabled()) {
-                logger.trace("Resource [" + name + "] was not found via the current class loader.  Trying the "
+            if (log.isTraceEnabled()) {
+                log.trace("Resource [" + name + "] was not found via the current class loader.  Trying the "
                         + "system/application ClassLoader...");
             }
             is = SYSTEM_CL_ACCESSOR.getResourceStream(name);
         }
 
-        if (is == null && logger.isTraceEnabled()) {
-            logger.trace("Resource [" + name + "] was not found via the thread context, current, or "
+        if (is == null && log.isTraceEnabled()) {
+            log.trace("Resource [" + name + "] was not found via the thread context, current, or "
                     + "system/application ClassLoaders.  All heuristics have been exhausted.  Returning null.");
         }
 
@@ -432,27 +425,97 @@ public class ZKClassUtils extends ClassUtils {
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
      * @date May 4, 2022 11:58:59 AM
-     * @param classz
-     *            一定要是实际的类型，不能是父类的类名
-     * @param classTypeName
+     * @param parentClassz
+     *            泛型所在的父类
+     * @param realClassz
+     *            实现 真实的类
+     * @param genericityTypeName
      *            要取类的泛型类的名称
      * @return
      * @return Class<?>
      */
-    @SuppressWarnings("unchecked")
-    public static <C> Class<C> getSuperclassByName(Class<?> pClassz, Class<?> classz, String classTypeName) {
-        TypeVariable<?>[] ts = pClassz.getTypeParameters();
+    public static <C> Class<C> getSuperclassByName(Class<?> parentClassz, Class<?> realClassz, String genericityTypeName) {
+
+        Type t = getTypeBySuperclassAndName(parentClassz, realClassz, genericityTypeName);
+        if(t != null && t instanceof Class){
+            return (Class<C>)t;
+        }
+        return null;
+    }
+
+    protected static Type getTypeBySuperclassAndName(Class<?> parentClassz, Class<?> realClassz,
+        String genericityTypeName) {
+
+//        log.info("[^_^:20221012-1635-001] getSuperclassByName, parentClassz:{}, realClassz: {}, genericityTypeName: {}",
+//            parentClassz.getName(), realClassz.getName(), genericityTypeName);
+        Type resType = null;
+        Class<?> rawType = null;
+        TypeVariable<?>[] tvs = null;
+        // 取出 子类或接口 支持的所有 泛型父类和接口
+        Set<Type> types = new HashSet<>();
+        if(!realClassz.isInterface()){
+            types.add(realClassz.getGenericSuperclass());
+        }
+        if(parentClassz.isInterface()){
+            types.addAll(Arrays.asList(realClassz.getGenericInterfaces()));
+        }
+        for(Type item:types){
+            rawType = getClassByType(item);
+            if(rawType == null){
+                // 如果泛型 实现类取上级类为空，跳过；
+                continue;
+            }
+            if(parentClassz.getName().equals(rawType.getName())){
+                // rawType 是 parentClassz 的一级子类
+                tvs = parentClassz.getTypeParameters();
+                if(item instanceof ParameterizedType) {
+                    resType = getTypeByParameterizedType((ParameterizedType) item, tvs, genericityTypeName);
+                }
+            }else{
+                if(parentClassz.isAssignableFrom(rawType)){
+                    // rawType 是 parentClassz 的子类或子接口，继续往下找
+                    resType = getTypeBySuperclassAndName(parentClassz, rawType, genericityTypeName);
+                    if(resType != null && resType instanceof TypeVariable){
+                        TypeVariable tv = (TypeVariable)resType;
+                        genericityTypeName = tv.getName();
+                        tvs = rawType.getTypeParameters();
+                        resType = getTypeByParameterizedType((ParameterizedType)item, tvs, genericityTypeName);
+                    }
+                    // 找一个泛型的实现类即可，不用一直循环找；
+                    break;
+                }
+            }
+        }
+        return resType;
+    }
+
+    protected static Type getTypeByParameterizedType(ParameterizedType pt, TypeVariable<?>[] ts,
+        String genericityTypeName) {
+        Type[] cTypes = pt.getActualTypeArguments();
+//        for (int i = 0; i < ts.length; ++i) {
+//            log.info("[^_^:20221007-1124-001] parentClassz.ts: {}.{}: {}", genericityTypeName, i, ts[i].getName());
+//        }
+//        for (int i = 0; i < cTypes.length; ++i) {
+//            log.info("[^_^:20221007-1124-001] realClassz.cTypes: {}.{}: {}", genericityTypeName, i,
+//                cTypes[i].getTypeName());
+//        }
         for (int i = 0; i < ts.length; ++i) {
-            if (classTypeName.equals(ts[i].getName())) {
-                ParameterizedType pt = ((ParameterizedType) classz.getGenericSuperclass());
-//                System.out.println("=== " + i);
-//                for (int ii = 0; ii < pt.getActualTypeArguments().length; ++ii) {
-//                    System.out.println("--- " + ii + ":  " + pt.getActualTypeArguments()[ii].getTypeName());
-//                }
-                return (Class<C>) pt.getActualTypeArguments()[i];
+            if (genericityTypeName.equals(ts[i].getName())) {
+//                 log.info("[^_^:20221007-1121-001] genericityTypeName:{}, i:{}", genericityTypeName, i);
+                return cTypes[i];
             }
         }
         return null;
+    }
+
+    protected static Class<?> getClassByType(Type type) {
+        if (type instanceof ParameterizedType) {
+            return (Class<?>)((ParameterizedType)type).getRawType();
+        } else if (type instanceof Class) {
+            return (Class<?>)type;
+        } else{
+            return null;
+        }
     }
 
     /**************************************************** */
@@ -508,21 +571,21 @@ public class ZKClassUtils extends ClassUtils {
         return (E) ctor.newInstance(args);
     }
 
-    public static Class<?> forName(String classNameStr) {
+    public static Class forName(String classNameStr) {
 
-        Class<?> clazz = THREAD_CL_ACCESSOR.loadClass(classNameStr);
+        Class clazz = THREAD_CL_ACCESSOR.loadClass(classNameStr);
 
         if (clazz == null) {
-            if (logger.isTraceEnabled()) {
-                logger.trace("Unable to load class named [" + classNameStr
+            if (log.isTraceEnabled()) {
+                log.trace("Unable to load class named [" + classNameStr
                         + "] from the thread context ClassLoader.  Trying the current ClassLoader...");
             }
             clazz = CLASS_CL_ACCESSOR.loadClass(classNameStr);
         }
 
         if (clazz == null) {
-            if (logger.isTraceEnabled()) {
-                logger.trace("Unable to load class named [" + classNameStr + "] from the current ClassLoader.  "
+            if (log.isTraceEnabled()) {
+                log.trace("Unable to load class named [" + classNameStr + "] from the current ClassLoader.  "
                         + "Trying the system/application ClassLoader...");
             }
             clazz = SYSTEM_CL_ACCESSOR.loadClass(classNameStr);

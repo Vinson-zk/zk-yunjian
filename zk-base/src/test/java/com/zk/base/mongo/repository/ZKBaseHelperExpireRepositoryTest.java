@@ -1,20 +1,20 @@
-/**   
+/**
  * Copyright (c) 2004-2014 Vinson Technologies, Inc.
- * address: 
- * All rights reserved. 
- * 
- * This software is the confidential and proprietary information of 
- * Vinson Technologies, Inc. ("Confidential Information").  You shall not 
- * disclose such Confidential Information and shall use it only in 
- * accordance with the terms of the license agreement you entered into 
- * with Vinson. 
+ * address:
+ * All rights reserved.
  *
- * @Title: ZKBaseHelperExpireRepositoryTest.java 
- * @author Vinson 
- * @Package com.zk.base.mongo.repository 
- * @Description: TODO(simple description this file what to do.) 
- * @date Dec 19, 2019 4:00:08 PM 
- * @version V1.0   
+ * This software is the confidential and proprietary information of
+ * Vinson Technologies, Inc. ("Confidential Information").  You shall not
+ * disclose such Confidential Information and shall use it only in
+ * accordance with the terms of the license agreement you entered into
+ * with Vinson.
+ *
+ * @Title: ZKBaseHelperExpireRepositoryTest.java
+ * @author Vinson
+ * @Package com.zk.base.mongo.repository
+ * @Description: TODO(simple description this file what to do.)
+ * @date Dec 19, 2019 4:00:08 PM
+ * @version V1.0
 */
 package com.zk.base.mongo.repository;
 
@@ -29,7 +29,7 @@ import junit.framework.TestCase;
 
 /**
  * 测试 mongo 过期索引
- * 
+ *
  * @ClassName: ZKBaseHelperExpireRepositoryTest
  * @Description: TODO(simple description this class what to do.)
  * @author Vinson

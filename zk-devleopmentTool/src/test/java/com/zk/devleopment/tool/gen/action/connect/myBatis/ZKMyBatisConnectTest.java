@@ -46,7 +46,7 @@ public class ZKMyBatisConnectTest {
             SqlSession session = null;
 
             ZKMyBatisSessionFactory.clean();
-            ZKMyBatisSessionFactory.createSessionFactory(ZKCodeGenConstant.config);
+            ZKMyBatisSessionFactory.createSessionFactory(ZKDevleopmentToolTestHelper.config);
             session = ZKMyBatisSessionFactory.openSession();
             TestCase.assertNotNull(session);
 

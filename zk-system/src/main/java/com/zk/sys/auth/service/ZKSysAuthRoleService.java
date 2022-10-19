@@ -91,7 +91,7 @@ public class ZKSysAuthRoleService extends ZKBaseService<String, ZKSysAuthRole, Z
         if (role == null) {
             // zk.sys.010013=职级不存在
             log.error("[>_<:20220504-1212-002] zk.sys.010013=职级不存在");
-            throw new ZKCodeException("zk.sys.010013");
+            throw ZKCodeException.as("zk.sys.010013");
         }
         // 先删除 需要删除的关联关系
         if (delAuths == null) {
@@ -118,7 +118,7 @@ public class ZKSysAuthRoleService extends ZKBaseService<String, ZKSysAuthRole, Z
         if (ZKStringUtils.isEmpty(roleId)) {
             return Collections.emptyList();
         }
-        return this.dao.findAuthCodesByRoleId(ZKSysAuthRole.initSqlProvider().getTableName(), roleId,
+        return this.dao.findAuthCodesByRoleId(ZKSysAuthRole.sqlHelper().getTableName(), roleId,
                 ZKSysAuthRole.DEL_FLAG.normal);
     }
 
@@ -137,7 +137,7 @@ public class ZKSysAuthRoleService extends ZKBaseService<String, ZKSysAuthRole, Z
         if (ZKStringUtils.isEmpty(roleId)) {
             return Collections.emptyList();
         }
-        return this.dao.findAuthIdsByRoleId(ZKSysAuthRole.initSqlProvider().getTableName(), roleId,
+        return this.dao.findAuthIdsByRoleId(ZKSysAuthRole.sqlHelper().getTableName(), roleId,
                 ZKSysAuthRole.DEL_FLAG.normal);
     }
 
@@ -154,8 +154,8 @@ public class ZKSysAuthRoleService extends ZKBaseService<String, ZKSysAuthRole, Z
      * @return ZKSysAuthRole
      */
     public ZKSysAuthRole getRelationByAuthIdAndRoleId(String authId, String roleId) {
-        return this.dao.getRelationByAuthIdAndRoleId(ZKSysAuthRole.initSqlProvider().getTableName(),
-                ZKSysAuthRole.initSqlProvider().getTableAlias(), ZKSysAuthRole.initSqlProvider().getSqlBlockSelCols(),
+        return this.dao.getRelationByAuthIdAndRoleId(ZKSysAuthRole.sqlHelper().getTableName(),
+                ZKSysAuthRole.sqlHelper().getTableAlias(), ZKSysAuthRole.sqlHelper().getBlockSqlCols(),
                 authId, roleId);
     }
 
@@ -174,7 +174,7 @@ public class ZKSysAuthRoleService extends ZKBaseService<String, ZKSysAuthRole, Z
     public int diskDelByAuthId(String authId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByAuthId(ZKSysAuthRole.initSqlProvider().getTableName(), authId);
+        return this.dao.diskDelByAuthId(ZKSysAuthRole.sqlHelper().getTableName(), authId);
     }
 
     /**
@@ -192,7 +192,7 @@ public class ZKSysAuthRoleService extends ZKBaseService<String, ZKSysAuthRole, Z
     public int diskDelByRoleId(String roleId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByRoleId(ZKSysAuthRole.initSqlProvider().getTableName(), roleId);
+        return this.dao.diskDelByRoleId(ZKSysAuthRole.sqlHelper().getTableName(), roleId);
     }
 
     /**
@@ -211,7 +211,7 @@ public class ZKSysAuthRoleService extends ZKBaseService<String, ZKSysAuthRole, Z
     public int diskDelByAuthIdAndRoleId(String authId, String roleId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByAuthIdAndRoleId(ZKSysAuthRole.initSqlProvider().getTableName(), authId, roleId);
+        return this.dao.diskDelByAuthIdAndRoleId(ZKSysAuthRole.sqlHelper().getTableName(), authId, roleId);
     }
 	
 }

@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.zk</groupId>
 		<artifactId>zk-parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>2.0.0</version>
 		<relativePath>../zk-parent</relativePath>
 	</parent>
 	<!-- <groupId>com.zk</groupId> -->
@@ -83,13 +83,14 @@
 		<version.quartz.scheduler>2.3.0</version.quartz.scheduler>
 		<version.javax.mail>1.4.7</version.javax.mail>
 		<!-- <version.freemarker>2.3.20</version.freemarker> -->
+		<version.sa.token>1.30.0</version.sa.token>
+		<version.mybatis.plus>3.5.1</version.mybatis.plus>
 	</properties>
 	
 	<dependencyManagement>
 		<dependencies>
 			<!-- ***** xxx begin -->
 			<!-- ##### xxx end -->
-			
 			<dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>springloaded</artifactId>
@@ -368,6 +369,17 @@
 			    <version>${version.mybatis.spring.boot}</version>
 			</dependency>
 			<!-- ##### mybatis end -->
+
+			<dependency>
+				<groupId>com.baomidou</groupId>
+				<artifactId>mybatis-plus-boot-starter</artifactId>
+				<version>${version.mybatis.plus}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.baomidou</groupId>
+				<artifactId>mybatis-plus</artifactId>
+				<version>${version.mybatis.plus}</version>
+			</dependency>
 			
 			<!-- ***** jsp begin -->
 			<dependency>
@@ -655,6 +667,11 @@
 			    <groupId>commons-io</groupId>
 			    <artifactId>commons-io</artifactId>
 			    <version>${version.commons.io}</version>
+			</dependency>
+			<dependency>
+				<groupId>cn.dev33</groupId>
+				<artifactId>sa-token-spring-boot-starter</artifactId>
+				<version>${version.sa.token}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.squareup.okhttp3</groupId>

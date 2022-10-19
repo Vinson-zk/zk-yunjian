@@ -85,12 +85,14 @@ b, strong {
 /* logo  */
 .zk_logo {
   width: auto;
-  /*height: 100%;*/
+  height: 100%;
   line-height: 50px;
 }
 .zk_logo img {
-  min-width: 270px;
+  /*min-width: 270px;*/
   max-width: 270px;
+  max-height: 50px;
+  height: 100%;
   vertical-align: middle;
 }
 
@@ -99,6 +101,7 @@ b, strong {
   background-color: var(--primary-color);
   color: var(--primary-font-color);
   border-color: var(--primary-border-color);
+  height: 50px;
 }
 .zk_header .zk_logo {
   transition: width .3s ease-in-out;

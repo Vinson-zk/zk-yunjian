@@ -15,10 +15,13 @@ import ${i};
 </#list>
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.xml.bind.annotation.XmlTransient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.Transient;
+
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.annotation.ZKColumn;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 import com.zk.base.entity.ZKBaseEntity;
 
@@ -31,18 +34,24 @@ import com.zk.base.entity.ZKBaseEntity;
 @ZKTable(name = "${zkTableInfo.tableName}", alias = "${zkTableInfo.funcName?uncap_first}"<#if zkTableInfo.colIsExists('c_create_date') == true >, orderBy = " c_create_date ASC "</#if>)
 public class ${zkTableInfo.className} extends ZKBaseEntity<${zkTableInfo.pkAttrType}, ${zkTableInfo.className}> {
 	
-	static ZKSqlProvider sqlProvider;
-	
-    @Override 
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+	static ZKDBSqlHelper sqlHelper;
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    @Override
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
-    
-    public static ZKSqlProvider initSqlProvider() {
-        if(sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ${zkTableInfo.className}());
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ${zkTableInfo.className}());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
     
     private static final long serialVersionUID = 1L;

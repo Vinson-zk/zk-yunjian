@@ -1,33 +1,34 @@
-/**   
+/**
  * Copyright (c) 2004-2014 Vinson Technologies, Inc.
- * address: 
- * All rights reserved. 
- * 
- * This software is the confidential and proprietary information of 
- * Vinson Technologies, Inc. ("Confidential Information").  You shall not 
- * disclose such Confidential Information and shall use it only in 
- * accordance with the terms of the license agreement you entered into 
- * with Vinson. 
+ * address:
+ * All rights reserved.
  *
- * @Title: ZKBaseHelperDoc.java 
- * @author Vinson 
- * @Package com.zk.base.helper.mongo.doc 
- * @Description: TODO(simple description this file what to do.) 
- * @date Dec 19, 2019 3:32:45 PM 
- * @version V1.0   
+ * This software is the confidential and proprietary information of
+ * Vinson Technologies, Inc. ("Confidential Information").  You shall not
+ * disclose such Confidential Information and shall use it only in
+ * accordance with the terms of the license agreement you entered into
+ * with Vinson.
+ *
+ * @Title: ZKBaseHelperDoc.java
+ * @author Vinson
+ * @Package com.zk.base.helper.mongo.doc
+ * @Description: TODO(simple description this file what to do.)
+ * @date Dec 19, 2019 3:32:45 PM
+ * @version V1.0
 */
 package com.zk.base.helper.mongo.doc;
 
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.zk.base.mongo.doc.ZKBaseMongoDoc;
 
-/** 
-* @ClassName: ZKBaseHelperDoc 
-* @Description: TODO(simple description this class what to do.) 
-* @author Vinson 
-* @version 1.0 
+/**
+* @ClassName: ZKBaseHelperDoc
+* @Description: TODO(simple description this class what to do.)
+* @author Vinson
+* @version 1.0
 */
 @Document(value = "test_ZKBaseHelperDoc")
 public class ZKBaseHelperDoc extends ZKBaseMongoDoc<String> {
@@ -43,7 +44,7 @@ public class ZKBaseHelperDoc extends ZKBaseMongoDoc<String> {
 
     /**
      * @ org.springframework.data.annotation.Transient
-     * 
+     *
      *   存储时，忽略该属性
      */
     @Transient

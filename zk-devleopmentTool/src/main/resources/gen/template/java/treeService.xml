@@ -28,6 +28,7 @@ public class ${zkTableInfo.className}Service extends ZKBaseTreeService<${zkTable
 	/**
      * 执行树形查询；
      */
+    @Override
     public List<${zkTableInfo.className}> doFindTree(${zkTableInfo.className} ${zkTableInfo.funcName?uncap_first}) {
         return this.dao.findTree(${zkTableInfo.funcName?uncap_first});
     }

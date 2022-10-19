@@ -190,7 +190,7 @@ public class ZKWXThirdPartyController {
             ZKThirdParty wxThirdPart = thirdPartyService.get(thirdPartyAppId);
             if (wxThirdPart == null) {
                 log.error("[>_<:20210218-1025-001] 此微信第三方平台 thirdPartyAppId:{} ; 尚未与系统对接。", thirdPartyAppId);
-                throw new ZKCodeException("zk.wechat.010001", "未对接第三方微信平台");
+                throw ZKCodeException.as("zk.wechat.010001", "未对接第三方微信平台");
             }
 
             //
@@ -238,7 +238,7 @@ public class ZKWXThirdPartyController {
             ZKThirdParty wxThirdPart = thirdPartyService.get(thirdPartyAppId);
             if (wxThirdPart == null) {
                 log.error("[>_<:20210219-0055-001] 此微信第三方平台 thirdPartyAppId:{} ; 尚未与系统对接。", thirdPartyAppId);
-                throw new ZKCodeException("zk.wechat.010001", "未对接第三方微信平台");
+                throw ZKCodeException.as("zk.wechat.010001", "未对接第三方微信平台");
             }
 
             Document notificationDoc = ZKWXMsgUtils.getDocumentMsg(wxThirdPart.getWxToken(), wxThirdPart.getWxAesKey(),
@@ -386,7 +386,7 @@ public class ZKWXThirdPartyController {
             log.error(
                     "[>_<_^:20220523-1013-002] 小程序取用户，取 openid 失败; jsCode 为空；thirdPartyAppid：{}，authAppId：{}，jsCode：{}",
                     thirdPartyAppId, authAppId, jsCode);
-            throw new ZKCodeException("zk.wechat.010019", "小程序取用户，取 openid 失败");
+            throw ZKCodeException.as("zk.wechat.010019", "小程序取用户，取 openid 失败");
         }
 
         // 取小程序用户的 openid sessionkey Unionid

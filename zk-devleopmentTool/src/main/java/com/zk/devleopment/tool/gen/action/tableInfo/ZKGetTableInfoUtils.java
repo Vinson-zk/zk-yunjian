@@ -108,7 +108,7 @@ public class ZKGetTableInfoUtils {
             if (tableInfoList != null && !tableInfoList.isEmpty()) {
                 if (tableInfoList.size() != 1) {
                     log.error("[^_^:20210401-0704-003] 表:{}, 信息不唯一；", tableName);
-                    throw new ZKCodeException("zk.codeGen.000003", "表信息不唯一", tableName);
+                    throw ZKCodeException.as("zk.codeGen.000003", "表信息不唯一", tableName);
                 }
                 return tableInfoList.get(0);
             }

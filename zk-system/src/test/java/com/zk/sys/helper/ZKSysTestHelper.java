@@ -34,6 +34,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClientConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -44,6 +45,7 @@ import com.zk.sys.ZKSysSpringBootMain;
 import com.zk.sys.configuration.ZKSysConfiguration;
 import com.zk.sys.configuration.ZKSysMvcConfiguration;
 
+@SpringBootTest
 @SpringBootApplication(exclude = { 
         DataSourceAutoConfiguration.class
         , TransactionAutoConfiguration.class

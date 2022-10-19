@@ -2,7 +2,7 @@
  * 
  */
 package com.zk.sys.res.service;
- 
+
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -17,8 +17,9 @@ import com.zk.sys.res.entity.ZKSysResDictType;
 
 /**
  * ZKSysResDictTypeService
- * @author 
- * @version 
+ * 
+ * @author
+ * @version
  */
 @Service
 @Transactional(readOnly = true)
@@ -36,9 +37,8 @@ public class ZKSysResDictTypeService extends ZKBaseService<String, ZKSysResDictT
      * @return ZKSysResDictType
      */
     public ZKSysResDictType getByTypeCode(String typeCode) {
-        return this.dao.getByTypeCode(ZKSysResDictType.initSqlProvider().getTableName(),
-                ZKSysResDictType.initSqlProvider().getTableAlias(),
-                ZKSysResDictType.initSqlProvider().getSqlBlockSelCols(), typeCode);
+        return this.dao.getByTypeCode(ZKSysResDictType.sqlHelper().getTableName(),
+            ZKSysResDictType.sqlHelper().getTableAlias(), ZKSysResDictType.sqlHelper().getBlockSqlCols(), typeCode);
     }
 
     @Override
@@ -54,8 +54,7 @@ public class ZKSysResDictTypeService extends ZKBaseService<String, ZKSysResDictT
                     Map<String, String> validatorMsg = Maps.newHashMap();
                     validatorMsg.put("typeCode", ZKMsgUtils.getMessage("zk.sys.000003", sysResDictType.getTypeCode()));
                     throw ZKCodeException.asDataValidator(validatorMsg);
-                }
-                else {
+                } else {
                     // 字典代码被逻辑删除，重新启用
                     sysResDictType.setDelFlag(ZKSysResDictType.DEL_FLAG.normal);
                     sysResDictType.setPkId(old.getPkId());
@@ -65,5 +64,4 @@ public class ZKSysResDictTypeService extends ZKBaseService<String, ZKSysResDictT
         return super.save(sysResDictType);
     }
 
-	
 }

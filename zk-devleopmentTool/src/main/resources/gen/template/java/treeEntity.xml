@@ -15,10 +15,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import ${i};
 </#list>
 
-import com.zk.base.commons.ZKTreeSqlProvider;
-import com.zk.base.entity.ZKBaseTreeEntity;
+import javax.xml.bind.annotation.XmlTransient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.Transient;
+
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.annotation.ZKColumn;
+import com.zk.base.commons.ZKTreeSqlHelper;
+import com.zk.base.entity.ZKBaseTreeEntity;
 import com.zk.db.commons.ZKSqlConvertDelegating;
 
 /**
@@ -29,18 +32,24 @@ import com.zk.db.commons.ZKSqlConvertDelegating;
 @ZKTable(name = "${zkTableInfo.tableName}", alias = "${zkTableInfo.funcName?uncap_first}"<#if zkTableInfo.colIsExists('c_create_date') == true >, orderBy = " c_create_date ASC "</#if>)
 public class ${zkTableInfo.className} extends ZKBaseTreeEntity<${zkTableInfo.pkAttrType}, ${zkTableInfo.className}> {
 	
-	static ZKTreeSqlProvider sqlProvider;
+	static ZKTreeSqlHelper sqlHelper;
 
+	@Transient
+    @XmlTransient
+    @JsonIgnore
     @Override
-    public ZKTreeSqlProvider getTreeSqlProvider() {
-        return initSqlProvider();
+    public ZKTreeSqlHelper getTreeSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKTreeSqlProvider initSqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKTreeSqlProvider(new ZKSqlConvertDelegating(), new ${zkTableInfo.className}());
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKTreeSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKTreeSqlHelper(new ZKSqlConvertDelegating(), new ${zkTableInfo.className}());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
     
 	private static final long serialVersionUID = 1L;

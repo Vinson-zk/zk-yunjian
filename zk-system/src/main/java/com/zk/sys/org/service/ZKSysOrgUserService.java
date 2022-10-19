@@ -2,7 +2,7 @@
  * 
  */
 package com.zk.sys.org.service;
- 
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,7 @@ import com.google.common.collect.Maps;
 import com.zk.base.service.ZKBaseService;
 import com.zk.core.encrypt.utils.ZKEncryptUtils;
 import com.zk.core.exception.ZKCodeException;
-import com.zk.core.utils.ZKDateUtils;
-import com.zk.core.utils.ZKEncodingUtils;
-import com.zk.core.utils.ZKEnvironmentUtils;
-import com.zk.core.utils.ZKMsgUtils;
-import com.zk.core.utils.ZKStringUtils;
+import com.zk.core.utils.*;
 import com.zk.framework.security.utils.ZKUserCacheUtils;
 import com.zk.sys.auth.service.ZKSysAuthUserRoleService;
 import com.zk.sys.auth.service.ZKSysAuthUserService;
@@ -28,8 +24,9 @@ import com.zk.sys.org.entity.ZKSysOrgUser;
 
 /**
  * ZKSysOrgUserService
- * @author 
- * @version 
+ * 
+ * @author
+ * @version
  */
 @Service
 @Transactional(readOnly = true)
@@ -85,9 +82,8 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
         if (ZKStringUtils.isEmpty(account) || ZKStringUtils.isEmpty(companyId)) {
             return null;
         }
-        return this.dao.getByAccount(ZKSysOrgUser.initSqlProvider().getTableName(),
-                ZKSysOrgUser.initSqlProvider().getTableAlias(), ZKSysOrgUser.initSqlProvider().getSqlBlockSelCols(),
-                companyId, account);
+        return this.dao.getByAccount(ZKSysOrgUser.sqlHelper().getTableName(), ZKSysOrgUser.sqlHelper().getTableAlias(),
+            ZKSysOrgUser.sqlHelper().getBlockSqlCols(), companyId, account);
     }
 
     /**
@@ -106,9 +102,8 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
         if (ZKStringUtils.isEmpty(mail) || ZKStringUtils.isEmpty(companyId)) {
             return null;
         }
-        return this.dao.getByMail(ZKSysOrgUser.initSqlProvider().getTableName(),
-                ZKSysOrgUser.initSqlProvider().getTableAlias(), ZKSysOrgUser.initSqlProvider().getSqlBlockSelCols(),
-                companyId, mail);
+        return this.dao.getByMail(ZKSysOrgUser.sqlHelper().getTableName(), ZKSysOrgUser.sqlHelper().getTableAlias(),
+            ZKSysOrgUser.sqlHelper().getBlockSqlCols(), companyId, mail);
     }
 
     /**
@@ -127,18 +122,16 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
         if (ZKStringUtils.isEmpty(phoneNum) || ZKStringUtils.isEmpty(companyId)) {
             return null;
         }
-        return this.dao.getByPhoneNum(ZKSysOrgUser.initSqlProvider().getTableName(),
-                ZKSysOrgUser.initSqlProvider().getTableAlias(), ZKSysOrgUser.initSqlProvider().getSqlBlockSelCols(),
-                companyId, phoneNum);
+        return this.dao.getByPhoneNum(ZKSysOrgUser.sqlHelper().getTableName(), ZKSysOrgUser.sqlHelper().getTableAlias(),
+            ZKSysOrgUser.sqlHelper().getBlockSqlCols(), companyId, phoneNum);
     }
 
     public ZKSysOrgUser getByJobNum(String companyId, String jobNum) {
         if (ZKStringUtils.isEmpty(jobNum) || ZKStringUtils.isEmpty(companyId)) {
             return null;
         }
-        return this.dao.getByJobNum(ZKSysOrgUser.initSqlProvider().getTableName(),
-                ZKSysOrgUser.initSqlProvider().getTableAlias(), ZKSysOrgUser.initSqlProvider().getSqlBlockSelCols(),
-                companyId, jobNum);
+        return this.dao.getByJobNum(ZKSysOrgUser.sqlHelper().getTableName(), ZKSysOrgUser.sqlHelper().getTableAlias(),
+            ZKSysOrgUser.sqlHelper().getBlockSqlCols(), companyId, jobNum);
     }
 
     // 新用户时，使用系统默认密码
@@ -157,14 +150,12 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
         ZKSysOrgCompany company = this.sysOrgCompanyService.get(new ZKSysOrgCompany(user.getCompanyId()));
         if (company == null) {
             log.error("[^_^:20220425-1014-001] 公司[{}-{}]不存在;", user.getCompanyId(), user.getCompanyCode());
-            throw new ZKCodeException("zk.sys.010003", "公司不存在");
-        }
-        else {
+            throw ZKCodeException.as("zk.sys.010003", "公司不存在");
+        } else {
             if (company.getStatus() == null || company.getStatus().intValue() != ZKSysOrgCompany.KeyStatus.normal) {
                 log.error("[^_^:20220425-1014-001] 公司[{}-{}]状态异常，请联系管理员;", company.getPkId(), company.getCode());
-                throw new ZKCodeException("zk.sys.010004", "公司状态异常，请联系管理员");
-            }
-            else {
+                throw ZKCodeException.as("zk.sys.010004", "公司状态异常，请联系管理员");
+            } else {
                 // 初始化公司值
                 user.setGroupCode(company.getGroupCode());
                 user.setCompanyCode(company.getCode());
@@ -175,21 +166,18 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
             ZKSysOrgDept dept = this.sysOrgDeptService.get(new ZKSysOrgDept(user.getDeptId()));
             if (dept == null) {
                 log.error("[^_^:20220425-1014-001] 部门[{}-{}]不存在;", user.getDeptId(), user.getDeptCode());
-                throw new ZKCodeException("zk.sys.010006", "部门不存在");
-            }
-            else {
+                throw ZKCodeException.as("zk.sys.010006", "部门不存在");
+            } else {
                 if (dept.getStatus().intValue() != ZKSysOrgDept.KeyStatus.normal) {
                     log.error("[^_^:20220425-1014-002] 部门[{}-{}]状态异常，请联系管理员;", dept.getPkId(), dept.getCode());
-                    throw new ZKCodeException("zk.sys.010007", "部门状态异常，请联系管理员");
-                }
-                else {
+                    throw ZKCodeException.as("zk.sys.010007", "部门状态异常，请联系管理员");
+                } else {
                     // 初始化部门值
                     user.setDeptId(dept.getPkId());
                     user.setDeptCode(dept.getCode());
                 }
             }
-        }
-        else {
+        } else {
             user.setDeptId(null);
             user.setDeptCode(null);
         }
@@ -253,8 +241,8 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
      */
     @Transactional(readOnly = false)
     public int updatePwd(String userId, String pwd, int pwdStatus) {
-        return this.dao.updatePwd(ZKSysOrgUser.initSqlProvider().getTableName(), userId, this.encryptionPwd(pwd),
-                pwdStatus, ZKDateUtils.getToday());
+        return this.dao.updatePwd(ZKSysOrgUser.sqlHelper().getTableName(), userId, this.encryptionPwd(pwd), pwdStatus,
+            ZKDateUtils.getToday());
     }
 
     /**
@@ -291,5 +279,5 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
         ZKUserCacheUtils.cleanAuth(user);
         return super.diskDel(user);
     }
-	
+
 }

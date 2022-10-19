@@ -41,7 +41,7 @@ public class ZKSecSecurityUtilsTest {
 
     static {
         try {
-            securiityManager = ZKSecTestHelper.ctxSec.getBean(ZKSecSecurityManager.class);
+            securiityManager = ZKSecTestHelper.getCtxSec().getBean(ZKSecSecurityManager.class);
             TestCase.assertNotNull(securiityManager);
 
         }
@@ -73,8 +73,8 @@ public class ZKSecSecurityUtilsTest {
                 subject.login(authenticationToken);
             }
             catch(ZKSecCodeException ae) {
-//              sec.000006=用户不存在
-                TestCase.assertEquals("sec.000006", ae.getCode());
+//              zk.sec.000001=用户不存在
+                TestCase.assertEquals("zk.sec.000001", ae.getCode());
             }
 
             /*** 密码错误 ***/
@@ -86,8 +86,8 @@ public class ZKSecSecurityUtilsTest {
                 subject.login(authenticationToken);
             }
             catch(ZKSecCodeException ae) {
-//              sec.000007=密码错误
-                TestCase.assertEquals("sec.000007", ae.getCode());
+//              zk.sec.000002=密码错误
+                TestCase.assertEquals("zk.sec.000002", ae.getCode());
             }
 
             /*** admin 成功登录 ***/

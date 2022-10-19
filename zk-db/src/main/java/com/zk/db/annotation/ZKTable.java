@@ -18,6 +18,8 @@
 */
 package com.zk.db.annotation;
 
+import org.springframework.core.annotation.AliasFor;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -44,7 +46,7 @@ public @interface ZKTable {
     // 说明
     String comment() default "";
 
-    // 默认排序, 都直接填写数据库字段
+    // 默认排序, 都直接填写数据库字段; 不要添加 order by
     String[] orderBy() default {};
 
 }

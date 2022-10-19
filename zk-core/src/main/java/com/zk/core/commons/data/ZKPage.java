@@ -112,12 +112,12 @@ public class ZKPage<T> {
         this.pageSize = pageSize > 9999 ? 9999 : pageSize;
     }
 
-    public String getOrderBySql() {
-        if (this.sorters != null) {
-            return ZKOrder.toOrderBySql(sorters);
-        }
-        return null;
-    }
+//    public String getOrderBySql() {
+//        if (this.sorters != null) {
+//            return ZKOrder.toOrderBySql(sorters);
+//        }
+//        return null;
+//    }
 
     public List<ZKOrder> getSorters() {
         return (sorters == null || sorters.size() < 1) ? null : sorters;

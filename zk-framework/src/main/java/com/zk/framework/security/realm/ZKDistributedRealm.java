@@ -80,9 +80,9 @@ public class ZKDistributedRealm extends ZKSecAbstractRealm {
     }
 
     /**
-     * 认证，登录
+     * 认证，登录；分布式认证域中，主要是做权限的鉴定
      * 
-     * @param token
+     * @param authcToken
      * @return
      * @throws com.zk.security.exception.ZKSecCodeException
      * @throws Exception

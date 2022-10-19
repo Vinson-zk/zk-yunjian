@@ -20,6 +20,7 @@ package com.zk.db.helper;
 
 import java.io.InputStream;
 
+import org.apache.ibatis.builder.xml.XMLConfigBuilder;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -65,8 +66,13 @@ public class ZKDBMybatisXmlConfigSessionFactory extends ZKMybatisSessionFactory 
         try {
             // 设置读配置文件输入流
             InputStream inputStream = Resources.getResourceAsStream(xml_file_path);
+
             // 创建 myBatis SqlSessionFactory 对象
-            sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+//            sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+            XMLConfigBuilder configBuilder = new XMLConfigBuilder(inputStream, null, null);
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(configBuilder.parse());
+
             logger.info("[^_^:20180309-1114-001] 创建 myBatis SqlSessionFactory 对象成功！ ");
         }
         catch(Exception e) {

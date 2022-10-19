@@ -30,13 +30,7 @@ import com.zk.framework.security.service.ZKSecAuthService;
 import com.zk.framework.security.userdetails.ZKUser;
 import com.zk.security.authz.ZKSecAuthorizationInfo;
 import com.zk.security.authz.ZKSecSimpleAuthorizationInfo;
-import com.zk.sys.auth.service.ZKSysAuthDeptService;
-import com.zk.sys.auth.service.ZKSysAuthFuncApiService;
-import com.zk.sys.auth.service.ZKSysAuthRankService;
-import com.zk.sys.auth.service.ZKSysAuthRoleService;
-import com.zk.sys.auth.service.ZKSysAuthUserRoleService;
-import com.zk.sys.auth.service.ZKSysAuthUserService;
-import com.zk.sys.auth.service.ZKSysAuthUserTypeService;
+import com.zk.sys.auth.service.*;
 import com.zk.sys.org.service.ZKSysOrgUserService;
 import com.zk.sys.sec.realm.ZKSysSecRealm.Key_Auth_Strategy;
 import com.zk.sys.settings.service.ZKSysSetItemService;
@@ -87,10 +81,9 @@ public class ZKSysSecAuthService implements ZKSecAuthService<String> {
      * Description:
      * </p>
      * 
-     * @param <ID>
      * @param userId
      * @return
-     * @see com.zk.framwwork.security.service.ZKSecAuthService#getByUserId(java.lang.Object)
+     * @see com.zk.framework.security.service.ZKSecAuthService#getByUserId(java.lang.Object)
      */
     @Override
     public ZKUser<String> getByUserId(String userId) {
@@ -106,10 +99,9 @@ public class ZKSysSecAuthService implements ZKSecAuthService<String> {
      * Description:
      * </p>
      * 
-     * @param <ID>
-     * @param userId
+     * @param user
      * @return
-     * @see com.zk.framwwork.security.service.ZKSecAuthService#ZKAuthPermission(java.lang.Object)
+     * @see com.zk.framework.security.service.ZKSecAuthService#getByAuthUser(com.zk.framework.security.userdetails.ZKUser)
      */
     @Override
     public ZKAuthPermission getByAuthUser(ZKUser<String> user) {
@@ -169,10 +161,8 @@ public class ZKSysSecAuthService implements ZKSecAuthService<String> {
      * Description:
      * </p>
      * 
-     * @param <ID>
      * @param userId
      * @return
-     * @see com.zk.framwwork.security.service.ZKSecAuthService#getByRoleCodesUserId(java.lang.Object)
      */
     @Override
     public List<String> getByRoleCodesUserId(String userId) {

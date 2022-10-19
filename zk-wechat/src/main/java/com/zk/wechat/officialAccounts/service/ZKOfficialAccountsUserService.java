@@ -35,9 +35,9 @@ public class ZKOfficialAccountsUserService extends ZKBaseService<String, ZKOffic
      * @return ZKOfficialAccountsUser
      */
     public ZKOfficialAccountsUser getByOpenId(String thirdPartyAppId, String accountAppId, String openid) {
-        return this.dao.getByOpenId(ZKOfficialAccountsUser.initSqlProvider().getTableName(),
-                ZKOfficialAccountsUser.initSqlProvider().getTableAlias(),
-                ZKOfficialAccountsUser.initSqlProvider().getSqlBlockSelCols(), thirdPartyAppId, accountAppId, openid);
+        return this.dao.getByOpenId(ZKOfficialAccountsUser.sqlHelper().getTableName(),
+                ZKOfficialAccountsUser.sqlHelper().getTableAlias(),
+                ZKOfficialAccountsUser.sqlHelper().getBlockSqlCols(), thirdPartyAppId, accountAppId, openid);
     }
 	
 }

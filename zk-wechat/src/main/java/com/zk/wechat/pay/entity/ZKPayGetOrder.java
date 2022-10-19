@@ -23,6 +23,7 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Transient;
 
@@ -31,7 +32,6 @@ import com.zk.base.entity.ZKBaseEntity;
 import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKTable;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
 import com.zk.wechat.pay.enumType.ZKPayGetChannel;
 import com.zk.wechat.pay.enumType.ZKPayStatus;
 
@@ -46,21 +46,21 @@ import com.zk.wechat.pay.enumType.ZKPayStatus;
 @ZKTable(name = "t_wx_pay_get_order", alias = "wxPayGetOrder", orderBy = " c_create_date Desc ")
 public class ZKPayGetOrder extends ZKBaseEntity<String, ZKPayGetOrder> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKPayGetOrder());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKPayGetOrder());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     /**

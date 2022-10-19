@@ -22,16 +22,20 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.zk.db.annotation.ZKQuery;
+import com.zk.db.commons.ZKDBOptComparison;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import org.springframework.data.annotation.Transient;
 
 /** 
 * @ClassName: ZKLogAccess 
@@ -43,18 +47,21 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_log_access", alias = "logAccess", orderBy = " c_create_date ASC ")
 public class ZKLogAccess extends ZKBaseEntity<String, ZKLogAccess> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
+    @Transient
+    @XmlTransient
+    @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider initSqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKLogAccess());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKLogAccess());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     private static final long serialVersionUID = 1L;
@@ -63,49 +70,53 @@ public class ZKLogAccess extends ZKBaseEntity<String, ZKLogAccess> {
      * 集团代码
      */
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_group_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_group_code", isInsert = true, javaType = String.class,
+            query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String groupCode;
 
     /**
      * 公司ID
      */
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_company_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_company_id", isInsert = true, javaType = String.class,
+            query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String companyId;
 
     /**
      * 公司代码
      */
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_company_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_company_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String companyCode;
 
-    @ZKColumn(name = "c_user_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+    @ZKColumn(name = "c_user_id", isInsert = true, javaType = String.class)
     String userId; // 创建用户ID
 
     @NotNull(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_date_time", isInsert = true, isUpdate = false, javaType = Date.class, isQuery = false)
+    @ZKColumn(name = "c_date_time", isInsert = true, javaType = Date.class)
     Date dateTime; // 修改时间戳 “yyyy-MM-dd HH:mm:ss.ssssss”
 
-    @ZKColumn(name = "c_user_agent", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+    @ZKColumn(name = "c_user_agent", isInsert = true, javaType = String.class)
     String userAgent; // 用户访问媒介【操作系统、浏览器类型、终端情况等信息】
 
-    @ZKColumn(name = "c_title", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+    @ZKColumn(name = "c_title", isInsert = true, javaType = String.class)
     String title; // 功能名称
 
-    @ZKColumn(name = "c_remote_addr", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_remote_addr", isInsert = true, javaType = String.class,
+            query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     String remoteAddr; // 访问者IP地址
 
-    @ZKColumn(name = "c_request_uri", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_request_uri", isInsert = true, javaType = String.class,
+            query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     String requestUri; // 请求路径
 
-    @ZKColumn(name = "c_method", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+    @ZKColumn(name = "c_method", isInsert = true, javaType = String.class)
     String method; // 请求方式
 
-    @ZKColumn(name = "c_params", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+    @ZKColumn(name = "c_params", isInsert = true, javaType = String.class)
     String params; // 请求参数
 
-    @ZKColumn(name = "c_exception", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+    @ZKColumn(name = "c_exception", isInsert = true, javaType = String.class)
     String exception; // 异常信息
 
     public ZKLogAccess() {

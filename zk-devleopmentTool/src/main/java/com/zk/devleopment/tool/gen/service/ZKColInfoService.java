@@ -81,12 +81,12 @@ public class ZKColInfoService extends ZKBaseService<String, ZKColInfo, ZKColInfo
         ZKTableInfo tableInfo = zkTableInfoService.get(new ZKTableInfo(tableId));
         if (tableInfo == null) {
             log.error("[^_^:20210401-0704-002] 表:{}, 信息不存在；", tableId);
-            throw new ZKCodeException("zk.codeGen.000002", "表信息不存在", tableId);
+            throw ZKCodeException.as("zk.codeGen.000002", "表信息不存在", tableId);
         }
         ZKModule module = zkModuleService.get(new ZKModule(tableInfo.getModuleId()));
         if (module == null) {
             log.error("[^_^:20210401-0704-002] 功能模块:{}, 不存在；", tableInfo.getModuleId());
-            throw new ZKCodeException("zk.codeGen.000001", "功能模块不存在", tableInfo.getModuleId());
+            throw ZKCodeException.as("zk.codeGen.000001", "功能模块不存在", tableInfo.getModuleId());
         }
         return this.updateAddByTable(module, tableInfo);
     }
@@ -119,12 +119,12 @@ public class ZKColInfoService extends ZKBaseService<String, ZKColInfo, ZKColInfo
         ZKTableInfo tableInfo = zkTableInfoService.get(new ZKTableInfo(tableId));
         if (tableInfo == null) {
             log.error("[^_^:20210401-0704-001] 表:{}, 信息不存在；", tableId);
-            throw new ZKCodeException("zk.codeGen.000002", "表信息不存在", tableId);
+            throw ZKCodeException.as("zk.codeGen.000002", "表信息不存在", tableId);
         }
         ZKModule module = zkModuleService.get(new ZKModule(tableInfo.getModuleId()));
         if (module == null) {
             log.error("[^_^:20210401-0704-001] 功能模块:{}, 不存在；", tableInfo.getModuleId());
-            throw new ZKCodeException("zk.codeGen.000001", "功能模块不存在", tableInfo.getModuleId());
+            throw ZKCodeException.as("zk.codeGen.000001", "功能模块不存在", tableInfo.getModuleId());
         }
         return this.updateAllByTable(module, tableInfo);
     }

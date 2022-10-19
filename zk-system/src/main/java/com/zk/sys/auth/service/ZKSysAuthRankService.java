@@ -70,7 +70,7 @@ public class ZKSysAuthRankService extends ZKBaseService<String, ZKSysAuthRank, Z
         if (rank == null) {
             // zk.sys.010013=职级不存在
             log.error("[>_<:20220504-1212-002] zk.sys.010013=职级不存在");
-            throw new ZKCodeException("zk.sys.010013");
+            throw ZKCodeException.as("zk.sys.010013");
         }
         // 先删除 需要删除的关联关系
         if (delAuths == null) {
@@ -97,7 +97,7 @@ public class ZKSysAuthRankService extends ZKBaseService<String, ZKSysAuthRank, Z
         if (ZKStringUtils.isEmpty(rankId)) {
             return Collections.emptyList();
         }
-        return this.dao.findAuthCodesByRankId(ZKSysAuthRank.initSqlProvider().getTableName(), rankId,
+        return this.dao.findAuthCodesByRankId(ZKSysAuthRank.sqlHelper().getTableName(), rankId,
                 ZKSysAuthRank.DEL_FLAG.normal);
     }
 
@@ -106,7 +106,7 @@ public class ZKSysAuthRankService extends ZKBaseService<String, ZKSysAuthRank, Z
         if (ZKStringUtils.isEmpty(rankId)) {
             return Collections.emptyList();
         }
-        return this.dao.findAuthIdsByRankId(ZKSysAuthRank.initSqlProvider().getTableName(), rankId,
+        return this.dao.findAuthIdsByRankId(ZKSysAuthRank.sqlHelper().getTableName(), rankId,
                 ZKSysAuthRank.DEL_FLAG.normal);
     }
 
@@ -115,14 +115,14 @@ public class ZKSysAuthRankService extends ZKBaseService<String, ZKSysAuthRank, Z
         if (ZKStringUtils.isEmpty(rankId)) {
             return Collections.emptyList();
         }
-        return this.dao.findApiCodesByRankId(ZKSysAuthRank.initSqlProvider().getTableName(),
-                ZKSysAuthFuncApi.initSqlProvider().getTableName(), rankId, ZKSysAuthUserType.DEL_FLAG.normal);
+        return this.dao.findApiCodesByRankId(ZKSysAuthRank.sqlHelper().getTableName(),
+                ZKSysAuthFuncApi.sqlHelper().getTableName(), rankId, ZKSysAuthUserType.DEL_FLAG.normal);
     }
 
     // 根据关联关系查询 权限关系实体
     public ZKSysAuthRank getRelationByAuthIdAndRankId(String authId, String rankId) {
-        return this.dao.getRelationByAuthIdAndRankId(ZKSysAuthRank.initSqlProvider().getTableName(),
-                ZKSysAuthRank.initSqlProvider().getTableAlias(), ZKSysAuthRank.initSqlProvider().getSqlBlockSelCols(),
+        return this.dao.getRelationByAuthIdAndRankId(ZKSysAuthRank.sqlHelper().getTableName(),
+                ZKSysAuthRank.sqlHelper().getTableAlias(), ZKSysAuthRank.sqlHelper().getBlockSqlCols(),
                 authId, rankId);
     }
 
@@ -131,7 +131,7 @@ public class ZKSysAuthRankService extends ZKBaseService<String, ZKSysAuthRank, Z
     public int diskDelByAuthId(String authId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByAuthId(ZKSysAuthRank.initSqlProvider().getTableName(), authId);
+        return this.dao.diskDelByAuthId(ZKSysAuthRank.sqlHelper().getTableName(), authId);
     }
 
     // 根据职级ID 删除关联关系
@@ -139,7 +139,7 @@ public class ZKSysAuthRankService extends ZKBaseService<String, ZKSysAuthRank, Z
     public int diskDelByRankId(String rankId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByRankId(ZKSysAuthRank.initSqlProvider().getTableName(), rankId);
+        return this.dao.diskDelByRankId(ZKSysAuthRank.sqlHelper().getTableName(), rankId);
     }
 
     // 根据权限代码ID和职级ID 物理删除
@@ -147,7 +147,7 @@ public class ZKSysAuthRankService extends ZKBaseService<String, ZKSysAuthRank, Z
     public int diskDelByAuthIdAndRankId(String authId, String rankId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByAuthIdAndRankId(ZKSysAuthRank.initSqlProvider().getTableName(), authId, rankId);
+        return this.dao.diskDelByAuthIdAndRankId(ZKSysAuthRank.sqlHelper().getTableName(), authId, rankId);
     }
 	
 }

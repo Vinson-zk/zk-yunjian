@@ -77,7 +77,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
             zkMsgRes.setData(serCenCertificate);
         }
         else {
-            throw new ZKMsgException("zk.ser.cen.000011"); // 证书生成异常
+            throw ZKCodeException.as("zk.ser.cen.000011"); // 证书生成异常
         }
 
         return zkMsgRes;
@@ -167,7 +167,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
 
         if (status != ZKSerCenCertificate.StatusType.Disabled && status != ZKSerCenCertificate.StatusType.Enable) {
             // 上送的状态不对，需要抛出异常
-            throw new ZKCodeException("zk.000002", null, null,
+            throw ZKCodeException.as("zk.000002", null, null,
                     ZKMsgUtils.getMessage("data.validation.rang", new Integer[] { 0, 1 }, ZKWebUtils.getLocale()));
         }
 
@@ -202,7 +202,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
 
         ZKSerCenCertificate sc = this.serCenCertificateService.get(new ZKSerCenCertificate(pkId));
         if (sc == null) {
-            throw new ZKMsgException("zk.ser.cen.000005"); // 证书不存在
+            throw ZKCodeException.as("zk.ser.cen.000005"); // 证书不存在
         }
 
 //        if (sc.getDelFlag().equals(ZKBaseEntity.DEL_FLAG.delete)) {

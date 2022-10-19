@@ -1,39 +1,39 @@
-/** 
-* Copyright (c) 2004-2020 ZK-Vinson Technologies, Inc.
-* address: 
-* All rights reserved. 
-* 
-* This software is the confidential and proprietary information of 
-* ZK-Vinson Technologies, Inc. ("Confidential Information"). You shall not 
-* disclose such Confidential Information and shall use it only in 
-* accordance with the terms of the license agreement you entered into 
-* with ZK-Vinson. 
-*
-* @Title: ZKSysResFuncApiReqChannel.java 
-* @author Vinson 
-* @Package com.zk.sys.res.entity 
-* @Description: TODO(simple description this file what to do. ) 
-* @date Nov 30, 2021 10:39:17 AM 
-* @version V1.0 
-*/
+/**
+ * Copyright (c) 2004-2020 ZK-Vinson Technologies, Inc. address: All rights reserved.
+ * 
+ * This software is the confidential and proprietary information of ZK-Vinson Technologies, Inc. ("Confidential
+ * Information"). You shall not disclose such Confidential Information and shall use it only in accordance with the
+ * terms of the license agreement you entered into with ZK-Vinson.
+ *
+ * @Title: ZKSysResFuncApiReqChannel.java
+ * @author Vinson
+ * @Package com.zk.sys.res.entity
+ * @Description: TODO(simple description this file what to do. )
+ * @date Nov 30, 2021 10:39:17 AM
+ * @version V1.0
+ */
 package com.zk.sys.res.entity;
 
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.zk.db.annotation.ZKQuery;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import org.hibernate.validator.constraints.Length;
 
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKTable;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import org.springframework.data.annotation.Transient;
 
-/** 
-* @ClassName: ZKSysResFuncApiReqChannel 
-* @Description: TODO(simple description this class what to do. ) 
-* @author Vinson 
-* @version 1.0 
-*/
+/**
+ * @ClassName: ZKSysResFuncApiReqChannel
+ * @Description: TODO(simple description this class what to do. )
+ * @author Vinson
+ * @version 1.0
+ */
 @ZKTable(name = "t_sys_res_func_api_req_channel", alias = "sysResFuncApiReqChannel", orderBy = " c_create_date ASC ")
 public class ZKSysResFuncApiReqChannel extends ZKBaseEntity<String, ZKSysResFuncApiReqChannel> {
 
@@ -41,18 +41,25 @@ public class ZKSysResFuncApiReqChannel extends ZKBaseEntity<String, ZKSysResFunc
      * @Fields serialVersionUID : TODO(simple description what to do.)
      */
     private static final long serialVersionUID = 1L;
-    static ZKSqlProvider sqlProvider;
 
+    static ZKDBSqlHelper sqlHelper;
+
+    @Transient
+    @XmlTransient
+    @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider initSqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKSysResFuncApiReqChannel());
+    @Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKSysResFuncApiReqChannel());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     /**
@@ -60,7 +67,7 @@ public class ZKSysResFuncApiReqChannel extends ZKBaseEntity<String, ZKSysResFunc
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_channel_id", isInsert = true, isQuery = true)
+    @ZKColumn(name = "c_channel_id", isInsert = true, query = @ZKQuery(true))
     String channelId;
 
     /**
@@ -68,7 +75,7 @@ public class ZKSysResFuncApiReqChannel extends ZKBaseEntity<String, ZKSysResFunc
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_func_api_id", isInsert = true, isQuery = true)
+    @ZKColumn(name = "c_func_api_id", isInsert = true, query = @ZKQuery(true))
     String funcApiId;
 
     /**
@@ -76,7 +83,7 @@ public class ZKSysResFuncApiReqChannel extends ZKBaseEntity<String, ZKSysResFunc
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_channel_code", isInsert = true, isQuery = true)
+    @ZKColumn(name = "c_channel_code", isInsert = true, query = @ZKQuery(true))
     String channelCode;
 
     /**
@@ -84,7 +91,7 @@ public class ZKSysResFuncApiReqChannel extends ZKBaseEntity<String, ZKSysResFunc
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_system_code", isInsert = true, isQuery = true)
+    @ZKColumn(name = "c_system_code", isInsert = true, query = @ZKQuery(true))
     String systemCode;
 
     /**
@@ -92,7 +99,7 @@ public class ZKSysResFuncApiReqChannel extends ZKBaseEntity<String, ZKSysResFunc
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_func_api_code", isInsert = true, isQuery = true)
+    @ZKColumn(name = "c_func_api_code", isInsert = true, query = @ZKQuery(true))
     String funcApiCode;
 
     public ZKSysResFuncApiReqChannel() {

@@ -19,62 +19,79 @@
 package com.zk.db.commons;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.zk.core.commons.data.ZKOrder;
-import com.zk.db.annotation.ZKDBAnnotationProvider;
 
 /** 
-* @ClassName: ZKSqlConvert 
-* @Description: TODO(simple description this class what to do. ) 
-* @author Vinson 
-* @version 1.0 
-*/
+ * 两个作用，一个是解析实体上的注解；二将解析的注解转换成以 sql
+ * @ClassName: ZKSqlConvert
+ * @Description: TODO(simple description this class what to do. )
+ * @author Vinson
+ * @version 1.0
+ */
 public interface ZKSqlConvert {
 
+
+    /**
+     * sql 关键字
+     */
+    public static interface SqlKeyword {
+        public static final String insert = " INSERT INTO ";
+        public static final String value = " VALUE ";
+        public static final String update = " UPDATE ";
+        public static final String set = " SET ";
+        public static final String from = " FROM ";
+        public static final String deleteFrom = " DELETE FROM ";
+        public static final String where = " WHERE ";
+        public static final String select = " SELECT ";
+        public static final String orderBy = " ORDER BY ";
+        public static final String space = " ";
+        public static final String[] bracketed = {"(", ")"};
+        public static final String comma = ", ";
+    }
+
     /********************************************************/
-    /*** 一些 完整的 sql 语句；一般只要生成一次即可；所以就保存下来 **/
+    /*** 通过注解直接转换成 sql **/
     /********************************************************/
     // insert sql
-    public String convertSqlInsert(ZKDBAnnotationProvider annotationProvider);
+    String convertSqlInsert(ZKDBMapInfo mapInfo);
 
     // update sql
-    public String convertSqlUpdate(ZKDBAnnotationProvider annotationProvider);
+    String convertSqlUpdate(ZKDBMapInfo mapInfo);
 
     // 逻辑删除 sql，逻辑删除语句，实体中定义
-    public String convertSqlDel(ZKDBAnnotationProvider annotationProvider, String delSetSql);
+    String convertSqlDel(ZKDBMapInfo mapInfo, String delSetSql);
 
     // 物理删除 sql
-    public String convertSqlDiskDel(ZKDBAnnotationProvider annotationProvider);
+    String convertSqlDiskDel(ZKDBMapInfo mapInfo);
 
-    /********************************************************/
-    /***  **/
-    /********************************************************/
-
-//    // 查询目标，带有 FROM
-//    public String convertSqlSelFrom(ZKDBAnnotationProvider annotationProvider, String tableAlias);
-
-    // 查询目标，不带有 FROM
-    public String convertSqlSelTable(ZKDBAnnotationProvider annotationProvider, String tableAlias);
-    
     // 查询结果映射
-    public String convertSqlSelCols(ZKDBAnnotationProvider annotationProvider, String tableAlias);
+    String convertSqlSelCols(ZKDBMapInfo mapInfo, String tableAlias);
 
-    // 查询主键条件; 带有 WHERE
-    public String convertSqlPkWhere(ZKDBAnnotationProvider annotationProvider, String tableAlias);
-
-    // 生成 查询条件 sql; 带有 WHERE
-    public String convertSqlWhere(ZKDBQueryConditionWhere where, String tableAlias);
-
-    // 这里将根据字段名映射到数据库字段；所以这里 ZKOrder 中填写的是 JAVA 实体字段名； 带有 ORDER BY
-    public String convertSqlOrderBy(ZKDBAnnotationProvider annotationProvider, Collection<ZKOrder> sorts,
-            String tableAlias, boolean isDefault);
+    // 主键查询条件
+    String convertPkCondition(ZKDBMapInfo mapInfo, String tableAlias);
 
     /********************************************************/
-    /***  **/
+    /*** 解析类上的注解 **/
     /********************************************************/
 
-    // 生成 查询 where
-    public ZKDBQueryConditionWhere getWhere(ZKDBAnnotationProvider annotationProvider);
+    // 根据注解 解析查询的条件
+    ZKDBQueryWhere resolveQueryCondition(ZKDBMapInfo mapInfo);
+    // 根据注解 解析查询的条件，为过虑的属性名；
+    ZKDBQueryWhere resolveQueryCondition(ZKDBMapInfo mapInfo, List<String> filterAttrNames);
 
+    /********************************************************/
+    /*** 一些动态 转换 **/
+    /********************************************************/
+
+    // 这里将根据字段名映射到数据库字段；所以这里 ZKOrder 中填写的是 JAVA 实体字段名；
+    String convertSqlOrderBy(ZKDBMapInfo mapInfo, Collection<ZKOrder> sorts, String tableAlias, boolean isDefault);
+
+    // 查询条件，单个字段的转换
+    void convertQueryCondition(StringBuffer sb, ZKDBQueryCol queryCol, String tableAlias);
+
+    // 查询条件，单个字段的转换
+    void convertQueryCondition(ZKDBOptLogic queryLogic, StringBuffer sb, ZKDBQueryCol queryCol, String tableAlias);
 
 }

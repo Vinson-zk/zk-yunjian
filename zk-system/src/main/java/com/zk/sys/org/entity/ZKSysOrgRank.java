@@ -16,15 +16,12 @@ import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.utils.ZKIdUtils;
 import com.zk.db.annotation.ZKColumn;
-import com.zk.db.annotation.ZKDBAnnotationProvider;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryConditionWhere;
-import com.zk.db.commons.ZKDBQueryType;
-import com.zk.db.commons.ZKSqlConvert;
-import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKDBQueryConditionCol;
-import com.zk.db.mybatis.commons.ZKDBQueryConditionIfByClass;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.*;
+import com.zk.db.mybatis.commons.ZKDBQueryScript;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 职级表
@@ -34,18 +31,24 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_sys_org_rank", alias = "sysOrgRank", orderBy = " c_create_date ASC ")
 public class ZKSysOrgRank extends ZKBaseEntity<String, ZKSysOrgRank> {
 	
-	static ZKSqlProvider sqlProvider;
-	
-    @Override 
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+	static ZKDBSqlHelper sqlHelper;
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    @Override
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
-    
-    public static ZKSqlProvider initSqlProvider() {
-        if(sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKSysOrgRank());
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKSysOrgRank());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
     
     private static final long serialVersionUID = 1L;
@@ -70,60 +73,60 @@ public class ZKSysOrgRank extends ZKBaseEntity<String, ZKSysOrgRank> {
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_group_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_group_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String groupCode;	
 	/**
 	 * 公司ID 
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_company_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_company_id", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String companyId;	
 	/**
 	 * 公司代码
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_company_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_company_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String companyCode;	
 	/**
 	 * 职级代码;公司下唯一
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String code;	
 	/**
 	 * 职级名称
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@NotEmpty(message = "{zk.core.data.validation.notNull}")
-	@ZKColumn(name = "c_name", isInsert = true, isUpdate = true, javaType = ZKJson.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_name", isInsert = true, javaType = ZKJson.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	ZKJson name;	
 	/**
 	 * 职级状态；0-正常；1-禁用；
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 9, message = "{zk.core.data.validation.rang.int}")
-    @ZKColumn(name = "c_status", isInsert = true, isUpdate = true, javaType = Integer.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_status", isInsert = true, javaType = Integer.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     Integer status;
 
 	/**
 	 *  职级简介
 	 */
-	@ZKColumn(name = "c_short_desc", isInsert = true, isUpdate = true, javaType = ZKJson.class, isQuery = false)
+	@ZKColumn(name = "c_short_desc", isInsert = true, javaType = ZKJson.class, update = @ZKUpdate(true))
 	ZKJson shortDesc;	
 	/**
 	 * 来源代码；与来源ID标识唯一；
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_source_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_source_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String sourceCode;	
 	/**
 	 * 来源ID标识，与来源代码唯一
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_source_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_source_id", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String sourceId;	
 	
 	public ZKSysOrgRank() {
@@ -286,12 +289,14 @@ public class ZKSysOrgRank extends ZKBaseEntity<String, ZKSysOrgRank> {
     @Transient
     @JsonIgnore
     @XmlTransient
-    public ZKDBQueryConditionWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBAnnotationProvider annotationProvider) {
-        ZKDBQueryConditionWhere where = super.getZKDbWhere(sqlConvert, annotationProvider);
-        ZKDBQueryConditionWhere sWhere = ZKDBQueryConditionWhere.asOr("(", ")",
-                ZKDBQueryConditionCol.as(ZKDBQueryType.LIKE, "c_name", "searchValue", String.class, null, false),
-                ZKDBQueryConditionCol.as(ZKDBQueryType.LIKE, "c_code", "searchValue", String.class, null, false));
-        where.put(ZKDBQueryConditionIfByClass.as(sWhere, "searchValue", String.class, false));
+    public ZKDBQueryWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
+		ZKDBQueryWhere where = sqlConvert.resolveQueryCondition(mapInfo);
+		// 制作一个根据名称和代码同时查询的 查询条件，用过度 java 属性 searchValue 为传参数值
+		ZKDBQueryWhere sWhere = ZKDBQueryWhere.asOr("(", ")",
+				ZKDBQueryCol.as(ZKDBOptComparison.LIKE, "c_name", "searchValue", String.class, null, false),
+				ZKDBQueryCol.as(ZKDBOptComparison.LIKE, "c_code", "searchValue", String.class, null, false));
+
+		where.put(ZKDBQueryScript.asIf(sWhere, 0, "searchValue", String.class));
         return where;
     }
 

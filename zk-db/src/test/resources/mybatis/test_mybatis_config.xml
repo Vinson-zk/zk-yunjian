@@ -35,17 +35,20 @@
 		<typeAlias alias="zkPage" type="com.zk.core.commons.data.ZKPage" /> 
 		<typeAlias alias="zkOrder" type="com.zk.core.commons.data.ZKOrder" />
 		<typeAlias alias="zkJson" type="com.zk.core.commons.data.ZKJson" /> 
-		<typeAlias alias="zkTestEntity" type="com.zk.db.helper.entity.ZKDBEntity" />
+		<typeAlias alias="zkDBTestSampleEntity" type="com.zk.db.helper.entity.ZKDBTestSampleEntity" />
 	</typeAliases>
 	
 	<typeHandlers>
   		<typeHandler handler="com.zk.db.mybatis.typeHandler.ZKJsonTypeHandler"/>
 	</typeHandlers>
 
-	<!-- 插件配置; 同一拦截类型下，后配置的行执行 -->
+	<!-- 插件配置; 同一拦截类型下，后配置的先执行
+	<plugin interceptor="com.zk.db.mybatis.plugins.ZKSqlLikeParameter" />
+	-->
 	<plugins>
 		<plugin interceptor="com.zk.db.mybatis.plugins.ZKSqlPage" />
-		<!-- <plugin interceptor="com.zk.db.mybatis.plugins.ZKSqlLikeParameter" /> -->
+		<plugin interceptor="com.zk.db.mybatis.plugins.ZKSamplePlugins" />
+		<plugin interceptor="com.zk.db.mybatis.plugins.ZKCustomParams" />
 		<plugin interceptor="com.zk.db.mybatis.plugins.ZKSqlRunCost" />
     </plugins>
 	 

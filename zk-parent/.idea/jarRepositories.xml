@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteRepositoriesConfiguration">
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="http://maven.aliyun.com/nexus/content/groups/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="local-repository" />
+      <option name="name" value="local-repository" />
+      <option name="url" value="http://192.168.0.127:8081/repository/zk-mvn-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="oss" />
+      <option name="name" value="oss" />
+      <option name="url" value="http://192.168.0.127:8081/repository/zk-mvn-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="mvn-gf-nexus" />
+      <option name="name" value="gxfz private nexus" />
+      <option name="url" value="http://192.168.0.127:8081/repository/zk-mvn-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="http://10.0.34.48:8081/repository/mvn-gf-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="mvn-zk-nexus" />
+      <option name="name" value="local private nexus" />
+      <option name="url" value="http://192.168.0.207:11000/repository/mvn-jcw-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="local-repository" />
+      <option name="name" value="local-repository" />
+      <option name="url" value="http://192.168.0.207:11000/repository/mvn-jcw-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="local-repository" />
+      <option name="name" value="local-repository" />
+      <option name="url" value="file:/$USER_HOME$/bs_mvn_lib/default" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="mvn-zk-nexus" />
+      <option name="name" value="local private nexus" />
+      <option name="url" value="http://192.168.0.127:8081/repository/zk-mvn-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="http://192.168.0.127:8081/repository/zk-mvn-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="mvn-zk-nexus" />
+      <option name="name" value="local private nexus" />
+      <option name="url" value="http://192.168.1.111:8081/repository/zk-mvn-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="http://192.168.1.111:8081/repository/mvn-zk-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="mvn-jcw-nexus" />
+      <option name="name" value="jcw private nexus" />
+      <option name="url" value="http://192.168.1.111:8081/repository/zk-mvn-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="mvn-zk-nexus" />
+      <option name="name" value="local private nexus" />
+      <option name="url" value="http://192.168.1.111:8081/repository/mvn-zk-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="mvn-gf-nexus" />
+      <option name="name" value="gxfz private nexus" />
+      <option name="url" value="http://10.0.34.48:8081/repository/mvn-gf-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="local-repository" />
+      <option name="name" value="local-repository" />
+      <option name="url" value="http://192.168.1.111:8081/repository/zk-mvn-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jboss.community" />
+      <option name="name" value="JBoss Community repository" />
+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="local-repository" />
+      <option name="name" value="local-repository" />
+      <option name="url" value="$USER_HOME$/bs_mvn_lib/default" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="mvn-jcw-nexus" />
+      <option name="name" value="jcw private nexus" />
+      <option name="url" value="http://192.168.0.207:11000/repository/mvn-jcw-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="local-repository" />
+      <option name="name" value="local-repository" />
+      <option name="url" value="http://192.168.1.111:8081/repository/mvn-zk-public/" />
+    </remote-repository>
+  </component>
+</project>

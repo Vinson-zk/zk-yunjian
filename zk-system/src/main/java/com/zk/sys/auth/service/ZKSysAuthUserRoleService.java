@@ -47,9 +47,9 @@ public class ZKSysAuthUserRoleService extends ZKBaseService<String, ZKSysAuthUse
         if (ZKStringUtils.isEmpty(userId) || ZKStringUtils.isEmpty(roleId)) {
             return null;
         }
-        return this.dao.getRelationByUserIdAndRoleId(ZKSysAuthUserRole.initSqlProvider().getTableName(),
-                ZKSysAuthUserRole.initSqlProvider().getTableAlias(),
-                ZKSysAuthUserRole.initSqlProvider().getSqlBlockSelCols(), userId, roleId);
+        return this.dao.getRelationByUserIdAndRoleId(ZKSysAuthUserRole.sqlHelper().getTableName(),
+                ZKSysAuthUserRole.sqlHelper().getTableAlias(),
+                ZKSysAuthUserRole.sqlHelper().getBlockSqlCols(), userId, roleId);
     }
 
     @Transactional(readOnly = false)
@@ -57,19 +57,19 @@ public class ZKSysAuthUserRoleService extends ZKBaseService<String, ZKSysAuthUse
         if (user.getStatus().intValue() != ZKSysOrgUser.KeyStatus.normal) {
             // 用户状态异常
             log.error("[>_<:20220504-0855-001] 用户 [{}] 状态异常", user.getPkId());
-            throw new ZKCodeException("zk.sys.020006");
+            throw ZKCodeException.as("zk.sys.020006");
         }
 
         if (role.getStatus().intValue() != ZKSysOrgRole.KeyStatus.normal) {
             // 角色状态异常
             log.error("[>_<:20220504-0855-001] 角色 [{}] 状态异常", role.getPkId());
-            throw new ZKCodeException("zk.sys.020007");
+            throw ZKCodeException.as("zk.sys.020007");
         }
 
         if (!user.getCompanyId().equals(role.getCompanyId())) {
             // 用户和角色是同一个公司
             log.error("[>_<:20220504-0855-001] 用户[{}]和角色[{}] 不是同一个公司", user.getPkId(), role.getPkId());
-            throw new ZKCodeException("zk.sys.020008");
+            throw ZKCodeException.as("zk.sys.020008");
         }
 
         // 创建新关系
@@ -118,7 +118,7 @@ public class ZKSysAuthUserRoleService extends ZKBaseService<String, ZKSysAuthUse
         if (user == null) {
             // zk.sys.020009=用户不存在
             log.error("[>_<:20220504-1111-001] 用户不存在!");
-            throw new ZKCodeException("zk.sys.020009", "用户不存在");
+            throw ZKCodeException.as("zk.sys.020009", "用户不存在");
         }
         // 先删除 需要删除的关联关系
         if (delRoles == null) {
@@ -155,8 +155,8 @@ public class ZKSysAuthUserRoleService extends ZKBaseService<String, ZKSysAuthUse
         if (ZKStringUtils.isEmpty(userId)) {
             return Collections.emptyList();
         }
-        return this.dao.findRoleIdsByUserId(ZKSysAuthUserRole.initSqlProvider().getTableName(),
-                ZKSysAuthUserRole.initSqlProvider().getTableAlias(), userId, ZKSysAuthUserRole.DEL_FLAG.normal);
+        return this.dao.findRoleIdsByUserId(ZKSysAuthUserRole.sqlHelper().getTableName(),
+                ZKSysAuthUserRole.sqlHelper().getTableAlias(), userId, ZKSysAuthUserRole.DEL_FLAG.normal);
     }
 
     /**
@@ -174,7 +174,7 @@ public class ZKSysAuthUserRoleService extends ZKBaseService<String, ZKSysAuthUse
     public int diskDelByUserId(String userId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByUserId(ZKSysAuthUserRole.initSqlProvider().getTableName(), userId);
+        return this.dao.diskDelByUserId(ZKSysAuthUserRole.sqlHelper().getTableName(), userId);
     }
 
     /**
@@ -192,7 +192,7 @@ public class ZKSysAuthUserRoleService extends ZKBaseService<String, ZKSysAuthUse
     public int diskDelByRoleId(String roleId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByRoleId(ZKSysAuthUserRole.initSqlProvider().getTableName(), roleId);
+        return this.dao.diskDelByRoleId(ZKSysAuthUserRole.sqlHelper().getTableName(), roleId);
     }
 
     /**
@@ -211,7 +211,7 @@ public class ZKSysAuthUserRoleService extends ZKBaseService<String, ZKSysAuthUse
     public int diskDelByUserIdAndRoleId(String userId, String roleId) {
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
-        return this.dao.diskDelByUserIdAndRoleId(ZKSysAuthUserRole.initSqlProvider().getTableName(), userId, roleId);
+        return this.dao.diskDelByUserIdAndRoleId(ZKSysAuthUserRole.sqlHelper().getTableName(), userId, roleId);
     }
 
     // 取用户的角色代码
@@ -220,8 +220,8 @@ public class ZKSysAuthUserRoleService extends ZKBaseService<String, ZKSysAuthUse
     }
 
     public List<String> findRoleCodesByUserId(String userId, Integer delFlag) {
-        return this.dao.findRoleCodesByUserId(ZKSysAuthUserRole.initSqlProvider().getTableName(),
-                ZKSysAuthUserRole.initSqlProvider().getTableAlias(), userId, delFlag);
+        return this.dao.findRoleCodesByUserId(ZKSysAuthUserRole.sqlHelper().getTableName(),
+                ZKSysAuthUserRole.sqlHelper().getTableAlias(), userId, delFlag);
     }
 
     // 查询用户通过角色拥有的权限代码
@@ -229,8 +229,8 @@ public class ZKSysAuthUserRoleService extends ZKBaseService<String, ZKSysAuthUse
         if (ZKStringUtils.isEmpty(userId)) {
             return Collections.emptyList();
         }
-        return this.dao.findAuthCodesByUserId(ZKSysAuthUserRole.initSqlProvider().getTableName(),
-                ZKSysAuthRole.initSqlProvider().getTableName(), userId, ZKBaseEntity.DEL_FLAG.normal);
+        return this.dao.findAuthCodesByUserId(ZKSysAuthUserRole.sqlHelper().getTableName(),
+                ZKSysAuthRole.sqlHelper().getTableName(), userId, ZKBaseEntity.DEL_FLAG.normal);
     }
 
     // 用户通过角色取拥有的 API 接口代码
@@ -238,8 +238,8 @@ public class ZKSysAuthUserRoleService extends ZKBaseService<String, ZKSysAuthUse
         if (ZKStringUtils.isEmpty(userId)) {
             return Collections.emptyList();
         }
-        return this.dao.findApiCodesByUserId(ZKSysAuthUserRole.initSqlProvider().getTableName(),
-                ZKSysAuthRole.initSqlProvider().getTableName(), ZKSysAuthFuncApi.initSqlProvider().getTableName(),
+        return this.dao.findApiCodesByUserId(ZKSysAuthUserRole.sqlHelper().getTableName(),
+                ZKSysAuthRole.sqlHelper().getTableName(), ZKSysAuthFuncApi.sqlHelper().getTableName(),
                 userId, ZKBaseEntity.DEL_FLAG.normal);
     }
 	

@@ -47,6 +47,7 @@ public class ZKThirdPartyService extends ZKBaseService<String, ZKThirdParty, ZKT
     @Autowired
     private ZKSysOrgCompanyApi sysOrgCompanyApi;
 
+    @Override
     public ZKThirdParty get(String thirdPartyAppId) {
         return this.dao.get(new ZKThirdParty(thirdPartyAppId));
     }

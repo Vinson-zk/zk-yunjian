@@ -2,7 +2,7 @@
  * 
  */
 package com.zk.sys.org.service;
- 
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,9 @@ import com.zk.sys.org.entity.ZKSysOrgRole;
 
 /**
  * ZKSysOrgRoleService
- * @author 
- * @version 
+ * 
+ * @author
+ * @version
  */
 @Service
 @Transactional(readOnly = true)
@@ -58,9 +59,8 @@ public class ZKSysOrgRoleService extends ZKBaseService<String, ZKSysOrgRole, ZKS
         if (ZKStringUtils.isEmpty(code) || ZKStringUtils.isEmpty(companyId)) {
             return null;
         }
-        return this.dao.getByCode(ZKSysOrgRole.initSqlProvider().getTableName(),
-                ZKSysOrgRole.initSqlProvider().getTableAlias(), ZKSysOrgRole.initSqlProvider().getSqlBlockSelCols(),
-                companyId, code);
+        return this.dao.getByCode(ZKSysOrgRole.sqlHelper().getTableName(), ZKSysOrgRole.sqlHelper().getTableAlias(),
+            ZKSysOrgRole.sqlHelper().getBlockSqlCols(), companyId, code);
     }
 
     @Override
@@ -70,14 +70,12 @@ public class ZKSysOrgRoleService extends ZKBaseService<String, ZKSysOrgRole, ZKS
         ZKSysOrgCompany company = this.sysOrgCompanyService.get(new ZKSysOrgCompany(role.getCompanyId()));
         if (company == null) {
             log.error("[^_^:20220425-0916-001] 公司[{}-{}]不存在;", role.getCompanyId(), role.getCompanyCode());
-            throw new ZKCodeException("zk.sys.010003", "公司不存在");
-        }
-        else {
+            throw ZKCodeException.as("zk.sys.010003", "公司不存在");
+        } else {
             if (company.getStatus() == null || company.getStatus().intValue() != ZKSysOrgCompany.KeyStatus.normal) {
                 log.error("[^_^:20220425-0916-002] 公司[{}-{}]状态异常，请联系管理员;", company.getPkId(), company.getCode());
-                throw new ZKCodeException("zk.sys.010004", "公司状态异常，请联系管理员");
-            }
-            else {
+                throw ZKCodeException.as("zk.sys.010004", "公司状态异常，请联系管理员");
+            } else {
                 // 初始化公司值
                 role.setGroupCode(company.getGroupCode());
                 role.setCompanyCode(company.getCode());
@@ -108,21 +106,18 @@ public class ZKSysOrgRoleService extends ZKBaseService<String, ZKSysOrgRole, ZKS
             ZKSysOrgDept dept = this.sysOrgDeptService.get(new ZKSysOrgDept(role.getDeptId()));
             if (dept == null) {
                 log.error("[^_^:20220425-0916-003] 部门[{}-{}]不存在;", role.getDeptId(), role.getDeptCode());
-                throw new ZKCodeException("zk.sys.010006", "部门不存在");
-            }
-            else {
+                throw ZKCodeException.as("zk.sys.010006", "部门不存在");
+            } else {
                 if (dept.getStatus().intValue() != ZKSysOrgDept.KeyStatus.normal) {
                     log.error("[^_^:20220425-0916-004] 部门[{}-{}]状态异常，请联系管理员;", dept.getPkId(), dept.getCode());
-                    throw new ZKCodeException("zk.sys.010007", "部门状态异常，请联系管理员");
-                }
-                else {
+                    throw ZKCodeException.as("zk.sys.010007", "部门状态异常，请联系管理员");
+                } else {
                     // 初始化部门值
                     role.setDeptId(dept.getPkId());
                     role.setDeptCode(dept.getCode());
                 }
             }
-        }
-        else {
+        } else {
             role.setDeptId(null);
             role.setDeptCode(null);
         }
@@ -148,5 +143,5 @@ public class ZKSysOrgRoleService extends ZKBaseService<String, ZKSysOrgRole, ZKS
         ZKUserCacheUtils.cleanAllAuth();
         return super.diskDel(role);
     }
-	
+
 }

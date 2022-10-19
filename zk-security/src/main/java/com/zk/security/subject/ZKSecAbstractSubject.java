@@ -23,7 +23,7 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zk.core.exception.ZKMsgException;
+import com.zk.core.exception.ZKCodeException;
 import com.zk.security.annotation.ZKSecApiCode;
 import com.zk.security.exception.ZKSecTicketException;
 import com.zk.security.exception.ZKSecUnknownException;
@@ -89,6 +89,7 @@ public abstract class ZKSecAbstractSubject implements ZKSecSubject {
     /**
      * 取当前登录用户所有身份
      */
+    @Override
     public ZKSecPrincipalCollection getPrincipalCollection() {
         if (getTicketCheckStatus() != null) {
             return this.ticket.getPrincipalCollection();
@@ -197,6 +198,7 @@ public abstract class ZKSecAbstractSubject implements ZKSecSubject {
     /**
      * 登出
      */
+    @Override
     public void logout() {
         getSecurityManager().logOut(this);
         this.authenticated = false;
@@ -206,7 +208,7 @@ public abstract class ZKSecAbstractSubject implements ZKSecSubject {
         if (this.ticket != null) {
             if (this.ticket.getStatus() == ZKSecTicket.KeyStatus.Stop) {
                 if (this.ticket.get(ZKSecTicket.KeyTicketInfo.stop_info_code) != null) {
-                    throw new ZKMsgException(this.ticket.get(ZKSecTicket.KeyTicketInfo.stop_info_code).toString());
+                    throw ZKCodeException.as(this.ticket.get(ZKSecTicket.KeyTicketInfo.stop_info_code).toString());
                 }
                 throw new ZKSecTicketException("zk.sec.000008", "未知原因，令牌禁用", null, null);// 未知的令牌禁用原因
             }

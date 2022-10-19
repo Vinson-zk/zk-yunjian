@@ -5,17 +5,22 @@ package com.zk.file.entity;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.data.annotation.Transient;
 
-import com.zk.base.commons.ZKTreeSqlProvider;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.zk.base.commons.ZKTreeSqlHelper;
 import com.zk.base.entity.ZKBaseTreeEntity;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.utils.ZKIdUtils;
 import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
 
 /**
@@ -26,61 +31,82 @@ import com.zk.db.commons.ZKSqlConvertDelegating;
 @ZKTable(name = "t_file_directory", alias = "fileDirectory", orderBy = " c_create_date ASC ")
 public class ZKFileDirectory extends ZKBaseTreeEntity<String, ZKFileDirectory> {
 	
-	static ZKTreeSqlProvider sqlProvider;
+	static ZKTreeSqlHelper sqlHelper;
 
+	@Transient
+    @XmlTransient
+    @JsonIgnore
     @Override
-    public ZKTreeSqlProvider getTreeSqlProvider() {
-        return initSqlProvider();
+    public ZKTreeSqlHelper getTreeSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKTreeSqlProvider initSqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKTreeSqlProvider(new ZKSqlConvertDelegating(), new ZKFileDirectory());
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKTreeSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKTreeSqlHelper(new ZKSqlConvertDelegating(), new ZKFileDirectory());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
     
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 状态：0-启用、1-禁用
+	 */
+	public static interface KeyStatus {
+		/**
+		 * 0-启用
+		 */
+		public static final int enabled = 0;
+
+		/**
+		 * 1-禁用
+		 */
+		public static final int disabled = 1;
+	}
 	
 	/**
 	 * 集团代码
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_group_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_group_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String groupCode;	
 	/**
 	 * 公司ID
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_company_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_company_id", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String companyId;	
 	/**
 	 * 公司代码
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_company_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_company_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String companyCode;	
 	/**
 	 * 代码，公司代码加全表唯一
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String code;	
 	/**
 	 * 目录名称
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@NotEmpty(message = "{zk.core.data.validation.notNull}")
-	@ZKColumn(name = "c_name", isInsert = true, isUpdate = true, javaType = ZKJson.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_name", isInsert = true, javaType = ZKJson.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	ZKJson name;	
 	/**
 	 * 状态：0-启用、1-禁用 
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Range(min = 0, max = 999999999, message = "{zk.core.data.validation.rang.int}")
-	@ZKColumn(name = "c_stauts", isInsert = true, isUpdate = true, javaType = Integer.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_stauts", isInsert = true, javaType = Integer.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	Integer stauts;	
 	
 	public ZKFileDirectory() {

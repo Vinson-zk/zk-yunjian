@@ -110,7 +110,7 @@ public class ZKMsgRes {
     }
 
     public static ZKMsgRes as(ZKMsgException zkMsgE) {
-        return new ZKMsgRes(zkMsgE.getCode(), zkMsgE.getMsg(), zkMsgE.getData());
+        return new ZKMsgRes(zkMsgE.getCode(), zkMsgE.getMessage(), zkMsgE.getData());
     }
 
     public static ZKMsgRes as(String code) {

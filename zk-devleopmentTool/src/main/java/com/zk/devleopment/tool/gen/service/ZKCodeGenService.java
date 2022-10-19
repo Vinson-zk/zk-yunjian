@@ -70,7 +70,7 @@ public class ZKCodeGenService {
         ZKModule module = zkModuleService.get(new ZKModule(moduleId));
         if (module == null) {
             log.error("[^_^:20210417-1702-001] 功能模块：{}，不存在；", moduleId);
-            throw new ZKCodeException("zk.codeGen.000001", "功能模块不存在");
+            throw ZKCodeException.as("zk.codeGen.000001", "功能模块不存在");
         }
         return this.genCode(module, tableIds);
     }
@@ -79,7 +79,7 @@ public class ZKCodeGenService {
 
         if (module == null) {
             log.error("[^_^:20210417-1702-002] 功能模块为 null");
-            throw new ZKCodeException("zk.codeGen.000001", "功能模块不存在");
+            throw ZKCodeException.as("zk.codeGen.000001", "功能模块不存在");
         }
 
         String codeRootPath = ZKCodeFileUtils.getCodeRootPath(genCodeRootPath, module);
@@ -88,12 +88,12 @@ public class ZKCodeGenService {
             ZKTableInfo tableInfo = zkTableInfoService.get(new ZKTableInfo(tableId));
             if (tableInfo == null) {
                 log.error("[^_^:20210408-0704-002] 表:{}, 信息不存在；", tableId);
-                throw new ZKCodeException("zk.codeGen.000002", "表信息不存在", tableId);
+                throw ZKCodeException.as("zk.codeGen.000002", "表信息不存在", tableId);
             }
 
             if (!module.getPkId().equals(tableInfo.getModuleId())) {
                 log.error("[^_^:20210408-0704-002] 非本模块的表；moduleId:{}, tableId:{} ", module.getPkId(), tableId);
-                throw new ZKCodeException("zk.codeGen.000004", "非本模块的表;", module.getModuleName(),
+                throw ZKCodeException.as("zk.codeGen.000004", "非本模块的表;", module.getModuleName(),
                         tableInfo.getTableName());
             }
             tableInfo.setModule(module);

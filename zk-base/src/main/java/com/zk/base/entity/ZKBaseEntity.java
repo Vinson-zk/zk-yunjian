@@ -38,7 +38,9 @@ import com.zk.core.utils.ZKClassUtils;
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.core.utils.ZKIdUtils;
 import com.zk.db.annotation.ZKColumn;
-import com.zk.db.commons.ZKDBBaseEntity;
+import com.zk.db.annotation.ZKQuery;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.entity.ZKDBBaseEntity;
 import com.zk.security.utils.ZKSecSecurityUtils;
 
 /** 
@@ -72,7 +74,7 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
      */
 
     // 实体编号（唯一标识）
-    @ZKColumn(name = "c_pk_id", isPk = true, isQuery = true)
+    @ZKColumn(name = "c_pk_id", isPk = true, query = @ZKQuery(value = true, isCaseSensitive = true))
     @NotNull(message = "{zk.core.data.validation.notNull}")
     protected ID pkId;
 
@@ -81,7 +83,7 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
     protected ID createUserId;
 
     // 更新者
-    @ZKColumn(name = "c_update_user_id", isUpdate = true)
+    @ZKColumn(name = "c_update_user_id", update = @ZKUpdate(true))
     protected ID updateUserId;
 
     // 创建日期
@@ -91,44 +93,43 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
 
     // 更新日期
     @NotNull(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_update_date", javaType = Date.class, isUpdate = true)
+    @ZKColumn(name = "c_update_date", javaType = Date.class, update = @ZKUpdate(true))
     protected Date updateDate;
 
     // 备注
-    @ZKColumn(name = "c_remarks", isUpdate = true)
+    @ZKColumn(name = "c_remarks", update = @ZKUpdate(true))
     protected String remarks;
 
     // 国际化说明 description 加个前缀，防关键字冲突
-    @ZKColumn(name = "c_p_desc", javaType = ZKJson.class, isUpdate = true)
+    @ZKColumn(name = "c_p_desc", javaType = ZKJson.class, update = @ZKUpdate(true))
     protected ZKJson pDesc;
 
     // 备用字段 1
-    @ZKColumn(name = "c_spare1", isUpdate = true)
+    @ZKColumn(name = "c_spare1", update = @ZKUpdate(true))
     protected String spare1;
 
     // 备用字段 2
-    @ZKColumn(name = "c_spare2", isUpdate = true)
+    @ZKColumn(name = "c_spare2", update = @ZKUpdate(true))
     protected String spare2;
 
     // 备用字段 3
-    @ZKColumn(name = "c_spare3", isUpdate = true)
+    @ZKColumn(name = "c_spare3", update = @ZKUpdate(true))
     protected String spare3;
 
     // 备用字段 ZKJson
-    @ZKColumn(name = "c_spare_json", javaType = ZKJson.class, isUpdate = true)
+    @ZKColumn(name = "c_spare_json", javaType = ZKJson.class, update = @ZKUpdate(true))
     protected ZKJson spareJson;
 
     // 删除标记（0：正常；1：删除;）
-    @ZKColumn(name = "c_del_flag", isQuery = true, javaType = Integer.class)
+    @ZKColumn(name = "c_del_flag", query =  @ZKQuery(true), javaType = Integer.class)
     protected Integer delFlag;
 
     // 数据版本
-    @ZKColumn(name = "c_version", javaType = Long.class, isUpdate = true)
+    // 做数据版本控制 update = @ZKUpdate(isForce = true, isCondition = true, setSql = "c_version = c_version + 1"),
+    @ZKColumn(name = "c_version", javaType = Long.class, update = @ZKUpdate(true))
     protected Long version;
 
     // 是否是新记录（默认：false），调用setNewRecord()设置新记录，使用自定义ID。设置为true后强制执行插入语句，ID不会自动生成，需从手动传入。
-    @Transient
-    @JsonProperty("isNewRecord")
     protected boolean isNewRecord;
 
     /**
@@ -178,6 +179,118 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
     }
 
     /**
+     * 数据版本号
+     *
+     * @return
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    public Long getVersion() {
+        return version;
+    }
+
+    /**
+     * 创建者, ID
+     *
+     * @return
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    public ID getCreateUserId() {
+        return createUserId;
+    }
+
+    /**
+     * 创建日期
+     *
+     * @return
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    @JsonFormat(pattern = ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss, timezone = timezone)
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * 修改者ID
+     *
+     * @return
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    public ID getUpdateUserId() {
+        return updateUserId;
+    }
+
+    /**
+     * 修改日期
+     *
+     * @return
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    @JsonFormat(pattern = ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss, timezone = timezone)
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    /**
+     * 备注
+     *
+     * @return
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    public String getRemarks() {
+        return remarks;
+    }
+
+    /**
+     * 删除标记（0：正常；1：删除;）
+     *
+     * @return
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+
+    /**
+     * @return spare1
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    public String getSpare1() {
+        return spare1;
+    }
+
+    /**
+     * @return spare2
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    public String getSpare2() {
+        return spare2;
+    }
+
+    /**
+     * @return spare3
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    public String getSpare3() {
+        return spare3;
+    }
+
+    /**
+     * @return spareJson
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    public ZKJson getSpareJson() {
+        return spareJson;
+    }
+
+    /**
+     * @return pDesc sa
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    public ZKJson getpDesc() {
+        return pDesc;
+    }
+
+    /**
      * 实体编号（唯一标识）
      */
     public void setPkId(ID pkId) {
@@ -189,28 +302,8 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
      * 
      * @return
      */
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    public Long getVersion() {
-        return version;
-    }
-
-    /**
-     * 数据版本号
-     * 
-     * @return
-     */
     public void setVersion(Long version) {
         this.version = version;
-    }
-
-    /**
-     * 创建者, ID
-     * 
-     * @return
-     */
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    public ID getCreateUserId() {
-        return createUserId;
     }
 
     /**
@@ -225,31 +318,10 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
     /**
      * 创建日期
      * 
-     * @return
-     */
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    @JsonFormat(pattern = ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss, timezone = timezone)
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    /**
-     * 创建日期
-     * 
      * @param createDate
      */
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-    /**
-     * 修改者ID
-     * 
-     * @return
-     */
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    public ID getUpdateUserId() {
-        return updateUserId;
     }
 
     /**
@@ -264,31 +336,10 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
     /**
      * 修改日期
      * 
-     * @return
-     */
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    @JsonFormat(pattern = ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss, timezone = timezone)
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    /**
-     * 修改日期
-     * 
      * @param updateDate
      */
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
-    }
-
-    /**
-     * 备注
-     * 
-     * @return
-     */
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    public String getRemarks() {
-        return remarks;
     }
 
     /**
@@ -303,29 +354,12 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
     /**
      * 删除标记（0：正常；1：删除;）
      * 
-     * @return
-     */
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    public Integer getDelFlag() {
-        return delFlag;
-    }
-
-    /**
-     * 删除标记（0：正常；1：删除;）
-     * 
      * @param delFlag
      */
     public void setDelFlag(Integer delFlag) {
         this.delFlag = delFlag;
     }
 
-    /**
-     * @return spare1
-     */
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    public String getSpare1() {
-        return spare1;
-    }
     /**
      * @param spare1
      *            the spare1 to set
@@ -335,13 +369,6 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
     }
 
     /**
-     * @return spare2
-     */
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    public String getSpare2() {
-        return spare2;
-    }
-    /**
      * @param spare2
      *            the spare2 to set
      */
@@ -349,13 +376,6 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
         this.spare2 = spare2;
     }
 
-    /**
-     * @return spare3
-     */
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    public String getSpare3() {
-        return spare3;
-    }
     /**
      * @param spare3
      *            the spare3 to set
@@ -365,27 +385,11 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
     }
 
     /**
-     * @return spareJson
-     */
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    public ZKJson getSpareJson() {
-        return spareJson;
-    }
-
-    /**
      * @param spareJson
      *            the spareJson to set
      */
     public void setSpareJson(ZKJson spareJson) {
         this.spareJson = spareJson;
-    }
-
-    /**
-     * @return pDesc sa
-     */
-    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    public ZKJson getpDesc() {
-        return pDesc;
     }
 
     /**
@@ -405,7 +409,8 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
      */
     @Transient
     @XmlTransient
-    @JsonIgnore
+    @JsonProperty("isNewRecord")
+//    @JsonIgnore
     public boolean isNewRecord() {
         return isNewRecord || pkId == null || "".equals(pkId.toString());
     }
@@ -432,7 +437,7 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
         this.updateUserId = this.createUserId;
         this.createDate = new Date();
         this.updateDate = this.createDate;
-        this.version = 0l;
+        this.version = 0L;
     }
 
     @SuppressWarnings("unchecked")
@@ -481,8 +486,6 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
     public Class<ID> getPkIDClass() {
         Class<ID> cz = ZKClassUtils.getSuperclassByName(ZKBaseEntity.class, this.getClass(), "ID");
         return cz;
-//        return (Class<ID>) this.getSuperclassByName("ID");
-//        return (Class<ID>) (((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
     }
 
     @Transient
@@ -498,27 +501,5 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
         this.createDate = entity.getCreateDate();
         this.createUserId = entity.createUserId;
     }
-
-//    /**
-//     * 根据 泛弄 类名取 Class<?>
-//    *
-//    * @Title: getSuperclassByName 
-//    * @Description: TODO(simple description this method what to do.) 
-//    * @author Vinson 
-//    * @date May 4, 2022 11:44:02 AM 
-//    * @param classTypeName
-//    * @return
-//    * @return Class<?>
-//     */
-//    public Class<?> getSuperclassByName(String classTypeName) {
-//        TypeVariable<?>[] ts = ZKBaseEntity.class.getTypeParameters();
-//        for (int i = 0; i < ts.length; ++i) {
-//            if (classTypeName.equals(ts[i].getName())) {
-//                ParameterizedType pt = ((ParameterizedType) this.getClass().getGenericSuperclass());
-//                return (Class<?>) pt.getActualTypeArguments()[0];
-//            }
-//        }
-//        return null;
-//    }
 
 }

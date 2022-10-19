@@ -23,6 +23,10 @@ import java.io.File;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.zk.db.annotation.ZKQuery;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Transient;
 
@@ -31,9 +35,7 @@ import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.utils.ZKStringUtils;
 import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
 
 /**
  * 功能模块信息
@@ -47,22 +49,23 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 //@JsonIgnoreProperties(value = { "handler" })
 public class ZKModule extends ZKBaseEntity<String, ZKModule> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKModule());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKModule());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
+
     /**
      * @Fields serialVersionUID : TODO(simple description what to do.)
      */
@@ -81,27 +84,27 @@ public class ZKModule extends ZKBaseEntity<String, ZKModule> {
     /**********************************************************************************/
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 128, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_db_driver", isUpdate = true)
+    @ZKColumn(name = "c_db_driver", update = @ZKUpdate(true))
     String driver = "com.mysql.cj.jdbc.Driver";
 
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 128, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_db_url", isUpdate = true)
+    @ZKColumn(name = "c_db_url", update = @ZKUpdate(true))
     String url;
 
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_db_username", isUpdate = true)
+    @ZKColumn(name = "c_db_username", update = @ZKUpdate(true))
     String username;
 
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_db_pwd", isUpdate = true)
+    @ZKColumn(name = "c_db_pwd", update = @ZKUpdate(true))
     String password;
 
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 32, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_db_type", isUpdate = true)
+    @ZKColumn(name = "c_db_type", update = @ZKUpdate(true))
     String dbType = "mysql"; // mysql; oracle; mssql;
 
     /**********************************************************************************/
@@ -111,14 +114,14 @@ public class ZKModule extends ZKBaseEntity<String, ZKModule> {
      * 表名前缀
      */
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_table_name_prefix", isUpdate = true)
+    @ZKColumn(name = "c_table_name_prefix", update = @ZKUpdate(true))
     String tableNamePrefix = "";
 
     /**
      * 字段名前缀
      */
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_col_name_prefix", isUpdate = true)
+    @ZKColumn(name = "c_col_name_prefix", update = @ZKUpdate(true))
     String colNamePrefix = "";
 
     /**
@@ -126,7 +129,7 @@ public class ZKModule extends ZKBaseEntity<String, ZKModule> {
      */
 
     @NotNull(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_is_remove_prefix", isUpdate = true)
+    @ZKColumn(name = "c_is_remove_prefix", update = @ZKUpdate(true))
     boolean isRemovePrefix = true;
 
     /**********************************************************************************/
@@ -137,15 +140,15 @@ public class ZKModule extends ZKBaseEntity<String, ZKModule> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_package_prefix", isUpdate = true)
+    @ZKColumn(name = "c_package_prefix", update = @ZKUpdate(true))
     String packagePrefix;
 
     /**
-     * java 功能模块名; 不做包名，如果要给模块添加包名，直接在包名前缀中添加即可
+     * java 功能模块名; 全表唯一；不做包名，如果要给模块添加包名，直接在包名前缀中添加即可
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_module_name", isUpdate = true)
+    @ZKColumn(name = "c_module_name", update = @ZKUpdate(true))
     String moduleName;
 
     /**********************************************************************************/
@@ -156,12 +159,13 @@ public class ZKModule extends ZKBaseEntity<String, ZKModule> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length}")
-    @ZKColumn(name = "c_label_name", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_label_name", update = @ZKUpdate(true),
+            query = @ZKQuery(value = true, queryType = ZKDBOptComparison.LIKE))
     String labelName;
 
 	// @NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length}")
-	@ZKColumn(name = "c_module_prefix", isUpdate = true)
+	@ZKColumn(name = "c_module_prefix", update = @ZKUpdate(true))
 	String modulePrefix = "ZK";
 
 //    /**

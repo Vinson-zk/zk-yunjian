@@ -36,8 +36,8 @@ import com.zk.wechat.pay.entity.ZKPayGetPayer;
 public class ZKPayGetPayerService extends ZKBaseService<String, ZKPayGetPayer, ZKPayGetPayerDao> {
 
     public ZKPayGetPayer getByPayOrderPkId(String payOrderPkId) {
-        return this.dao.getByPayOrderPkId(ZKPayGetPayer.sqlProvider().getTableName(),
-                ZKPayGetPayer.sqlProvider().getSqlBlockSelCols(""), payOrderPkId);
+        return this.dao.getByPayOrderPkId(ZKPayGetPayer.sqlHelper().getTableName(),
+                ZKPayGetPayer.sqlHelper().getBlockSqlCols(""), payOrderPkId);
     }
 
 }

@@ -35,7 +35,7 @@ public class ZKSecValidUtilsTest {
     @Test
     public void testLoginFailNum() {
         try {
-            TestCase.assertNotNull(ZKSecTestHelper.ctxSprint);
+            TestCase.assertNotNull(ZKSecTestHelper.getCtxSpring());
 
             String host = "127.0.1.1";
             int num = 7;
@@ -54,7 +54,7 @@ public class ZKSecValidUtilsTest {
     @Test
     public void testCode() {
         try {
-            TestCase.assertNotNull(ZKSecTestHelper.ctxSprint);
+            TestCase.assertNotNull(ZKSecTestHelper.getCtxSpring());
             String tkId = "test_token_ticket";
             String code = "code";
             ZKSecValidUtils.putValidCode(tkId, code);

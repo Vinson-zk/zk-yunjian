@@ -33,6 +33,7 @@ import com.zk.mongo.configuration.ZKMongoProperties;
 * @author Vinson 
 * @version 1.0 
 */
+//@Configuration
 @PropertySources(value = { @PropertySource(value = {
         "classpath:test.zk.sec.mongo.properties" }, ignoreResourceNotFound = true, encoding = "UTF-8") })
 @AutoConfigureBefore(value = { ZKMongoAutoConfiguration.class })

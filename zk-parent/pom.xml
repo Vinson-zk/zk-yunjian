@@ -6,7 +6,7 @@
 	
 	<groupId>com.zk</groupId>
 	<artifactId>zk-parent</artifactId>
-	<version>1.0.0-SNAPSHOT</version><!-- RELEASE  .0-SNAPSHOT -->
+	<version>2.0.0</version><!-- RELEASE  .0-SNAPSHOT -->
 	<packaging>pom</packaging>
 	<name>zk-parent</name>
 	<description>Vinson project zk-parent</description>
@@ -61,23 +61,25 @@
         <java.version>1.8</java.version>
         
 		<!-- zk 项目的依赖的版本，可由 zk 项目自行决定，这里只是统一定义一个默认值 -->
-		<version.zk.dependencies>1.0.0-SNAPSHOT</version.zk.dependencies>
-		<version.zk.core>1.0.0-SNAPSHOT</version.zk.core>
-		<version.zk.base>1.0.0-SNAPSHOT</version.zk.base>
-		<version.zk.cache>1.0.0-SNAPSHOT</version.zk.cache>
-		<version.zk.db>1.0.0-SNAPSHOT</version.zk.db>
-		<version.zk.mongo>1.0.0-SNAPSHOT</version.zk.mongo>
-		<version.zk.framework>1.0.0-SNAPSHOT</version.zk.framework>
-		<version.zk.security>1.0.0-SNAPSHOT</version.zk.security>
-		<version.zk.devleopmentTool>1.0.0-SNAPSHOT</version.zk.devleopmentTool>
-		<version.zk.serverCentral>1.0.0-SNAPSHOT</version.zk.serverCentral>
-		<version.zk.system>1.0.0-SNAPSHOT</version.zk.system>
-		<version.zk.system.api>1.0.0-SNAPSHOT</version.zk.system.api>
-		<version.zk.wechat>1.0.0-SNAPSHOT</version.zk.wechat>
-		<version.zk.test>1.0.0-SNAPSHOT</version.zk.test>
-		<version.zk.demo>1.0.0-SNAPSHOT</version.zk.demo>
-		<version.zk.log>1.0.0-SNAPSHOT</version.zk.log>
-		<version.zk.file>1.0.0-SNAPSHOT</version.zk.file>
+		<version.zk.dependencies>2.0.0</version.zk.dependencies>
+		<version.zk.core>2.0.0</version.zk.core>
+		<version.zk.base>2.0.0</version.zk.base>
+		<version.zk.cache>2.0.0</version.zk.cache>
+		<version.zk.db>2.0.0</version.zk.db>
+		<version.zk.mongo>2.0.0</version.zk.mongo>
+		<version.zk.framework>2.0.0</version.zk.framework>
+		<version.zk.security>2.0.0</version.zk.security>
+		<version.zk.devleopmentTool>2.0.0</version.zk.devleopmentTool>
+		<version.zk.serverCentral>2.0.0</version.zk.serverCentral>
+		<version.zk.system>2.0.0</version.zk.system>
+		<version.zk.system.api>2.0.0</version.zk.system.api>
+		<version.zk.wechat>2.0.0</version.zk.wechat>
+		<version.zk.test>2.0.0</version.zk.test>
+		<version.zk.demo>2.0.0</version.zk.demo>
+		<version.zk.log>2.0.0</version.zk.log>
+		<version.zk.file>2.0.0</version.zk.file>
+		<version.zk.mail>2.0.0</version.zk.mail>
+		<version.zk.zuul>2.0.0</version.zk.zuul>
 		
 		<!-- maven 插件版本 -->
 		<!-- <plugin.version.maven.clean>2.6.1</plugin.version.maven.clean>

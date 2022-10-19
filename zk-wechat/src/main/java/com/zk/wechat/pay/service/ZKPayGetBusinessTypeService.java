@@ -54,8 +54,8 @@ public class ZKPayGetBusinessTypeService extends ZKBaseService<String, ZKPayGetB
         if (ZKStringUtils.isEmpty(code)) {
             return null;
         }
-        return this.dao.getByCode(ZKPayGetBusinessType.sqlProvider().getTableName(),
-                ZKPayGetBusinessType.sqlProvider().getSqlBlockSelCols(""), code);
+        return this.dao.getByCode(ZKPayGetBusinessType.sqlHelper().getTableName(),
+                ZKPayGetBusinessType.sqlHelper().getBlockSqlCols(""), code);
     }
         
     @Override
@@ -68,7 +68,7 @@ public class ZKPayGetBusinessTypeService extends ZKBaseService<String, ZKPayGetB
                 if (oldPayGetBusinessType.getDelFlag().intValue() == ZKBaseEntity.DEL_FLAG.normal) {
                     // code 已存在；抛出异常；
                     log.error("[>_<:20210220-0935-001] 收款业务类型代码: {} 已存在!", oldPayGetBusinessType.getCode());
-                    throw new ZKCodeException("zk.wechat.000005", "收款业务类型已存在", null, oldPayGetBusinessType.getCode());
+                    throw ZKCodeException.as("zk.wechat.000005", "收款业务类型已存在", null, oldPayGetBusinessType.getCode());
                 }
                 else {
                     // code 已存在，只是已逻辑删除；先物理删除已存在的；

@@ -134,7 +134,7 @@ public class ZKWXApiPayUtils {
         String resStr = outStringBuffer.toString();
 
         if (resStatus != 200 && resStatus != 204) {
-            throw new ZKCodeException(parseErrCode(resStatus, resStr), "向微信平台请求统一下单异常 " + resStr);
+            throw ZKCodeException.as(parseErrCode(resStatus, resStr), "向微信平台请求统一下单异常 " + resStr);
         }
 
         return resStr;
@@ -162,7 +162,7 @@ public class ZKWXApiPayUtils {
         String resStr = outStringBuffer.toString();
 
         if (resStatus != 204) {
-            throw new ZKCodeException(parseErrCode(resStatus, resStr), "向微信平台请求关闭订单异常 " + resStr);
+            throw ZKCodeException.as(parseErrCode(resStatus, resStr), "向微信平台请求关闭订单异常 " + resStr);
         }
         return parseErrCode(resStatus, resStr);
     }
@@ -190,7 +190,7 @@ public class ZKWXApiPayUtils {
         String resStr = outStringBuffer.toString();
 
         if (resStatus != 200) {
-            throw new ZKCodeException(parseErrCode(resStatus, resStr), "向微信平台请求下载平台证书异常 " + resStr);
+            throw ZKCodeException.as(parseErrCode(resStatus, resStr), "向微信平台请求下载平台证书异常 " + resStr);
         }
         return resStr;
     }

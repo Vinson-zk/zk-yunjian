@@ -30,15 +30,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.db.annotation.ZKColumn;
-import com.zk.db.annotation.ZKDBAnnotationProvider;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryConditionWhere;
-import com.zk.db.commons.ZKDBQueryType;
-import com.zk.db.commons.ZKSqlConvert;
-import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKDBQueryConditionCol;
-import com.zk.db.mybatis.commons.ZKDBQueryConditionIfByClass;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.*;
+import com.zk.db.mybatis.commons.ZKDBQueryScript;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /** 
 * @ClassName: ZKSysNav 
@@ -64,18 +61,24 @@ public class ZKSysNav extends ZKBaseEntity<String, ZKSysNav> {
         public static final int show = 1;
     }
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
+    @Transient
+    @XmlTransient
+    @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKSysNav());
+    @Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKSysNav());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     /**
@@ -96,7 +99,8 @@ public class ZKSysNav extends ZKBaseEntity<String, ZKSysNav> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @NotEmpty(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_name", isUpdate = true, isQuery = true, javaType = ZKJson.class, isCaseSensitive = false, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_name", javaType = ZKJson.class, update = @ZKUpdate(true),
+        query = @ZKQuery(queryType = ZKDBOptComparison.LIKE, isCaseSensitive = false))
     protected ZKJson name;
 
     /* 前端路由相关的属性 */
@@ -106,7 +110,7 @@ public class ZKSysNav extends ZKBaseEntity<String, ZKSysNav> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_code", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_code", update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     protected String code;
 
     /**
@@ -114,7 +118,7 @@ public class ZKSysNav extends ZKBaseEntity<String, ZKSysNav> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_func_module_code", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_func_module_code", update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     protected String funcModuleCode;
 
     /**
@@ -122,7 +126,7 @@ public class ZKSysNav extends ZKBaseEntity<String, ZKSysNav> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_func_name", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_func_name", update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     protected String funcName;
 
     /**
@@ -130,7 +134,7 @@ public class ZKSysNav extends ZKBaseEntity<String, ZKSysNav> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_path", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_path", update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     protected String path;
 
     /**
@@ -138,7 +142,7 @@ public class ZKSysNav extends ZKBaseEntity<String, ZKSysNav> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 999999999, message = "{zk.core.data.validation.rang.int}")
-    @ZKColumn(name = "c_sort", isUpdate = true, javaType = Integer.class)
+    @ZKColumn(name = "c_sort", javaType = Integer.class, update = @ZKUpdate(true))
     protected Integer sort;
 
     /**
@@ -146,7 +150,7 @@ public class ZKSysNav extends ZKBaseEntity<String, ZKSysNav> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 9, message = "{zk.core.data.validation.rang.int}")
-    @ZKColumn(name = "c_is_index", isUpdate = true, isQuery = true, javaType = Integer.class, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_is_index", javaType = Integer.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     protected Integer isIndex;
 
     /**
@@ -154,14 +158,14 @@ public class ZKSysNav extends ZKBaseEntity<String, ZKSysNav> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 9, message = "{zk.core.data.validation.rang.int}")
-    @ZKColumn(name = "c_is_show", javaType = Integer.class, isUpdate = true, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_is_show", javaType = Integer.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     protected Integer isShow;
 
     /**
      * 图标
      */
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_icon", isUpdate = true)
+    @ZKColumn(name = "c_icon", update = @ZKUpdate(true))
     protected String icon;
 
     // 查询辅助字段
@@ -201,7 +205,7 @@ public class ZKSysNav extends ZKBaseEntity<String, ZKSysNav> {
     }
 
     /**
-     * @param navCode
+     * @param code
      *            the navCode to set
      */
     public void setCode(String code) {
@@ -333,12 +337,14 @@ public class ZKSysNav extends ZKBaseEntity<String, ZKSysNav> {
     @Transient
     @JsonIgnore
     @XmlTransient
-    public ZKDBQueryConditionWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBAnnotationProvider annotationProvider) {
-        ZKDBQueryConditionWhere where = super.getZKDbWhere(sqlConvert, annotationProvider);
-        ZKDBQueryConditionWhere sWhere = ZKDBQueryConditionWhere.asOr("(", ")",
-                ZKDBQueryConditionCol.as(ZKDBQueryType.LIKE, "c_name", "searchValue", String.class, null, false),
-                ZKDBQueryConditionCol.as(ZKDBQueryType.LIKE, "c_code", "searchValue", String.class, null, false));
-        where.put(ZKDBQueryConditionIfByClass.as(sWhere, "searchValue", String.class, false));
+    public ZKDBQueryWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
+        ZKDBQueryWhere where = sqlConvert.resolveQueryCondition(mapInfo);
+        // 制作一个根据名称和代码同时查询的 查询条件，用过度 java 属性 searchValue 为传参数值
+		ZKDBQueryWhere sWhere = ZKDBQueryWhere.asOr("(", ")",
+				ZKDBQueryCol.as(ZKDBOptComparison.LIKE, "c_name", "searchValue", String.class, null, false),
+				ZKDBQueryCol.as(ZKDBOptComparison.LIKE, "c_code", "searchValue", String.class, null, false));
+
+		where.put(ZKDBQueryScript.asIf(sWhere, 0, "searchValue", String.class));
         return where;
     }
 

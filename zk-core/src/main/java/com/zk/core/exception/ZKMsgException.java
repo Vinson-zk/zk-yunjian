@@ -20,6 +20,8 @@ package com.zk.core.exception;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.core.utils.ZKJsonUtils;
+import com.zk.core.utils.ZKMsgUtils;
+import com.zk.core.utils.ZKStringUtils;
 
 /**
  * 带有消息的异常，消息自行国际化，会在异常处理中直接根据消息，代码，数据做成响应数据
@@ -46,20 +48,31 @@ public class ZKMsgException extends ZKUnknownException {
      */
     private Object data;
 
-    public ZKMsgException(String code) {
-        this(code, null);
+    public static ZKMsgException as(String code) {
+        return as(KeyExceptionType.general, code, null, null, null);
     }
 
-    public ZKMsgException(String code, String msg) {
-        this(code, msg, null);
+    public static ZKMsgException as(String code, String msg) {
+        return as(KeyExceptionType.general, code, msg, null, null);
     }
 
-    public ZKMsgException(String code, String msg, Object data) {
-        this(code, msg, data, null);
+    public static ZKMsgException as(String code, String msg, Object data) {
+        return as(KeyExceptionType.general, code, msg, data, null);
     }
 
-    public ZKMsgException(String code, String msg, Object data, Throwable cause) {
-        super(msg, cause);
+    public static ZKMsgException as(String code, String msg, Object data, Throwable cause) {
+        return as(KeyExceptionType.general, code, msg, data, cause);
+    }
+
+    public static ZKMsgException as(int type, String code, String msg, Object data, Throwable cause) {
+        if(ZKStringUtils.isEmpty(msg)){
+            msg = ZKMsgUtils.getMessage(code, null);
+        }
+        return new ZKMsgException(type, code, msg, data, cause);
+    }
+
+    protected ZKMsgException(int type, String code, String msg, Object data, Throwable cause) {
+        super(type, msg, cause);
         this.code = code;
         this.data = data;
     }
@@ -71,12 +84,8 @@ public class ZKMsgException extends ZKUnknownException {
         return code;
     }
 
-    /**
-     * @param code
-     *            the code to set
-     */
-    public void setCode(String code) {
-        this.code = code;
+    public void setData(Object data) {
+        this.data = data;
     }
 
     /**
@@ -84,14 +93,6 @@ public class ZKMsgException extends ZKUnknownException {
      */
     public Object getData() {
         return data;
-    }
-
-    /**
-     * @param data
-     *            the data to set
-     */
-    public void setData(Object data) {
-        this.data = data;
     }
 
     @JsonIgnore
@@ -104,17 +105,15 @@ public class ZKMsgException extends ZKUnknownException {
                 return ZKJsonUtils.writeObjectJson(this.data);
             }
         }
-        return null;
+        return "";
     }
 
     @Override
     public String toString() {
-        return String.format("{code:%s, msg:%s, data:%s}", this.getCode(), super.getMessage(), this.getDataStr());
-    }
-
-    @Override
-    public String getMessage() {
-        return toString();
+        StringBuffer sb = new StringBuffer();
+        sb.append("{type:").append(this.getType()).append(", code:").append(this.getCode()).append(", msg:")
+            .append(super.getMessage()).append(", data:").append(this.getDataStr()).append("}");
+        return sb.toString();
     }
 
 }

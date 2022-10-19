@@ -102,7 +102,7 @@ public class ZKWXPayService {
             if (cert == null) {
                 if (pCert == null) {
                     log.error("[>_<:20210220-1745-001] 平台证书[{0}]不存在", mchid);
-                    throw new ZKCodeException("zk.wechat.000021", "平台证书不存在", new String[] { mchid }, null);
+                    throw ZKCodeException.as("zk.wechat.000021", "平台证书不存在", new String[] { mchid }, null);
                 }
                 cert = this.getPlatformCert(pCert);
             }
@@ -143,7 +143,7 @@ public class ZKWXPayService {
             if (cert == null) {
                 if (pCert == null) {
                     log.error("[>_<:20210222-1847-001] 平台证书[{}-{}]不存在", mchid, serialNo);
-                    throw new ZKCodeException("zk.wechat.000022", "平台证书不存在", new String[] { mchid, serialNo }, null);
+                    throw ZKCodeException.as("zk.wechat.000022", "平台证书不存在", new String[] { mchid, serialNo }, null);
                 }
                 cert = this.getPlatformCert(pCert);
             }
@@ -184,7 +184,7 @@ public class ZKWXPayService {
             ZKPayMerchant merchant = merchantService.get(new ZKPayMerchant(mchid));
             if (merchant == null) {
                 log.error("[>_<:20210220-1745-001] 商户号[{0}]未对接", mchid);
-                throw new ZKCodeException("zk.wechat.000006", "户号未对接", new String[] { mchid }, null);
+                throw ZKCodeException.as("zk.wechat.000006", "户号未对接", new String[] { mchid }, null);
             }
             PrivateKey privateKey = ZKWXPayUtils
                     .getRSAPrivateKey(ZKWechatUtils.getFilePath(merchant.getApiCertPathKeyPem()));
@@ -212,7 +212,7 @@ public class ZKWXPayService {
             ZKPayMerchant merchant = merchantService.get(new ZKPayMerchant(mchid));
             if (merchant == null) {
                 log.error("[>_<:20210220-1745-001] 商户号[{0}]未对接", mchid);
-                throw new ZKCodeException("zk.wechat.000006", "户号未对接", new String[] { mchid }, null);
+                throw ZKCodeException.as("zk.wechat.000006", "户号未对接", new String[] { mchid }, null);
             }
             apiv3AesKeyMap.put(mchid, merchant.getApiv3AesKey().getBytes());
         }

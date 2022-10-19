@@ -284,51 +284,6 @@ public class ZKSysMenuServiceTest {
     }
 
     @Test
-    public void testFindTreeNoLevel() {
-
-        ZKSysMenuService zkSysMenuService = ZKSysTestHelper.getMainCtx().getBean(ZKSysMenuService.class);
-        List<ZKSysMenu> dels = new ArrayList<>();
-        try {
-            ZKSysMenu zkSysMenu = null;
-            List<ZKSysMenu> resList = null;
-            ZKPage<ZKSysMenu> resPage = null;
-
-            /*** 制作树型数据 ***/
-            // this.calculate(7, 3) = 399
-            int nodeCount = 7;
-//            int level = 3;
-//          dels.addAll(makeTestMenu(zkSysMenuService, "testName-FindTreeNoLevel", nodeCount, level));
-
-            /*** 树型查询 ***/
-
-            // 过虑
-            zkSysMenu = new ZKSysMenu();
-            zkSysMenu.setCode("-1");
-            resList = zkSysMenuService.findTreeNoLevel(zkSysMenu);
-            TestCase.assertFalse(resList.isEmpty());
-            TestCase.assertEquals(301, resList.size());
-
-            // 分页
-            zkSysMenu = new ZKSysMenu();
-            zkSysMenu.setCode("test");
-            resPage = new ZKPage<ZKSysMenu>();
-            resPage.setPageSize(3);
-            resPage = zkSysMenuService.findTreeNoLevel(resPage, zkSysMenu);
-            TestCase.assertEquals(3, resPage.getResult().size());
-            TestCase.assertEquals(nodeCount, resPage.getTotalCount());
-
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            TestCase.assertTrue(false);
-        } finally {
-            dels.forEach(item -> {
-                zkSysMenuService.diskDel(item);
-            });
-        }
-    }
-
-    @Test
     public void testFindTreeTest() {
 
         ZKSysMenuService zkSysMenuService = ZKSysTestHelper.getMainCtx().getBean(ZKSysMenuService.class);
@@ -366,6 +321,26 @@ public class ZKSysMenuServiceTest {
             dels.forEach(item -> {
                 zkSysMenuService.diskDel(item);
             });
+        }
+    }
+
+    @Test
+    public void testGetDetail() {
+
+        ZKSysMenuService s = ZKSysTestHelper.getMainCtx().getBean(ZKSysMenuService.class);
+
+        try {
+            ZKSysMenu e = null;
+            String pkId = "5823591463954416128";
+
+            e = s.getDetail(new ZKSysMenu(pkId));
+
+            TestCase.assertNotNull(e);
+
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            TestCase.assertTrue(false);
         }
     }
 
@@ -427,26 +402,6 @@ public class ZKSysMenuServiceTest {
         menu.setSort(1);
 
         return menu;
-    }
-
-    @Test
-    public void testGetDetail() {
-
-        ZKSysMenuService s = ZKSysTestHelper.getMainCtx().getBean(ZKSysMenuService.class);
-
-        try {
-            ZKSysMenu e = null;
-            String pkId = "5823591463954416128";
-
-            e = s.getDetail(new ZKSysMenu(pkId));
-
-            TestCase.assertNotNull(e);
-
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            TestCase.assertTrue(false);
-        }
     }
 
 }

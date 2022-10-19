@@ -34,22 +34,8 @@ public interface ZKSysResDictDao extends ZKBaseTreeDao<String, ZKSysResDict> {
      */
     @SelectProvider(type = ZKMyBatisTreeSqlProvider.class, method = "selectTree")
     @Results(id = "treeResult", value = {
-            @Result(column = "{parentId=pkId}", property = "children", javaType = List.class, many = @Many(select = "com.zk.sys.res.dao.ZKSysResDictDao.findTreeChild", fetchType = FetchType.EAGER)) })
+            @Result(column = "{parentId=pkId}", property = "children", javaType = List.class, many = @Many(select = "com.zk.sys.res.dao.ZKSysResDictDao.findTree", fetchType = FetchType.EAGER)) })
     List<ZKSysResDict> findTree(ZKSysResDict sysResDic);
-
-    /**
-     * 树形查询的子节点查询
-     *
-     * @Title: findTreeChild
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Jan 6, 2021 10:09:10 PM
-     * @param ZKSysResDict
-     * @return List<T>
-     */
-    @SelectProvider(type = ZKMyBatisTreeSqlProvider.class, method = "selectTree")
-    @ResultMap("treeResult")
-    List<ZKSysResDict> findTreeChild(ZKSysResDict sysResDic);
 
     /**
      * 查询字典详情，包含父节点 fetchType = FetchType.EEAGER

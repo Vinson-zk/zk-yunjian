@@ -20,15 +20,14 @@ package com.zk.security.helper;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.zk.core.redis.ZKJedisOperatorStringKey;
 import com.zk.core.web.resolver.ZKExceptionHandlerResolver;
 import com.zk.security.helper.realm.ZKSecTestRealm;
 import com.zk.security.ticket.ZKSecTicketManager;
-import com.zk.security.ticket.support.mongo.ZKSecMongoTicketManager;
 import com.zk.security.ticket.support.redis.ZKSecRedisTicketManager;
 import com.zk.security.web.mgt.ZKSecWebSecurityManager;
 import com.zk.security.web.support.spring.ZKSecStaticMethodMatcherPointcutAdvisor;
@@ -39,6 +38,7 @@ import com.zk.security.web.support.spring.ZKSecStaticMethodMatcherPointcutAdviso
 * @author Vinson 
 * @version 1.0 
 */
+@Configuration
 @AutoConfigureAfter(value = { ZKSecTestHelperMongoConfiguration.class, ZKSecTestHelperRedisConfiguration.class })
 @ImportResource(locations = { "classpath:xmlConfig/spring_ctx_application.xml",
         "classpath:xmlConfig/spring_ctx_mvc.xml", "classpath:test_spring_ctx.xml" })
@@ -69,16 +69,16 @@ public class ZKSecTestHelperConfigurationBefore {
     }
 
     @Bean
-    public ZKSecTestRealm zkSecTestRealm(ZKSecMongoTicketManager zkSecTicketManager) {
+    public ZKSecTestRealm zkSecTestRealm(ZKSecTicketManager zkSecTicketManager) {
         ZKSecTestRealm realm = new ZKSecTestRealm();
         realm.setTicketManager(zkSecTicketManager);
         return realm;
     }
 
-    @Bean
-    public ZKSecMongoTicketManager zkSecMongoTicketManager(MongoTemplate mongoTemplate) {
-        return new ZKSecMongoTicketManager(mongoTemplate);
-    }
+//    @Bean
+//    public ZKSecMongoTicketManager zkSecMongoTicketManager(MongoTemplate mongoTemplate) {
+//        return new ZKSecMongoTicketManager(mongoTemplate);
+//    }
 
     @Primary
     @Bean

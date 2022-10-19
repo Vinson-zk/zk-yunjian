@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `zk-zuul` /*!40100 DEFAULT CHARACTER SET utf8mb4 
 USE `zk-zuul`;
 -- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
 --
--- Host: 10.211.55.10    Database: zk-zuul
+-- Host: 10.211.55.11    Database: zk-zuul
 -- ------------------------------------------------------
 -- Server version	8.0.21
 

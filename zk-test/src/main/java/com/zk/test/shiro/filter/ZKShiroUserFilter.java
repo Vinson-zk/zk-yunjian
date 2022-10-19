@@ -56,7 +56,7 @@ public class ZKShiroUserFilter extends ZKShiroBaseFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         log.error("[>_<:20210705-2030-001] 用户未登录");
-        throw new ZKCodeException("zk.test.000004", "用户未登录");
+        throw ZKCodeException.as("zk.test.000004", "用户未登录");
     }
 
     @Override

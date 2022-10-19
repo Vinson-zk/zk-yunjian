@@ -23,6 +23,7 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Transient;
 
@@ -32,11 +33,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvert;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
 
 /** 
 * @ClassName: ZKThirdParty 
@@ -47,21 +49,21 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_wx_third_party", alias = "wxThirdParty")
 public class ZKThirdParty extends ZKBaseEntity<String, ZKThirdParty> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKThirdParty());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKThirdParty());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
     /**
      * @Fields serialVersionUID : TODO(simple description what to do.)
@@ -78,28 +80,26 @@ public class ZKThirdParty extends ZKBaseEntity<String, ZKThirdParty> {
         super(appId);
     }
 
-//  @ZKColumn(name = "c_name", isUpdate = true, isQuery = false, javaType = ZKJson.class, isCaseSensitive = false, queryType = ZKDBQueryType.LIKE)
-
     // 微信第三方平台账号的 app secret
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_wx_app_secret", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_wx_app_secret", update = @ZKUpdate(true))
     private String wxAppSecret;
 
     // 微信平台配置的消息校验 token
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_wx_token", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_wx_token", update = @ZKUpdate(true))
     private String wxToken;
 
     // 微信消息加解密 key
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_wx_aes_key", isUpdate = true, isQuery = false)
+    @ZKColumn(name = "c_wx_aes_key", update = @ZKUpdate(true))
     private String wxAesKey;
 
     // 第三方平台令牌
-    @ZKColumn(name = "c_wx_ticket", isUpdate = false, isQuery = false)
+    @ZKColumn(name = "c_wx_ticket")
 //    @Length(max = 256, message = "{zk.core.data.validation.length.max}")
     private String wxTicket;
 
@@ -112,7 +112,7 @@ public class ZKThirdParty extends ZKBaseEntity<String, ZKThirdParty> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_group_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_group_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     String groupCode;
 
     /**
@@ -120,7 +120,7 @@ public class ZKThirdParty extends ZKBaseEntity<String, ZKThirdParty> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_company_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_company_id", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String companyId;
 
     /**
@@ -128,7 +128,7 @@ public class ZKThirdParty extends ZKBaseEntity<String, ZKThirdParty> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_company_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_company_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String companyCode;
 
     /**

@@ -23,6 +23,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import com.zk.core.web.utils.ZKWebUtils;
+import com.zk.security.common.ZKSecConstants;
 import com.zk.security.exception.ZKSecCodeException;
 import com.zk.security.subject.ZKSecSubject;
 import com.zk.security.utils.ZKSecSecurityUtils;
@@ -48,15 +49,23 @@ public class ZKSecUserFilter extends ZKSecBaseControlFilter {
 
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
+        String server = "";
         if (request instanceof HttpServletRequest) {
-            log.error("[>_<:20210805-1202-001] 用户未登录: {}", ZKWebUtils.toHttp(request).getServletPath());
+            server = ZKWebUtils.toHttp(request).getServletPath();
         }
         else {
-            log.error("[>_<:20210805-1202-002] 用户未登录: {}", request.getServerPort());
+            server = request.getServerName();
         }
 
-        // 用户未登录，抛出用户未登录异常
-        throw new ZKSecCodeException("zk.sec.000004");
+        if(request.getAttribute(ZKSecConstants.SEC_KEY.SecIsHaveTicket) != null){
+            log.error("[^_^:20221013-1703-001] 用户登录过期，请重新登录；{}", server);
+            // 请求中带有令牌，抛出异常； zk.sec.000020=登录已过期，请重新登录
+            throw new ZKSecCodeException("zk.sec.000020=登录已过期，请重新登录");
+        }else {
+            log.error("[^_^:20221013-1703-001] 用户未登录；{}", server);
+            // 用户未登录，抛出异常；zk.sec.000004=用户未登录
+            throw new ZKSecCodeException("zk.sec.000004");
+        }
     }
 
 }

@@ -257,7 +257,7 @@ public class ZKHttpApiUtils {
             // 配置不存在
 //            throw new ZKUnknownException(String.format("配置的 API 地址错误; {key:%s, url:%s}", key, url));
             // 环境配置项目有误
-            throw new ZKCodeException("zk.000003", "环境配置项目有误", null,
+            throw ZKCodeException.as("zk.000003", "环境配置项目有误", null,
                     String.format("配置的 API 地址错误; {key:%s, url:%s}", key, url));
         }
         return url;
@@ -460,7 +460,7 @@ public class ZKHttpApiUtils {
      *            请求 url
      * @param content
      *            请求内容
-     * @param contentType
+     * @param reqContentType
      *            请求内容的类型
      * @param reqCharset
      *            请求内容类型的字符集编码

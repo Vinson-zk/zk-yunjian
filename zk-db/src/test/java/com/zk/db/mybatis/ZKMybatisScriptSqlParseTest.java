@@ -9,7 +9,7 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKMybatisScriptSqlParse.java 
+* @Title: ZKMybatisScriptSqlParseTest.java
 * @author Vinson 
 * @Package com.zk.db.mybatis 
 * @Description: TODO(simple description this file what to do. ) 
@@ -18,6 +18,7 @@
 */
 package com.zk.db.mybatis;
 
+import com.zk.db.helper.entity.ZKDBTestSampleEntity;
 import org.apache.ibatis.builder.xml.XMLMapperEntityResolver;
 import org.apache.ibatis.parsing.XPathParser;
 import org.apache.ibatis.scripting.xmltags.XMLScriptBuilder;
@@ -26,7 +27,6 @@ import org.junit.Test;
 
 import com.zk.db.ZKMybatisSessionFactory;
 import com.zk.db.helper.ZKDBTestConfig;
-import com.zk.db.helper.entity.ZKDBEntity;
 
 import junit.framework.TestCase;
 
@@ -38,19 +38,29 @@ import junit.framework.TestCase;
  */
 public class ZKMybatisScriptSqlParseTest {
 
+    public static ZKMybatisSessionFactory mybatisSessionFactory = null;
+
+    public static ZKMybatisSessionFactory getMybatisSessionFactory(){
+        if(mybatisSessionFactory == null){
+            mybatisSessionFactory = ZKDBTestConfig.getXmlConfigSessionFactory();
+//            mybatisSessionFactory = ZKDBTestConfig.getJavaConfigSessionFactory();
+        }
+        return mybatisSessionFactory;
+    }
+
     @Test
     public void testScriptSqlParse() {
         try {
 
-            ZKMybatisSessionFactory mybatisSessionFactory = ZKDBTestConfig.getZKMybatisSessionFactory();
+            ZKMybatisSessionFactory mybatisSessionFactory = getMybatisSessionFactory();
             Configuration configuration = mybatisSessionFactory.getSqlSessionFactory().getConfiguration();
             XPathParser parser = null;
             XMLScriptBuilder builder = null;
             String script = "";
 
-            ZKDBEntity entity = new ZKDBEntity();
+            ZKDBTestSampleEntity entity = new ZKDBTestSampleEntity();
             entity.setId(null);
-            entity.setType(1L);
+            entity.setmInt(1L);
 
             System.out.println("===============================================");
             script = "";
@@ -59,11 +69,11 @@ public class ZKMybatisScriptSqlParseTest {
             script += "ta.* ";
             script += "FROM ta ta <where> AND ";
             script += "(<trim prefix=\"\" prefixOverrides=\"and|or\">";
-            script += "<if test=\"id!=null\">AND id=#{id}</if>";
-            script += "<if test=\"type!=null\">AND type=#{type}</if>";
+            script += "<if test=\"id != null\">AND id = #{id}</if>";
+            script += "<if test=\"mInt != null\">AND type=#{mInt}</if>";
             script += " AND (";
             script += "<trim prefixOverrides=\"AND|OR\">";
-            script += "OR id=#{id} OR type=#{type}";
+            script += "OR id = #{id} OR type = #{mInt}";
             script += "</trim>)";
             script += "</trim>)";
             script += "</where></script>";

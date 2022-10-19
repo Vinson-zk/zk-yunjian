@@ -55,6 +55,9 @@ public class ZKTestHelper {
 
     }
 
+    /*
+    21365 -> 56312
+     */
     @Test
     public void testNode() {
 //        String timeStr = "1653218795";
@@ -74,25 +77,26 @@ public class ZKTestHelper {
     }
 
     public static Node s(Node head) {
-        Node t = head;
-        while (t.next != null) {
-            System.out.print(t.data + "->");
-            t = t.next;
-        }
-        System.out.println(t.data + "->null");
-        System.out.println("=====================");
-        Node s = head.next;
+        printNode(head);
+        System.out.println("=====================================================================");
+        Node s = null;
+//        s = head.next;
 //        head.next = null;
 //        s = s1(head, s);
         s = s2(head);
-        t = s;
-        while(t.next != null) {
-            System.out.print(t.data + "->");
-            t = t.next;
-        }
-        System.out.print(t.data + "->null");
+        printNode(s);
 
         return null;
+    }
+
+    public static void printNode(Node n){
+        System.out.println("print node begin ----------------------------------- ");
+        while(n.next != null) {
+            System.out.print(n.data + "->");
+            n = n.next;
+        }
+        System.out.println(n.data + "->null");
+        System.out.println("print node end ----------------------------------- ");
     }
 
     public static Node s2(Node head) {

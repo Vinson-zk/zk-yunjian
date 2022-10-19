@@ -46,8 +46,7 @@ public class ZKSecWebSubjectFactory implements ZKSecSubjectFactory {
     }
 
     public ZKSecWebSubject createSubject(ZKSecWebSecurityManager securityManager, HttpServletRequest request,
-            HttpServletResponse response,
-            ZKSecTicket tk) {
+            HttpServletResponse response, ZKSecTicket tk) {
         // TODO Auto-generated method stub
         return new ZKSecWebSubject(securityManager, request, response, tk);
     }

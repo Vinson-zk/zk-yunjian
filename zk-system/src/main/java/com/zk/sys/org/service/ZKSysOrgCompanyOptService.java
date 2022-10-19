@@ -1,21 +1,17 @@
-/** 
-* Copyright (c) 2004-2020 ZK-Vinson Technologies, Inc.
-* address: 
-* All rights reserved. 
-* 
-* This software is the confidential and proprietary information of 
-* ZK-Vinson Technologies, Inc. ("Confidential Information"). You shall not 
-* disclose such Confidential Information and shall use it only in 
-* accordance with the terms of the license agreement you entered into 
-* with ZK-Vinson. 
-*
-* @Title: ZKSysOrgCompanyOptService.java 
-* @author Vinson 
-* @Package com.zk.sys.org.service 
-* @Description: TODO(simple description this file what to do. ) 
-* @date Apr 12, 2022 4:44:34 PM 
-* @version V1.0 
-*/
+/**
+ * Copyright (c) 2004-2020 ZK-Vinson Technologies, Inc. address: All rights reserved.
+ * 
+ * This software is the confidential and proprietary information of ZK-Vinson Technologies, Inc. ("Confidential
+ * Information"). You shall not disclose such Confidential Information and shall use it only in accordance with the
+ * terms of the license agreement you entered into with ZK-Vinson.
+ *
+ * @Title: ZKSysOrgCompanyOptService.java
+ * @author Vinson
+ * @Package com.zk.sys.org.service
+ * @Description: TODO(simple description this file what to do. )
+ * @date Apr 12, 2022 4:44:34 PM
+ * @version V1.0
+ */
 package com.zk.sys.org.service;
 
 import org.slf4j.Logger;
@@ -62,13 +58,12 @@ public class ZKSysOrgCompanyOptService {
         ZKSysOrgCompany company = this.sysOrgCompanyService.get(new ZKSysOrgCompany(companyId));
         if (company == null) {
             log.error("[>_<:20220412-1648-001] 公司不存在! parentId:{}", companyId);
-            throw new ZKCodeException("zk.sys.010003", "公司不存在");
+            throw ZKCodeException.as("zk.sys.010003", "公司不存在");
         }
         if (flag == 0) {
             // 通过审核
             this.sysOrgCompanyService.approveCompany(company);
-        }
-        else {
+        } else {
             // 禁用公司
             this.sysOrgCompanyService.disabledCompany(company);
         }

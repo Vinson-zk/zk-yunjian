@@ -3,18 +3,21 @@
  */
 package com.zk.sys.auth.entity;
 
-import java.lang.String;
-import com.zk.core.utils.ZKIdUtils;
-import com.zk.db.commons.ZKDBQueryType;
-
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
+import javax.xml.bind.annotation.XmlTransient;
 
-import com.zk.db.annotation.ZKTable;
-import com.zk.db.annotation.ZKColumn;
-import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.base.entity.ZKBaseEntity;
+import com.zk.core.utils.ZKIdUtils;
+import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
+import com.zk.db.annotation.ZKTable;
+import com.zk.db.commons.ZKDBOptComparison;
+import com.zk.db.commons.ZKSqlConvertDelegating;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 权限-功能API接口表
@@ -24,18 +27,24 @@ import com.zk.base.entity.ZKBaseEntity;
 @ZKTable(name = "t_sys_auth_func_api", alias = "sysAuthFuncApi", orderBy = " c_create_date ASC ")
 public class ZKSysAuthFuncApi extends ZKBaseEntity<String, ZKSysAuthFuncApi> {
 	
-	static ZKSqlProvider sqlProvider;
-	
-    @Override 
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+	static ZKDBSqlHelper sqlHelper;
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    @Override
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
-    
-    public static ZKSqlProvider initSqlProvider() {
-        if(sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKSysAuthFuncApi());
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKSysAuthFuncApi());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
     
     private static final long serialVersionUID = 1L;
@@ -45,21 +54,21 @@ public class ZKSysAuthFuncApi extends ZKBaseEntity<String, ZKSysAuthFuncApi> {
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_auth_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_auth_id", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String authId;	
 	/**
 	 * 功能API接口ID 
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_func_api_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+	@ZKColumn(name = "c_func_api_id", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String funcApiId;	
 	/**
 	 * 功能API接口 代码
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_func_api_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_func_api_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String funcApiCode;	
 	
 	public ZKSysAuthFuncApi() {

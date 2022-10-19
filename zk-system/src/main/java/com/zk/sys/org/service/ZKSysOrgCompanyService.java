@@ -51,6 +51,7 @@ public class ZKSysOrgCompanyService extends ZKBaseTreeService<String, ZKSysOrgCo
 	/**
      * 树形查询； 不分页
      */
+    @Override
     public List<ZKSysOrgCompany> doFindTree(ZKSysOrgCompany sysOrgCompany) {
         return this.dao.findTree(sysOrgCompany);
     }
@@ -84,7 +85,7 @@ public class ZKSysOrgCompanyService extends ZKBaseTreeService<String, ZKSysOrgCo
                 ZKSysOrgCompany parentCompany = this.get(new ZKSysOrgCompany(entity.getParentId()));
                 if (parentCompany == null) {
                     log.error("[>_<:20220411-0956-001] 父公司不存在! parentId:{}", entity.getParentId());
-                    throw new ZKCodeException("zk.sys.010002", "父公司不存在");
+                    throw ZKCodeException.as("zk.sys.010002", "父公司不存在");
                 }
                 else {
                     // 在这里可以添加父公司的一些校验，如父公司 licence 等
@@ -113,9 +114,9 @@ public class ZKSysOrgCompanyService extends ZKBaseTreeService<String, ZKSysOrgCo
         if(ZKStringUtils.isEmpty(code)) {
             return null;
         }
-        return this.dao.getByCode(ZKSysOrgCompany.initSqlProvider().getTableName(),
-                ZKSysOrgCompany.initSqlProvider().getTableAlias(),
-                ZKSysOrgCompany.initSqlProvider().getSqlBlockSelCols(), code);
+        return this.dao.getByCode(ZKSysOrgCompany.sqlHelper().getTableName(),
+                ZKSysOrgCompany.sqlHelper().getTableAlias(),
+                ZKSysOrgCompany.sqlHelper().getBlockSqlCols(), code);
     }
 
     /**
@@ -134,7 +135,7 @@ public class ZKSysOrgCompanyService extends ZKBaseTreeService<String, ZKSysOrgCo
         // 校验licence
         this.checkLicence();
         // 修改公司状态为通过
-        return this.dao.approveCompany(ZKSysOrgCompany.initSqlProvider().getTableName(), entity.getPkId(),
+        return this.dao.approveCompany(ZKSysOrgCompany.sqlHelper().getTableName(), entity.getPkId(),
                 ZKSysOrgCompany.KeyStatus.normal, ZKSecSecurityUtils.getUserId(), ZKDateUtils.getToday());
     }
 
@@ -154,7 +155,7 @@ public class ZKSysOrgCompanyService extends ZKBaseTreeService<String, ZKSysOrgCo
         // 校验licence
         this.checkLicence();
         // 修改公司状态为通过
-        return this.dao.approveCompany(ZKSysOrgCompany.initSqlProvider().getTableName(), entity.getPkId(),
+        return this.dao.approveCompany(ZKSysOrgCompany.sqlHelper().getTableName(), entity.getPkId(),
                 ZKSysOrgCompany.KeyStatus.disabled, ZKSecSecurityUtils.getUserId(), ZKDateUtils.getToday());
     }
 

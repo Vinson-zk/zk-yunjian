@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zk.base.service.ZKBaseService;
 import com.zk.core.encrypt.ZKRSAKey;
-import com.zk.core.exception.ZKMsgException;
+import com.zk.core.exception.ZKCodeException;
 import com.zk.core.exception.ZKValidatorException;
 import com.zk.core.utils.ZKJsonUtils;
 import com.zk.server.central.commons.ZKSerCenCerCipherManager;
@@ -42,6 +42,9 @@ import com.zk.server.central.entity.ZKSerCenCertificate;
 @Service
 public class ZKSerCenCertificateService extends ZKBaseService<String, ZKSerCenCertificate, ZKSerCenCertificateDao> {
 
+    /**
+     *
+     */
     @Autowired
     ZKSerCenCerCipherManager zkSerCenCerCipherManager;
 
@@ -55,9 +58,10 @@ public class ZKSerCenCertificateService extends ZKBaseService<String, ZKSerCenCe
     /**
      * 保存数据（插入或更新）
      * 
-     * @param entity
+     * @param serCenCertificate
      * @throws ZKValidatorException
      */
+    @Override
     @Transactional(readOnly = false)
     public int save(ZKSerCenCertificate serCenCertificate) throws ZKValidatorException {
         if (serCenCertificate.isNewRecord()) {
@@ -77,7 +81,7 @@ public class ZKSerCenCertificateService extends ZKBaseService<String, ZKSerCenCe
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
      * @date Aug 29, 2019 1:41:57 PM
-     * @param entity
+     * @param serCenCertificate
      * @return void
      */
     public void genCertificate(ZKSerCenCertificate serCenCertificate) {
@@ -85,12 +89,10 @@ public class ZKSerCenCertificateService extends ZKBaseService<String, ZKSerCenCe
             ZKRSAKey rsaKey = zkSerCenCerCipherManager.genCer();
             serCenCertificate.setPublicKey(rsaKey.getPublicKeyStr());
             serCenCertificate.setPrivateKey(rsaKey.getPrivateKeyStr());
-            System.out.println(
-                    "[^_^:20190829-1630-001] serCenCertificate:" + ZKJsonUtils.writeObjectJson(serCenCertificate));
-
+            log.info("[^_^:20190829-1630-001] serCenCertificate: {}", ZKJsonUtils.writeObjectJson(serCenCertificate));
         }
         catch(NoSuchAlgorithmException e) {
-            throw new ZKMsgException("zk.ser.cen.000011");
+            throw ZKCodeException.as("zk.ser.cen.000011", null,null,null, e);
         }
     }
 

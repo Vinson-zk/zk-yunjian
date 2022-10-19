@@ -24,12 +24,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.eureka.MutableDiscoveryClientOptionalArgs;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
 import com.zk.framework.serCen.ZKSerCenEncrypt;
@@ -42,8 +46,13 @@ import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
 * @author Vinson 
 * @version 1.0 
 */
-@SpringBootApplication
+@SpringBootApplication(exclude = {
+        DataSourceAutoConfiguration.class,
+        TransactionAutoConfiguration.class
+})
 @EnableEurekaClient
+@EnableTransactionManagement(proxyTargetClass = true)
+@ComponentScan(basePackages = { "com.zk.demo.*" })
 public class ZKDemoSpringBootMain {
 
     @Bean

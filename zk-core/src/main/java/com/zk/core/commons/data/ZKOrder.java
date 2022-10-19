@@ -52,7 +52,7 @@ public class ZKOrder implements Serializable {
     private static final Pattern isColumnNamePattern = Pattern.compile("^([A-Za-z_][A-Za-z_0-9.]*)$");
 
     /**
-     * 表中字段名
+     * 字段名，如果不做其他转换，直接转入表中字段名，如果使用通 @ZKColumn 做映射转换，则传入实体对应的属性名；
      */
     private String columnName;
 
@@ -84,27 +84,6 @@ public class ZKOrder implements Serializable {
         return sortMode.getValue();
     }
 
-    @Override
-    public String toString() {
-        return this.toString("");
-    }
-
-    /**
-     * 
-     *
-     * @Title: toString
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Sep 17, 2020 7:07:36 PM
-     * @param tableAlias
-     *            表的别名；这里需要加上 “.”；不会自动添加
-     * @return
-     * @return String
-     */
-    public String toString(String tableAlias) {
-        return tableAlias + columnName + " " + sortMode.getValue();
-    }
-
     /****************************************************************/
     public static interface Param_Name {
         /**
@@ -124,7 +103,6 @@ public class ZKOrder implements Serializable {
      * @param columnName
      * @param sort
      * @return
-     * @throws CoreException
      */
     public static ZKOrder asOrder(String columnName, String sort) {
         ZKSortMode st = ZKSortMode.parseKey(sort);
@@ -156,34 +134,5 @@ public class ZKOrder implements Serializable {
         return null;
     }
 
-    /**
-     * 转换为排序的 sql 语句；这里的转换没有根据字段名映射到数据库字段；需要直接填写数据库表的字段名；
-     *
-     * @Title: toOrderBySql
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Sep 17, 2020 7:09:54 PM
-     * @param tableAlias
-     *            表的别名；这里需要加上 “.”；不会自动添加
-     * @param orders
-     * @return
-     * @return String
-     */
-    public static String toOrderBySql(String tableAlias, Collection<ZKOrder> orders) {
-        String str = "";
-        for (ZKOrder order : orders) {
-            str += "," + order.toString(tableAlias);
-        }
-        return ZKStringUtils.isEmpty(str) ? null : str.substring(1);
-    }
-
-    /**
-     * 转换为排序的 sql 语句；这里的转换没有根据字段名映射到数据库字段；需要直接填写数据库表的字段名；
-     * 
-     * @return
-     */
-    public static String toOrderBySql(Collection<ZKOrder> orders) {
-        return toOrderBySql("", orders);
-    }
 
 }

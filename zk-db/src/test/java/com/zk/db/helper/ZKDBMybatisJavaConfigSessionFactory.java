@@ -24,6 +24,8 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import com.zk.db.helper.dao.ZKDBTestDao;
+import com.zk.db.helper.entity.ZKDBTestSampleEntity;
 import org.apache.commons.io.IOUtils;
 import org.apache.ibatis.datasource.pooled.PooledDataSourceFactory;
 import org.apache.ibatis.mapping.Environment;
@@ -42,8 +44,6 @@ import com.zk.core.commons.data.ZKJson;
 import com.zk.core.commons.data.ZKOrder;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.db.ZKMybatisSessionFactory;
-import com.zk.db.helper.dao.ZKDBDao;
-import com.zk.db.helper.entity.ZKDBEntity;
 import com.zk.db.mybatis.plugins.ZKSqlLikeParameter;
 import com.zk.db.mybatis.plugins.ZKSqlPage;
 
@@ -132,11 +132,11 @@ public class ZKDBMybatisJavaConfigSessionFactory extends ZKMybatisSessionFactory
              */
             // add mappers
 //          configuration.addMappers("com.zk.db.helper");
-            configuration.addMapper(ZKDBDao.class);
+            configuration.addMapper(ZKDBTestDao.class);
             // register type alias
             configuration.getTypeAliasRegistry().registerAlias("page", ZKPage.class);
             configuration.getTypeAliasRegistry().registerAlias("json", ZKJson.class);
-            configuration.getTypeAliasRegistry().registerAlias("testEntity", ZKDBEntity.class);
+            configuration.getTypeAliasRegistry().registerAlias("testEntity", ZKDBTestSampleEntity.class);
             configuration.getTypeAliasRegistry().registerAlias("order", ZKOrder.class);
 
             // add plugins interceptor

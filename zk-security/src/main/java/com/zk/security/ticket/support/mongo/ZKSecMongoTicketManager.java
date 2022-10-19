@@ -235,7 +235,7 @@ public class ZKSecMongoTicketManager extends ZKSecAbstractTicketManager implemen
         else {
             logger.error("[>_<:20180606-1654-002] ZKCreate ZKSecTicket fail -> {} - {}", identification,
                     ZKJsonUtils.writeObjectJson(resDoc));
-            throw new ZKSecTicketException("sec.000003", null, null, "ZKCreate ZKSecTicket fail");
+            throw new ZKSecTicketException("zk.sec.000019", "生成信息异常，请联系管理员", null, "ZKCreate ZKSecTicket fail");
         }
 
 //      // 创建令牌到令牌集合中，不存在创建，存在，不修改
@@ -261,7 +261,7 @@ public class ZKSecMongoTicketManager extends ZKSecAbstractTicketManager implemen
 //          logger.info("[^_^:20180606-1654-001] ZKCreate ZKSecTicket success -> {}", tkId); 
 //      }else{
 //          logger.error("[>_<:20180606-1654-002] ZKCreate ZKSecTicket fail -> {}", tkId); 
-//          throw new ZKSecTicketException("sec.000003", "ZKCreate ZKSecTicket fail");
+//          throw new ZKSecTicketException("zk.sec.000019", "生成信息异常，请联系管理员", null, "ZKCreate ZKSecTicket fail");
 //      }
         return t;
     }

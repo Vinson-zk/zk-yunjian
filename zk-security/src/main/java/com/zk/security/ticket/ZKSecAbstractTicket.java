@@ -36,6 +36,7 @@ public abstract class ZKSecAbstractTicket implements ZKSecTicket {
 
     private Serializable key;
 
+    @Override
     public Serializable getTkId() {
         return key;
     }

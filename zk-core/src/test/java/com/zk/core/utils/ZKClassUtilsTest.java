@@ -19,6 +19,7 @@
 package com.zk.core.utils;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -32,34 +33,89 @@ import junit.framework.TestCase;
 * @author Vinson 
 * @version 1.0 
 */
+
+interface IParent0<C1,C2> {}
+interface IParent1<C1,C2> { }
+interface IParent2<C1,C2> { }
+interface IParent3<C1,C2> { }
+interface IParent01<C1> extends IParent0<C1, Double> {}
+interface IParent11<C1> extends IParent1<C1, Double> {}
+interface IChild extends IParent01<String>, IParent1<ZKClassUtilsTest, Double> { }
+
+class CParent<CC1, CC2> implements IParent11<CC1> { }
+class CChild extends CParent<ZKClassUtilsTest, Double> implements IChild, IParent2<Float, BigDecimal>,
+        IParent3<ZKClassUtilsTest, Double> { }
+
 public class ZKClassUtilsTest {
-    
+
     @Test
     public void testGetSuperclassByName() {
-        class Parent<C1, C2> {
-        }
-        class Child extends Parent<ZKClassUtilsTest, Integer> {
-        }
 
-        Class<?> resultClass = ZKClassUtils.getSuperclassByName(Parent.class, Child.class, "C2");
-        System.out.println("[^_^:20220504-1354-001]" + resultClass);
-        TestCase.assertEquals(Integer.class, resultClass);
-        resultClass = ZKClassUtils.getSuperclassByName(Parent.class, Child.class, "C1");
+        Class<?> resultClass = null;
+        /** java class 泛型 CParent */
+        // CParent<CC1, CC2> : CParent<ZKClassUtilsTest, Double> implements IParent11<CC1>
+        resultClass = ZKClassUtils.getSuperclassByName(CParent.class, CChild.class, "CC1");
         System.out.println("[^_^:20220504-1354-002]" + resultClass);
         TestCase.assertEquals(ZKClassUtilsTest.class, resultClass);
-//        TestCase.assertTrue(fieldNameStr.matches(".*parentAttribute.*"));
+        resultClass = ZKClassUtils.getSuperclassByName(CParent.class, CChild.class, "CC2");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(Double.class, resultClass);
+        // IParent11<C1> : IParent11<C1> extends IParent1<C1, Double>
+        resultClass = ZKClassUtils.getSuperclassByName(IParent11.class, CChild.class, "C1");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(ZKClassUtilsTest.class, resultClass);
+        // IParent1<C1,C2> : IParent1<C1, Double>
+        resultClass = ZKClassUtils.getSuperclassByName(IParent1.class, CChild.class, "C1");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(ZKClassUtilsTest.class, resultClass);
+        resultClass = ZKClassUtils.getSuperclassByName(IParent1.class, CChild.class, "C2");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(Double.class, resultClass);
+
+        // IChild : IParent01<String>, IParent1<ZKClassUtilsTest, Double>
+        // IParent01<C1> : IParent01<String> extends IParent0<C1, Double>
+        resultClass = ZKClassUtils.getSuperclassByName(IParent01.class, CChild.class, "C1");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(String.class, resultClass);
+        // IParent0<C1,C2> : IParent0<C1, Double>
+        resultClass = ZKClassUtils.getSuperclassByName(IParent0.class, CChild.class, "C1");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(String.class, resultClass);
+        resultClass = ZKClassUtils.getSuperclassByName(IParent0.class, CChild.class, "C2");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(Double.class, resultClass);
+        // IParent1<C1,C2> : IParent1<ZKClassUtilsTest, Double>
+        resultClass = ZKClassUtils.getSuperclassByName(IParent1.class, CChild.class, "C1");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(ZKClassUtilsTest.class, resultClass);
+        resultClass = ZKClassUtils.getSuperclassByName(IParent1.class, CChild.class, "C2");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(Double.class, resultClass);
+
+        // IParent2<C1,C2> : IParent2<Float, BigDecimal>,
+        resultClass = ZKClassUtils.getSuperclassByName(IParent2.class, CChild.class, "C1");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(Float.class, resultClass);
+        resultClass = ZKClassUtils.getSuperclassByName(IParent2.class, CChild.class, "C2");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(BigDecimal.class, resultClass);
+        // IParent3<C1,C2> : IParent3<ZKClassUtilsTest, Double>
+        resultClass = ZKClassUtils.getSuperclassByName(IParent3.class, CChild.class, "C1");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(ZKClassUtilsTest.class, resultClass);
+        resultClass = ZKClassUtils.getSuperclassByName(IParent3.class, CChild.class, "C2");
+        System.out.println("[^_^:20220504-1354-001]" + resultClass);
+        TestCase.assertEquals(Double.class, resultClass);
     }
 
     @Test
     public void testGetAllField() {
-        @SuppressWarnings("unused")
+
         class Parent {
             private String parentAttribute;
-
             public String getParentAttribute() {
                 return parentAttribute;
             }
-
             public void setParentAttribute(String parentAttribute) {
                 this.parentAttribute = parentAttribute;
             }
@@ -67,11 +123,9 @@ public class ZKClassUtilsTest {
         @SuppressWarnings("unused")
         class Child extends Parent {
             private String childAttribute;
-
             public String getChildAttribute() {
                 return childAttribute;
             }
-
             public void setChildAttribute(String childAttribute) {
                 this.childAttribute = childAttribute;
             }

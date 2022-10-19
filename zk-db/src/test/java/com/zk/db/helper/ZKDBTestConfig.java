@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.zk.db.ZKMybatisSessionFactory;
-import com.zk.db.dynamic.spring.ZKDBSpringBootMain;
 
 import junit.framework.TestCase;
 
@@ -51,7 +50,7 @@ public class ZKDBTestConfig {
      * 
      * @return
      */
-    protected static ZKMybatisSessionFactory getJavaConfigSessionFactory() {
+    public static ZKMybatisSessionFactory getJavaConfigSessionFactory() {
         if (javaConfigSessionFactory == null) {
             javaConfigSessionFactory = ZKDBMybatisJavaConfigSessionFactory.creatBean(properties_file_path);
         }
@@ -63,27 +62,15 @@ public class ZKDBTestConfig {
      * 
      * @return
      */
-    protected static ZKMybatisSessionFactory getXmlConfigSessionFactory() {
+    public static ZKMybatisSessionFactory getXmlConfigSessionFactory() {
         if (xmlConfigSessionFactory == null) {
             xmlConfigSessionFactory = ZKDBMybatisXmlConfigSessionFactory.creatBean(xml_config_path);
         }
         return xmlConfigSessionFactory;
     }
 
-//    public static ConfigurableApplicationContext ctx = null;
-//
-//    /**
-//     * 取 数据源 contenxt；
-//     * 
-//     * @return
-//     */
-//    public static ConfigurableApplicationContext getCtx() {
-//        if (ctx == null) {
-//            ctx = ZKDBSpringBootMain.run(new String[] {});
-//            TestCase.assertNotNull(ctx);
-//        }
-//        return ctx;
-//    }
+    // ---------------------------------------------------------------
+    // ---------------------------------------------------------------
 
     public static ConfigurableApplicationContext dynamicCtx = null;
 
@@ -97,16 +84,6 @@ public class ZKDBTestConfig {
             dynamicCtx = ZKDBSpringBootMain.run(new String[] {});
         }
         return dynamicCtx;
-    }
-
-    /**
-     * 取 mybatis session factory
-     * 
-     * @return
-     */
-    public static ZKMybatisSessionFactory getZKMybatisSessionFactory() {
-        return ZKDBTestConfig.getXmlConfigSessionFactory();
-//    return TestConfig.getJavaConfigSessionFactory();
     }
 
     @Test

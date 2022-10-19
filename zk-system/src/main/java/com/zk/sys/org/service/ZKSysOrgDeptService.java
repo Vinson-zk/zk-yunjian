@@ -2,7 +2,7 @@
  * 
  */
 package com.zk.sys.org.service;
- 
+
 import java.util.List;
 import java.util.Map;
 
@@ -23,8 +23,9 @@ import com.zk.sys.org.entity.ZKSysOrgDept;
 
 /**
  * ZKSysOrgDeptService
- * @author 
- * @version 
+ * 
+ * @author
+ * @version
  */
 @Service
 @Transactional(readOnly = true)
@@ -35,16 +36,18 @@ public class ZKSysOrgDeptService extends ZKBaseTreeService<String, ZKSysOrgDept,
 
     @Autowired
     ZKSysAuthDeptService sysAuthDeptService;
-	/**
+
+    /**
      * 树形查询； 不分页
      */
+    @Override
     public List<ZKSysOrgDept> doFindTree(ZKSysOrgDept sysOrgDept) {
         return this.dao.findTree(sysOrgDept);
     }
 
-	/**
-	 * 查询详情，包含父节点
-	 */
+    /**
+     * 查询详情，包含父节点
+     */
     public ZKSysOrgDept getDetail(ZKSysOrgDept sysOrgDept) {
         ZKSysOrgDept dept = this.dao.getDetail(sysOrgDept);
         if (dept != null) {
@@ -52,7 +55,7 @@ public class ZKSysOrgDeptService extends ZKBaseTreeService<String, ZKSysOrgDept,
         }
         return dept;
     }
-    
+
     // 新增/编辑公司一般信息，仅允许编辑公司和修改涉及 licence 相关的信息
     @Override
     @Transactional(readOnly = false)
@@ -61,14 +64,12 @@ public class ZKSysOrgDeptService extends ZKBaseTreeService<String, ZKSysOrgDept,
         ZKSysOrgCompany company = this.sysOrgCompanyService.get(new ZKSysOrgCompany(sysOrgDept.getCompanyId()));
         if (company == null) {
             log.error("[^_^:20220420-0802-001] 公司[{}-{}]不存在;", sysOrgDept.getCompanyId(), sysOrgDept.getCompanyCode());
-            throw new ZKCodeException("zk.sys.010003", "公司不存在");
-        }
-        else {
+            throw ZKCodeException.as("zk.sys.010003", "公司不存在");
+        } else {
             if (company.getStatus() == null || company.getStatus().intValue() != ZKSysOrgCompany.KeyStatus.normal) {
                 log.error("[^_^:20220420-0802-001] 公司[{}-{}]状态异常，请联系管理员;", company.getPkId(), company.getCode());
-                throw new ZKCodeException("zk.sys.010004", "公司状态异常，请联系管理员");
-            }
-            else {
+                throw ZKCodeException.as("zk.sys.010004", "公司状态异常，请联系管理员");
+            } else {
                 // 初始化公司值
                 sysOrgDept.setGroupCode(company.getGroupCode());
                 sysOrgDept.setCompanyCode(company.getCode());
@@ -103,9 +104,8 @@ public class ZKSysOrgDeptService extends ZKBaseTreeService<String, ZKSysOrgDept,
         if (ZKStringUtils.isEmpty(code) || ZKStringUtils.isEmpty(companyId)) {
             return null;
         }
-        return this.dao.getByCode(ZKSysOrgDept.initSqlProvider().getTableName(),
-                ZKSysOrgDept.initSqlProvider().getTableAlias(), ZKSysOrgDept.initSqlProvider().getSqlBlockSelCols(),
-                companyId, code);
+        return this.dao.getByCode(ZKSysOrgDept.sqlHelper().getTableName(), ZKSysOrgDept.sqlHelper().getTableAlias(),
+            ZKSysOrgDept.sqlHelper().getBlockSqlCols(), companyId, code);
     }
 
     @Override
@@ -125,5 +125,5 @@ public class ZKSysOrgDeptService extends ZKBaseTreeService<String, ZKSysOrgDept,
         ZKUserCacheUtils.cleanAllAuth();
         return super.diskDel(sysOrgDept);
     }
-	
+
 }

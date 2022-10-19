@@ -32,10 +32,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 平台证书维护
@@ -49,21 +50,21 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
         "c_wx_cert_expiration_time desc" })
 public class ZKPlatformCert extends ZKBaseEntity<String, ZKPlatformCert> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKPlatformCert());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKPlatformCert());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     /**
@@ -84,7 +85,7 @@ public class ZKPlatformCert extends ZKBaseEntity<String, ZKPlatformCert> {
     // 微信商户号的 mchid
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_wx_mchid", isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_wx_mchid", query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String mchid;
 
     // 平台证书存放路径； 不要以 “/” 开头。

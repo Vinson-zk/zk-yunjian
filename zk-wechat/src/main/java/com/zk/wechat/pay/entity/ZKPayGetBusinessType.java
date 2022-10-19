@@ -33,10 +33,12 @@ import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 微信支付-收款时，支持收款的业务的类型维护；
@@ -49,21 +51,21 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_wx_pay_get_business_type", alias = "wxPayGetNotify")
 public class ZKPayGetBusinessType extends ZKBaseEntity<String, ZKPayGetBusinessType> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKPayGetBusinessType());
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKPayGetBusinessType());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     /**
@@ -107,7 +109,7 @@ public class ZKPayGetBusinessType extends ZKBaseEntity<String, ZKPayGetBusinessT
 
     // 业务类型的名称
     @NotNull(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_name", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_name", update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     ZKJson name;
 
     // 状态；0-启用；1-禁用； disabled，enabled

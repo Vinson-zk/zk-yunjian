@@ -21,11 +21,7 @@ package com.zk.devleopment.tool.gen.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.zk.base.controller.ZKBaseController;
 import com.zk.core.commons.data.ZKPage;
@@ -50,8 +46,7 @@ public class ZKModuleController extends ZKBaseController {
     @RequestMapping(value = "module", method = RequestMethod.POST
 //            , consumes = "application/json"
     )
-    public ZKMsgRes editModule(@RequestBody
-    ZKModule zkModule) {
+    public ZKMsgRes editModule(@RequestBody ZKModule zkModule) {
         this.zkModuleService.save(zkModule);
         return ZKMsgRes.as("zk.0", null, zkModule);
     }

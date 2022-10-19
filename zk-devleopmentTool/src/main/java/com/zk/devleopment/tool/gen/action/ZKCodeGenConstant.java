@@ -28,11 +28,6 @@ public class ZKCodeGenConstant {
     /**
      * 配置文件路径
      */
-    public static String config = "gen/config/myBatis/mybatis-config.xml";
-
-    /**
-     * 配置文件路径
-     */
     public static String[] mappers = new String[] { "gen/config/myBatis/mappers/tableInfoMapper.xml" };
 
     /**

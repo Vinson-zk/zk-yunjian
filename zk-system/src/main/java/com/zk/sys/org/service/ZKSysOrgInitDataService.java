@@ -1,21 +1,17 @@
-/** 
-* Copyright (c) 2004-2020 ZK-Vinson Technologies, Inc.
-* address: 
-* All rights reserved. 
-* 
-* This software is the confidential and proprietary information of 
-* ZK-Vinson Technologies, Inc. ("Confidential Information"). You shall not 
-* disclose such Confidential Information and shall use it only in 
-* accordance with the terms of the license agreement you entered into 
-* with ZK-Vinson. 
-*
-* @Title: ZKSysOrgInitDataService.java 
-* @author Vinson 
-* @Package com.zk.sys.org.service 
-* @Description: TODO(simple description this file what to do. ) 
-* @date Apr 25, 2022 4:27:03 PM 
-* @version V1.0 
-*/
+/**
+ * Copyright (c) 2004-2020 ZK-Vinson Technologies, Inc. address: All rights reserved.
+ * 
+ * This software is the confidential and proprietary information of ZK-Vinson Technologies, Inc. ("Confidential
+ * Information"). You shall not disclose such Confidential Information and shall use it only in accordance with the
+ * terms of the license agreement you entered into with ZK-Vinson.
+ *
+ * @Title: ZKSysOrgInitDataService.java
+ * @author Vinson
+ * @Package com.zk.sys.org.service
+ * @Description: TODO(simple description this file what to do. )
+ * @date Apr 25, 2022 4:27:03 PM
+ * @version V1.0
+ */
 package com.zk.sys.org.service;
 
 import org.slf4j.Logger;
@@ -70,8 +66,7 @@ public class ZKSysOrgInitDataService {
             ZKSysOrgUser adminUser = this.addAdminUser(company);
             System.out.println("^_^: ----- ----- initOwnerPlatform 初始化平台 end  ");
             System.out.println("initOwnerPlatform end =================================================");
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }

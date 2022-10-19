@@ -45,7 +45,7 @@ public class ZKSecApiCodeAnnotationHandler extends ZKSecAbstractAuthorizingAnnot
         if (ZKStringUtils.isEmpty(apiCode)) {
             return;
         }
-        // 要重写 Subject ZKSecApiCode 鉴权
+        // 鉴定是否有接口 API 代码权限
         if (getZKSecSubject().checkApiCode(apiCode)) {
             return;
         }

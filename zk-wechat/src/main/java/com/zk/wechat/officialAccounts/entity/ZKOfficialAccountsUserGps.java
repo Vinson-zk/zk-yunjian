@@ -4,17 +4,21 @@
 package com.zk.wechat.officialAccounts.entity;
 
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.data.annotation.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.utils.ZKIdUtils;
 import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryType;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
  * 用户上报地理位置
@@ -25,18 +29,24 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 @ZKTable(name = "t_wx_official_accounts_user_gps", alias = "officialAccountsUserGps", orderBy = " c_create_date ASC ")
 public class ZKOfficialAccountsUserGps extends ZKBaseEntity<String, ZKOfficialAccountsUserGps> {
 	
-	static ZKSqlProvider sqlProvider;
-	
-    @Override 
-    public ZKSqlProvider getSqlProvider() {
-        return initSqlProvider();
+	static ZKDBSqlHelper sqlHelper;
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    @Override
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
-    
-    public static ZKSqlProvider initSqlProvider() {
-        if(sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKOfficialAccountsUserGps());
+
+	@Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKOfficialAccountsUserGps());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
     
     private static final long serialVersionUID = 1L;
@@ -46,71 +56,71 @@ public class ZKOfficialAccountsUserGps extends ZKBaseEntity<String, ZKOfficialAc
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_third_party_auth_account_user_pk_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_third_party_auth_account_user_pk_id", isInsert = true, javaType = String.class)
 	String thirdPartyAuthAccountUserPkId;	
 	/**
 	 * 数据域平台标识；第三方数据绑定标识
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_data_space_platform", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_data_space_platform", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String dataSpacePlatform;	
 	/**
 	 * 数据域分组标识；第三方数据绑定标识
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_data_space_group", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_data_space_group", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String dataSpaceGroup;	
 	/**
 	 * 数据域拥有标识；第三方数据绑定标识
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_data_space_owner", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_data_space_owner", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String dataSpaceOwner;	
 	/**
 	 * 微信第三方平台 Appid
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_third_party_appid", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_wx_third_party_appid", isInsert = true, javaType = String.class)
 	String wxThirdPartyAppid;	
 	/**
 	 * 微信第三方平台，目标授权方账号
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_authorizer_appid", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_wx_authorizer_appid", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String wxAuthorizerAppid;	
 	/**
 	 * 用户的标识，对当前公众号唯一: openid
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_openid", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+	@ZKColumn(name = "c_wx_openid", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 	String wxOpenid;	
 	/**
 	 * 地理位置纬度: Latitude
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_latitude", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_wx_latitude", isInsert = true, javaType = String.class)
 	String wxLatitude;	
 	/**
 	 * 地理位置经度: Longitude
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_longitude", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_wx_longitude", isInsert = true, javaType = String.class)
 	String wxLongitude;	
 	/**
 	 * 地理位置精度: Precision
 	 */
 	@Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-	@ZKColumn(name = "c_wx_precision", isInsert = true, isUpdate = false, javaType = String.class, isQuery = false)
+	@ZKColumn(name = "c_wx_precision", isInsert = true, javaType = String.class)
 	String wxPrecision;	
 	/**
 	 * 上报时间: CreateTime
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Range(min = 0, max = 999999999, message = "{zk.core.data.validation.rang.int}")
-	@ZKColumn(name = "c_wx_create_time", isInsert = true, isUpdate = false, javaType = Long.class, isQuery = false)
+	@ZKColumn(name = "c_wx_create_time", isInsert = true, javaType = Long.class)
 	Long wxCreateTime;	
 	
     /**
@@ -118,7 +128,7 @@ public class ZKOfficialAccountsUserGps extends ZKBaseEntity<String, ZKOfficialAc
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_group_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_group_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     String groupCode;
 
     /**
@@ -126,7 +136,7 @@ public class ZKOfficialAccountsUserGps extends ZKBaseEntity<String, ZKOfficialAc
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_company_id", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_company_id", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String companyId;
 
     /**
@@ -134,7 +144,7 @@ public class ZKOfficialAccountsUserGps extends ZKBaseEntity<String, ZKOfficialAc
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_company_code", isInsert = true, isUpdate = false, javaType = String.class, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_company_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String companyCode;
 
 	public ZKOfficialAccountsUserGps() {

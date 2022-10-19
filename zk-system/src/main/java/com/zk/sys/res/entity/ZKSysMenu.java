@@ -22,23 +22,20 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.zk.db.annotation.ZKQuery;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.*;
+import com.zk.db.mybatis.commons.ZKDBQueryScript;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.zk.base.commons.ZKTreeSqlProvider;
+import com.zk.base.commons.ZKTreeSqlHelper;
 import com.zk.base.entity.ZKBaseTreeEntity;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.db.annotation.ZKColumn;
-import com.zk.db.annotation.ZKDBAnnotationProvider;
 import com.zk.db.annotation.ZKTable;
-import com.zk.db.commons.ZKDBQueryConditionWhere;
-import com.zk.db.commons.ZKDBQueryType;
-import com.zk.db.commons.ZKSqlConvert;
-import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKDBQueryConditionCol;
-import com.zk.db.mybatis.commons.ZKDBQueryConditionIfByClass;
 
 /** 
 * @ClassName: ZKSysMenu 
@@ -50,18 +47,24 @@ import com.zk.db.mybatis.commons.ZKDBQueryConditionIfByClass;
 //@JsonIgnoreProperties(value = { "handler" })
 public class ZKSysMenu extends ZKBaseTreeEntity<String, ZKSysMenu> {
 
-    static ZKTreeSqlProvider sqlProvider;
+    static ZKTreeSqlHelper sqlHelper;
 
+    @Transient
+    @XmlTransient
+    @JsonIgnore
     @Override
-    public ZKTreeSqlProvider getTreeSqlProvider() {
-        return ZKSysMenu.initSqlProvider();
+    public ZKTreeSqlHelper getTreeSqlHelper() {
+        return sqlHelper();
     }
 
-    public static ZKTreeSqlProvider initSqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKTreeSqlProvider(new ZKSqlConvertDelegating(), new ZKSysMenu());
+    @Transient
+    @XmlTransient
+    @JsonIgnore
+    public static ZKTreeSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKTreeSqlHelper(new ZKSqlConvertDelegating(), new ZKSysMenu());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     /**
@@ -77,14 +80,14 @@ public class ZKSysMenu extends ZKBaseTreeEntity<String, ZKSysMenu> {
         super(pkId);
     }
 
-    protected static ZKSqlConvert sqlConvert;
+//    protected static ZKSqlConvert sqlConvert;
 
     /**
      * 不能为空；菜单(路由)的名称, 国际化json对象；
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @NotEmpty(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_name", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE, isCaseSensitive = false, javaType = ZKJson.class)
+    @ZKColumn(name = "c_name", javaType = ZKJson.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE, isCaseSensitive = false))
     protected ZKJson name;
 
     /**
@@ -92,7 +95,7 @@ public class ZKSysMenu extends ZKBaseTreeEntity<String, ZKSysMenu> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 80, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_code", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_code", update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     protected String code;
 
     /* 前端路由相关的属性 */
@@ -102,7 +105,7 @@ public class ZKSysMenu extends ZKBaseTreeEntity<String, ZKSysMenu> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_nav_code", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.EQ)
+    @ZKColumn(name = "c_nav_code", update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     protected String navCode;
 
     /**
@@ -110,21 +113,21 @@ public class ZKSysMenu extends ZKBaseTreeEntity<String, ZKSysMenu> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_func_module_code", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_func_module_code", update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     protected String funcModuleCode;
 
     /**
      * 功能名称，也是功能组件对象名称；在同功能模块下要求唯一；将根据这名称查找到对应功能组件；注：为空时，不会生成面包屑！及路由
      */
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_func_name", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_func_name", update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     protected String funcName;
 
     /**
      * 访问路径；注意当路径为 ':param'，要排在同级路由的最后，否则后面的路由会匹配不到！
      */
     @Length(max = 32, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_path", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE)
+    @ZKColumn(name = "c_path", update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     protected String path;
 
     /**
@@ -132,7 +135,7 @@ public class ZKSysMenu extends ZKBaseTreeEntity<String, ZKSysMenu> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 9, message = "{zk.core.data.validation.rang.int}")
-    @ZKColumn(name = "c_is_index", isUpdate = true, isQuery = true, javaType = Integer.class)
+    @ZKColumn(name = "c_is_index", javaType = Integer.class, update = @ZKUpdate(true), query = @ZKQuery(true))
     protected Integer isIndex;
 
     /**
@@ -141,7 +144,7 @@ public class ZKSysMenu extends ZKBaseTreeEntity<String, ZKSysMenu> {
      *  2、当 isFrame 0-路由容器，此配置不起作用；值为 false；
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
-    @ZKColumn(name = "c_exact", isUpdate = true, isQuery = true, javaType = Boolean.class)
+    @ZKColumn(name = "c_exact", javaType = Boolean.class, update = @ZKUpdate(true), query = @ZKQuery(true))
     protected Boolean exact;
 
     /**
@@ -149,7 +152,7 @@ public class ZKSysMenu extends ZKBaseTreeEntity<String, ZKSysMenu> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 9, message = "{zk.core.data.validation.rang.int}")
-    @ZKColumn(name = "c_is_frame", isUpdate = true, isQuery = true, javaType = Integer.class)
+    @ZKColumn(name = "c_is_frame", javaType = Integer.class, update = @ZKUpdate(true), query = @ZKQuery(true))
     protected Integer isFrame;
 
     /**
@@ -157,14 +160,14 @@ public class ZKSysMenu extends ZKBaseTreeEntity<String, ZKSysMenu> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 9, message = "{zk.core.data.validation.rang.int}")
-    @ZKColumn(name = "c_is_show", isUpdate = true, isQuery = true, javaType = Integer.class)
+    @ZKColumn(name = "c_is_show", javaType = Integer.class, update = @ZKUpdate(true), query = @ZKQuery(true))
     protected Integer isShow;
 
     /**
      * 菜单图标,【生成菜单属性，不影响路由生成】；
      */
     @Length(max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_icon", isUpdate = true)
+    @ZKColumn(name = "c_icon", update = @ZKUpdate(true))
     protected String icon;
 
     /**
@@ -172,14 +175,14 @@ public class ZKSysMenu extends ZKBaseTreeEntity<String, ZKSysMenu> {
      */
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Range(min = 0, max = 999999999, message = "{zk.core.data.validation.rang.int}")
-    @ZKColumn(name = "c_sort", isUpdate = true, javaType = Integer.class)
+    @ZKColumn(name = "c_sort", javaType = Integer.class, update = @ZKUpdate(true))
     protected Integer sort;
 
     /**
      * 权限标识，与后对对应控制代码一至；多个权限标识时用英文 ";" 号分隔；
      */
     @Length(max = 256, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_permission", isUpdate = true, isQuery = true, queryType = ZKDBQueryType.LIKE, javaType = String.class)
+    @ZKColumn(name = "c_permission", javaType = String.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     protected String permission;
     
     /*** 过渡和查询参数 ****/
@@ -187,7 +190,7 @@ public class ZKSysMenu extends ZKBaseTreeEntity<String, ZKSysMenu> {
 //     * code 模糊查询
 //     */
 //    @Transient
-//    @ZKColumn(name = "c_nav_code", isResult = false, isInsert = false, isUpdate = false, isQuery = true, queryType = ZKDBQueryType.LIKE)
+//    @ZKColumn(name = "c_nav_code", isResult = false, isInsert = false, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
 //    protected String searchNavCode;
 
     /**
@@ -446,12 +449,14 @@ public class ZKSysMenu extends ZKBaseTreeEntity<String, ZKSysMenu> {
     @Transient
     @JsonIgnore
     @XmlTransient
-    public ZKDBQueryConditionWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBAnnotationProvider annotationProvider) {
-        ZKDBQueryConditionWhere where = super.getZKDbWhere(sqlConvert, annotationProvider);
-        ZKDBQueryConditionWhere sWhere = ZKDBQueryConditionWhere.asOr("(", ")",
-                ZKDBQueryConditionCol.as(ZKDBQueryType.LIKE, "c_name", "searchValue", String.class, null, false),
-                ZKDBQueryConditionCol.as(ZKDBQueryType.LIKE, "c_code", "searchValue", String.class, null, false));
-        where.put(ZKDBQueryConditionIfByClass.as(sWhere, "searchValue", String.class, false));
+    public ZKDBQueryWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
+        ZKDBQueryWhere where = sqlConvert.resolveQueryCondition(mapInfo);
+        // 制作一个根据名称和代码同时查询的 查询条件，用过度 java 属性 searchValue 为传参数值
+		ZKDBQueryWhere sWhere = ZKDBQueryWhere.asOr("(", ")",
+				ZKDBQueryCol.as(ZKDBOptComparison.LIKE, "c_name", "searchValue", String.class, null, false),
+				ZKDBQueryCol.as(ZKDBOptComparison.LIKE, "c_code", "searchValue", String.class, null, false));
+
+		where.put(ZKDBQueryScript.asIf(sWhere, 0, "searchValue", String.class));
         return where;
     }
 

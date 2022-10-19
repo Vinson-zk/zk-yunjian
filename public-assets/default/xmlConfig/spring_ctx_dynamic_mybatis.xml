@@ -30,8 +30,11 @@
 	-->
     <!-- begin spring 事务管理配置 -->
 	
-	<!-- begin mybatis 配置  -->
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<!-- begin mybatis 配置
+	org.mybatis.spring.SqlSessionFactoryBean
+	com.zk.db.mybatis.spring.ZKDBSqlSessionFactoryBean
+	-->
+    <bean id="sqlSessionFactory" class="com.zk.db.mybatis.spring.ZKDBSqlSessionFactoryBean">
         <property name="dataSource" ref="zkDynamicDataSource"/>
         <property name="typeAliasesPackage" value="com.**.entity"></property>
         <property name="typeAliasesSuperType" value="com.zk.base.entity.ZKBaseEntity"></property>

@@ -84,7 +84,7 @@ public class ZKWXThirdPartyService {
 
         if (thirdParty == null) {
             log.error("[>_<:20211104-1758-001] 第三方平台账号未录入系统，无法获取 ComponentAccessToken");
-            throw new ZKCodeException("zk.wechat.010006", "第三方平台账号未录入系统，无法获取 ComponentAccessToken");
+            throw ZKCodeException.as("zk.wechat.010006", "第三方平台账号未录入系统，无法获取 ComponentAccessToken");
         }
 
         /** 1、从缓存中取 第三方平台 componentAccessToken 并判断是否存在或过期 */
@@ -106,7 +106,7 @@ public class ZKWXThirdPartyService {
         String componentVerifyTicket = thirdParty.getWxTicket();
         if (ZKStringUtils.isEmpty(componentVerifyTicket)) {
             log.error("[>_<:20211104-1758-002] 第三方平台账号令牌不存在，无法获取 ComponentAccessToken");
-            throw new ZKCodeException("zk.wechat.010007", "第三方平台账号令牌不存在，无法获取 ComponentAccessToken");
+            throw ZKCodeException.as("zk.wechat.010007", "第三方平台账号令牌不存在，无法获取 ComponentAccessToken");
         }
 
         /** 3、取 token 并保存 */
@@ -117,7 +117,7 @@ public class ZKWXThirdPartyService {
         }
         if (componentAccessToken == null) {
             log.error("[>_<:20220520-0059-001] 取第三方平台 AccessToken 失败");
-            throw new ZKCodeException("zk.wechat.010016", "取第三方平台 AccessToken 失败");
+            throw ZKCodeException.as("zk.wechat.010016", "取第三方平台 AccessToken 失败");
         }
         else {
             // 保存 第三方平台 componentAccessToken 到缓存
@@ -147,7 +147,7 @@ public class ZKWXThirdPartyService {
             log.error(
                     "[>_<:20211108-1848-001] 目标授权方未向第三方平台授权，无法获取 AuthAccountAccessToken; thirdPartyAppid：{}，accountAppid：{}",
                     thirdPartyAppid, accountAppid);
-            throw new ZKCodeException("zk.wechat.010011", "目标授权方未向第三方平台授权，无法获取 AuthAccountAccessToken");
+            throw ZKCodeException.as("zk.wechat.010011", "目标授权方未向第三方平台授权，无法获取 AuthAccountAccessToken");
         }
 
         // 测试时，不从缓存 取 token 从微信平台取 token
@@ -174,7 +174,7 @@ public class ZKWXThirdPartyService {
             log.error(
                     "[>_<:20211108-1848-002] 目标授权方刷新 AuthorizerRefreshToken 不存在，无法获取 AuthAccountAccessToken; thirdPartyAppid：{}，accountAppid：{}",
                     thirdPartyAppid, accountAppid);
-            throw new ZKCodeException("zk.wechat.010012", "目标授权方刷新 AuthorizerRefreshToken 不存在");
+            throw ZKCodeException.as("zk.wechat.010012", "目标授权方刷新 AuthorizerRefreshToken 不存在");
         }
 
         /** 3、刷新 AuthorizerRefreshToken 并保存 */
@@ -186,7 +186,7 @@ public class ZKWXThirdPartyService {
         if (wxAccountAuthAccessToken == null) {
             log.error("[>_<:20220520-0046-001] 目标授权方刷新 AuthorizerRefreshToken 失败; thirdPartyAppid：{}，accountAppid：{}",
                     thirdPartyAppid, accountAppid);
-            throw new ZKCodeException("zk.wechat.010017", "取授权方 AccessToken 失败");
+            throw ZKCodeException.as("zk.wechat.010017", "取授权方 AccessToken 失败");
         }
         else {
             // 保存目标授权账号 accessToken 到 缓存
@@ -231,14 +231,14 @@ public class ZKWXThirdPartyService {
             log.error(
                     "[>_<:20220520-0031-001] 用户不存在，无法获取 userAuthAccessToken; thirdPartyAppid：{}，accountAppid：{}，openid：{}",
                     thirdPartyAppid, accountAppid, openid);
-            throw new ZKCodeException("zk.wechat.010015", "用户不存在或未授权");
+            throw ZKCodeException.as("zk.wechat.010015", "用户不存在或未授权");
         }
         userAuthAccessToken = officialAccountsUser.getAccessToken();
         if (userAuthAccessToken == null || ZKStringUtils.isEmpty(userAuthAccessToken.getRefreshToken())) {
             log.error(
                     "[>_<:20220520-0031-002] 用户刷新 Token 不存在，需要重新授权; thirdPartyAppid：{}，accountAppid：{}，openid：{}",
                     thirdPartyAppid, accountAppid, openid);
-            throw new ZKCodeException("zk.wechat.010018", "取用户 AccessToken 失败");
+            throw ZKCodeException.as("zk.wechat.010018", "取用户 AccessToken 失败");
         }
         /** 3、使用用户 刷新 Token 刷新用户 userAuthAccessToken */
         userAuthAccessToken = this.wxApiThirdPartyService.api_official_accounts_user_auth_refresh_token(thirdPartyAppid,
@@ -248,7 +248,7 @@ public class ZKWXThirdPartyService {
             log.error(
                     "[>_<:20220520-0031-003] 刷新 用户 Token 失败; thirdPartyAppid：{}，accountAppid：{}，openid：{}",
                     thirdPartyAppid, accountAppid, openid);
-            throw new ZKCodeException("zk.wechat.010018", "取用户 AccessToken 失败");
+            throw ZKCodeException.as("zk.wechat.010018", "取用户 AccessToken 失败");
         }
         else {
             // 保存用户 accessToken 到 缓存
@@ -281,7 +281,7 @@ public class ZKWXThirdPartyService {
         if (userAuthAccessToken == null) {
             log.error("[>_<:20220520-1104-003] 刷新 用户 Token 失败; thirdPartyAppid：{}，authAppId：{}，code：{}",
                     thirdPartyAppId, authAppId, code);
-            throw new ZKCodeException("zk.wechat.010018", "取用户 AccessToken 失败");
+            throw ZKCodeException.as("zk.wechat.010018", "取用户 AccessToken 失败");
         }
         else {
             // 保存用户 accessToken 到 缓存
@@ -341,7 +341,7 @@ public class ZKWXThirdPartyService {
         if (jscode2session == null) {
             log.error("[>_<:20220523-1013-001] 小程序取用户，取 openid 失败; thirdPartyAppid：{}，authAppId：{}，jsCode：{}",
                     thirdPartyAppId, authAppId, jsCode);
-            throw new ZKCodeException("zk.wechat.010019", "小程序取用户，取 openid 失败");
+            throw ZKCodeException.as("zk.wechat.010019", "小程序取用户，取 openid 失败");
         }
         //
 

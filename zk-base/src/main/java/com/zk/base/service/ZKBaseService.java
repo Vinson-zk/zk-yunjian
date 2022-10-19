@@ -79,8 +79,9 @@ public class ZKBaseService<ID extends Serializable, E extends ZKBaseEntity<ID, E
         }
         catch(ZKValidatorException ex) {
             List<String> list = ex.getMessagePropertyAndMessageAsList();
-            if (returnMsgList != null)
+            if (returnMsgList != null) {
                 returnMsgList.addAll(list);
+            }
             return false;
         }
         return true;
@@ -124,63 +125,6 @@ public class ZKBaseService<ID extends Serializable, E extends ZKBaseEntity<ID, E
             throw e;
         }
     }
-
-//    /**
-//     * 获取单条数据
-//     * 
-//     * @param id
-//     * @return
-//     */
-//    public T get(ID pkId) {
-//        return dao.get(pkId);
-//    }
-//
-//    /**
-//     * 查询列表数据
-//     * 
-//     * @param entity
-//     * @return
-//     */
-//    public List<T> findList(T entity) {
-//        return dao.findList(entity);
-//    }
-//
-//    /**
-//     * 查询分页数据
-//     * 
-//     * @param page
-//     *            分页对象
-//     * @param entity
-//     * @return
-//     */
-//    public ZKPage<T> findPage(ZKPage<T> page, T entity) {
-//        entity.setPage(page);
-//        page.setResult(dao.findList(entity));
-//        return page;
-//    }
-//
-//    /**
-//     * 删除数据
-//     * 
-//     * @param entity
-//     */
-//    @Transactional(readOnly = false)
-//    public int delete(T entity) {
-//        entity.setDelFlag(ZKBaseEntity.DEL_FLAG.delete);
-//        entity.preUpdate();
-//        return dao.delete(entity);
-//    }
-//
-//    /**
-//     * 物理删除数据
-//     * 
-//     * @param entity
-//     * @return
-//     */
-//    @Transactional(readOnly = false)
-//    public int diskDelete(ID pkId) {
-//        return dao.diskDelete(pkId);
-//    }
     
     private E getEntity(ID pkId) {
         Class<E> classz = ZKClassUtils.getSuperclassByName(ZKBaseService.class, this.getClass(), "E");
@@ -200,8 +144,7 @@ public class ZKBaseService<ID extends Serializable, E extends ZKBaseEntity<ID, E
 
     /**
      * 获取单条数据
-     * 
-     * @param id
+     * @param entity
      * @return
      */
     public E get(E entity) {
@@ -210,11 +153,11 @@ public class ZKBaseService<ID extends Serializable, E extends ZKBaseEntity<ID, E
 
     /**
      * 查询列表数据
-     * 
      * @param entity
      * @return
      */
     public List<E> findList(E entity) {
+//        entity.setPage(null);
         return dao.findList(entity);
     }
 

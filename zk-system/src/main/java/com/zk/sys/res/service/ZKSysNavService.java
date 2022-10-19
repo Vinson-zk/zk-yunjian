@@ -55,7 +55,7 @@ public class ZKSysNavService extends ZKBaseService<String, ZKSysNav, ZKSysNavDao
                 if (oldSysNav.getDelFlag().intValue() == ZKBaseEntity.DEL_FLAG.normal) {
                     // navCode 已存在；抛出异常；
                     log.error("[>_<:20200820-1400-001] 导航栏目代码: {} 已存在!", zkSysNav.getCode());
-                    throw new ZKCodeException("zk.sys.000002", "导航栏目代码已存在", null, zkSysNav.getCode());
+                    throw ZKCodeException.as("zk.sys.000002", "导航栏目代码已存在", null, zkSysNav.getCode());
                 }
                 else {
                     // navCode 已存在，只是已逻辑删除；先物理删除已存在的；
@@ -92,8 +92,8 @@ public class ZKSysNavService extends ZKBaseService<String, ZKSysNav, ZKSysNavDao
         if (ZKStringUtils.isEmpty(navCode)) {
             return null;
         }
-        return this.dao.getByNavCode(ZKSysNav.sqlProvider().getTableName(),
-                ZKSysNav.sqlProvider().getSqlBlockSelColsNoAlias(), navCode);
+        return this.dao.getByNavCode(ZKSysNav.sqlHelper().getTableName(),
+                ZKSysNav.sqlHelper().getBlockSqlCols(""), navCode);
     }
 
     @Override

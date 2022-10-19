@@ -33,18 +33,11 @@ import com.zk.base.myBaits.provider.ZKMyBatisTreeSqlProvider;
 * @version 1.0 
 */
 public interface ZKBaseTreeDao<ID extends Serializable, E extends ZKBaseTreeEntity<ID, E>> extends ZKBaseDao<ID, E> {
+
     /**
-     * 不分层级查询; 此方法还未达到预期效果
-     *
-     * @Title: findTreeNoLevel
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Jan 6, 2021 10:08:27 PM
-     * @param entity
-     * @return List<T>
+     * 树形所有节点，统一过滤，过滤结果中不是根结点时，如果父节点不在过滤结果中，升级为结果中的根节点；如果父节点在过滤结果中，则不做为返回结果; 且不递归查询子节点；
      */
-//    @Select({"SELECT ${blockSqlSelColumns} FROM ${blockSqlTableName} ${blockSqlTableAlias} ${blockSqlWhereTreeNoLevel}" })
-    @SelectProvider(type = ZKMyBatisTreeSqlProvider.class, method = "selectTreeNoLevel")
-    List<E> findTreeNoLevel(E entity);
+    @SelectProvider(type = ZKMyBatisTreeSqlProvider.class, method = "selectTreeFilter")
+    List<E> findTreeFilter(E entity);
 
 }

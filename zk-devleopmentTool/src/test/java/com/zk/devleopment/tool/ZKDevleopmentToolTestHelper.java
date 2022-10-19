@@ -38,6 +38,11 @@ import com.zk.devleopment.tool.gen.entity.ZKTableInfo;
 */
 public class ZKDevleopmentToolTestHelper {
 
+    /**
+     * 配置文件路径
+     */
+    public static String config = "test_mybatis_config.xml";
+
     protected static Logger log = LoggerFactory.getLogger(ZKDevleopmentToolTestHelper.class);
 
     public static String testRootPath = "codeGenFile/";
@@ -61,7 +66,8 @@ public class ZKDevleopmentToolTestHelper {
         ///////////////////////
         zkModule = new ZKModule();
         zkModule.setUrl(
-                "jdbc:mysql://10.211.55.10:3306/sys?useUnicode=true&characterEncoding=utf8&useTimezone=true&serverTimezone=GMT%2B8");
+                "jdbc:mysql://10.211.55.11:3306/sys?useUnicode=true&characterEncoding=utf8&useTimezone=true" +
+                        "&serverTimezone=GMT%2B8");
         zkModule.setUsername("root");
         zkModule.setPassword("root");
 

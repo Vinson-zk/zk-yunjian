@@ -65,14 +65,14 @@ public class ZKSecAnnotationAuthorizationMethodInterceptor implements MethodInte
         try {
             for (ZKSecAuthorizingAnnotationHandler secAuthcMethodInterceptor : getSecAuthorizationSet()) {
                 // 通异常，终止功能继续执行 // sec.000014=没有访问权限 throw new
-                // MsgException("sec.000014", ue, null, ue.getMessage());
+                // MsgException("zk.sec.000014", ue, null, ue.getMessage());
                 secAuthcMethodInterceptor.assertAuthorized(invocation);
             }
         }
         catch(ZKSecAuthorizationException authE) {
             authE.printStackTrace();
             log.error("[>_<:20220511-1923-001] [zk.sec.000003] 您没有操作权限:[{}]", authE.getAuthCode());
-            throw new ZKCodeException("zk.sec.000003", "您没有操作权限", null, authE.getAuthCode(), authE);
+            throw ZKCodeException.as("zk.sec.000003", "您没有操作权限", null, authE.getAuthCode(), authE);
         }
 
         return invocation.proceed();

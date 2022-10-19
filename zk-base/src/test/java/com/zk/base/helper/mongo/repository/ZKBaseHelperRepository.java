@@ -1,41 +1,44 @@
-/**   
+/**
  * Copyright (c) 2004-2014 Vinson Technologies, Inc.
- * address: 
- * All rights reserved. 
- * 
- * This software is the confidential and proprietary information of 
- * Vinson Technologies, Inc. ("Confidential Information").  You shall not 
- * disclose such Confidential Information and shall use it only in 
- * accordance with the terms of the license agreement you entered into 
- * with Vinson. 
+ * address:
+ * All rights reserved.
  *
- * @Title: ZKBaseHelperRepository.java 
- * @author Vinson 
- * @Package com.zk.base.helper.mongo.repository 
- * @Description: TODO(simple description this file what to do.) 
- * @date Dec 19, 2019 3:34:42 PM 
- * @version V1.0   
+ * This software is the confidential and proprietary information of
+ * Vinson Technologies, Inc. ("Confidential Information").  You shall not
+ * disclose such Confidential Information and shall use it only in
+ * accordance with the terms of the license agreement you entered into
+ * with Vinson.
+ *
+ * @Title: ZKBaseHelperRepository.java
+ * @author Vinson
+ * @Package com.zk.base.helper.mongo.repository
+ * @Description: TODO(simple description this file what to do.)
+ * @date Dec 19, 2019 3:34:42 PM
+ * @version V1.0
 */
 package com.zk.base.helper.mongo.repository;
 
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.Query;
 
 import com.zk.base.helper.mongo.doc.ZKBaseHelperDoc;
 import com.zk.base.mongo.repository.ZKBaseMongoRepository;
 
-/** 
-* @ClassName: ZKBaseHelperRepository 
-* @Description: TODO(simple description this class what to do.) 
-* @author Vinson 
-* @version 1.0 
+/**
+* @ClassName: ZKBaseHelperRepository
+* @Description: TODO(simple description this class what to do.)
+* @author Vinson
+* @version 1.0
 */
+@ConditionalOnBean(value = {MongoTemplate.class})
 public interface ZKBaseHelperRepository extends ZKBaseMongoRepository<ZKBaseHelperDoc, String> {
 
     /**
-     * 
+     *
      *
      * @Title: findFieldsInclude
      * @Description: 按条件查询，并指定返回包含的字段
@@ -49,7 +52,7 @@ public interface ZKBaseHelperRepository extends ZKBaseMongoRepository<ZKBaseHelp
     ZKBaseHelperDoc findFieldsInclude(String pkId);
 
     /**
-     * 
+     *
      *
      * @Title: findFieldsExclude
      * @Description: 按条件查询，并指定返回排除的字段

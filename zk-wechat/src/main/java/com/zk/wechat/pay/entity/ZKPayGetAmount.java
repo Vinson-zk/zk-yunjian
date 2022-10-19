@@ -30,7 +30,7 @@ import com.zk.base.entity.ZKBaseEntity;
 import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKTable;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import com.zk.wechat.pay.enumType.ZKPayCurrency;
 
 /**
@@ -44,19 +44,21 @@ import com.zk.wechat.pay.enumType.ZKPayCurrency;
 @ZKTable(name = "t_wx_pay_get_amount", alias = "wxPayGetAmount")
 public class ZKPayGetAmount extends ZKBaseEntity<String, ZKPayGetAmount> {
 
-    static ZKSqlProvider sqlProvider;
+    static ZKDBSqlHelper sqlHelper;
+
     @Transient
     @XmlTransient
     @JsonIgnore
     @Override
-    public ZKSqlProvider getSqlProvider() {
-        return sqlProvider();
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
     }
-    public static ZKSqlProvider sqlProvider() {
-        if (sqlProvider == null) {
-            sqlProvider = new ZKSqlProvider(new ZKSqlConvertDelegating(), new ZKPayGetAmount());
+
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKPayGetAmount());
         }
-        return sqlProvider;
+        return sqlHelper;
     }
 
     /**

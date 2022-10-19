@@ -54,8 +54,8 @@ public class ZKPayGroupService extends ZKBaseService<String, ZKPayGroup, ZKPayGr
         if (ZKStringUtils.isEmpty(code)) {
             return null;
         }
-        return this.dao.getByCode(ZKPayGroup.sqlProvider().getTableName(),
-                ZKPayGroup.sqlProvider().getSqlBlockSelCols(""),
+        return this.dao.getByCode(ZKPayGroup.sqlHelper().getTableName(),
+                ZKPayGroup.sqlHelper().getBlockSqlCols(""),
                 code);
     }
 
@@ -69,7 +69,7 @@ public class ZKPayGroupService extends ZKBaseService<String, ZKPayGroup, ZKPayGr
                 if (oldPayGroup.getDelFlag().intValue() == ZKBaseEntity.DEL_FLAG.normal) {
                     // code 已存在；抛出异常；
                     log.error("[>_<:20210221-1015-001] 后台系统的支付关联组: {} 已存在!", oldPayGroup.getCode());
-                    throw new ZKCodeException("zk.wechat.000011", "后台系统的支付关联组已存在", null, oldPayGroup.getCode());
+                    throw ZKCodeException.as("zk.wechat.000011", "后台系统的支付关联组已存在", null, oldPayGroup.getCode());
                 }
                 else {
                     // code 已存在，只是已逻辑删除；先物理删除已存在的；

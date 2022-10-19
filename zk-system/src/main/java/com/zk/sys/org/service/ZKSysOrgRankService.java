@@ -2,7 +2,7 @@
  * 
  */
 package com.zk.sys.org.service;
- 
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,9 @@ import com.zk.sys.org.entity.ZKSysOrgRank;
 
 /**
  * ZKSysOrgRankService
- * @author 
- * @version 
+ * 
+ * @author
+ * @version
  */
 @Service
 @Transactional(readOnly = true)
@@ -50,9 +51,8 @@ public class ZKSysOrgRankService extends ZKBaseService<String, ZKSysOrgRank, ZKS
         if (ZKStringUtils.isEmpty(code) || ZKStringUtils.isEmpty(companyId)) {
             return null;
         }
-        return this.dao.getByCode(ZKSysOrgRank.initSqlProvider().getTableName(),
-                ZKSysOrgRank.initSqlProvider().getTableAlias(), ZKSysOrgRank.initSqlProvider().getSqlBlockSelCols(),
-                companyId, code);
+        return this.dao.getByCode(ZKSysOrgRank.sqlHelper().getTableName(), ZKSysOrgRank.sqlHelper().getTableAlias(),
+            ZKSysOrgRank.sqlHelper().getBlockSqlCols(), companyId, code);
     }
 
     @Override
@@ -62,14 +62,12 @@ public class ZKSysOrgRankService extends ZKBaseService<String, ZKSysOrgRank, ZKS
         ZKSysOrgCompany company = this.sysOrgCompanyService.get(new ZKSysOrgCompany(rank.getCompanyId()));
         if (company == null) {
             log.error("[^_^:20220425-0918-001] 公司[{}-{}]不存在;", rank.getCompanyId(), rank.getCompanyCode());
-            throw new ZKCodeException("zk.sys.010003", "公司不存在");
-        }
-        else {
+            throw ZKCodeException.as("zk.sys.010003", "公司不存在");
+        } else {
             if (company.getStatus() == null || company.getStatus().intValue() != ZKSysOrgCompany.KeyStatus.normal) {
                 log.error("[^_^:20220425-0918-002] 公司[{}-{}]状态异常，请联系管理员;", company.getPkId(), company.getCode());
-                throw new ZKCodeException("zk.sys.010004", "公司状态异常，请联系管理员");
-            }
-            else {
+                throw ZKCodeException.as("zk.sys.010004", "公司状态异常，请联系管理员");
+            } else {
                 // 初始化公司值
                 rank.setGroupCode(company.getGroupCode());
                 rank.setCompanyCode(company.getCode());
@@ -106,5 +104,5 @@ public class ZKSysOrgRankService extends ZKBaseService<String, ZKSysOrgRank, ZKS
         ZKUserCacheUtils.cleanAllAuth();
         return super.diskDel(rank);
     }
-	
+
 }

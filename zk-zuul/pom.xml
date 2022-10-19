@@ -5,10 +5,11 @@
 	<parent>
 		<groupId>com.zk</groupId>
 		<artifactId>zk-parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>2.0.0</version>
 		<relativePath>../zk-parent</relativePath>
 	</parent>
 	<artifactId>zk-zuul</artifactId>
+	<version>${version.zk.zuul}</version>
 	<name>zk-zuul</name>
 	<description>Vinson zuul project</description>
 	<properties>

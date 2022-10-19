@@ -137,7 +137,7 @@ public class ZKWXPayJsApiService {
             else {
                 // 支付订单已存在，不能重复支付
                 log.error("[>_<:20210221-1049-001] 支付订单[{}-{}]已存在，请务重复支付", businessCode, businessNo);
-                throw new ZKCodeException("zk.wechat.000016", "支付订单已存在，请务重复支付", businessNo);
+                throw ZKCodeException.as("zk.wechat.000016", "支付订单已存在，请务重复支付", businessNo);
             }
         }
 
@@ -165,22 +165,22 @@ public class ZKWXPayJsApiService {
         ZKPayGetOrder payGetOrder = this.payGetOrderService.getDetail(payGetOrderId);
         if(payGetOrder == null) {
             log.error("[>_<:20210222-1326-001] 支付订单[{}]不存在", payGetOrderId);
-            throw new ZKCodeException("zk.wechat.000017", "支付订单不存在", payGetOrderId);
+            throw ZKCodeException.as("zk.wechat.000017", "支付订单不存在", payGetOrderId);
         }
         // 如果支付成功，返回支付成功
         if (ZKPayStatus.SUCCESS == payGetOrder.getPayStatus()) {
             log.error("[>_<:20210222-1326-002] 订单[{0}]支付成功", payGetOrderId);
-            throw new ZKCodeException("zk.wechat.000018", "订单支付成功", (Object[]) null, payGetOrder);
+            throw ZKCodeException.as("zk.wechat.000018", "订单支付成功", (Object[]) null, payGetOrder);
         }
         // 如果支付成功，返回支付失败
         if (ZKPayStatus.PAYERROR == payGetOrder.getPayStatus()) {
             log.error("[>_<:20210222-1326-003] 订单[{0}]支付失败", payGetOrderId);
-            throw new ZKCodeException("zk.wechat.000019", "订单支付失败", (Object[]) null, payGetOrder);
+            throw ZKCodeException.as("zk.wechat.000019", "订单支付失败", (Object[]) null, payGetOrder);
         }
         // 如果订单关闭，返回支付关闭
         if (ZKPayStatus.CLOSED == payGetOrder.getPayStatus()) {
             log.error("[>_<:20210222-1326-004] 订单[{0}]已关闭支付", payGetOrderId);
-            throw new ZKCodeException("zk.wechat.000020", "订单已关闭支付", (Object[]) null, payGetOrder);
+            throw ZKCodeException.as("zk.wechat.000020", "订单已关闭支付", (Object[]) null, payGetOrder);
         }
         // 支付中，如果支付标识已过期，重新下单
         if (this.checkPayValidTime(payGetOrder) < 1) {
@@ -188,7 +188,7 @@ public class ZKWXPayJsApiService {
             log.info("[^_^:20210331-1438-001] 订单[{}]已过期，请重新支付。[{}]；}", payGetOrder.getPkId(),
                     ZKDateUtils.formatDate(payGetOrder.getTimeExpire(), ZKDateUtils.DF_yyyy_MM_ddTHH_mm_ssZZ));
             this.payGetOrderService.updatePayStatus(payGetOrder.getPkId(), ZKPayStatus.CLOSED);
-            throw new ZKCodeException("zk.wechat.000023", "订单已过期，请重新支付", null, payGetOrder);
+            throw ZKCodeException.as("zk.wechat.000023", "订单已过期，请重新支付", null, payGetOrder);
         }
 
         // 支付中，如果支付标识已过期，重新下单
@@ -222,7 +222,7 @@ public class ZKWXPayJsApiService {
                 log.info("[^_^:20210331-1438-001] 订单[{}]已过期，请重新下单。[{}]；}", payGetOrder.getPkId(),
                         ZKDateUtils.formatDate(payGetOrder.getTimeExpire(), ZKDateUtils.DF_yyyy_MM_ddTHH_mm_ssZZ));
                 this.payGetOrderService.updatePayStatus(payGetOrder.getPkId(), ZKPayStatus.CLOSED);
-                throw new ZKCodeException("zk.wechat.000023", "订单已过期，请重新下单", null, payGetOrder);
+                throw ZKCodeException.as("zk.wechat.000023", "订单已过期，请重新下单", null, payGetOrder);
             }
             // 取商户 api 证书
             ZKWXApiCert apiCert = wxPayService.getApiCertKey(payGetOrder.getMchid());
@@ -268,7 +268,7 @@ public class ZKWXPayJsApiService {
         ZKPayGetOrder payGetOrder = this.payGetOrderService.get(new ZKPayGetOrder(payGetOrderPkId));
         if (payGetOrder == null) {
             log.error("[>_<:20210223-2048-001] 支付订单[{}]不存在", payGetOrderPkId);
-            throw new ZKCodeException("zk.wechat.000017", "支付订单不存在", payGetOrderPkId);
+            throw ZKCodeException.as("zk.wechat.000017", "支付订单不存在", payGetOrderPkId);
         }
         return this.close(payGetOrder);
     }

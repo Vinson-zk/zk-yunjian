@@ -42,8 +42,8 @@ public class ZKMailTypeService extends ZKBaseService<String, ZKMailType, ZKMailT
         if (ZKStringUtils.isEmpty(typeCode)) {
             return null;
         }
-        return this.dao.getByCode(ZKMailType.initSqlProvider().getTableName(),
-                ZKMailType.initSqlProvider().getTableAlias(), ZKMailType.initSqlProvider().getSqlBlockSelCols(),
+        return this.dao.getByCode(ZKMailType.sqlHelper().getTableName(),
+                ZKMailType.sqlHelper().getTableAlias(), ZKMailType.sqlHelper().getBlockSqlCols(),
                 typeCode, delFlag);
     }
 

@@ -1,21 +1,17 @@
-/** 
-* Copyright (c) 2004-2020 ZK-Vinson Technologies, Inc.
-* address: 
-* All rights reserved. 
-* 
-* This software is the confidential and proprietary information of 
-* ZK-Vinson Technologies, Inc. ("Confidential Information"). You shall not 
-* disclose such Confidential Information and shall use it only in 
-* accordance with the terms of the license agreement you entered into 
-* with ZK-Vinson. 
-*
-* @Title: ZKSysResFuncApiReqChannelService.java 
-* @author Vinson 
-* @Package com.zk.sys.res.service 
-* @Description: TODO(simple description this file what to do. ) 
-* @date Nov 30, 2021 10:54:28 AM 
-* @version V1.0 
-*/
+/**
+ * Copyright (c) 2004-2020 ZK-Vinson Technologies, Inc. address: All rights reserved.
+ *
+ * This software is the confidential and proprietary information of ZK-Vinson Technologies, Inc. ("Confidential
+ * Information"). You shall not disclose such Confidential Information and shall use it only in accordance with the
+ * terms of the license agreement you entered into with ZK-Vinson.
+ *
+ * @Title: ZKSysResFuncApiReqChannelService.java
+ * @author Vinson
+ * @Package com.zk.sys.res.service
+ * @Description: TODO(simple description this file what to do. )
+ * @date Nov 30, 2021 10:54:28 AM
+ * @version V1.0
+ */
 package com.zk.sys.res.service;
 
 import java.util.ArrayList;
@@ -41,7 +37,7 @@ import com.zk.sys.res.entity.ZKSysResRequestChannel;
 @Service
 @Transactional(readOnly = true)
 public class ZKSysResFuncApiReqChannelService
-        extends ZKBaseService<String, ZKSysResFuncApiReqChannel, ZKSysResFuncApiReqChannelDao> {
+    extends ZKBaseService<String, ZKSysResFuncApiReqChannel, ZKSysResFuncApiReqChannelDao> {
 
     // public ZKPage<ZKSysResFuncApiReqChannel> findByChannelCode(ZKPage<ZKSysResFuncApiReqChannel> page,
     // String channelCode, String systemCode) {
@@ -50,7 +46,7 @@ public class ZKSysResFuncApiReqChannelService
     // e.setSystemCode(systemCode);
     // return super.findPage(page, e);
     // }
-    
+
     // public ZKPage<ZKSysResFuncApiReqChannel> findByApiCode(ZKPage<ZKSysResFuncApiReqChannel> page, String apiCode) {
     // ZKSysResFuncApiReqChannel e = new ZKSysResFuncApiReqChannel();
     // e.setFuncApiCode(apiCode);
@@ -76,9 +72,9 @@ public class ZKSysResFuncApiReqChannelService
      * @return ZKSysResFuncApiReqChannel
      */
     public ZKSysResFuncApiReqChannel getByRelationId(String channelId, String funcApiId) {
-        return this.dao.getByRelationId(ZKSysResFuncApiReqChannel.initSqlProvider().getTableName(),
-                ZKSysResFuncApiReqChannel.initSqlProvider().getTableAlias(),
-                ZKSysResFuncApiReqChannel.initSqlProvider().getSqlBlockSelCols(), channelId, funcApiId);
+        return this.dao.getByRelationId(ZKSysResFuncApiReqChannel.sqlHelper().getTableName(),
+            ZKSysResFuncApiReqChannel.sqlHelper().getTableAlias(),
+            ZKSysResFuncApiReqChannel.sqlHelper().getBlockSqlCols(), channelId, funcApiId);
     }
 
     /**
@@ -98,9 +94,9 @@ public class ZKSysResFuncApiReqChannelService
      * @return ZKSysResFuncApiReqChannel
      */
     ZKSysResFuncApiReqChannel getByCode(String channelCode, String systemCode, String funcApiCode) {
-        return this.dao.getByCode(ZKSysResFuncApiReqChannel.initSqlProvider().getTableName(),
-                ZKSysResFuncApiReqChannel.initSqlProvider().getTableAlias(),
-                ZKSysResFuncApiReqChannel.initSqlProvider().getSqlBlockSelCols(), channelCode, systemCode, funcApiCode);
+        return this.dao.getByCode(ZKSysResFuncApiReqChannel.sqlHelper().getTableName(),
+            ZKSysResFuncApiReqChannel.sqlHelper().getTableAlias(),
+            ZKSysResFuncApiReqChannel.sqlHelper().getBlockSqlCols(), channelCode, systemCode, funcApiCode);
     }
 
     /********************************************************************************************/
@@ -122,16 +118,15 @@ public class ZKSysResFuncApiReqChannelService
      */
     @Transactional(readOnly = false)
     public ZKSysResFuncApiReqChannel save(ZKSysResRequestChannel channel, ZKSysResFuncApi funcApi) {
-        ZKSysResFuncApiReqChannel funcApiReqChannel = new ZKSysResFuncApiReqChannel(channel.getPkId(),
-                funcApi.getPkId());
+        ZKSysResFuncApiReqChannel funcApiReqChannel =
+            new ZKSysResFuncApiReqChannel(channel.getPkId(), funcApi.getPkId());
         // 先查询关联关系是否存在
         ZKSysResFuncApiReqChannel old = this.getByRelationId(channel.getPkId(), funcApi.getPkId());
         if (old != null) {
             if (ZKSysResFuncApiReqChannel.DEL_FLAG.normal == old.getDelFlag().intValue()) {
                 // 关系已存在；
                 return old;
-            }
-            else {
+            } else {
                 funcApiReqChannel.setPkId(old.getPkId());
                 funcApiReqChannel.setDelFlag(ZKSysResFuncApiReqChannel.DEL_FLAG.normal);
             }
@@ -161,15 +156,15 @@ public class ZKSysResFuncApiReqChannelService
      */
     @Transactional(readOnly = false)
     public List<ZKSysResFuncApiReqChannel> addByChannel(ZKSysResRequestChannel channel,
-            List<ZKSysResFuncApi> addFuncApis, List<ZKSysResFuncApi> delFuncApis) {
+        List<ZKSysResFuncApi> addFuncApis, List<ZKSysResFuncApi> delFuncApis) {
         if (channel == null) {
             log.error("[>_<:20220406-1916-002] 请求渠道不存在!");
-            throw new ZKCodeException("zk.sys.000006", "请求渠道不存在");
+            throw ZKCodeException.as("zk.sys.000006", "请求渠道不存在");
         }
         // 先删除 需要删除的关联关系
-        if(delFuncApis == null) {
+        if (delFuncApis == null) {
             this.diskDelByChannelId(channel.getPkId());
-        }else {
+        } else {
             delFuncApis.forEach(item -> {
                 this.diskDelByChannelIdAndApiId(channel.getPkId(), item.getPkId());
             });
@@ -202,16 +197,15 @@ public class ZKSysResFuncApiReqChannelService
      */
     @Transactional(readOnly = false)
     public List<ZKSysResFuncApiReqChannel> addByFuncApi(ZKSysResFuncApi funcApi,
-            List<ZKSysResRequestChannel> addChannels, List<ZKSysResRequestChannel> delChannels) {
+        List<ZKSysResRequestChannel> addChannels, List<ZKSysResRequestChannel> delChannels) {
         if (funcApi == null) {
             log.error("[>_<:20220406-1916-001] 功能接口API不存在!");
-            throw new ZKCodeException("zk.sys.000005", "功能接口API不存在");
+            throw ZKCodeException.as("zk.sys.000005", "功能接口API不存在");
         }
         // 先删除 需要删除的关联关系
         if (delChannels == null) {
             this.diskDelByApiId(funcApi.getPkId());
-        }
-        else {
+        } else {
             delChannels.forEach(item -> {
                 this.diskDelByChannelIdAndApiId(item.getPkId(), funcApi.getPkId());
             });
@@ -231,57 +225,57 @@ public class ZKSysResFuncApiReqChannelService
     /*** 删除 ***********************************************************************************/
     /********************************************************************************************/
 
-//    /**
-//     * 根据 渠道ID 和 API功能接口ID 逻辑删除 关联关系；
-//     *
-//     * @Title: delByChannelIdAndApiId
-//     * @Description: TODO(simple description this method what to do.)
-//     * @author Vinson
-//     * @date Apr 1, 2022 10:52:19 AM
-//     * @param channelPkId
-//     * @param apiPkId
-//     * @return
-//     * @return int
-//     */
-//    @Transactional(readOnly = false)
-//    public int delByChannelIdAndApiId(String channelPkId, String apiPkId) {
-//        return this.dao.delByChannelIdAndApiId(ZKSysResFuncApiReqChannel.initSqlProvider().getTableName(), channelPkId,
-//                apiPkId, ZKSysResFuncApiReqChannel.DEL_FLAG.delete);
-//    }
-//
-//    /**
-//     * 根据 渠道ID，逻辑删除所有关联的 API功能接口关系
-//     *
-//     * @Title: delByChannelId
-//     * @Description: TODO(simple description this method what to do.)
-//     * @author Vinson
-//     * @date Nov 30, 2021 11:32:27 AM
-//     * @param channelPkId
-//     * @return
-//     * @return int
-//     */
-//    @Transactional(readOnly = false)
-//    public int delByChannelId(String channelPkId) {
-//        return this.dao.delByChannelId(ZKSysResFuncApiReqChannel.initSqlProvider().getTableName(), channelPkId,
-//                ZKSysResFuncApiReqChannel.DEL_FLAG.delete);
-//    }
-//
-//    /**
-//     * 根据 API功能接口ID，逻辑删除所有关联的渠道关系
-//     *
-//     * @Title: delByApiId
-//     * @Description: TODO(simple description this method what to do.)
-//     * @author Vinson
-//     * @date Nov 30, 2021 11:32:34 AM
-//     * @param apiPkId
-//     * @return
-//     * @return int
-//     */
-//    @Transactional(readOnly = false)
-//    public int delByApiId(String apiPkId) {
-//        return this.dao.delByApiId(ZKSysResFuncApiReqChannel.initSqlProvider().getTableName(), apiPkId,
-//                ZKSysResFuncApiReqChannel.DEL_FLAG.delete);
-//    }
+    // /**
+    // * 根据 渠道ID 和 API功能接口ID 逻辑删除 关联关系；
+    // *
+    // * @Title: delByChannelIdAndApiId
+    // * @Description: TODO(simple description this method what to do.)
+    // * @author Vinson
+    // * @date Apr 1, 2022 10:52:19 AM
+    // * @param channelPkId
+    // * @param apiPkId
+    // * @return
+    // * @return int
+    // */
+    // @Transactional(readOnly = false)
+    // public int delByChannelIdAndApiId(String channelPkId, String apiPkId) {
+    // return this.dao.delByChannelIdAndApiId(ZKSysResFuncApiReqChannel.sqlHelper().getTableName(), channelPkId,
+    // apiPkId, ZKSysResFuncApiReqChannel.DEL_FLAG.delete);
+    // }
+    //
+    // /**
+    // * 根据 渠道ID，逻辑删除所有关联的 API功能接口关系
+    // *
+    // * @Title: delByChannelId
+    // * @Description: TODO(simple description this method what to do.)
+    // * @author Vinson
+    // * @date Nov 30, 2021 11:32:27 AM
+    // * @param channelPkId
+    // * @return
+    // * @return int
+    // */
+    // @Transactional(readOnly = false)
+    // public int delByChannelId(String channelPkId) {
+    // return this.dao.delByChannelId(ZKSysResFuncApiReqChannel.sqlHelper().getTableName(), channelPkId,
+    // ZKSysResFuncApiReqChannel.DEL_FLAG.delete);
+    // }
+    //
+    // /**
+    // * 根据 API功能接口ID，逻辑删除所有关联的渠道关系
+    // *
+    // * @Title: delByApiId
+    // * @Description: TODO(simple description this method what to do.)
+    // * @author Vinson
+    // * @date Nov 30, 2021 11:32:34 AM
+    // * @param apiPkId
+    // * @return
+    // * @return int
+    // */
+    // @Transactional(readOnly = false)
+    // public int delByApiId(String apiPkId) {
+    // return this.dao.delByApiId(ZKSysResFuncApiReqChannel.sqlHelper().getTableName(), apiPkId,
+    // ZKSysResFuncApiReqChannel.DEL_FLAG.delete);
+    // }
 
     /**
      * 根据 渠道ID和 API功能接口ID 物理删除关联关系
@@ -296,8 +290,8 @@ public class ZKSysResFuncApiReqChannelService
      * @return int
      */
     public int diskDelByChannelIdAndApiId(String channelPkId, String apiPkId) {
-        return this.dao.diskDelByChannelIdAndApiId(ZKSysResFuncApiReqChannel.initSqlProvider().getTableName(),
-                channelPkId, apiPkId);
+        return this.dao.diskDelByChannelIdAndApiId(ZKSysResFuncApiReqChannel.sqlHelper().getTableName(), channelPkId,
+            apiPkId);
     }
 
     /**
@@ -313,7 +307,7 @@ public class ZKSysResFuncApiReqChannelService
      */
     @Transactional(readOnly = false)
     public int diskDelByChannelId(String channelPkId) {
-        return this.dao.diskDelByChannelId(ZKSysResFuncApiReqChannel.initSqlProvider().getTableName(), channelPkId);
+        return this.dao.diskDelByChannelId(ZKSysResFuncApiReqChannel.sqlHelper().getTableName(), channelPkId);
     }
 
     /**
@@ -329,8 +323,7 @@ public class ZKSysResFuncApiReqChannelService
      */
     @Transactional(readOnly = false)
     public int diskDelByApiId(String apiPkId) {
-        return this.dao.diskDelByApiId(ZKSysResFuncApiReqChannel.initSqlProvider().getTableName(), apiPkId);
+        return this.dao.diskDelByApiId(ZKSysResFuncApiReqChannel.sqlHelper().getTableName(), apiPkId);
     }
 
 }
-

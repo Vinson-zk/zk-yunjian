@@ -19,6 +19,7 @@
 package com.zk.base.entity;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlTransient;
@@ -27,17 +28,13 @@ import org.springframework.data.annotation.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.zk.base.commons.ZKTreeSqlProvider;
+import com.zk.base.commons.ZKTreeSqlHelper;
 import com.zk.db.annotation.ZKColumn;
-import com.zk.db.annotation.ZKDBAnnotationProvider;
-import com.zk.db.commons.ZKDBQueryCondition;
-import com.zk.db.commons.ZKDBQueryConditionWhere;
-import com.zk.db.commons.ZKDBQueryType;
-import com.zk.db.commons.ZKSqlConvert;
-import com.zk.db.mybatis.commons.ZKDBQueryConditionIf;
-import com.zk.db.mybatis.commons.ZKDBQueryConditionIfByClass;
-import com.zk.db.mybatis.commons.ZKDBQueryConditionSql;
-import com.zk.db.mybatis.commons.ZKSqlProvider;
+import com.zk.db.annotation.ZKQuery;
+import com.zk.db.commons.*;
+import com.zk.db.mybatis.commons.ZKDBQueryScript;
+import com.zk.db.mybatis.commons.ZKDBScriptKey;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /** 
 * @ClassName: ZKBaseTreeEntity 
@@ -47,17 +44,18 @@ import com.zk.db.mybatis.commons.ZKSqlProvider;
 */
 public abstract class ZKBaseTreeEntity<ID extends Serializable, E extends ZKBaseTreeEntity<ID, E>> extends ZKBaseEntity<ID, E> {
 
+    @Override
     @Transient
     @XmlTransient
     @JsonIgnore
-    public ZKSqlProvider getSqlProvider() {
-        return this.getTreeSqlProvider();
+    public ZKDBSqlHelper getSqlHelper(){
+        return this.getTreeSqlHelper();
     }
 
     @Transient
     @XmlTransient
     @JsonIgnore
-    public abstract ZKTreeSqlProvider getTreeSqlProvider();
+    public abstract ZKTreeSqlHelper getTreeSqlHelper();
 
     /**
      * @Fields serialVersionUID : TODO(simple description what to do.)
@@ -75,7 +73,7 @@ public abstract class ZKBaseTreeEntity<ID extends Serializable, E extends ZKBase
     /**
      * 菜单(路由)的上级结点 id，制作树形结构关键属性； 
      */
-    @ZKColumn(name = "c_parent_id", isUpdate = false, isQuery = true)
+    @ZKColumn(name = "c_parent_id", query = @ZKQuery(value = true, isCaseSensitive = true))
     protected ID parentId;
 
     @XmlTransient
@@ -198,68 +196,108 @@ public abstract class ZKBaseTreeEntity<ID extends Serializable, E extends ZKBase
     /////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////
 
+    @Override
     @Transient
     @JsonIgnore
     @XmlTransient
-    public ZKDBQueryConditionWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBAnnotationProvider annotationProvider) {
-        ZKDBQueryConditionWhere where = super.getZKDbWhere(sqlConvert, annotationProvider);
+    public ZKDBQueryWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
+        return this.getZKDbWhereTree(sqlConvert, mapInfo);
+    }
+
+    /**
+     * 树形查询
+     *
+     * @MethodName getZKDbWhereTree
+     * @param sqlConvert
+     * @param mapInfo
+     * @return com.zk.db.commons.ZKDBQueryWhere
+     * @throws
+     * @Author bs
+     * @DATE 2022-10-08 01:02:90
+     */
+    @Transient
+    @JsonIgnore
+    @XmlTransient
+    public ZKDBQueryWhere getZKDbWhereTree(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
+        ZKDBQueryWhere where = sqlConvert.resolveQueryCondition(mapInfo);
         // 制作 c_parent_id 为 null 或为空的 查询根节点的查询条件
-        ZKDBQueryCondition parentCondition = this.getParentCondition(this.getPkIDClass());
+        ZKDBQuery parentIdIsEmpty = this.getParentIsNullCondition(this.getPkIDClass(), "c_parent_id");
         // 当 parentId 为null或为空, 且 parentIdIsEmpty 为 true，指定只查询 c_parent_id 为 null 或为空的根节点;
-        // 注：此种方式递归查询树形节点; 1.不支持子节点过虑; 2.仅支持根节点过滤与分页；
-        where.put(ZKDBQueryConditionIfByClass.as(
-                ZKDBQueryConditionIf.asAnd(parentCondition, "parentIdIsEmpty", false, true), "parentId", String.class,
-                true));
+        parentIdIsEmpty = ZKDBQueryScript.asIf(parentIdIsEmpty, 0, "parentIdIsEmpty", Boolean.class);
+        where.put(ZKDBQueryScript.asIf(parentIdIsEmpty, 4, "parentId", this.getPkIDClass()));
         return where;
     }
 
-    // 当 parentId 为null或为空, 且 parentIdIsEmpty 为 true，指定只查询 c_parent_id 为 null 或为空的根节点
-    //
+    /**
+     * 树形所有节点，统一过滤，过滤结果中不是根结点时，如果父节点不在过滤结果中，升级为结果中的根节点；如果父节点在过滤结果中，则不做为返回结果; 且不递归查询子节点；
+     * @MethodName getZKDbWhereTreeFilter
+     * @param sqlConvert
+     * @param mapInfo
+     * @return com.zk.db.commons.ZKDBQueryWhere
+     * @throws
+     * @Author bs
+     * @DATE 2022-10-18 23:03:984
+     */
     @JsonIgnore
     @XmlTransient
     @Transient
-    private ZKDBQueryCondition getParentCondition(Class<?> idClass) {
+    public ZKDBQueryWhere getZKDbWhereTreeFilter(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
+        return this.getZKDbWhereTreeFilter(sqlConvert, mapInfo,"c_pk_id", "c_parent_id");
+    }
+
+    protected ZKDBQueryWhere getZKDbWhereTreeFilter(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo,
+        String pkColumnName, String parentColumnName) {
+        ZKDBQueryWhere where = sqlConvert.resolveQueryCondition(mapInfo, Arrays.asList("parentId"));
+
+        // 查询 所以结果的ID
+        String selSqlResIds = this.getResIdsSelSql(where, sqlConvert, mapInfo, pkColumnName);
+        // 父ID 不在指定 ID集合 中
+        ZKDBQuery parentIdNotIn = ZKDBQueryColSql.as(ZKDBOptComparison.NIN, parentColumnName, selSqlResIds);
+
+        // 制作 c_parent_id 为 null 或为空的 查询根节点的查询条件
+        ZKDBQuery parentIdIsEmpty = this.getParentIsNullCondition(this.getPkIDClass(), parentColumnName);
+
+        // 查询 结果中的 根结点
+        ZKDBQueryWhere pIdOrWhere = ZKDBQueryWhere.asOr("(",")",parentIdNotIn);
+        pIdOrWhere.put(ZKDBQueryScript.asIf(parentIdIsEmpty, 4, "parentId", this.getPkIDClass()));
+        pIdOrWhere.put(ZKDBQueryScript.asIf(
+                ZKDBQueryCol.as(ZKDBOptComparison.EQ, parentColumnName, "parentId", this.getPkIDClass(),null, true),
+                0, "parentId", this.getPkIDClass()));
+        where.put(pIdOrWhere);
+
+        return where;
+    }
+
+    private String getResIdsSelSql(ZKDBQueryWhere where, ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo,
+                                 String pkColumnName){
+        // 过滤出所有结果ID 的 sql
+        StringBuffer sb = new StringBuffer();
+        sb.append("(");
+        sb.append(ZKSqlConvert.SqlKeyword.select).append("_t.").append(pkColumnName);
+        sb.append(ZKSqlConvert.SqlKeyword.from).append(mapInfo.getTableName()).append(" _t ");
+        sb.append(ZKDBScriptKey.where[0]).append(where.toQueryCondition(sqlConvert, " _t")).append(ZKDBScriptKey.where[1]);
+        sb.append(")");
+        return sb.toString();
+    }
+
+    // 当 parentId 为 null 或为空 的查询条件
+    @JsonIgnore
+    @XmlTransient
+    @Transient
+    private ZKDBQuery getParentIsNullCondition(Class<?> idClass, String parentColumnName) {
         if (idClass == String.class) {
-//          return ZKDBQueryConditionWhere.asOr("(", ")",
-//                  ZKDBQueryConditionCol.as(ZKDBQueryType.EQ, "c_parent_id", "parentId", idClass, null, true),
-//                  ZKDBQueryConditionCol.as(ZKDBQueryType.ISNULL, "c_parent_id", "parentId", idClass, null, true));
-            return ZKDBQueryConditionWhere.asOr("(", ")",
-                    ZKDBQueryConditionSql.as(ZKDBQueryType.ISNULL, "c_parent_id", ""),
-                    ZKDBQueryConditionSql.as(ZKDBQueryType.EQ, "c_parent_id", "\"\""));
+            return ZKDBQueryWhere.asOr("(", ")",
+                    ZKDBQueryColSql.as(ZKDBOptComparison.ISNULL, parentColumnName, ""),
+                    ZKDBQueryColSql.as(ZKDBOptComparison.EQ, parentColumnName, "\"\""));
         }
         else if (idClass == Long.class || idClass == Integer.class) {
-//            return ZKDBQueryConditionWhere.asOr("(", ")",
-//                    ZKDBQueryConditionCol.as(ZKDBQueryType.EQ, "c_parent_id", "parentId", idClass, null, true),
-//                    ZKDBQueryConditionCol.as(ZKDBQueryType.ISNULL, "c_parent_id", "parentId", idClass, null, true));
-            return ZKDBQueryConditionWhere.asOr("(", ")",
-                    ZKDBQueryConditionSql.as(ZKDBQueryType.ISNULL, "c_parent_id", ""),
-                    ZKDBQueryConditionSql.as(ZKDBQueryType.EQ, "c_parent_id", "0"));
+            return ZKDBQueryWhere.asOr("(", ")",
+                    ZKDBQueryColSql.as(ZKDBOptComparison.ISNULL, parentColumnName, ""),
+                    ZKDBQueryColSql.as(ZKDBOptComparison.EQ, parentColumnName, "0"));
         }
         else {
-//            return ZKDBQueryConditionCol.as(ZKDBQueryType.ISNULL, "c_parent_id", "parentId", idClass, null, true);
-            return ZKDBQueryConditionSql.as(ZKDBQueryType.ISNULL, "c_parent_id", "");
+            return ZKDBQueryColSql.as(ZKDBOptComparison.ISNULL, parentColumnName, "");
         }
-    }
-
-    // 不分层级按条件过滤，过滤结果中不是根结点时，如果父节点不在过滤结果中，升级为结果中的根节点；
-    @JsonIgnore
-    @XmlTransient
-    @Transient
-    public ZKDBQueryConditionWhere getZKDbWhereTreeNoLevel(ZKSqlConvert sqlConvert,
-            ZKDBAnnotationProvider annotationProvider) {
-        
-        StringBuffer sb = new StringBuffer();
-        
-        ZKDBQueryConditionWhere where = ZKDBQueryConditionWhere.asOr();
-        // 制作 c_parent_id 为 null 或为空的 查询根节点的查询条件
-        ZKDBQueryCondition parentCondition = this.getParentCondition(this.getPkIDClass());
-        where.put(ZKDBQueryConditionIfByClass.as(parentCondition, "parentId", String.class, true));
-
-        String childStr = sqlConvert.convertSqlWhere(super.getZKDbWhere(sqlConvert, annotationProvider), "_t");
-        where.put(ZKDBQueryConditionSql.as(ZKDBQueryType.NIN, "c_parent_id",
-                sb.append("(SELECT _t.c_pk_id FROM ").append(annotationProvider.getTable().name()).append(" _t ")
-                        .append(childStr).append(")").toString()));
-        return where;
     }
 
 }

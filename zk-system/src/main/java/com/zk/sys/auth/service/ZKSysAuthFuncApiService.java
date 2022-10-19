@@ -62,7 +62,7 @@ public class ZKSysAuthFuncApiService extends ZKBaseService<String, ZKSysAuthFunc
         if (authDefined == null) {
             // zk.sys.020011=权限不存在
             log.error("[>_<:20220504-1212-001] 权限不存在");
-            throw new ZKCodeException("zk.sys.020011", "权限不存在");
+            throw ZKCodeException.as("zk.sys.020011", "权限不存在");
         }
         // 先删除 需要删除的关联关系
         if (delFuncApis == null) {
@@ -87,39 +87,39 @@ public class ZKSysAuthFuncApiService extends ZKBaseService<String, ZKSysAuthFunc
 
     // 查询权限拥有的API接口代码
     public List<String> findApiCodesByAuthId(String authId) {
-        return this.dao.findApiCodesByAuthId(ZKSysAuthFuncApi.initSqlProvider().getTableName(), authId,
+        return this.dao.findApiCodesByAuthId(ZKSysAuthFuncApi.sqlHelper().getTableName(), authId,
                 ZKSysAuthFuncApi.DEL_FLAG.normal);
     }
 
     // 查询权限拥有的API接口ID
     public List<String> findApiIdsByAuthId(String authId) {
-        return this.dao.findApiIdsByAuthId(ZKSysAuthFuncApi.initSqlProvider().getTableName(), authId,
+        return this.dao.findApiIdsByAuthId(ZKSysAuthFuncApi.sqlHelper().getTableName(), authId,
                 ZKSysAuthFuncApi.DEL_FLAG.normal);
     }
 
     // 根据关联关系查询 权限关系实体
     public ZKSysAuthFuncApi getRelationByAuthIdAndApiId(String authId, String funcApiId) {
-        return this.dao.getRelationByAuthIdAndApiId(ZKSysAuthFuncApi.initSqlProvider().getTableName(),
-                ZKSysAuthFuncApi.initSqlProvider().getTableAlias(),
-                ZKSysAuthFuncApi.initSqlProvider().getSqlBlockSelCols(), authId, funcApiId);
+        return this.dao.getRelationByAuthIdAndApiId(ZKSysAuthFuncApi.sqlHelper().getTableName(),
+                ZKSysAuthFuncApi.sqlHelper().getTableAlias(),
+                ZKSysAuthFuncApi.sqlHelper().getBlockSqlCols(), authId, funcApiId);
     }
 
     // 根据权限代码ID 删除关联关系
     @Transactional(readOnly = false)
     public int diskDelByAuthId(String authId) {
-        return this.dao.diskDelByAuthId(ZKSysAuthFuncApi.initSqlProvider().getTableName(), authId);
+        return this.dao.diskDelByAuthId(ZKSysAuthFuncApi.sqlHelper().getTableName(), authId);
     }
 
     // 根据Api接口ID 删除关联关系
     @Transactional(readOnly = false)
     public int diskDelByApiId(String funcApiId) {
-        return this.dao.diskDelByApiId(ZKSysAuthFuncApi.initSqlProvider().getTableName(), funcApiId);
+        return this.dao.diskDelByApiId(ZKSysAuthFuncApi.sqlHelper().getTableName(), funcApiId);
     }
 
     // 根据权限代码ID和Api接口ID 物理删除
     @Transactional(readOnly = false)
     public int diskDelByAuthIdAndApiId(String authId,  String funcApiId) {
-        return this.dao.diskDelByAuthIdAndApiId(ZKSysAuthFuncApi.initSqlProvider().getTableName(), authId, funcApiId);
+        return this.dao.diskDelByAuthIdAndApiId(ZKSysAuthFuncApi.sqlHelper().getTableName(), authId, funcApiId);
     }
 	
 }

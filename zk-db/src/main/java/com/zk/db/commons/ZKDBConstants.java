@@ -18,7 +18,9 @@
 */
 package com.zk.db.commons;
 
-/** 
+import java.io.File;
+
+/**
 * @ClassName: ZKDBConstants 
 * @Description: TODO(simple description this class what to do.) 
 * @author Vinson 
@@ -40,6 +42,10 @@ public class ZKDBConstants {
          * 分页数据对象
          */
         public static final String Page = "page";
+    }
+
+    public static interface Mybatis_Param_Name {
+        public static final String sqlHelper = "_zkSql";
     }
 
 }

@@ -61,7 +61,7 @@ public class ZKSysMenuService extends ZKBaseTreeService<String, ZKSysMenu, ZKSys
                 if (oldSysMenu.getDelFlag().intValue() == ZKBaseEntity.DEL_FLAG.normal) {
                     // code 已存在；抛出异常；
                     log.error("[>_<:20200805-1216-001] 菜单代码: {} 已存在!", zkSysMenu.getCode());
-                    throw new ZKCodeException("zk.sys.000001", "菜单代码已存在", null, zkSysMenu.getCode());
+                    throw ZKCodeException.as("zk.sys.000001", "菜单代码已存在", null, zkSysMenu.getCode());
                 }
                 else {
                     // code 已存在，只是已逻辑删除；先物理删除已存在的；
@@ -72,7 +72,6 @@ public class ZKSysMenuService extends ZKBaseTreeService<String, ZKSysMenu, ZKSys
                 }
             }
         }
-
         return super.save(zkSysMenu);
     }
 
@@ -90,13 +89,14 @@ public class ZKSysMenuService extends ZKBaseTreeService<String, ZKSysMenu, ZKSys
         if (ZKStringUtils.isEmpty(code)) {
             return null;
         }
-        return this.dao.getByCode(ZKSysMenu.initSqlProvider().getTableName(),
-                ZKSysMenu.initSqlProvider().getSqlBlockSelCols(""), code);
+        return this.dao.getByCode(ZKSysMenu.sqlHelper().getTableName(),
+                ZKSysMenu.sqlHelper().getBlockSqlCols(""), code);
     }
 
     /**
      * 树形查询菜单
      */
+    @Override
     public List<ZKSysMenu> doFindTree(ZKSysMenu zkSysMenu) {
         return this.dao.findTree(zkSysMenu);
     }
@@ -115,6 +115,7 @@ public class ZKSysMenuService extends ZKBaseTreeService<String, ZKSysMenu, ZKSys
         sysAuthMenuService.diskDelByMenuId(menu.getPkId());
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
+        // 是否需要级联删除子项
         return super.del(menu);
     }
 
@@ -124,6 +125,7 @@ public class ZKSysMenuService extends ZKBaseTreeService<String, ZKSysMenu, ZKSys
         sysAuthMenuService.diskDelByMenuId(menu.getPkId());
         // 清空权限缓存
         ZKUserCacheUtils.cleanAllAuth();
+        // 是否需要级联删除子项
         return super.diskDel(menu);
     }
 

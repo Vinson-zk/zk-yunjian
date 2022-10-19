@@ -40,7 +40,7 @@ public interface ZKSerCenCertificateDao extends ZKBaseDao<String, ZKSerCenCertif
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
      * @date Aug 23, 2019 5:34:23 PM
-     * @param zkServerCertificate
+     * @param serCenCertificate
      * @return
      * @return int
      */
