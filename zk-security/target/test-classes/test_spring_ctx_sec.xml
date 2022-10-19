@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	">
+	
+	<!-- 开启shiro的注解;  depends-on="lifecycleBeanPostProcessor" 保证实现了Shiro内部lifecycle函数的bean执行 
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>  -->
+    <!-- AOP式方法级权限检查 
+    <bean id="advisorAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+        <property name="proxyTargetClass" value="true"></property>
+    </bean> -->
+    
+    <!-- 配置 zkSecFilter -->
+    <bean id="zkSecFilter" class="com.zk.security.web.filter.ZKSecFilterFactoryBean">
+        <property name="securityManager" ref="zkSecWebSecurityManager"></property>
+        <!-- 登入 api 接口 -->
+        <property name="loginUrl" value="/sec/h/c/login"></property> 
+        <!-- 登入成功页面 
+        <property name="successUrl" value="/"/> -->
+        <property name="filters">
+            <map><!-- 注意，此处如果拦截器配置在外面，所有请求路径都会执行拦截；但如果在 filters 如果没有定义引用，则不会初始化 PathMatchingFilter.appliedPaths 所有不会有执行效果，反之就会有执行效果-->
+                <!-- 登出 过虑器 -->
+                <entry key="logout">
+                	<bean class="com.zk.security.web.filter.authc.ZKSecLogoutFilter"></bean>
+                </entry> 
+                <!-- 登入 过虑器 -->
+                <entry key="login">
+                	<bean class="com.zk.security.web.filter.authc.ZKSecAuthcUserFilter"></bean> 
+                </entry>  
+                <!-- 需要用户登录 过虑器 -->
+                <entry key="user">
+   					<bean class="com.zk.security.web.filter.authc.ZKSecUserFilter"></bean> 
+                </entry> 
+            </map>
+        </property> 
+        <!-- URL的拦截 -->
+        <property name="filterChainDefinitions" >
+        	<value>
+        		<!-- 放开静态资源  
+        		/eureka/** = anon -->
+        		/static/** = anon
+        		/sec/h/c/none = anon
+        		/sec/h/c/login = login
+        		/sec/h/c/logout = logout
+                /** = user
+    		</value>
+        </property>
+    </bean>
+	
+	
+	
+</beans>
+

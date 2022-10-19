@@ -291,12 +291,6 @@
    			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>com.zk</groupId>
-            <artifactId>zk-mongo</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
         <!-- ##### other end -->
 			
 	</dependencies>

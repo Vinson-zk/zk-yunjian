@@ -1,0 +1,14 @@
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/command/queryAndWriteOperation/ZKFindTest.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/configuration/ZKMongoAutoConfigurationTest.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/helper/ZKObjectToSave.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/command/administration/ZKAdministrationTest.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/helper/ZKTestObject.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/helper/ZKMongoTestConfig.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/command/queryAndWriteOperation/ZKInsertTest.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/command/ZKMongoCommandTest.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/ZKMongoTemplateTest.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/lock/ZKMongoLockUtilsTest.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/command/queryAndWriteOperation/ZKFindAndModifyTest.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/lock/ZKMongoDistributedLockImplTest.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/command/queryAndWriteOperation/ZKDeleteTest.java
+/Users/bs/ws_idea/zk-yunjian/zk-mongo/src/test/java/com/zk/mongo/command/queryAndWriteOperation/ZKUpdateTest.java

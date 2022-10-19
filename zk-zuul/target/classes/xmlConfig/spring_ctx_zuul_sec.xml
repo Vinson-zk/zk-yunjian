@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	">
+	
+	<!-- 配置 zkSecFilter -->
+    <bean id="zkSecFilter" class="com.zk.security.web.filter.ZKSecFilterFactoryBean">
+        <property name="securityManager" ref="zkSecWebSecurityManager"></property>
+        <!-- 登入 api 接口 -->
+        <!-- <property name="loginUrl" value="/${zk.path.admin}/${zk.path.wechat}/${zk.wechat.version}/sec/login"></property>  -->
+        <!-- 登入成功页面 
+        <property name="successUrl" value="/"/> -->
+        <!-- URL的拦截 -->
+        <property name="filterChainDefinitions" >
+        	<value>
+        		<!-- 放开静态资源  
+        		/eureka/** = anon -->
+        		<!-- /static/** = anon -->
+        		/${zk.path.admin}/${zk.path.zuul}/${zk.zuul.version} = anon
+        		/${zk.path.admin}/${zk.path.zuul}/${zk.zuul.version}/index = anon
+        		<!-- 
+        		 /** = anon
+        		 /** = user
+        		-->
+               /** = anon
+    		</value>
+        </property>
+    </bean>
+	
+</beans>
+

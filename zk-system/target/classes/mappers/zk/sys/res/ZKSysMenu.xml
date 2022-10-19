@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.sys.res.dao.ZKSysMenuDao">
+
+	<!-- ========================================================================== -->
+	<!-- ========================================================================== -->
+	<!-- ========================================================================== -->
+	
+	<!-- 
+	一、按指定层级单一树形级别查询；使用普通的 列表查询即可；
+		1.支持分页；
+		2.支持条件过滤
+		3.需按树形去查询子节点
+		
+	二、递归查询树形节点
+		1.不支持子节点过虑
+		2.仅支持根节点过滤与分页；
+		
+	三、[见 dao ]不分层级按条件过滤，过滤结果中不是根结点时，如果父节点不在过滤结果中，升级为结果中的根节点；
+		1.支持分页
+		2.支持条件过滤
+		3.需按树形去查询子节点
+		4.不支持根据子节点查询父节点
+		
+	 -->
+	 
+	<!-- ========================================================================== -->
+	<!-- ========================================================================== -->
+	<!-- ========================================================================== -->
+	
+	<!-- ************************************************************* -->
+	<!-- 二、递归查询树形节点 
+	 	使用 resultMap="treeResult" 逐级查询，查询出所有子孙节点；
+	 	使用 resultType="ZKSysMenu" 不会递归查询；
+	 	-->
+	<!-- 树形节点递归查询，查询出所有子节点 -->
+	<!-- <resultMap type="ZKSysMenu" id="treeResultt" >
+	    <collection property="children" ofType="ZKSysMenu" 
+	    	column="{depth=depth, parentId=pkId,blockSqlSelColumns=blockSqlSelColumns, blockSqlTableAlias=blockSqlTableAlias, blockSqlTableName=blockSqlTableName}"  
+	    	javaType="ArrayList" fetchType="eager" select="findTree">
+	    </collection>
+	</resultMap>
+	<sql id =  "paramsSql" >// 递归调用时的参数
+		'${blockSqlSelColumns}' AS "blockSqlSelColumns",
+		'${blockSqlTableAlias}' AS "blockSqlTableAlias",
+		'${blockSqlTableName}' AS "blockSqlTableName",
+		${depth==null?1:depth+1} AS "depth", // depth 为对象在树形结果集中的深度；根节点尝试为1；当 "depth == null or depth == 0" 时，查询返回根结点，且返回对象时深度会增加1，即在结果集中，对象深度为 1 的，为根结点；而查询根结点时，节点深度需要传入 null 或 0
+	</sql>
+	<sql id="treeIf">
+		<choose>
+			<when test=" depth == null or depth == 0 ">// 尝试为根结点时，主键 ID 为 空
+				AND (${blockSqlTableAlias}.c_parent_id is null OR ${tableAlias}.c_parent_id = "")
+			</when>
+			<otherwise>
+				AND ${blockSqlTableAlias}.c_parent_id = #{parentId}
+			</otherwise>
+		</choose>
+		<if test="pkId != null">
+			AND ${blockSqlTableAlias}.c_pk_id = #{pkId}
+		</if>
+		<if test="code != null and code != '' ">
+			AND ${blockSqlTableAlias}.c_code like CONCAT('%', REPLACE(REPLACE(REPLACE(#{code}, '\\\\\\\\', '\\\\\\\\\\\\\\\\'), '_', '\\\\_'), '%', '\\\\%'), '%')
+		</if>
+		<if test="navCode != null and navCode != '' ">
+		  	AND ${blockSqlTableAlias}.c_nav_code = #{navCode}
+		</if>
+		<if test="funcModuleCode != null and funcModuleCode != '' ">
+		  	AND ${blockSqlTableAlias}.c_func_module_code = #{funcModuleCode}
+		</if>
+		<if test="funcName != null and funcName != '' ">
+		  	AND ${blockSqlTableAlias}.c_func_name like CONCAT('%', REPLACE(REPLACE(REPLACE(#{funcName}, '\\\\\\\\', '\\\\\\\\\\\\\\\\'), '_', '\\\\_'), '%', '\\\\%'), '%')
+		</if>
+	</sql>
+	 <select id="findTreeT" resultMap="treeResult" >
+		SELECT 
+			<include refid = "paramsSql" />
+			${blockSqlSelColumns}
+		FROM ${blockSqlTableName} ${blockSqlTableAlias}  
+		<where>
+			// (${blockSqlTableAlias}.c_parent_id is null OR ${blockSqlTableAlias}.c_parent_id = "")
+			<include refid = "treeIf" />
+		</where>
+	</select> -->
+
+</mapper>
+
+ 
+ 
+ 

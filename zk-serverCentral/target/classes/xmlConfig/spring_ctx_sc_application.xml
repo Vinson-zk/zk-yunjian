@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	">
+	
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<array><!-- 文件名不能包含 [.]，相同 key 配置在前面的生效，后配置的不会覆盖前面的 -->
+				<value>msg/zkMsg_serCen</value>
+				<value>msg/zkMsg_core</value>
+			</array>
+		</property>
+		<property name="useCodeAsDefaultMessage" value="true"/>
+		<property name="cacheSeconds" value="3600" />
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
+	</bean> 
+	
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+    	<property name="defaultLocale" value="en_US" />
+    </bean>
+	
+	<!-- 配置 JSR303 Bean Validator 定义 在 java 配置 类中定义
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+	    <property name="validationMessageSource" ref="messageSource"/>
+	</bean>   -->
+	
+	<!-- 异常处理 
+	<bean class="com.zk.core.web.resolver.ZKExceptionHandlerResolver"></bean>  -->
+	
+	<!-- 这里配置的异常显示界面均仅包括主文件名，至于文件路径和后缀已经在viewResolver中指定
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+	 -->
+	<bean class="com.zk.core.web.resolver.ZKViewExceptionHandlerResolver">  
+		<!-- <property name="defaultErrorView">    
+        	<value>/error/default</value>  
+	    </property>   -->
+	    <property name="defaultStatusCode">    
+	        <value>444</value>  
+	    </property>     
+		<!-- <property name="warnLogCategory">    
+	        <value>org.springframework.web.servlet.handler.SimpleMappingExceptionResolver</value>  
+	    </property>  -->
+	    <property name="statusCodes">
+		    <map>
+		        <entry key="error/400" value="400" />
+		        <entry key="error/404" value="404" />
+		        <!-- <entry key="error/5xx" value="500" /> -->
+		    </map>
+		</property>   
+	    <property name="exceptionMappings">  
+	        <props>  
+	            <prop key="java.util.MissingResourceException">/error/missingResource</prop>  
+	            <!-- 这里还可以继续扩展对不同异常类型的处理 -->  
+	            <!-- 文件上传异常 
+	            <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">error_fileupload</prop>
+	            -->
+	        </props>  
+	    </property>   
+	    <!-- <property name="excludedExceptions">
+	    	<array>
+	    		<value>com.zk.core.utils.exception.ZKValidatorException</value>
+	    	</array>
+	    </property> -->
+	</bean>  
+	
+</beans>
+

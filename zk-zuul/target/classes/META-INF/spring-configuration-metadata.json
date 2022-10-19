@@ -1,0 +1,543 @@
+{
+  "groups": [
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool",
+      "type": "com.alibaba.druid.pool.DruidDataSource",
+      "sourceType": "com.zk.zuul.configuration.ZKZuulJdbcConfiguration",
+      "sourceMethod": "parentDataSource()"
+    },
+    {
+      "name": "zk.zuul.redis.pool",
+      "type": "redis.clients.jedis.JedisPoolConfig",
+      "sourceType": "com.zk.zuul.configuration.ZKZuulRedisConfiguration",
+      "sourceMethod": "jedisPoolConfig()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.access-to-underlying-connection-allowed",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.active-connection-stack-trace",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.active-connections",
+      "type": "java.util.Set<com.alibaba.druid.pool.DruidPooledConnection>",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.async-close-connection-enable",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.async-init",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.break-after-acquire-failure",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.clear-filters-enable",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.connect-properties",
+      "type": "java.util.Properties",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.connection-error-retry-attempts",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.connection-init-sqls",
+      "type": "java.util.Collection<java.lang.String>",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.create-scheduler",
+      "type": "java.util.concurrent.ScheduledExecutorService",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.db-type",
+      "type": "java.lang.String",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.default-auto-commit",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.default-catalog",
+      "type": "java.lang.String",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.default-read-only",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.default-transaction-isolation",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.destroy-scheduler",
+      "type": "java.util.concurrent.ScheduledExecutorService",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.driver",
+      "type": "java.sql.Driver",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.driver-class-name",
+      "type": "java.lang.String",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.dup-close-log-enable",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.enable",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.exception-sorter",
+      "type": "com.alibaba.druid.pool.ExceptionSorter",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.exception-sorter-class-name",
+      "type": "java.lang.String",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.fail-fast",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.filter-class-names",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.init-global-variants",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.init-variants",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.initial-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.keep-alive",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.kill-when-socket-read-timeout",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.log-abandoned",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.log-different-thread",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.login-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.max-active",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.max-create-task-count",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.max-evictable-idle-time-millis",
+      "type": "java.lang.Long",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.max-open-prepared-statements",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.max-pool-prepared-statement-per-connection-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.max-wait",
+      "type": "java.lang.Long",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.max-wait-thread-count",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.min-evictable-idle-time-millis",
+      "type": "java.lang.Long",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.min-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.name",
+      "type": "java.lang.String",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.not-full-timeout-retry-count",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.object-name",
+      "type": "javax.management.ObjectName",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.on-fatal-error-max-active",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.oracle",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.password",
+      "type": "java.lang.String",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.password-callback",
+      "type": "javax.security.auth.callback.PasswordCallback",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.phy-timeout-millis",
+      "type": "java.lang.Long",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.pool-prepared-statements",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.pooling-connection-info",
+      "type": "java.util.List<java.util.Map<java.lang.String,java.lang.Object>>",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.proxy-filters",
+      "type": "java.util.List<com.alibaba.druid.filter.Filter>",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.query-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.remove-abandoned",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.remove-abandoned-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.remove-abandoned-timeout-millis",
+      "type": "java.lang.Long",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.reset-stat-enable",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.share-prepared-statements",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.sql-stat-map",
+      "type": "java.util.Map<java.lang.String,com.alibaba.druid.stat.JdbcSqlStat>",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.stat-data",
+      "type": "java.util.Map<java.lang.String,java.lang.Object>",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.stat-data-for-m-bean",
+      "type": "java.util.Map<java.lang.String,java.lang.Object>",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.stat-logger",
+      "type": "com.alibaba.druid.pool.DruidDataSourceStatLogger",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.test-on-borrow",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.test-on-return",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.test-while-idle",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.time-between-connect-error-millis",
+      "type": "java.lang.Long",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.time-between-eviction-runs-millis",
+      "type": "java.lang.Long",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.time-between-log-stats-millis",
+      "type": "java.lang.Long",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.transaction-query-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.transaction-threshold-millis",
+      "type": "java.lang.Long",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.url",
+      "type": "java.lang.String",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.use-global-data-source-stat",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.use-local-session-state",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.use-oracle-implicit-cache",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.use-unfair-lock",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.user-callback",
+      "type": "javax.security.auth.callback.NameCallback",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.username",
+      "type": "java.lang.String",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.valid-connection-checker",
+      "type": "com.alibaba.druid.pool.ValidConnectionChecker",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.valid-connection-checker-class-name",
+      "type": "java.lang.String",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.validation-query",
+      "type": "java.lang.String",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.validation-query-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.wall-stat-map",
+      "type": "java.util.Map<java.lang.String,java.lang.Object>",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource"
+    },
+    {
+      "name": "zk.zuul.redis.pool.block-when-exhausted",
+      "type": "java.lang.Boolean",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.eviction-policy-class-name",
+      "type": "java.lang.String",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.fairness",
+      "type": "java.lang.Boolean",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.jmx-enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.jmx-name-base",
+      "type": "java.lang.String",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.jmx-name-prefix",
+      "type": "java.lang.String",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.lifo",
+      "type": "java.lang.Boolean",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.max-total",
+      "type": "java.lang.Integer",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.max-wait-millis",
+      "type": "java.lang.Long",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.min-evictable-idle-time-millis",
+      "type": "java.lang.Long",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.min-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.num-tests-per-eviction-run",
+      "type": "java.lang.Integer",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.soft-min-evictable-idle-time-millis",
+      "type": "java.lang.Long",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.test-on-borrow",
+      "type": "java.lang.Boolean",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.test-on-create",
+      "type": "java.lang.Boolean",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.test-on-return",
+      "type": "java.lang.Boolean",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.test-while-idle",
+      "type": "java.lang.Boolean",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.redis.pool.time-between-eviction-runs-millis",
+      "type": "java.lang.Long",
+      "sourceType": "redis.clients.jedis.JedisPoolConfig"
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource",
+      "deprecated": true,
+      "deprecation": {}
+    },
+    {
+      "name": "zk.zuul.db.dynamic.jdbc.druid.pool.num-tests-per-eviction-run",
+      "type": "java.lang.Integer",
+      "sourceType": "com.alibaba.druid.pool.DruidDataSource",
+      "deprecated": true,
+      "deprecation": {}
+    }
+  ],
+  "hints": []
+}
