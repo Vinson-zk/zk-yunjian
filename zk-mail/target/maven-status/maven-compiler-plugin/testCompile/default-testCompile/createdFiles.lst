@@ -1,6 +1,0 @@
-com/zk/mail/entity/ZKMailTemplateTest.class
-com/zk/mail/service/ZKMailSendHistoryServiceTest.class
-com/zk/mail/utils/ZKMailUtilsTest.class
-com/zk/mail/service/ZKMailTypeServiceTest.class
-com/zk/mail/service/ZKMailTemplateServiceTest.class
-com/zk/mail/helper/ZKMailTestHelper.class
