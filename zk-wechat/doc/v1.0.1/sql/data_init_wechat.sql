@@ -1,0 +1,47 @@
+-- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
+--
+-- Host: 10.211.55.11    Database: zk-wechat
+-- ------------------------------------------------------
+-- Server version	8.0.21
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Dumping data for table `t_wx_pb_func_key_config`
+--
+
+LOCK TABLES `t_wx_pb_func_key_config` WRITE;
+/*!40000 ALTER TABLE `t_wx_pb_func_key_config` DISABLE KEYS */;
+INSERT INTO `t_wx_pb_func_key_config` VALUES (6116518872746033664,6075055676609004032,6075055676609004032,'2022-05-24 23:58:29','2022-06-06 09:28:17',0,0,NULL,NULL,NULL,NULL,NULL,NULL,6134484354883125760,'Test','{\"en-US\": \"Test\", \"zh-CN\": \"测试\"}','Test',0,'https://www.baidu.com','https://www.baidu.com','{}'),(6134486675977404928,6075055676609004032,6075055676609004032,'2022-06-06 09:27:54','2022-06-06 09:51:46',0,0,NULL,NULL,NULL,NULL,NULL,NULL,6116513647448556032,'Anonymous_Mail','{\"en-US\": \"ZHGXFZ Anonymous Mail\", \"zh-CN\": \"高发匿名信箱\"}','ZHGXFZ_Boss_Mail',0,'http://gfdev03.zhghsz.com/apiGfGeneral/mail/send/sendView/Boss_Mail','http://gfdev03.zhghsz.com/apiGfGeneral/mail/send/sendView/Boss_Mail','{}');
+/*!40000 ALTER TABLE `t_wx_pb_func_key_config` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `t_wx_pb_func_key_type`
+--
+
+LOCK TABLES `t_wx_pb_func_key_type` WRITE;
+/*!40000 ALTER TABLE `t_wx_pb_func_key_type` DISABLE KEYS */;
+INSERT INTO `t_wx_pb_func_key_type` VALUES (6116513647448556032,6075055676609004032,6075055676609004032,'2022-05-24 23:53:18','2022-05-24 23:53:18',0,0,NULL,'{}',NULL,NULL,NULL,'{}','Anonymous_Mail','{\"en-US\": \"AnonymousMail\", \"zh-CN\": \"匿名邮箱\"}',0,'{}'),(6134484354883125760,6075055676609004032,6075055676609004032,'2022-06-06 09:25:36','2022-06-06 09:25:36',0,0,NULL,'{}',NULL,NULL,NULL,'{}','Test','{\"en-US\": \"Test\", \"zh-CN\": \"测试\"}',0,'{}');
+/*!40000 ALTER TABLE `t_wx_pb_func_key_type` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2022-07-02 20:48:58

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+	">  
+	
+	<!-- 引入 mongo 配置 -->
+	<!-- -->
+	<import resource="classpath:test_spring_context_mongo.xml"/> 
+	
+	<!-- mongo 缓存管理 -->
+	<bean id="mongoCacheManager" class="com.zk.cache.mongo.ZKMongoCacheManager" >
+	    <constructor-arg index="0" name="mongoTemplate" ref="mongoTemplate" />
+	</bean>
+	
+	<!-- 内存 缓存管理 -->
+	<bean id="memoryCacheManager" class="com.zk.cache.memory.ZKMemoryCacheManager" />
+	
+	<!-- 自定义支持 shiro mongo 缓存
+	<bean id="mongoShiroCacheManager" class="com.zk.cache.support.shiro.ZKShiroCacheManager">
+	    <constructor-arg index="0" name="cacheManager" ref="mongoCacheManager" />
+	</bean>  -->
+	
+	<!-- 自定义支持 spring mongo 缓存
+	<bean id="mongoSpringCacheManager" class="com.zk.cache.support.spring.ZKSpringCacheManager">
+	    <constructor-arg index="0" name="cacheManager" ref="mongoCacheManager" />
+	</bean> -->
+	
+	<!-- 自定义支持 shiro 内存 缓存
+	<bean id="memoryShiroCacheManager" class="com.zk.cache.support.shiro.ZKShiroCacheManager">
+	    <constructor-arg index="0" name="cacheManager" ref="memoryCacheManager" />
+	</bean> -->
+	
+	<!-- 自定义支持 spring 内存 缓存
+	<bean id="memorySpringCacheManager" class="com.zk.cache.support.spring.ZKSpringCacheManager">
+	    <constructor-arg index="0" name="cacheManager" ref="memoryCacheManager" />
+	</bean> -->
+    
+</beans>
+
+

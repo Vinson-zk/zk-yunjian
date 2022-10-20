@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"    
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	">
+
+	<!-- 五、请求适配器；[HandlerAdapter]    在 java 配置类中配置，这里只配置一些属性； -->
+	<!-- 5.1 适配消息处理 -->
+	<bean id="messageConverters" class="org.springframework.boot.autoconfigure.http.HttpMessageConverters" >
+		<constructor-arg>
+			<array>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="writeAcceptCharset" value="false" /> <!-- 避免响应头过大 -->
+					<property name="supportedMediaTypes">
+						<list>
+							<bean class="org.springframework.http.MediaType">
+								<constructor-arg index="0" value="text" />
+								<constructor-arg index="1" value="plain" />
+								<constructor-arg index="2" value="UTF-8" />
+							</bean>
+							<value>*/*;charset=UTF-8</value>  
+							<value>*/*</value>  
+						</list>
+					</property>
+				</bean>
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+					<property name="supportedMediaTypes">
+		                <list>    
+		                    <value>application/json;charset=UTF-8</value>    
+		                    <value>text/javascript;charset=UTF-8</value>  
+		                    <value>text/html;charset=UTF-8</value>  
+		                </list>    
+		            </property>   
+		            <property name="prettyPrint" value="false"/>  
+	                <property name="objectMapper">  
+	                    <bean class="com.zk.core.web.ZKJsonObjectMapper"></bean>  
+	                </property>  
+				</bean>
+			</array>
+		</constructor-arg>
+	</bean> 
+	
+</beans>
+
+

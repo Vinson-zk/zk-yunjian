@@ -1,0 +1,331 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.zk</groupId>
+		<artifactId>zk-parent</artifactId>
+		<version>2.0.0</version>
+		<relativePath>../zk-parent</relativePath>
+	</parent>
+	<artifactId>zk-test</artifactId>
+	<version>${version.zk.test}</version>
+	<name>zk-test</name>
+	<description>Vinson project zk-test</description>
+	
+	<properties>
+		<!-- 可以从 parent 中继承 -->
+	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.zk</groupId>
+				<artifactId>zk-dependencies</artifactId>
+				<version>${version.zk.dependencies}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-core</artifactId>
+			<version>${version.zk.core}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-lang3</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- 
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-mongo</artifactId>
+			<version>${version.zk.mongo}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-db</artifactId>
+			<version>${version.zk.db}</version>
+		</dependency> 
+-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<!-- <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency> -->
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+			
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>cn.dev33</groupId>
+			<artifactId>sa-token-spring-boot-starter</artifactId>
+		</dependency>
+		
+		<!-- ***** log4j begin -->
+		<dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-log4j</artifactId>
+	    </dependency>
+	    <dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-log4j12</artifactId>
+		    <!-- <scope>test</scope> -->
+		</dependency>
+	    <!-- <dependency>
+	        <groupId>org.apache.logging.log4j</groupId>
+	        <artifactId>log4j-api</artifactId>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.apache.logging.log4j</groupId>
+	        <artifactId>log4j-core</artifactId>
+	    </dependency>
+	    <dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-web</artifactId>
+	    </dependency> -->
+	    <!-- ##### log4j end -->
+	    <!-- <dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency> -->
+	    
+	    <!-- ***** shiro begin -->
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-spring</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-core</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-web</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-ehcache</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-cas</artifactId>
+		</dependency>
+		<!-- ##### shiro end -->
+		
+	    <!-- ***** cxf begin -->
+		<dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+            <exclusions>
+				<exclusion>
+					<groupId>javax.validation</groupId>
+   					<artifactId>validation-api</artifactId>
+				</exclusion>
+			</exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http-jetty</artifactId>
+        </dependency>
+       	<!-- ##### cxf end -->
+	
+		<!-- ***** other begin -->
+		<!-- <dependency>
+		    <groupId>jsr94</groupId>
+		    <artifactId>jsr94</artifactId>
+		    <version>1.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>drools</groupId>
+		    <artifactId>drools-jsr94</artifactId>
+		    <version>2.1</version>
+		</dependency> -->
+		<!-- ***** mongo begin 
+		<dependency>
+		    <groupId>org.springframework.data</groupId>
+		    <artifactId>spring-data-mongodb</artifactId>
+		    <exclusions>
+		        <exclusion>
+		            <artifactId>spring-data-commons</artifactId>
+		            <groupId>org.springframework.data</groupId>
+		        </exclusion>
+		    </exclusions> 
+		</dependency>-->
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+        </dependency>
+        
+		 <!-- begin jackson json -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+        </dependency>
+        <!-- end jackson json -->
+        		
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		</dependency>
+		<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+			</dependency>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+   			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- ##### other end -->
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<!-- plugin 发布 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-jar-plugin</artifactId>
+			    <configuration>
+<!--			        <source>1.8</source>-->
+<!--			        <target>1.8</target>-->
+			        <archive>
+			            <manifest>
+			                <mainClass>com.zk.test.ZKTestSpringBootMain</mainClass>
+			                <addClasspath>true</addClasspath>
+			            	<classpathPrefix>lib/</classpathPrefix>
+			            </manifest>
+			        </archive>
+			        <classesDirectory>
+			        </classesDirectory>
+			    </configuration>
+			</plugin>
+			<!-- <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-dependency-plugin</artifactId>
+	            <executions>
+	                <execution>
+	                    <id>copy</id>
+	                    <phase>package</phase>
+	                    <goals>
+	                        <goal>copy-dependencies</goal>
+	                    </goals>
+	                    <configuration>
+	                        <outputDirectory>${project.build.directory}/lib</outputDirectory>
+	                    </configuration>
+	                </execution>
+	            </executions>
+	        </plugin> -->
+	        <!-- spring boot 运行插件 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+	        <!-- 打包项目外部配置文件； 虽然直接在 resources 下也可实现，但在 Maven update project 时， 会报错误：mvn 
+			update Could not update project xxx configuration java.lang.NullPointerE -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<configuration>
+					<resources>
+						<resource>
+							<directory>src/main/resources</directory>
+							<filtering>false</filtering>
+							<includes>
+								<include>**/**</include>
+							</includes>
+						</resource>
+					</resources>
+				</configuration>
+				<executions>
+					<execution>
+						<id>my-own-very-cool-id-for-this-step</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>add-resource</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>${zk.resources.path}/default</directory>
+									<filtering>false</filtering>
+									<includes>
+										<include>**</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

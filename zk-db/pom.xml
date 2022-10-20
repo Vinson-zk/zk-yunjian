@@ -1,0 +1,215 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.zk</groupId>
+		<artifactId>zk-parent</artifactId>
+		<version>2.0.0</version>
+		<relativePath>../zk-parent</relativePath>
+	</parent>
+	<!-- <groupId>com.zk</groupId> -->
+	<artifactId>zk-db</artifactId>
+	<version>${version.zk.db}</version>
+	<name>zk-db</name>
+	<description>Vinson project zk-db</description>
+	
+	<properties>
+		<!-- 可以从 parent 中继承 -->
+	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.zk</groupId>
+				<artifactId>zk-dependencies</artifactId>
+				<version>${version.zk.dependencies}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-core</artifactId>
+			<version>${version.zk.core}</version>
+		</dependency>
+		
+		<!-- ***** spring begin -->
+		<!-- --><dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter</artifactId>
+	</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<!-- <dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-jdbc</artifactId>
+    	</dependency> -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-json</artifactId>
+		</dependency>
+		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-configuration-processor</artifactId>
+    	</dependency>
+		<!-- ##### spring end -->
+		
+		<!-- begin mybatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+        </dependency>
+        <!-- end mybatis -->
+        <!-- begin connection pool -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>tools</artifactId>
+                    <groupId>com.alibaba</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- end connection pool -->
+        <!-- begin jdbc driver -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- end jdbc driver -->
+		
+		<!-- ***** log4j begin -->
+		<dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-log4j</artifactId>
+	    </dependency>
+	    <dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-log4j12</artifactId>
+		    <!-- <scope>test</scope> -->
+		</dependency>
+		<!-- ##### log4j end -->
+		
+		<!-- ***** other begin -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+   			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- ##### other end -->
+	</dependencies>
+	
+	<build>
+	
+		<plugins>
+			<!-- spring boot 运行插件 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- plugin 资源配置文件处理 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<!-- 输出目录 配置 executions 需要配置 -->
+					<!-- <outputDirectory>${basedir}/target/classes</outputDirectory> -->
+					<!-- <outputDirectory>${project.build.directory}/classes</outputDirectory> -->
+					<!-- 替换配置文件中的 @key@ 变量，需要 resources 中和 filtering 配合使用 filtering 为 false 时，不会替换 -->
+					<!-- useDefaultDelimiters 为 
+						true 时，可替换 @propertyName@ 和 ${propertyName} 
+						false 时，根据 delimiter 定义的通配符来替换；
+					-->
+					<useDefaultDelimiters>true</useDefaultDelimiters>
+					<delimiters>
+						<delimiter>${*}</delimiter><!-- ${*}-可替换 ${propertyName} -->
+					</delimiters>
+					<!-- 默认只替换 ${basedir}/src/main/resources 下的 yml 和 properties 文件，如需要替换其他文件，请在子项目中自己定制 -->
+					<resources>
+						<resource>
+							<filtering>true</filtering>
+							<directory>${basedir}/src/main/resources</directory>
+							<!-- <includes>
+								<include>**/*.yml</include>
+								<include>**/*.properties</include>
+							</includes> -->
+						</resource>
+						<resource>
+							<filtering>true</filtering>
+							<directory>${basedir}/src/test/resources</directory>
+							<targetPath>${project.build.directory}/test-classes</targetPath>
+						</resource>
+					</resources>
+					<!-- 
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>pem</nonFilteredFileExtension>
+						<nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+						<nonFilteredFileExtension>p12</nonFilteredFileExtension>
+					</nonFilteredFileExtensions> -->
+				</configuration>
+				<!-- 引入外部资源文件 -->
+				<executions>
+					<execution>
+					 	<id>copy-extra-assets</id>
+			            <phase>process-sources</phase><!-- validate process-sources compile -->
+						<goals>
+							<goal>copy-resources</goal> <!-- copy-resources -->
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${zk.resources.path}/public-assets/default</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>**</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		
+	</build>
+	
+</project>

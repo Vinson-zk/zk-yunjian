@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd   
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+    ">  
+ 
+    <!-- 获取配置资源 
+   	<context:property-placeholder file-encoding="UTF-8" ignore-unresolvable="true" location="classpath*:env/env.test.child.properties" />
+	<context:property-placeholder file-encoding="UTF-8" ignore-unresolvable="true" location="classpath*:env/env.test.parent.properties" />
+	<context:property-placeholder file-encoding="UTF-8" ignore-unresolvable="true" location="classpath*:env/env.test.source.properties" />
+	-->  
+	
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+       <property name="basenames">
+	       <list>
+				<value>msg/test_msg</value>
+	       </list>
+       </property>  
+       
+       <property name="useCodeAsDefaultMessage" value="true"/>
+       <property name="cacheSeconds" value="60"></property>
+       <property name="defaultEncoding" value="UTF-8"></property>
+    </bean> 
+    
+    <!-- id="localeResolver" 
+    org.springframework.web.servlet.i18n.SessionLocaleResolver
+    -->
+    <bean id="localeResolver" class="com.zk.core.web.handler.support.ZKSessionLocaleResolver">
+    	<property name="defaultLocale" value="en_US" />
+    </bean>    
+    
+    <!-- 自定义消息处理拦截器 -->
+    <bean id="zkValidatorMessageInterpolator" class="com.zk.core.commons.ZKValidatorMessageInterpolator">
+    	<constructor-arg ref="messageSource" />
+    </bean>
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" >
+		<property name="messageInterpolator" ref="zkValidatorMessageInterpolator" />
+		<!-- 使用默认消息处理拦截器，org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator.ResourceBundleMessageInterpolator
+		刚不用注入 messageInterpolator 直接注入 validationMessageSource 即可；
+		 -->
+		<!-- <property name="validationMessageSource" ref="messageSource" /> -->
+	</bean>
+	
+</beans> 
+
+
+
