@@ -23,6 +23,7 @@
 				/apiWechat/** = anon
 				/apiDevTool/** = anon
 				/apiMail/** = anon
+				/apiFile/** = anon
 
 				/${zk.path.admin}/${zk.path.zuul}/${zk.zuul.version} = anon
 				/${zk.path.admin}/${zk.path.zuul}/${zk.zuul.version}/index = anon
