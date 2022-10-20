@@ -99,7 +99,7 @@ public class ZKMongoAutoConfigurationTest {
 
             MongoClient mongoClient = ctx.getBean(MongoClient.class);
 
-            TestCase.assertEquals("10.211.55.11", mongoClient.getAddress().getHost());
+            TestCase.assertEquals("192.168.1.104", mongoClient.getAddress().getHost());
 
         }
         catch(Exception e) {

@@ -19,12 +19,17 @@
         		<!-- 放开静态资源  
         		/eureka/** = anon -->
         		<!-- /static/** = anon -->
-        		/${zk.path.admin}/${zk.path.zuul}/${zk.zuul.version} = anon
-        		/${zk.path.admin}/${zk.path.zuul}/${zk.zuul.version}/index = anon
-        		<!-- 
-        		 /** = anon
-        		 /** = user
-        		-->
+				/apiSys/** = anon
+				/apiWechat/** = anon
+				/apiDevTool/** = anon
+				/apiMail/** = anon
+
+				/${zk.path.admin}/${zk.path.zuul}/${zk.zuul.version} = anon
+				/${zk.path.admin}/${zk.path.zuul}/${zk.zuul.version}/index = anon
+				<!--
+                 /** = anon
+                 /** = user
+                -->
                /** = anon
     		</value>
         </property>

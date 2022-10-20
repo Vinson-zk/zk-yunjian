@@ -66,8 +66,7 @@ public class ZKDevleopmentToolTestHelper {
         ///////////////////////
         zkModule = new ZKModule();
         zkModule.setUrl(
-                "jdbc:mysql://10.211.55.11:3306/sys?useUnicode=true&characterEncoding=utf8&useTimezone=true" +
-                        "&serverTimezone=GMT%2B8");
+            "jdbc:mysql://192.168.1.104:3306/sys?useUnicode=true&characterEncoding=utf8&useTimezone=true&serverTimezone=GMT%2B8");
         zkModule.setUsername("root");
         zkModule.setPassword("root");
 
