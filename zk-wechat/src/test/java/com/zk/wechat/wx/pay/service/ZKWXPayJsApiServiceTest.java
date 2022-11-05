@@ -35,7 +35,7 @@ import junit.framework.TestCase;
 * @author Vinson 
 * @version 1.0 
 */
-public class ZKWXPayJsApiServiceTest {
+public class  ZKWXPayJsApiServiceTest {
 
     // 统一下单
     @Test

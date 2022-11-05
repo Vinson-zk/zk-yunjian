@@ -9,27 +9,30 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKWXGetOrder.java 
+* @Title: ZKWXJsApiOrder.java 
 * @author Vinson 
 * @Package com.zk.wechat.wx.pay.entity 
 * @Description: TODO(simple description this file what to do. ) 
 * @date Feb 19, 2021 10:53:29 PM 
 * @version V1.0 
 */
-package com.zk.wechat.wx.pay.entity;
+package com.zk.wechat.wx.pay.entity.jsapi;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.wechat.pay.entity.ZKPayGetOrder;
+import com.zk.wechat.wx.pay.entity.ZKWXGetAmount;
+import com.zk.wechat.wx.pay.entity.ZKWXGetPayer;
 
-/** 
-* @ClassName: ZKWXGetOrder 
+/**
+ * 商户号 jsapi 下单实体
+* @ClassName: ZKWXJsApiOrder 
 * @Description: TODO(simple description this class what to do. ) 
 * @author Vinson 
 * @version 1.0 
 */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
-public class ZKWXGetOrder {
+public class ZKWXV3JsApiOrder {
 
     ZKPayGetOrder payGetOrder;
 
@@ -37,7 +40,7 @@ public class ZKWXGetOrder {
 
     ZKWXGetAmount amount = null;
 
-    public ZKWXGetOrder(ZKPayGetOrder payGetOrder) {
+    public ZKWXV3JsApiOrder(ZKPayGetOrder payGetOrder) {
         this.payGetOrder = payGetOrder;
         
         if(payGetOrder.getPayGetAmount() != null) {

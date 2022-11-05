@@ -44,12 +44,12 @@ import com.zk.wechat.pay.enumType.ZKPayGetChannel;
 import com.zk.wechat.pay.enumType.ZKPayStatus;
 import com.zk.wechat.pay.service.ZKPayGetOrderService;
 import com.zk.wechat.pay.service.ZKPlatformCertService;
-import com.zk.wechat.wx.pay.ZKWXApiPayUtils;
 import com.zk.wechat.wx.pay.ZKWXPayConstants;
 import com.zk.wechat.wx.pay.ZKWXPayUtils;
+import com.zk.wechat.wx.pay.ZKWXV3ApiPayUtils;
 import com.zk.wechat.wx.pay.entity.ZKWXApiCert;
-import com.zk.wechat.wx.pay.entity.ZKWXGetOrder;
 import com.zk.wechat.wx.pay.entity.ZKWXJsPay;
+import com.zk.wechat.wx.pay.entity.jsapi.ZKWXV3JsApiOrder;
 
 /** 
 * @ClassName: ZKWXPayJsApiService 
@@ -214,7 +214,7 @@ public class ZKWXPayJsApiService {
      * @return ZKPayGetOrder
      */
     public ZKPayGetOrder jsapiByZKPayGetOrder(ZKPayGetOrder payGetOrder) {
-        ZKWXGetOrder getOrder = new ZKWXGetOrder(payGetOrder);
+        ZKWXV3JsApiOrder jsApiOrder = new ZKWXV3JsApiOrder(payGetOrder);
         try {
             // 支付中，如果支付标识已过期，重新下单
             if (this.checkPayValidTime(payGetOrder) < 1) {
@@ -227,7 +227,7 @@ public class ZKWXPayJsApiService {
             // 取商户 api 证书
             ZKWXApiCert apiCert = wxPayService.getApiCertKey(payGetOrder.getMchid());
             // 调用微信支付平台统一下单
-            String resStr = ZKWXApiPayUtils.jsapi(null, getOrder, apiCert.getPrivateKey(), apiCert.getSerialNo());
+            String resStr = ZKWXV3ApiPayUtils.jsapi(null, jsApiOrder, apiCert.getPrivateKey(), apiCert.getSerialNo());
             JSONObject obj = ZKJsonUtils.parseObject(resStr);
             // 更新预支付ID 到支付订单中
             payGetOrder.setPrepayId(obj.getString(ZKWXPayConstants.MsgAttr.prepayId));
@@ -280,7 +280,7 @@ public class ZKWXPayJsApiService {
         ZKWXApiCert apiCert = wxPayService.getApiCertKey(payGetOrder.getMchid());
         try {
             // 调用微信支付平台统一下单
-            String resStr = ZKWXApiPayUtils.close(null, payGetOrder.getMchid(), payGetOrder.getPkId(), apiCert.getPrivateKey(),
+            String resStr = ZKWXV3ApiPayUtils.close(null, payGetOrder.getMchid(), payGetOrder.getPkId(), apiCert.getPrivateKey(),
                     apiCert.getSerialNo());
             payGetOrderService.updatePrepay(payGetOrder.getPkId(), ZKPayStatus.CLOSED, resStr, null);
             return this.payGetOrderService.get(payGetOrder);
@@ -297,7 +297,7 @@ public class ZKWXPayJsApiService {
     public void dowloadPlatformCert(String mchid) throws ParseException, IOException {
         // 取商户 api 证书
         ZKWXApiCert apiCert = wxPayService.getApiCertKey(mchid);
-        String resStr = ZKWXApiPayUtils.dowloadCerts(null, mchid, apiCert.getPrivateKey(), apiCert.getSerialNo());
+        String resStr = ZKWXV3ApiPayUtils.dowloadCerts(null, mchid, apiCert.getPrivateKey(), apiCert.getSerialNo());
         JSONObject resObj = ZKJsonUtils.parseObject(resStr);
 
         JSONArray certArray = resObj.getJSONArray(ZKWXPayConstants.MsgAttr.data);

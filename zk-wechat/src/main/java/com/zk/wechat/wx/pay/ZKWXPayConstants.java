@@ -145,6 +145,13 @@ public class ZKWXPayConstants {
         public static final String prepayId = "prepay_id";
 
         /**
+         * 二维码链接	code_url	string[1,512]	是	此URL用于生成支付二维码，然后提供给用户扫码支付。
+         * 注意：code_url并非固定值，使用时按照URL格式转成二维码即可。
+         * 示例值：weixin://wxpay/bizpayurl/up?pr=NwY5Mz9&groupid=00
+         */
+        public static final String codeUrl = "code_url";
+
+        /**
          * 数据
          */
         public static final String data = "data";

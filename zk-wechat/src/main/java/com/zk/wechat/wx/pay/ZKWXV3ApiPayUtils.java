@@ -9,7 +9,7 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKWXApiPayUtils.java 
+* @Title: ZKWXApiPayV3Utils.java 
 * @author Vinson 
 * @Package com.zk.wechat.wx.pay 
 * @Description: TODO(simple description this file what to do. ) 
@@ -37,27 +37,24 @@ import com.zk.core.utils.ZKJsonUtils;
 import com.zk.core.utils.ZKStringUtils;
 import com.zk.core.web.utils.ZKHttpApiUtils;
 import com.zk.wechat.wx.common.ZKWXConstants;
-import com.zk.wechat.wx.pay.entity.ZKWXGetOrder;
+import com.zk.wechat.wx.pay.entity.jsapi.ZKWXV3JsApiOrder;
+import com.zk.wechat.wx.pay.entity.nativeapi.ZKWXV3PartnerNativeApiOrder;
 import com.zk.wechat.wx.utils.ZKWXUtils;
 
 /** 
-* @ClassName: ZKWXApiPayUtils 
+* @ClassName: ZKWXApiPayV3Utils 
 * @Description: TODO(simple description this class what to do. ) 
 * @author Vinson 
 * @version 1.0 
 */
-public class ZKWXApiPayUtils {
+public class ZKWXV3ApiPayUtils {
 
     /**
      * 日志对象
      */
-    protected static Logger log = LoggerFactory.getLogger(ZKWXApiPayUtils.class);
+    protected static Logger log = LoggerFactory.getLogger(ZKWXV3ApiPayUtils.class);
 
     public static interface Key {
-        /**
-         * jsapi 统一下单
-         */
-        public static final String jsapi = "zk.wechat.wx.pay.transactions.jsapi";
 
         /**
          * 关闭订单；其中 {0} 替换为商户订单号 out_trade_no
@@ -68,6 +65,16 @@ public class ZKWXApiPayUtils {
          * GET 获取平台证书列表
          */
         public static final String certs = "zk.wechat.wx.pay.certificates";
+
+        /**
+         * jsapi 统一下单
+         */
+        public static final String jsapi = "zk.wechat.wx.pay.transactions.jsapi";
+
+        /**
+         * Native 下单 API
+         */
+        public static final String nativeApiUrl = "zk.wechat.wx.pay.transactions.native";
     }
 
     private static void addHeaderAuthSign(Map<String, String> header, RequestMethod method, String apiUrl, String body,
@@ -94,50 +101,6 @@ public class ZKWXApiPayUtils {
 //        + "signature=\"" + signature + "\"";
         
         header.put(ZKWXPayConstants.WXReqHeader.Authorization, authStrBuf.toString());
-    }
-
-    /**
-     * JsApi 统一下单
-     *
-     * @Title: transactionsJsapi
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Feb 19, 2021 11:46:11 AM
-     * @param getOrder
-     * @return
-     * @throws UnsupportedEncodingException
-     * @return String
-     * @throws SignatureException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     */
-    public static String jsapi(String jsApiUrl, ZKWXGetOrder getOrder, PrivateKey privateKey,
-            String certMyPrivateSerialNo) {
-
-        if (jsApiUrl == null) {
-            jsApiUrl = ZKEnvironmentUtils.getString(Key.jsapi);
-        }
-
-//        httpPost.setHeader("Accept", "application/json");
-        Map<String, String> header = new HashMap<>();
-        header.put("Accept", "application/json");
-
-        String postBody = ZKJsonUtils.writeObjectJson(getOrder);
-
-        // 添加请求头签名
-        addHeaderAuthSign(header, RequestMethod.POST, jsApiUrl, postBody, getOrder.getMchid(), privateKey,
-                certMyPrivateSerialNo);
-
-        StringBuffer outStringBuffer = new StringBuffer();
-        int resStatus = ZKHttpApiUtils.postJson(jsApiUrl, postBody, header, outStringBuffer);
-
-        String resStr = outStringBuffer.toString();
-
-        if (resStatus != 200 && resStatus != 204) {
-            throw ZKCodeException.as(parseErrCode(resStatus, resStr), "向微信平台请求统一下单异常 " + resStr);
-        }
-
-        return resStr;
     }
     
     // 关闭订单
@@ -207,6 +170,85 @@ public class ZKWXApiPayUtils {
             e.printStackTrace();
         }
         return String.format("%s.%s.%s", ZKWXConstants.errCodePrefix, resStatus, resStr);
+    }
+
+    /************************************************************/
+    /* JSAPI 支付 */
+
+    /**
+     * JsApi 统一下单
+     *
+     * @Title: transactionsJsapi
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Feb 19, 2021 11:46:11 AM
+     * @param jsApiOrder
+     * @return
+     * @throws UnsupportedEncodingException
+     * @return String
+     * @throws SignatureException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     */
+    public static String jsapi(String jsApiUrl, ZKWXV3JsApiOrder jsApiOrder, PrivateKey privateKey,
+                               String certMyPrivateSerialNo) {
+
+        if (jsApiUrl == null) {
+            jsApiUrl = ZKEnvironmentUtils.getString(Key.jsapi);
+        }
+
+//        httpPost.setHeader("Accept", "application/json");
+        Map<String, String> header = new HashMap<>();
+        header.put("Accept", "application/json");
+
+        String postBody = ZKJsonUtils.writeObjectJson(jsApiOrder);
+
+        // 添加请求头签名
+        addHeaderAuthSign(header, RequestMethod.POST, jsApiUrl, postBody, jsApiOrder.getMchid(), privateKey,
+                certMyPrivateSerialNo);
+
+        StringBuffer outStringBuffer = new StringBuffer();
+        int resStatus = ZKHttpApiUtils.postJson(jsApiUrl, postBody, header, outStringBuffer);
+
+        String resStr = outStringBuffer.toString();
+
+        if (resStatus != 200 && resStatus != 204) {
+            throw ZKCodeException.as(parseErrCode(resStatus, resStr), "向微信平台请求统一下单异常 " + resStr);
+        }
+
+        return resStr;
+    }
+
+    /************************************************************/
+    /* 服务商 partner Native 支付 */
+
+    // 服务商 partner Native 下单
+    public static String partnerNativeapi(String nativeApiUrl, ZKWXV3PartnerNativeApiOrder partnerNativeApiOrder,
+        PrivateKey privateKey, String certMyPrivateSerialNo) {
+        if (nativeApiUrl == null) {
+            nativeApiUrl = ZKEnvironmentUtils.getString(Key.nativeApiUrl);
+        }
+
+//        httpPost.setHeader("Accept", "application/json");
+        Map<String, String> header = new HashMap<>();
+        header.put("Accept", "application/json");
+
+        String postBody = ZKJsonUtils.writeObjectJson(partnerNativeApiOrder);
+
+        // 添加请求头签名
+        addHeaderAuthSign(header, RequestMethod.POST, nativeApiUrl, postBody, partnerNativeApiOrder.getSp_mchid(), privateKey,
+                certMyPrivateSerialNo);
+
+        StringBuffer outStringBuffer = new StringBuffer();
+        int resStatus = ZKHttpApiUtils.postJson(nativeApiUrl, postBody, header, outStringBuffer);
+
+        String resStr = outStringBuffer.toString();
+
+        if (resStatus != 200 && resStatus != 204) {
+            throw ZKCodeException.as(parseErrCode(resStatus, resStr), "向微信平台请求统一下单异常 " + resStr);
+        }
+
+        return resStr;
     }
 
 }
