@@ -188,43 +188,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <!-- 打包项目外部配置文件； 虽然直接在 resources 下也可实现，但在 Maven update project 时， 会报错误：mvn 
-			update Could not update project xxx configuration java.lang.NullPointerE -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<configuration>
-					<resources>
-						<resource>
-							<directory>src/main/resources</directory>
-							<filtering>false</filtering>
-							<includes>
-								<include>**/**</include>
-							</includes>
-						</resource>
-					</resources>
-				</configuration>
-				<executions>
-					<execution>
-						<id>my-own-very-cool-id-for-this-step</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>add-resource</goal>
-						</goals>
-						<configuration>
-							<resources>
-								<resource>
-									<directory>${zk.resources.path}/default</directory>
-									<filtering>false</filtering>
-									<includes>
-										<include>**</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+
 		</plugins>
 		
 	</build>

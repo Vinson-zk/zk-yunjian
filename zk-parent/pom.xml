@@ -31,9 +31,9 @@
 			</activation>
 		</profile>
 		<profile>
-			<id>zkdev</id>
+			<id>zkDev</id>
 			<properties>
-				<package.env>zkdev</package.env>
+				<package.env>zkDev</package.env>
 			</properties>
 		</profile>
 		<profile>
@@ -348,7 +348,7 @@
 	                	<finalName>${artifactId}-${version}</finalName>
 						<executable>false</executable>
 						<classifier>exec</classifier>
-				        <mainClass>com.zk.${startClass}</mainClass>
+						<!-- <mainClass>com.zk.${startClass}</mainClass>-->
 				    </configuration> 
 				    <executions>
 						<execution>

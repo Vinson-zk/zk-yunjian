@@ -167,10 +167,6 @@
 						<resource>
 							<filtering>true</filtering>
 							<directory>${basedir}/src/main/resources</directory>
-							<!-- <includes>
-								<include>**/*.yml</include>
-								<include>**/*.properties</include>
-							</includes> -->
 						</resource>
 						<resource>
 							<filtering>true</filtering>
@@ -178,35 +174,7 @@
 							<targetPath>${project.build.directory}/test-classes</targetPath>
 						</resource>
 					</resources>
-					<!-- 
-					<nonFilteredFileExtensions>
-						<nonFilteredFileExtension>pem</nonFilteredFileExtension>
-						<nonFilteredFileExtension>pfx</nonFilteredFileExtension>
-						<nonFilteredFileExtension>p12</nonFilteredFileExtension>
-					</nonFilteredFileExtensions> -->
 				</configuration>
-				<!-- 引入外部资源文件 -->
-				<executions>
-					<execution>
-					 	<id>copy-extra-assets</id>
-			            <phase>process-sources</phase><!-- validate process-sources compile -->
-						<goals>
-							<goal>copy-resources</goal> <!-- copy-resources -->
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${zk.resources.path}/public-assets/default</directory>
-									<filtering>true</filtering>
-									<includes>
-										<include>**</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 		
