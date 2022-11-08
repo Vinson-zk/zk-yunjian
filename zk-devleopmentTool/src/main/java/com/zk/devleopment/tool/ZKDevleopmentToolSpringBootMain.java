@@ -53,7 +53,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //@ServletComponentScan(basePackages = { "com.zk.server.central.filter" })
 @PropertySource(encoding = "UTF-8", value = { 
         "classpath:zk.log.properties",
-        "classpath:src/env/dev/zk.devleopment.tool.jdbc.properties"
+        "classpath:zk.devleopment.tool.jdbc.properties"
         })
 //@AutoConfigureOrder(value = Ordered.HIGHEST_PRECEDENCE)
 @ComponentScan(basePackages = { "com.zk.devleopment.tool.*", "com.zk.log.*" })
