@@ -319,7 +319,7 @@
 					<skip>${isDeploy}</skip>
 					<executable>false</executable>
 					<classifier>exec</classifier>
-					<mainClass>com.zk.mail.ZKFileSpringBootMain</mainClass>
+					<mainClass>com.zk.file.ZKFileSpringBootMain</mainClass>
 				</configuration>
 				<executions>
 					<execution>
