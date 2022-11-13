@@ -47,12 +47,10 @@ public class ZKServletOutputStream extends ServletOutputStream {
     @Override
     public void setWriteListener(WriteListener listener) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void write(int b) throws IOException {
-        // TODO Auto-generated method stub
         outputStream.write(b);
     }
 
