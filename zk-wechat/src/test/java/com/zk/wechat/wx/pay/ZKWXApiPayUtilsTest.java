@@ -108,7 +108,8 @@ public class ZKWXApiPayUtilsTest {
             sub_merchantId = "1633190975";
 
             sp_appId = "wx54d979ff9836e8a1";
-            sub_appId = "wxbd854fedeb2c8913";
+            // 建采：wxbd854fedeb2c8913  建协：wxf6a8f3904df3a7aa
+            sub_appId = "wxf6a8f3904df3a7aa";
 
             getAmount = new ZKPayGetAmount();
             getAmount.setTotal(1);

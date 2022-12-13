@@ -52,7 +52,7 @@ public interface ZKTransferCipherManager {
      * @author Vinson
      * @date Jun 27, 2019 11:00:29 AM
      * @param response
-     * @param dataKey
+     * @param response
      * @return void
      */
     void encrypt(HttpServletRequest request, HttpServletResponse response);

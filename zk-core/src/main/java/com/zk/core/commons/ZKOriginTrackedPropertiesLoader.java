@@ -46,7 +46,7 @@ public class ZKOriginTrackedPropertiesLoader {
     private final Resource resource;
 
     /**
-     * Create a new {@link OriginTrackedPropertiesLoader} instance.
+     * Create a new {@link ZKOriginTrackedPropertiesLoader} instance.
      * @param resource the resource of the {@code .properties} data
      */
     ZKOriginTrackedPropertiesLoader(Resource resource) {

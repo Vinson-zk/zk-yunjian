@@ -307,7 +307,7 @@ public class ZKSerCenConfiguration extends ZKCoreConfiguration {
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
      * @date Mar 12, 2020 9:06:08 PM
-     * @param eurekaJerseyApp
+     * @param zkSerCenDecode
      * @return FilterRegistrationBean
      */
     @Bean

@@ -89,6 +89,8 @@ class CInit${zkTableInfo.funcName}Edit extends Component {
             payload: values, 
             callback: (errors) => {
                 if(!errors){
+                	/* 这里应该是将 loading false，但是一般保存成功后，会返回上一级列表，列表会更新；
+                		所以为了让 loading 框连续，这里设置为 true，如果不返回上一级，需要设置为 false; */
                     this.setState({loading: true});
                 }
                 callbackFunc(errors);

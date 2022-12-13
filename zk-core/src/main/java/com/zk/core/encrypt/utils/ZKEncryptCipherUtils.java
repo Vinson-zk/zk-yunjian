@@ -18,11 +18,7 @@
 */
 package com.zk.core.encrypt.utils;
 
-import java.security.AlgorithmParameters;
-import java.security.GeneralSecurityException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.security.*;
 import java.security.cert.Certificate;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
@@ -102,10 +98,10 @@ public class ZKEncryptCipherUtils {
      * 
      * @param mode
      *            算法
+     * @param keySize,
+     *            对应密钥长度，与 mode 对应，传O为不指定，自动对应
      * @param seed
      *            随机种子，选传
-     * @param keysize,
-     *            对应密钥长度，与 mode 对应，传O为不指定，自动对应
      * @return SecretKey 生成的 key
      * @throws NoSuchAlgorithmException
      * @throws Exception
@@ -314,7 +310,7 @@ public class ZKEncryptCipherUtils {
      * @param instanceParameter
      * @param data
      * @param key
-     * @param apSpec
+     * @param aParam
      * @return
      * @return byte[]
      */
