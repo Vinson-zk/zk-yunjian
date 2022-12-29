@@ -7,17 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.zk.base.controller.ZKBaseController;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.core.web.ZKMsgRes;
-
 import com.zk.file.entity.ZKFileDirectoryOptLog;
 import com.zk.file.service.ZKFileDirectoryOptLogService;       
 
@@ -32,13 +29,6 @@ public class ZKFileDirectoryOptLogController extends ZKBaseController {
 
 	@Autowired
 	private ZKFileDirectoryOptLogService fileDirectoryOptLogService;
-	
-	// 编辑
-	@RequestMapping(value="fileDirectoryOptLog", method = RequestMethod.POST)
-	public ZKMsgRes fileDirectoryOptLogPost(@RequestBody ZKFileDirectoryOptLog fileDirectoryOptLog){
-		this.fileDirectoryOptLogService.save(fileDirectoryOptLog);
-        return ZKMsgRes.asOk(fileDirectoryOptLog);
-	}
 	
 	// 查询详情
 	@RequestMapping(value="fileDirectoryOptLog", method = RequestMethod.GET)

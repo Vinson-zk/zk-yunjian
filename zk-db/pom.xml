@@ -139,11 +139,12 @@
 	<build>
 	
 		<plugins>
-			<!-- spring boot 运行插件 -->
+			<!-- spring boot 运行插件 
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            -->
             <!-- plugin 资源配置文件处理 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

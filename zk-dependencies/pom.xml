@@ -24,14 +24,41 @@
         <java.version>1.8</java.version>
 		
 		<version.springloaded>1.2.8.RELEASE</version.springloaded>
+		<!-- spring boot ****************************************** -->
+		<!-- 2.1.3.RELEASE 3.0.1 -->
 		<version.spring.boot>2.1.3.RELEASE</version.spring.boot>
-		<version.spring.cloud>2.0.5.RELEASE</version.spring.cloud>
+		<!-- spring cloud ****************************************** -->
+		<!-- <version.spring.cloud>2.0.5.RELEASE</version.spring.cloud>
+		2.1.1.RELEASE	3.1.2
 		<version.spring.cloud.starter>2.1.1.RELEASE</version.spring.cloud.starter>
+		openfeign>4.0.0 config>4.0.0 zipkin>2.2.8.RELEASE task>3.0.0 amqp>4.0.0
+		-->
+		<version.spring.cloud.starter.openfeign>2.1.1.RELEASE</version.spring.cloud.starter.openfeign>
+		<version.spring.cloud.starter.config>2.1.1.RELEASE</version.spring.cloud.starter.config>
+		<version.spring.cloud.starter.zipkin>2.1.1.RELEASE</version.spring.cloud.starter.zipkin>
+		<version.spring.cloud.starter.task>2.1.1.RELEASE</version.spring.cloud.starter.task>
+		<version.spring.cloud.starter.bus.amqp>2.1.1.RELEASE</version.spring.cloud.starter.bus.amqp>
+		<!-- 2.1.1.RELEASE	2.2.9.RELEASE
 		<version.spring.cloud.starter.netflix>2.1.1.RELEASE</version.spring.cloud.starter.netflix>
+		server>4.0.0  client>4.0.0  ribbon>2.2.9.RELEASE  zuul>2.2.9.RELEASE  hystrix>2.2.9.RELEASE
+		dashboard>2.2.9.RELEASE  turbine>2.2.9.RELEASE  eureka.server>4.0.0
+		-->
+		<version.spring.cloud.starter.netflix.eureka.server>2.1.1.RELEASE</version.spring.cloud.starter.netflix.eureka.server>
+		<version.spring.cloud.starter.netflix.eureka.client>2.1.1.RELEASE</version.spring.cloud.starter.netflix.eureka.client>
+		<version.spring.cloud.starter.netflix.ribbon>2.1.1.RELEASE</version.spring.cloud.starter.netflix.ribbon>
+		<version.spring.cloud.starter.netflix.zuul>2.1.1.RELEASE</version.spring.cloud.starter.netflix.zuul>
+		<version.spring.cloud.starter.netflix.hystrix>2.1.1.RELEASE</version.spring.cloud.starter.netflix.hystrix>
+		<version.spring.cloud.starter.netflix.hystrix.dashboard>2.1.1.RELEASE</version.spring.cloud.starter.netflix.hystrix.dashboard>
+		<version.spring.cloud.starter.netflix.turbine>2.1.1.RELEASE</version.spring.cloud.starter.netflix.turbine>
+		<version.spring.cloud.netflix.eureka.server>2.1.1.RELEASE</version.spring.cloud.netflix.eureka.server>
+		<!-- 2.1.2.RELEASE	4.0.0-->
 		<version.spring.cloud.config.server>2.1.2.RELEASE</version.spring.cloud.config.server>
+		<!-- 2.1.1.RELEASE 3.1.2 4.0.0 -->
 		<version.spring.cloud.bus>2.1.1.RELEASE</version.spring.cloud.bus>
+		<!-- 2.1.1.RELEASE 2.4.5 3.0.0 -->
 		<version.spring.cloud.task>2.1.1.RELEASE</version.spring.cloud.task>
-		
+
+		<!-- ************************** -->
 		<version.spring.amqp>2.1.5.RELEASE</version.spring.amqp>
 		<!-- <version.mongo.driver>3.4.3</version.mongo.driver> -->
 		<version.mongo.spring>2.1.1.RELEASE</version.mongo.spring>
@@ -40,10 +67,8 @@
 		<version.mongo.driver>3.6.3</version.mongo.driver>
 		<version.mongo.spring>2.0.6.RELEASE</version.mongo.spring> 
 		-->
-		
 		<version.redis.redisson>3.5.5</version.redis.redisson>
 		<version.redis.spring>2.1.5.RELEASE</version.redis.spring>
-
 		<version.redis.jedis>2.9.0</version.redis.jedis>
 		<version.rabbitmq.amqp.client>5.6.0</version.rabbitmq.amqp.client>
 		<version.junit>4.12</version.junit>
@@ -184,7 +209,7 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-config</artifactId>
-				<version>${version.spring.cloud.starter}</version>
+				<version>${version.spring.cloud.starter.config}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
@@ -194,12 +219,12 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-zipkin</artifactId>
-				<version>${version.spring.cloud.starter}</version>
+				<version>${version.spring.cloud.starter.zipkin}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-task</artifactId>
-				<version>${version.spring.cloud.starter}</version>
+				<version>${version.spring.cloud.starter.task}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
@@ -209,12 +234,12 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-bus-amqp</artifactId>
-				<version>${version.spring.cloud.starter}</version>
+				<version>${version.spring.cloud.starter.bus.amqp}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
-				<version>${version.spring.cloud.starter.netflix}</version>
+				<version>${version.spring.cloud.starter.netflix.eureka.server}</version>
 				<exclusions>
 					<exclusion>
 	                	<groupId>javax.servlet</groupId>
@@ -229,7 +254,7 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-netflix-eureka-server</artifactId>
-				<version>${version.spring.cloud.starter.netflix}</version>
+				<version>${version.spring.cloud.netflix.eureka.server}</version>
 				<exclusions>
 					<exclusion>
 	                	<groupId>javax.servlet</groupId>
@@ -244,49 +269,37 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-				<version>${version.spring.cloud.starter.netflix}</version>
+				<version>${version.spring.cloud.starter.netflix.eureka.client}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
-				<version>${version.spring.cloud.starter.netflix}</version>
+				<version>${version.spring.cloud.starter.netflix.ribbon}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-netflix-zuul</artifactId>
-				<version>${version.spring.cloud.starter.netflix}</version>
+				<version>${version.spring.cloud.starter.netflix.zuul}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-				<version>${version.spring.cloud.starter.netflix}</version>
+				<version>${version.spring.cloud.starter.netflix.hystrix}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
-				<version>${version.spring.cloud.starter.netflix}</version>
+				<version>${version.spring.cloud.starter.netflix.hystrix.dashboard}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-netflix-turbine</artifactId>
-				<version>${version.spring.cloud.starter.netflix}</version>
+				<version>${version.spring.cloud.starter.netflix.turbine}</version>
 			</dependency>
-			<!-- 
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-starter-netflix-turbine-amgp</artifactId>
-				<version>${version.spring.cloud.starter.netflix}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-starter-netflix-turbine-stream</artifactId>
-				<version>${version.spring.cloud.starter.netflix}</version>
-			</dependency>
-			 -->
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-openfeign</artifactId>
-				<version>${version.spring.cloud.starter}</version>
+				<version>${version.spring.cloud.starter.openfeign}</version>
 			</dependency>
 			<!-- ##### spring cloud end -->
 			

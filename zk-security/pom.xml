@@ -183,12 +183,12 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-			<!-- spring boot 运行插件 -->
+			<!-- spring boot 运行插件
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
+ 			-->
 		</plugins>
 		
 	</build>

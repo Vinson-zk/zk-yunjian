@@ -7,17 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.zk.base.controller.ZKBaseController;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.core.web.ZKMsgRes;
-
 import com.zk.file.entity.ZKFileInfo;
 import com.zk.file.service.ZKFileInfoService;       
 
@@ -32,13 +29,6 @@ public class ZKFileInfoController extends ZKBaseController {
 
 	@Autowired
 	private ZKFileInfoService fileInfoService;
-	
-	// 编辑
-	@RequestMapping(value="fileInfo", method = RequestMethod.POST)
-	public ZKMsgRes fileInfoPost(@RequestBody ZKFileInfo fileInfo){
-		this.fileInfoService.save(fileInfo);
-        return ZKMsgRes.asOk(fileInfo);
-	}
 	
 	// 查询详情
 	@RequestMapping(value="fileInfo", method = RequestMethod.GET)

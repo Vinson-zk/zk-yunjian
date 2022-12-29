@@ -43,6 +43,38 @@ import junit.framework.TestCase;
 */
 public class ZKEncryptCipherUtilsTest {
 
+
+    @Test
+    public void test() {
+        try {
+//            5113011990010181111
+//            8c2da4c769828fcfa77aedb690999cf9
+//            80cfe03525bb2b8d43d62ff369e95334cd1facfe4bbb800c
+            String encryptStr; // 密文
+            String secretKeyStr; // 密钥
+            String decryptStr;  // 明文
+            String resStr;
+
+            encryptStr = "80cfe03525bb2b8d43d62ff369e95334cd1facfe4bbb800c";
+            secretKeyStr = "8c2da4c769828fcfa77aedb690999cf9";
+            decryptStr = "5113011990010181111";
+            System.out.println("[^_^:20221213-1936-001] secretKeyStr.length: " + ZKEncodingUtils.decodeHex(secretKeyStr).length);
+
+            DESKeySpec desKeySpec = new DESKeySpec(secretKeyStr.getBytes());
+
+            resStr = ZKEncodingUtils.encodeHex(ZKEncryptCipherUtils.encrypt(decryptStr.getBytes(),
+                    desKeySpec.getKey(),
+                    MODE.DES));
+            System.out.println("[^_^:20221213-1931-001] res: " + resStr);
+            TestCase.assertEquals(encryptStr, resStr);
+
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            TestCase.assertTrue(false);
+        }
+    }
+
     private void encAndDec(String decryptStr, String mode, int keysize) throws Exception {
         String encryptStr;
         SecretKey secretKey;
@@ -394,17 +426,6 @@ public class ZKEncryptCipherUtilsTest {
             keyStr = ZKEncodingUtils.encodeHex(secretKey.getEncoded());
             System.out.println(String.format("keySeed:%s; algorithm:%s; format:%s; key:%s", keySeed,
                     secretKey.getAlgorithm(), secretKey.getFormat(), keyStr));
-
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            TestCase.assertTrue(false);
-        }
-    }
-
-    @Test
-    public void test() {
-        try {
 
         }
         catch(Exception e) {

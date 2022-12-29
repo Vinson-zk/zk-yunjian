@@ -3,27 +3,24 @@
  */
 package com.zk.file.entity;
 
-import com.zk.db.commons.ZKDBOptComparison;
-import java.lang.String;
-import com.zk.core.utils.ZKIdUtils;
-
-import com.zk.db.annotation.ZKQuery;
-import org.hibernate.validator.constraints.Range;
-import com.zk.db.annotation.ZKUpdate;
-import com.zk.db.annotation.ZKColumn;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.xml.bind.annotation.XmlTransient;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.zk.base.entity.ZKBaseEntity;
+import com.zk.core.utils.ZKIdUtils;
+import com.zk.db.annotation.ZKColumn;
+import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
+import com.zk.db.annotation.ZKUpdate;
+import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
-
-import com.zk.base.entity.ZKBaseEntity;
 
 /**
  * 文件信息明细
@@ -104,7 +101,7 @@ public class ZKFileInfo extends ZKBaseEntity<String, ZKFileInfo> {
 	@ZKColumn(name = "c_save_group_code", isInsert = true, javaType = String.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
 	String saveGroupCode;	
 	/**
-	 * 状态：0-上传、1-正常、2-失效[上传后在指定时间来，没修改为正常时，会自动失效，会删除实际文件]、3-禁用[不能下载，但能查看] 
+	 * 状态：0-上传、1-正常、2-失效[上传后在指定时间内，没修改为正常时，会自动失效，会删除实际文件]、3-禁用[不能下载，但能查看]
 	 */
 	@NotNull(message = "{zk.core.data.validation.notNull}")
 	@Range(min = 0, max = 999999999, message = "{zk.core.data.validation.rang.int}")
