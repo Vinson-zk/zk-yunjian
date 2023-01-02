@@ -111,6 +111,7 @@ public class ZKClassUtilsTest {
     @Test
     public void testGetAllField() {
 
+        @SuppressWarnings("unused")
         class Parent {
             private String parentAttribute;
             public String getParentAttribute() {
@@ -120,6 +121,7 @@ public class ZKClassUtilsTest {
                 this.parentAttribute = parentAttribute;
             }
         }
+
         @SuppressWarnings("unused")
         class Child extends Parent {
             private String childAttribute;

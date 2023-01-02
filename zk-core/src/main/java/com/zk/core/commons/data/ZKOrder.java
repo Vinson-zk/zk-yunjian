@@ -20,7 +20,6 @@ package com.zk.core.commons.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -30,7 +29,6 @@ import org.springframework.web.bind.ServletRequestUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zk.core.utils.ZKStringUtils;
 
 /** 
 * @ClassName: ZKOrder 

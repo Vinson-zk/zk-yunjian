@@ -165,6 +165,7 @@ public class ZKRedisTestHelperConfiguration {
         return jedisConnectionFactory;
     }
 
+    @SuppressWarnings("deprecation")
     @Bean
     @Primary
     @ConditionalOnBean(name = { "jedisConnectionFactory" })
@@ -235,6 +236,7 @@ public class ZKRedisTestHelperConfiguration {
         return jedisConnectionFactory;
     }
 
+    @SuppressWarnings("deprecation")
     @Bean
     @ConditionalOnBean(name = { "jedisConnectionFactory2" })
     public RedisTemplate<String, ?> redisTemplate2(JedisConnectionFactory jedisConnectionFactory2) {

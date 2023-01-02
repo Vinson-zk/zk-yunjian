@@ -76,6 +76,7 @@ public class ZKZuulSpringBootMain {
         /*** 修改默认的配置文件名称和路径 ***/
         // 配置文件路径；默认：[file:./config/, file:./, classpath:/config/, classpath:/]
         springApplicationBuilder = springApplicationBuilder.properties("spring.config.location=classpath:/");
+
         // 定义配置文件名；默认：applicaiton；添加下面这一行后，不会读取 properties/yml 配置文件；多个时用英文逗号","
         // 隔；
         springApplicationBuilder = springApplicationBuilder.properties("spring.config.name=zk,zk.zuul,zk.zuul.env");

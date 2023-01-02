@@ -31,8 +31,8 @@ import com.zk.core.helper.entity.ZKRedisTestEntity;
 
 import junit.framework.TestCase;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.ScanParams;
-import redis.clients.jedis.ScanResult;
+import redis.clients.jedis.params.ScanParams;
+import redis.clients.jedis.resps.ScanResult;
 
 /** 
 * @ClassName: ZKJedisOperatorByteTest 
@@ -140,7 +140,7 @@ public class ZKJedisOperatorByteTest {
 
             ScanResult<String> res = j.scan("0", scanParams);
 //            System.out.println("------- " + res.getCursor());
-            System.out.println("------- " + res.getStringCursor());
+            System.out.println("------- " + res.getCursor());
             System.out.println("------- " + new String(res.getCursorAsBytes()));
             System.out.println("------- " + res.getResult().size());
 

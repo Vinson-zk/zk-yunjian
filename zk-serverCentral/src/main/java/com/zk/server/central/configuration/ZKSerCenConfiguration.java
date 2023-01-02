@@ -40,6 +40,7 @@ import org.springframework.cloud.netflix.eureka.MutableDiscoveryClientOptionalAr
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.Ordered;
@@ -79,11 +80,12 @@ import com.zk.server.central.interceptor.ZKViewVariateInterceptor;
         ZKSerCenShiroConfiguration.class,
         ZKSerCenMvcConfiguration.class,
         EnableWebMvcConfiguration.class,
-        ServletWebServerFactoryAutoConfiguration.class
-        })
+        ServletWebServerFactoryAutoConfiguration.class,
+})
 //@AutoConfigureAfter(value = { ServletWebServerFactoryAutoConfiguration.class })
 //@AutoConfigureOrder(value = Ordered.HIGHEST_PRECEDENCE)
 //@ImportAutoConfiguration(classes = { DispatcherServletAutoConfiguration.class })
+@Configuration
 public class ZKSerCenConfiguration extends ZKCoreConfiguration {
 
     protected static Logger log = LoggerFactory.getLogger(ZKSerCenConfiguration.class);

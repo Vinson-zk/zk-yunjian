@@ -40,10 +40,11 @@ import redis.clients.jedis.JedisPoolConfig;
 * @author Vinson 
 * @version 1.0 
 */
+//@Configuration
 @PropertySources(value = { @PropertySource(value = { "classpath:zk.ser.cen.redis.properties" }, encoding = "UTF-8") })
 public class ZKSerCenRedisConfiguration {
 
-    private static Logger logger = LoggerFactory.getLogger(ZKSerCenRedisConfiguration.class);
+    protected static Logger logger = LoggerFactory.getLogger(ZKSerCenRedisConfiguration.class);
 
     /*** jedis 整合 配置 ***/
     @Value("${zk.ser.cen.redis.host:127.0.0.1}")

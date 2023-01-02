@@ -30,7 +30,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import com.zk.core.commons.ZKJedisConstants;
 import com.zk.core.utils.ZKJsonUtils;
 import com.zk.core.utils.ZKObjectUtils;
 
@@ -78,11 +77,11 @@ public class ZKJedisTest {
              * 
              * @param 第五个参数：过期时间
              */
-            resValue = jedis.set(key, value, ZKJedisConstants.OpsMode.NOT_EXIST, ZKJedisConstants.TimeUnit.SECONDS,
-                    seconds);
+            resValue = jedis.set(key, value);
+            jedis.expire(key, seconds);
             System.out.println("[^_^:20210811-0832-001] key: " + key + "; 第一次设置值，结果：" + resValue);
-            resValue = jedis.set(key, value, ZKJedisConstants.OpsMode.NOT_EXIST, ZKJedisConstants.TimeUnit.SECONDS,
-                    seconds);
+            resValue = jedis.set(key, value);
+            jedis.expire(key, seconds);
             System.out.println("[^_^:20210811-0832-001] key: " + key + "; 第二次设置值，结果：" + resValue);
 
         }
@@ -361,8 +360,8 @@ public class ZKJedisTest {
                         Jedis jedis = jedisPool.getResource();
                         jedis.select(2);
                         long threadId = Thread.currentThread().getId();
-                        String str = jedis.set(jedisKey, "v", ZKJedisConstants.OpsMode.NOT_EXIST,
-                                ZKJedisConstants.TimeUnit.SECONDS, seconds);
+                        String str = jedis.set(jedisKey, "v");
+                        jedis.expire(jedisKey, seconds);
                         resJedisMap.put(index + ":Thread.id=" + threadId, str);
                         jedis.close();
                         return;

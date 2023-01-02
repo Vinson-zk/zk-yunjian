@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zk.core.commons.data.ZKJson;
@@ -78,6 +79,30 @@ public class ZKJsonUtils extends JSON {
     }
 
     /**
+     * 将json字符串转成map结合解析出来，并打印(这里以解析成map为例)
+     * 
+     * @throws Exception
+     */
+    public static <T> T jsonStrToObject(String jsonStr, Class<T> classz) {
+        return jsonStrToObject(jsonStr, classz, true);
+    }
+
+    public static <T> T jsonStrToObject(String jsonStr, Class<T> classz, boolean failOnUnknownProperties) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, failOnUnknownProperties);
+
+            // 将json字符串转成map结合解析出来，并打印(这里以解析成map为例)
+            T obj = objectMapper.readValue(jsonStr, classz);
+            return obj;
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            throw ZKExceptionsUtils.unchecked(e);
+        }
+    }
+
+    /**
      * 适用于 ModelView.addObject 返回的JSON,直接返回到前端时用
      * 
      * @param list
@@ -85,10 +110,15 @@ public class ZKJsonUtils extends JSON {
      * @throws Exception
      */
     public static String writeObjectJsonForJs(Object obj) {
-        ObjectMapper mapper = new ObjectMapper();
-        String result = "";
+
         try {
-            result = mapper.writeValueAsString(obj);
+//            ObjectMapper mapper = new ObjectMapper();
+//            String result = mapper.writeValueAsString(obj);
+//            result = result.replaceAll("\\\\", "\\\\\\\\");
+////          result = result.replaceAll("\"", "'");
+//            return result;
+
+            String result = JSONObject.toJSONString(obj);
             result = result.replaceAll("\\\\", "\\\\\\\\");
 //          result = result.replaceAll("\"", "'");
             return result;
@@ -107,36 +137,11 @@ public class ZKJsonUtils extends JSON {
      * @throws Exception
      */
     public static String writeObjectJson(Object obj) {
-        ObjectMapper mapper = new ObjectMapper();
-        String result = "";
+
         try {
-            result = mapper.writeValueAsString(obj);
-            return result;
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            throw ZKExceptionsUtils.unchecked(e);
-        }
-    }
-
-    /**
-     * 将json字符串转成map结合解析出来，并打印(这里以解析成map为例)
-     * 
-     * @throws Exception
-     */
-    public static <T> T jsonStrToObject(String jsonStr, Class<T> classz) {
-        return jsonStrToObject(jsonStr, classz, true);
-    }
-
-    public static <T> T jsonStrToObject(String jsonStr, Class<T> classz, boolean failOnUnknownProperties)
-    {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, failOnUnknownProperties);
-
-            // 将json字符串转成map结合解析出来，并打印(这里以解析成map为例)
-            T obj = objectMapper.readValue(jsonStr, classz);
-            return obj;
+//            ObjectMapper mapper = new ObjectMapper();
+//            return mapper.writeValueAsString(obj);
+            return JSONObject.toJSONString(obj);
         }
         catch(Exception e) {
             e.printStackTrace();

@@ -9,17 +9,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.zk.base.controller.ZKBaseController;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.core.web.ZKMsgRes;
-
 import com.zk.file.entity.ZKFileDirectory;
-import com.zk.file.service.ZKFileDirectoryService;       
+import com.zk.file.service.ZKFileDirectoryService;
+import com.zk.security.utils.ZKSecSecurityUtils;
 
 /**
  * ZKFileDirectoryController
@@ -36,6 +35,9 @@ public class ZKFileDirectoryController extends ZKBaseController {
 	// 编辑
 	@RequestMapping(value="fileDirectory", method = RequestMethod.POST)
 	public ZKMsgRes fileDirectoryPost(@RequestBody ZKFileDirectory fileDirectory){
+        fileDirectory.setCompanyCode(ZKSecSecurityUtils.getCompanyCode());
+//        fileDirectory.setCompanyId(ZKSecSecurityUtils.getCompanyId());
+//        fileDirectory.setGroupCode(ZKSecSecurityUtils.getGroupCode());
 		this.fileDirectoryService.save(fileDirectory);
         return ZKMsgRes.asOk(fileDirectory);
 	}

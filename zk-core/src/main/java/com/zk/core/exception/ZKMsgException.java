@@ -66,7 +66,7 @@ public class ZKMsgException extends ZKUnknownException {
 
     public static ZKMsgException as(int type, String code, String msg, Object data, Throwable cause) {
         if(ZKStringUtils.isEmpty(msg)){
-            msg = ZKMsgUtils.getMessage(code, null);
+            msg = ZKMsgUtils.getMessage(code, (Object) null);
         }
         return new ZKMsgException(type, code, msg, data, cause);
     }

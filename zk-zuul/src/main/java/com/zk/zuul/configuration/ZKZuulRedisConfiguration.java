@@ -74,7 +74,8 @@ public class ZKZuulRedisConfiguration {
 
         System.out.println("[^_^:20220615-1100-001] ====================================================");
         System.out.println(String.format("[^_^:20220615-1100-001] Redis 连接 hosr:%s, port:%s, password:%s", host, port, password));
-        System.out.println("[^_^:20220615-1100-001] Redis 连接 JedisPoolConfig:" + ZKJsonUtils.writeObjectJson(jedisPoolConfig));
+        System.out.println(
+                "[^_^:20220615-1100-001] Redis 连接 JedisPoolConfig:" + ZKJsonUtils.writeObjectJson(jedisPoolConfig));
         System.out.println("[^_^:20220615-1100-001] ====================================================");
 
         /** 单机模式 */

@@ -52,7 +52,7 @@
   </div>
 </div>
 
-<#if isBelowRenewThresold>
+<#if isBelowRenewThreshold>
     <#if !registry.selfPreservationModeEnabled>
         <h4 id="uptime"><font size="+1" color="red"><b>RENEWALS ARE LESSER THAN THE THRESHOLD. THE SELF PRESERVATION MODE IS TURNED OFF. THIS MAY NOT PROTECT INSTANCE EXPIRY IN CASE OF NETWORK/OTHER PROBLEMS.</b></font></h4>
     <#else>
@@ -63,7 +63,7 @@
 </#if>
 
 <h1 class="zk-eureka-font-h1">DS Replicas</h1>
-<ul class="list-group">
+<ul class="list-group mb-3">
   <#list replicas as replica>
     <li class="list-group-item"><a href="${replica.value}">${replica.key}</a></li>
   </#list>

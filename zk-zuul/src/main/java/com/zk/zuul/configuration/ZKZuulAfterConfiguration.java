@@ -32,6 +32,10 @@ import com.zk.log.interceptor.ZKLogAccessInterceptor;
 * @version 1.0 
 */
 @Configuration
+//@AutoConfigureAfter(value = {
+//        EnableWebMvcConfiguration.class,
+//        ServletWebServerFactoryAutoConfiguration.class,
+//})
 public class ZKZuulAfterConfiguration implements WebMvcConfigurer {
 
     @Autowired

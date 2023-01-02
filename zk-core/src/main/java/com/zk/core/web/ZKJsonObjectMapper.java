@@ -176,7 +176,7 @@ public class ZKJsonObjectMapper extends ObjectMapper {
     /**
      * 當JSON裡只含有Bean的部分屬性時，更新一個已存在Bean，只覆蓋該部分的屬性.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "hiding" })
     public <T> T update(String jsonString, T object) {
         try {
             return (T) this.readerForUpdating(object).readValue(jsonString);

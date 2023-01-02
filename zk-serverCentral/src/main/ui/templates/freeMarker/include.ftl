@@ -3,8 +3,8 @@
 <link rel="stylesheet" href="/${_zk.ctxStatic}/lib/bootstrap/${_zk._v_bootstrap}/css/bootstrap.min.css">
 <link rel="stylesheet" href="/${_zk.ctxStatic}/lib/font-awesome/${_zk._v_awesome}/css/font-awesome.min.css">
 
-<!--
 <script src="/${_zk.ctxStatic}/lib/jquery/${_zk._v_jquery}/jquery.min.js"></script>
+<!--
 <script src="/${_zk.ctxStatic}/lib/jquery-validation/${_zk._v_jqValidation}/jquery.validate.js"></script>
 <script src="/${_zk.ctxStatic}/lib/jquery-validation/${_zk._v_jqValidation}/localization/messages_en_US.js"></script>
 <script src="/${_zk.ctxStatic}/lib/jquery-validation/${_zk._v_jqValidation}/jquery.validate.extend.js"></script>

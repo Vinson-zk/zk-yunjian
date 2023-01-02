@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
@@ -32,10 +31,6 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import com.zk.server.central.configuration.ZKSerCenConfiguration;
-import com.zk.server.central.configuration.ZKSerCenMvcConfiguration;
-import com.zk.server.central.configuration.ZKSerCenShiroConfiguration;
 
 /**
  * 
@@ -50,17 +45,17 @@ import com.zk.server.central.configuration.ZKSerCenShiroConfiguration;
         HibernateJpaAutoConfiguration.class, 
 //        MongoAutoConfiguration.class, 
 //        WebMvcAutoConfiguration.class, 
-        TransactionAutoConfiguration.class
+        TransactionAutoConfiguration.class,
 })
 @EnableEurekaServer
 @EnableTransactionManagement(proxyTargetClass = true)
 //@ComponentScan(basePackages = { "com.zk.server.central.filter" })
 //@ServletComponentScan(basePackages = { "com.zk.server.central.filter" })
-@ImportAutoConfiguration(classes = { 
-        ZKSerCenConfiguration.class,
-//      ZKMongoAutoConfiguration.class, 
-        ZKSerCenMvcConfiguration.class, 
-        ZKSerCenShiroConfiguration.class })
+//@ImportAutoConfiguration(classes = { 
+//        ZKSerCenConfiguration.class,
+////      ZKMongoAutoConfiguration.class, 
+//        ZKSerCenMvcConfiguration.class, 
+//        ZKSerCenShiroConfiguration.class })
 //@AutoConfigureOrder(value = Ordered.HIGHEST_PRECEDENCE)
 @ComponentScan(basePackages = { "com.zk.server.central.*" })
 public class ZKSerCenSpringBootMain {

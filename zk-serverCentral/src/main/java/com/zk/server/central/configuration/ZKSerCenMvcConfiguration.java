@@ -18,6 +18,7 @@
 */
 package com.zk.server.central.configuration;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 * @author Vinson 
 * @version 1.0 
 */
+@Configuration
 public class ZKSerCenMvcConfiguration implements WebMvcConfigurer {
 
 //    @Autowired

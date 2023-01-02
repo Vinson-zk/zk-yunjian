@@ -23,9 +23,21 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.InputStream;
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -434,6 +446,7 @@ public class ZKClassUtils extends ClassUtils {
      * @return
      * @return Class<?>
      */
+    @SuppressWarnings("unchecked")
     public static <C> Class<C> getSuperclassByName(Class<?> parentClassz, Class<?> realClassz, String genericityTypeName) {
 
         Type t = getTypeBySuperclassAndName(parentClassz, realClassz, genericityTypeName);
@@ -476,7 +489,7 @@ public class ZKClassUtils extends ClassUtils {
                     // rawType 是 parentClassz 的子类或子接口，继续往下找
                     resType = getTypeBySuperclassAndName(parentClassz, rawType, genericityTypeName);
                     if(resType != null && resType instanceof TypeVariable){
-                        TypeVariable tv = (TypeVariable)resType;
+                        TypeVariable<?> tv = (TypeVariable<?>) resType;
                         genericityTypeName = tv.getName();
                         tvs = rawType.getTypeParameters();
                         resType = getTypeByParameterizedType((ParameterizedType)item, tvs, genericityTypeName);
@@ -571,9 +584,9 @@ public class ZKClassUtils extends ClassUtils {
         return (E) ctor.newInstance(args);
     }
 
-    public static Class forName(String classNameStr) {
+    public static Class<?> forName(String classNameStr) {
 
-        Class clazz = THREAD_CL_ACCESSOR.loadClass(classNameStr);
+        Class<?> clazz = THREAD_CL_ACCESSOR.loadClass(classNameStr);
 
         if (clazz == null) {
             if (log.isTraceEnabled()) {
