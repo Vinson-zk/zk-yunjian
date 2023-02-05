@@ -44,8 +44,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.zk.core.commons.ZKLanguageType;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.utils.ZKJsonUtils;
-import com.zk.core.web.ZKMsgRes;
 import com.zk.core.web.utils.ZKCookieUtils;
 import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.server.central.ZKSerCenSpringBootMain;

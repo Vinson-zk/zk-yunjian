@@ -25,9 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.zk.core.web.resolver.ZKLocaleResolver;
 import com.zk.core.web.utils.ZKWebUtils;
 
 /** 
@@ -52,7 +52,7 @@ public class ZKViewVariateInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest hReq, HttpServletResponse response, Object handler,
             @Nullable ModelAndView modelAndView) throws Exception {
         if (modelAndView != null) {
-            LocaleResolver localeResolver = ZKWebUtils.getLocaleResolver();
+            ZKLocaleResolver localeResolver = ZKWebUtils.getLocaleResolver();
             if (localeResolver != null) {
                 modelAndView.addObject(ZKWebUtils.Locale_Flag_In_Header,
                         localeResolver.resolveLocale(hReq).toLanguageTag());

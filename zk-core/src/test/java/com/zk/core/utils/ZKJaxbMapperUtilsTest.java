@@ -20,7 +20,7 @@ package com.zk.core.utils;
 
 import org.junit.Test;
 
-import com.zk.core.helper.ZKCoreEntity;
+import com.zk.core.helper.entity.ZKCoreEntity;
 
 import junit.framework.TestCase;
 

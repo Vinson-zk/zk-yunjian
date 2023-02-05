@@ -31,11 +31,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.zk.server.central.configuration.ZKSerCenConfiguration;
+import com.zk.server.central.configuration.ZKSerCenBeforeConfiguration;
 import com.zk.server.central.configuration.ZKSerCenMvcConfiguration;
+import com.zk.server.central.configuration.ZKSerCenShiroConfiguration;
 
 /** 
 * @ClassName: ZKSerCenTestRestTemplateMain 
@@ -55,13 +55,11 @@ import com.zk.server.central.configuration.ZKSerCenMvcConfiguration;
 //@ComponentScan(basePackages = { "com.zk.server.central.filter" })
 //@ServletComponentScan(basePackages = { "com.zk.server.central.filter" })
 @ImportAutoConfiguration(classes = { 
-      ZKSerCenConfiguration.class
-//      , ZKMongoAutoConfiguration.class
-        , ZKSerCenMvcConfiguration.class
-//      , ZKSerCenShiroConfiguration.class
+        ZKSerCenBeforeConfiguration.class, //
+//      ZKMongoAutoConfiguration.class,  //
+        ZKSerCenMvcConfiguration.class, //
+        ZKSerCenShiroConfiguration.class, //
       })
-@PropertySource(encoding = "UTF-8", value = { "classpath:zk.ser.cen.jdbc.properties",
-      "classpath:zk.ser.cen.mongo.properties" })
 //@AutoConfigureOrder(value = Ordered.HIGHEST_PRECEDENCE)
 @ComponentScan(basePackages = { "com.zk.server.central.*" })
 public class ZKSerCenTestRestTemplateMain {
@@ -71,7 +69,7 @@ public class ZKSerCenTestRestTemplateMain {
     public static void main(String[] args) {
         try {
             System.out.println("[^_^:20190628-1708-001]====================================================");
-            System.out.println("[^_^:20190628-1708-001]=== zk Server Central  启动 ... ... ");
+            System.out.println("[^_^:20190628-1708-001]=== zk ZKSerCenTestRestTemplateMain 启动 ... ... ");
             System.out.println("[^_^:20190628-1708-001]====================================================");
             run(args);
             System.out.println("[^_^:20190628-1708-001]----------------------------------------------------");
@@ -95,8 +93,8 @@ public class ZKSerCenTestRestTemplateMain {
             springApplicationBuilder = springApplicationBuilder.properties("spring.config.location=classpath:/");
             // 定义配置文件名；默认：applicaiton；添加下面这一行后，不会读取 properties/yml
             // 配置文件；多个时用英文逗号"," 隔；
-            springApplicationBuilder = springApplicationBuilder.properties("spring.config.name=zk.ser.cen");
-
+            springApplicationBuilder = springApplicationBuilder.properties("spring.config.name=zk,zk.ser.cen,zk.ser.cen.env");
+            
             SpringApplication springApplication = springApplicationBuilder.build();
             springApplication.setWebApplicationType(WebApplicationType.SERVLET);
 

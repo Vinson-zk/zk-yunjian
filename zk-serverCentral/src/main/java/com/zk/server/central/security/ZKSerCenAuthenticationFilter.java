@@ -139,8 +139,8 @@ public class ZKSerCenAuthenticationFilter extends FormAuthenticationFilter {
         catch(Exception e) {
             log.error("[>_<:20200103-1023-001] 接口解密失败；");
 //            e.printStackTrace();
-            throw ZKCodeException.as("zk.ser.cen.000016", null, null, null, e);
-//            throw new ZKSerCenAuthenticationException("zk.ser.cen.000016", null, null, e);
+            throw ZKCodeException.as(e, "zk.ser.cen.000016", null, null, null, null);
+
         }
 
         // 处理记住账号和密码；与 isRememberMe() 不同，isRememberMe() 是自动登录。
@@ -296,14 +296,14 @@ public class ZKSerCenAuthenticationFilter extends FormAuthenticationFilter {
         ZKCodeException zkE = null;
         if (e instanceof ZKSerCenAuthenticationException) {
             ZKSerCenAuthenticationException sce = (ZKSerCenAuthenticationException) e;
-            zkE = ZKCodeException.as(sce.getCode(), null, sce.getMsgArgs(), sce.getData());
+            zkE = ZKCodeException.as(sce.getCode(), null, sce.getData(), sce.getMsgArgs());
         }
         else if (e.getCause() instanceof ZKCodeException) {
             zkE = (ZKCodeException) e.getCause();
         }
         else {
             // zk.ser.cen.000015=未知的登录错误。
-            zkE = ZKCodeException.as("zk.ser.cen.000015", null, null, e, e);
+            zkE = ZKCodeException.as(e, "zk.ser.cen.000015", null, null, null, null);
         }
 
         request.setAttribute(ZKAuthKeys.KEY_EXCEPTION, zkE);

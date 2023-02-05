@@ -30,11 +30,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import com.zk.base.entity.ZKBaseEntity;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.core.commons.data.ZKPage.Param_Name;
 import com.zk.core.utils.ZKEncodingUtils;
 import com.zk.core.utils.ZKJsonUtils;
-import com.zk.core.web.ZKMsgRes;
 import com.zk.sys.helper.ZKSysBaseControllerTest;
 import com.zk.sys.res.entity.ZKSysNav;
 import com.zk.sys.res.service.ZKSysNavService;
@@ -47,6 +47,7 @@ import junit.framework.TestCase;
 * @author Vinson 
 * @version 1.0 
 */
+@SuppressWarnings("deprecation")
 public class ZKSysNavControllerTest extends ZKSysBaseControllerTest {
 
 

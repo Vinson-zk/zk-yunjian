@@ -33,12 +33,12 @@ import com.zk.wechat.pay.entity.ZKPayGroup;
 
 import junit.framework.TestCase;
 
-/** 
-* @ClassName: ZKPayGroupServiceTest 
-* @Description: TODO(simple description this class what to do. ) 
-* @author Vinson 
-* @version 1.0 
-*/
+/**
+ * @ClassName: ZKPayGroupServiceTest
+ * @Description: TODO(simple description this class what to do. )
+ * @author Vinson
+ * @version 1.0
+ */
 public class ZKPayGroupServiceTest {
 
     @Test
@@ -73,7 +73,7 @@ public class ZKPayGroupServiceTest {
             payGroup.setWxAppId(wxAppId);
             payGroup.setCode(code);
             payGroup.setName(new ZKJson());
-            payGroup.getName().put(ZKLocaleUtils.getLocale().toString(), name);
+            payGroup.getName().put(ZKLocaleUtils.getDefautLocale().toString(), name);
             payGroup.setStatus(ZKPayGroup.Status.disabled);
             intRes = s.save(payGroup);
             dels.add(payGroup);
@@ -85,13 +85,13 @@ public class ZKPayGroupServiceTest {
             System.out.println("[^_^:20210222-1622-001] payGroup: " + ZKJsonUtils.writeObjectJson(payGroup));
             TestCase.assertEquals(ZKPayGroup.Status.disabled, payGroup.getStatus().intValue());
             TestCase.assertEquals(code, payGroup.getCode());
-            TestCase.assertEquals(name, payGroup.getName().get(ZKLocaleUtils.getLocale().toString()));
+            TestCase.assertEquals(name, payGroup.getName().get(ZKLocaleUtils.getDefautLocale().toString()));
 
             // getByCode
             payGroup = s.getByCode(payGroup.getCode());
             TestCase.assertEquals(ZKPayGroup.Status.disabled, payGroup.getStatus().intValue());
             TestCase.assertEquals(code, payGroup.getCode());
-            TestCase.assertEquals(name, payGroup.getName().get(ZKLocaleUtils.getLocale().toString()));
+            TestCase.assertEquals(name, payGroup.getName().get(ZKLocaleUtils.getDefautLocale().toString()));
 
             // 相同 code 保存
             payGroup = new ZKPayGroup();

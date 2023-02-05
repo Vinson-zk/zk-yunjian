@@ -25,7 +25,7 @@ import java.util.Map;
 
 import org.bson.Document;
 import org.junit.Test;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.ApplicationContext;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -34,13 +34,13 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.alibaba.fastjson.JSON;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import com.zk.core.utils.ZKObjectUtils;
 import com.zk.mongo.helper.ZKMongoTestConfig;
 import com.zk.mongo.helper.ZKObjectToSave;
 import com.zk.mongo.helper.ZKTestObject;
 import com.zk.mongo.utils.ZKMongoUtils;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
 
 import junit.framework.TestCase;
 
@@ -52,9 +52,7 @@ import junit.framework.TestCase;
 */
 public class ZKMongoTemplateTest {
 
-    public static final String config_path = "classpath:mongo/test_spring_context_mongo_2.0.xml";
-
-    public static FileSystemXmlApplicationContext ctx;
+    public static ApplicationContext ctx;
 
     public static MongoTemplate mongoTemplate;
 
@@ -271,7 +269,7 @@ public class ZKMongoTemplateTest {
             update = new Update();
             update.set(attributeKeyName, attributeKeyValue);
             ur = mongoTemplate.upsert(query, update, ZKObjectToSave.class);
-            TestCase.assertTrue(ur.isModifiedCountAvailable());
+            TestCase.assertTrue(ur.getMatchedCount() > 0);
             query = Query.query(Criteria.where(collectionAttributeName_id).is(id));
             // 查询实体外属性
             doc = mongoTemplate.executeCommand(jsonCommand);
@@ -309,9 +307,9 @@ public class ZKMongoTemplateTest {
     /**
      * 修改属性，文档存在与不存在两种情况；此方法测试文档不存在
      * 
-     * mongoTemplate.upsert 文档存在，修改指定属性，不存，新增文档，修改指定属性
+     * mongoTemplate.upsert 文档存在，修改指定属性，不存不新增文档，[del-新增文档，修改指定属性]
      * 
-     * mongoTemplate.findAndModify 文档不存在时，可指定新增或不新增文档
+     * mongoTemplate.findAndModify 文档不存在时，不新增文档
      * 
      * update.setOnInsert 文档新增时生效， update.set 属性存在，修改，不存在新增，
      * 
@@ -348,12 +346,13 @@ public class ZKMongoTemplateTest {
             attributeKeyValue = "mongoTemplate.upsert";
             update.set(attributeKeyName, attributeKeyValue);
             ur = mongoTemplate.upsert(query, update, ZKObjectToSave.class);
-            TestCase.assertTrue(ur.isModifiedCountAvailable());
+            System.out.println(ur);
+            TestCase.assertTrue(ur.getModifiedCount() == 0);
 
             // 此文档不存在，新增,并修改属性，方法二
             dRes = mongoTemplate.remove(ots);
             if (dRes.wasAcknowledged()) {
-                System.out.println("[^_^:20180520-0827-003] 删除成功");
+                System.out.println("[^_^:20180520-0827-003] 删除成功 --- ");
             }
             else {
                 TestCase.assertTrue(false);
@@ -364,8 +363,7 @@ public class ZKMongoTemplateTest {
             update.set(attributeKeyName, attributeKeyValue);
             options = FindAndModifyOptions.options();
             options.upsert(true);
-            // 返回修改值
-            options.returnNew(true);
+            options.returnNew(true); // 需要设置返回新值，不然新增文档后，返回的还是 null
             tempOTS = mongoTemplate.findAndModify(query, update, options, ZKObjectToSave.class);
             TestCase.assertNotNull(tempOTS);
             System.out.println("[^_^:20180520-0827-003] " + JSON.toJSONString(tempOTS));
@@ -399,7 +397,7 @@ public class ZKMongoTemplateTest {
      * 文档存在，属性；属性不存在，会自动新增属性 递增
      */
     @Test
-    public void testAttributeUpdate() {
+    public void testFindAndModifyOptions() {
         String id = "test_update_attribute_01";
         String value = "测试 mongoTemplate 修改属性，属性存在与不存在 ";
 
@@ -412,7 +410,7 @@ public class ZKMongoTemplateTest {
             FindAndModifyOptions options = null;
             DeleteResult dRes = null;
             ZKObjectToSave tempOTS = null;
-            UpdateResult ur = null;
+            ZKObjectToSave ur = null;
             Map<String, ?> resDoc;
             String jsonCommand;
             Document doc = null;
@@ -428,20 +426,48 @@ public class ZKMongoTemplateTest {
             else {
                 System.out.println("[^_^:20180520-0910-002] 没有删除数据");
             }
+
+            // 文档不存在；不新增
+            attributeKeyName = "testAttrValue-1";
+            attributeKeyValue = "文档不存在；不新增";
+            query = Query.query(Criteria.where(collectionAttributeName_id).is(id));
+            update = new Update();
+            update.set(attributeKeyName, attributeKeyValue);
+            options = FindAndModifyOptions.options();
+            options.upsert(false);
+            ur = mongoTemplate.findAndModify(query, update, options, ZKObjectToSave.class);
+            System.out.println(ur);
+            TestCase.assertNull(ur);
+
+            // 文档不存在；新增 不生效了
+            attributeKeyName = "testAttrValue-1";
+            attributeKeyValue = "文档不存在；新增";
+            query = Query.query(Criteria.where(collectionAttributeName_id).is(id));
+            update = new Update();
+            update.set(attributeKeyName, attributeKeyValue);
+            options = FindAndModifyOptions.options();
+            options.upsert(true);
+            options.returnNew(true); // 需要设置返回新值，不然新增文档后，返回的还是 null
+            ur = mongoTemplate.findAndModify(query, update, options, ZKObjectToSave.class);
+            System.out.println(ur);
+            TestCase.assertNotNull(ur);
+
+            // 新增文档
             mongoTemplate.save(ots);
             query = Query.query(Criteria.where(collectionAttributeName_id).is(id));
             tempOTS = mongoTemplate.findOne(query, ZKObjectToSave.class);
             TestCase.assertNotNull(tempOTS);
 
-            // 属性不存在，新增
+            attributeKeyName = "testAttrValue";
+            // 文档存在；属性不存在，新增
             attributeKeyValue = "属性不存在，新增";
             query = Query.query(Criteria.where(collectionAttributeName_id).is(id));
             update = new Update();
             update.set(attributeKeyName, attributeKeyValue);
             options = FindAndModifyOptions.options();
             options.upsert(true);
-            ur = mongoTemplate.upsert(query, update, ZKObjectToSave.class);
-            TestCase.assertTrue(ur.isModifiedCountAvailable());
+            ur = mongoTemplate.findAndModify(query, update, options, ZKObjectToSave.class);
+            TestCase.assertNotNull(ur);
             // 查询对象 cResult
             jsonCommand = String.format("{find:'%s', filter:{%s:'%s'}, projection:{%s:1}}",
                     ZKObjectToSave.collectionName, "_id", id, attributeKeyName);
@@ -450,15 +476,15 @@ public class ZKMongoTemplateTest {
             t = (String) resDoc.get(attributeKeyName);
             TestCase.assertEquals(attributeKeyValue, t);
 
-            // 属性存在，修改
+            // 文档存在；属性存在，修改
             attributeKeyValue = "属性存在，修改";
             query = Query.query(Criteria.where(collectionAttributeName_id).is(id));
             update = new Update();
             update.set(attributeKeyName, attributeKeyValue);
             options = FindAndModifyOptions.options();
             options.upsert(true);
-            ur = mongoTemplate.upsert(query, update, ZKObjectToSave.class);
-            TestCase.assertTrue(ur.isModifiedCountAvailable());
+            ur = mongoTemplate.findAndModify(query, update, options, ZKObjectToSave.class);
+            TestCase.assertNotNull(ur);
 
             // 属性数组操作 ,未完成
 
@@ -515,7 +541,7 @@ public class ZKMongoTemplateTest {
             options = FindAndModifyOptions.options();
             options.upsert(true);
             ur = mongoTemplate.upsert(query, update, ZKObjectToSave.class);
-            TestCase.assertTrue(ur.isModifiedCountAvailable());
+            TestCase.assertTrue(ur.getMatchedCount() > 0);
 
             // 查询对象 cResult
             String jsonCommand = String.format("{find:'%s', filter:{%s:'%s'}, projection:{%s:1}}",
@@ -596,7 +622,7 @@ public class ZKMongoTemplateTest {
             options = FindAndModifyOptions.options();
             options.upsert(true);
             ur = mongoTemplate.upsert(query, update, ZKObjectToSave.class);
-            TestCase.assertTrue(ur.isModifiedCountAvailable());
+            TestCase.assertTrue(ur.getMatchedCount() > 0);
 
             jsonCommand = String.format("{find:'%s', filter:{%s:'%s'}}", ZKObjectToSave.collectionName, "_id", id);
             doc = mongoTemplate.executeCommand(jsonCommand);
@@ -630,7 +656,7 @@ public class ZKMongoTemplateTest {
             options = FindAndModifyOptions.options();
             options.upsert(true);
             ur = mongoTemplate.upsert(query, update, ZKObjectToSave.class);
-            TestCase.assertTrue(ur.isModifiedCountAvailable());
+            TestCase.assertTrue(ur.getMatchedCount() > 0);
 
             // 查询对象 Document
             jsonCommand = String.format("{find:'%s', filter:{%s:'%s'}}", ZKObjectToSave.collectionName, "_id", id);

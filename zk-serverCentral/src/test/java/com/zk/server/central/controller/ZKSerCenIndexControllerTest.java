@@ -38,9 +38,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.utils.ZKJsonUtils;
-import com.zk.core.web.ZKMsgRes;
 import com.zk.core.web.utils.ZKCookieUtils;
 import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.server.central.ZKSerCenSpringBootMain;
@@ -56,6 +56,7 @@ import junit.framework.TestCase;
  * @author Vinson
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { ZKSerCenSpringBootMain.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = { "classpath:/" }, properties = { "spring.config.name=zk.ser.cen" })

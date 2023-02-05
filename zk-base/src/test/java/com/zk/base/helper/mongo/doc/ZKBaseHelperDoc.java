@@ -18,7 +18,6 @@
 */
 package com.zk.base.helper.mongo.doc;
 
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 

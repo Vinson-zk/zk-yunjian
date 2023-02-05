@@ -47,7 +47,7 @@ public interface ZKSecRememberMeManager {
      * @param rememberMeToken
      * @param pc
      */
-    void onSuccessfulLogin(ZKSecSubject subject, ZKSecAuthenticationToken token, ZKSecPrincipalCollection pc);
+    <ID> void onSuccessfulLogin(ZKSecSubject subject, ZKSecAuthenticationToken token, ZKSecPrincipalCollection<ID> pc);
 
     /**
      * 登录失败记住我处理
@@ -64,7 +64,7 @@ public interface ZKSecRememberMeManager {
      * @param subject
      * @return
      */
-    ZKSecPrincipalCollection getRememberedPrincipals(ZKSecSubject subject);
+    <ID> ZKSecPrincipalCollection<ID> getRememberedPrincipals(ZKSecSubject subject);
 
     /**
      * 是否是记住我

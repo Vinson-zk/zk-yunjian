@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.utils.ZKMsgUtils;
-import com.zk.core.web.ZKMsgRes;
 import com.zk.core.web.utils.ZKWebUtils;
 
 /**
@@ -38,13 +38,13 @@ import com.zk.core.web.utils.ZKWebUtils;
 public class ZKGatewayIndexController {
 
     @RequestMapping({ "", "index" })
-    @ResponseBody
     public ZKMsgRes welcome() {
         return ZKMsgRes.asOk(ZKMsgUtils.getMessage("zk.gateway.msg.welcome", null, ZKWebUtils.getLocale())
                 + ZKEnvironmentUtils.getString("spring.application.name", "zk Gateway"));
     }
 
     @RequestMapping("noGateway")
+    @ResponseBody
     public String noGateway() {
         return "noGateway";
     }

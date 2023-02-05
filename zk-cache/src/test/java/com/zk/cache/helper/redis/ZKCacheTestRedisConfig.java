@@ -27,9 +27,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zk.core.redis.ZKJedisOperatorByte;
 import com.zk.core.redis.ZKJedisOperatorStringKey;
-import com.zk.core.utils.ZKJsonUtils;
 
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -69,7 +69,7 @@ public class ZKCacheTestRedisConfig {
     @ConditionalOnBean(name = "jedisPoolConfig")
     public JedisPool jedisPool(JedisPoolConfig jedisPoolConfig) {
         logger.info("[^_^:20210809-1255-001] hosr:{}, port:{}, password:{}", host, port, password);
-        logger.info("[^_^:20210809-1255-001] JedisPoolConfig:{}", ZKJsonUtils.writeObjectJson(jedisPoolConfig));
+        logger.info("[^_^:20210809-1255-001] JedisPoolConfig:{}", JSONObject.toJSONString(jedisPoolConfig));
 
         /** 单机模式 */
         JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password);

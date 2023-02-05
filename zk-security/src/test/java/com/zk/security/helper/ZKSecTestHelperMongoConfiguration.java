@@ -23,9 +23,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.zk.mongo.configuration.ZKMongoAutoConfiguration;
 import com.zk.mongo.configuration.ZKMongoProperties;
+import com.zk.security.ticket.support.mongo.ZKSecMongoTicketManager;
 
 /** 
 * @ClassName: ZKSecTestHelperMongoConfiguration 
@@ -43,6 +45,11 @@ public class ZKSecTestHelperMongoConfiguration {
     @ConfigurationProperties(prefix = "zk.sec.mongodb")
     public ZKMongoProperties zkMongoProperties() {
         return new ZKMongoProperties();
+    }
+
+    @Bean
+    public ZKSecMongoTicketManager zkSecMongoTicketManager(MongoTemplate mongoTemplate) {
+        return new ZKSecMongoTicketManager(mongoTemplate);
     }
 
 }

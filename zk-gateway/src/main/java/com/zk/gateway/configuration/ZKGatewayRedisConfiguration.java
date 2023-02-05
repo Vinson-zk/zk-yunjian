@@ -46,7 +46,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @PropertySource(encoding = "UTF-8", value = { "classpath:zk.gateway.redis.properties" })
 public class ZKGatewayRedisConfiguration {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     /*** jedis 整合 配置 ***/
     @Value("${zk.gateway.cache.redis.host:127.0.0.1}")

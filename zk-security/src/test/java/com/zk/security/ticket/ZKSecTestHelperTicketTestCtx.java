@@ -28,15 +28,11 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import com.zk.core.redis.ZKJedisOperatorStringKey;
 import com.zk.mongo.configuration.ZKMongoAutoConfiguration;
 import com.zk.security.helper.ZKSecTestHelperMongoConfiguration;
 import com.zk.security.helper.ZKSecTestHelperRedisConfiguration;
-import com.zk.security.ticket.support.mongo.ZKSecMongoTicketManager;
-import com.zk.security.ticket.support.redis.ZKSecRedisTicketManager;
 
 import junit.framework.TestCase;
 
@@ -46,10 +42,15 @@ import junit.framework.TestCase;
 * @author Vinson 
 * @version 1.0 
 */
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class, MongoAutoConfiguration.class,
-        WebMvcAutoConfiguration.class })
-@ImportAutoConfiguration(classes = { ZKMongoAutoConfiguration.class, ZKSecTestHelperMongoConfiguration.class,
-        ZKSecTestHelperRedisConfiguration.class })
+@SpringBootApplication(exclude = { //
+        DataSourceAutoConfiguration.class, //
+        MongoAutoConfiguration.class, //
+        WebMvcAutoConfiguration.class, })
+@ImportAutoConfiguration(classes = { //
+        ZKMongoAutoConfiguration.class, //
+        ZKSecTestHelperMongoConfiguration.class, //
+        ZKSecTestHelperRedisConfiguration.class, //
+})
 public class ZKSecTestHelperTicketTestCtx {
 
     private static ConfigurableApplicationContext ctx;
@@ -97,16 +98,6 @@ public class ZKSecTestHelperTicketTestCtx {
         MongoTemplate mongoTemplate = ctx.getBean(MongoTemplate.class);
         TestCase.assertNotNull(mongoTemplate);
         TestCase.assertTrue(true);
-    }
-
-    @Bean
-    public ZKSecMongoTicketManager zkSecMongoTicketManager(MongoTemplate mongoTemplate) {
-        return new ZKSecMongoTicketManager(mongoTemplate);
-    }
-
-    @Bean
-    public ZKSecRedisTicketManager zkSecRedisTicketManager(ZKJedisOperatorStringKey jedisOperatorStringKey) {
-        return new ZKSecRedisTicketManager(jedisOperatorStringKey);
     }
 
 }

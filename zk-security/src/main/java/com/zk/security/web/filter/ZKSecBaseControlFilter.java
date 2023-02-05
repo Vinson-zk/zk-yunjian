@@ -25,10 +25,10 @@ import javax.servlet.ServletResponse;
 
 import org.springframework.http.MediaType;
 
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.exception.ZKCodeException;
 import com.zk.core.exception.ZKMsgException;
 import com.zk.core.utils.ZKJsonUtils;
-import com.zk.core.web.ZKMsgRes;
 
 /** 
 * @ClassName: ZKSecBaseControlFilter 
@@ -55,9 +55,7 @@ public abstract class ZKSecBaseControlFilter extends ZKSecAccessControlFilter {
             e.printStackTrace();
         }
         catch(Exception e) {
-            resMsg = new ZKMsgRes();
-            resMsg.setCode("zk.1");
-            resMsg.setData(e.getMessage());
+            resMsg = ZKMsgRes.as("zk.1", e.getMessage(), e);
             e.printStackTrace();
         }
         String resStr = ZKJsonUtils.writeObjectJson(resMsg);

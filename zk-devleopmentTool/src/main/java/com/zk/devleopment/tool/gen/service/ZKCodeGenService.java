@@ -54,7 +54,7 @@ public class ZKCodeGenService {
     @Value("${zk.devleopmentTool.codeGen.root.path:codeGenFile/}")
     String genCodeRootPath = "";
 
-    @Value("${zk.devleopmentTool.codeGen.code.template.path}")
+    @Value("${zk.devleopmentTool.codeGen.code.template.path:\"\"}")
     String genCodeTemplatePath = "";
 
 	@Autowired

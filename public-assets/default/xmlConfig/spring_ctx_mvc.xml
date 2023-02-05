@@ -34,6 +34,9 @@
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"></bean>
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"></bean>
      -->
+     <bean id="localeResolver" class="com.zk.webmvc.resolver.ZKSessionLocaleResolver">
+    	<property name="defaultLocale" value="zh_CN" />
+    </bean>
     
 	<!-- 三、主题解析器；[ThemeResolver]     不配置，使用默认 -->
 	
@@ -43,7 +46,7 @@
 	<bean id="localeChangeInterceptor" class="com.zk.spring.boot.demo.mvc.interceptors.LocaleInterceptor" />
 	 -->
 	<!-- <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" /> -->
-	<bean id="localeChangeInterceptor" class="com.zk.core.web.interceptor.ZKLocaleInterceptor" /> 
+	<bean id="localeChangeInterceptor" class="com.zk.webmvc.interceptor.ZKLocaleInterceptor" /> 
     
     <!-- 在 controller 适配器 adapter 注解方式1 或 controller 适配器 adapter 注解方式2 中，用下面的方式添加拦截器；
     如果是 controller 适配器 adapter 注解方式3，也 可以在 controller 适配器 adapter 注解中添加这个拦截：<property name="interceptors" ref="localeChangInterceptor" />
@@ -102,7 +105,7 @@
 		            </property>   
 		            <property name="prettyPrint" value="false"/>  
 	                <property name="objectMapper">  
-	                    <bean class="com.zk.core.web.ZKJsonObjectMapper"></bean>  
+	                    <bean class="com.zk.core.commons.ZKJsonObjectMapper"></bean>  
 	                </property>  
 				</bean>
 			</array>

@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.web.filter.ZKOncePerFilter;
 import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.framework.serCen.ZKSerCenDecode;
@@ -70,7 +70,7 @@ public class ZKSerCenRegisterFilter extends ZKOncePerFilter {
             }
             else {
                 log.error("[>_<:20200629-1622-001] 服务中心权限认证失败，请联系管理员；");
-                ZKMsgRes zkMsgRes = new ZKMsgRes("zk.ser.cen.000001", null);
+                ZKMsgRes zkMsgRes = ZKMsgRes.as("zk.ser.cen.000001");
                 hRes.setStatus(601);
                 hRes.setHeader("errCode", "zk.ser.cen.000001");
                 ZKWebUtils.renderString(hRes, zkMsgRes.toString(), null);

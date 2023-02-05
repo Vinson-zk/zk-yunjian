@@ -49,7 +49,7 @@ import com.zk.security.web.support.spring.ZKSecStaticMethodMatcherPointcutAdviso
 //        ZKMongoAutoConfiguration.class,
         EnableWebMvcConfiguration.class, 
         ServletWebServerFactoryAutoConfiguration.class})
-@ImportResource(locations = { "classpath:xmlConfig/spring_ctx_zuul_sec.xml" })
+@ImportResource(locations = { "classpath:xmlConfig/spring_ctx_dev_sec.xml" })
 public class ZKDevSecConfiguration {
     
     @Bean

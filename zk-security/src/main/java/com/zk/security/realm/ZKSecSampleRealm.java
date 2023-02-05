@@ -21,6 +21,7 @@ package com.zk.security.realm;
 import java.util.Arrays;
 import java.util.List;
 
+import com.zk.core.exception.ZKUnknownException.KeyExceptionType;
 import com.zk.security.authz.ZKSecAuthorizationInfo;
 import com.zk.security.authz.ZKSecSimpleAuthorizationInfo;
 import com.zk.security.exception.ZKSecCodeException;
@@ -84,9 +85,10 @@ public class ZKSecSampleRealm extends ZKSecAbstractRealm {
      * @throws com.zk.security.exception.ZKSecCodeException
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     @Override
-    protected ZKSecPrincipalCollection doAuthentication(ZKSecAuthenticationToken authcToken) {
-        ZKSecPrincipalCollection pc = new ZKSecDefaultPrincipalCollection();
+    protected ZKSecPrincipalCollection<String> doAuthentication(ZKSecAuthenticationToken authcToken) {
+        ZKSecPrincipalCollection<String> pc = new ZKSecDefaultPrincipalCollection<String>();
         ZKSecAuthcUserToken authcUserToken = (ZKSecAuthcUserToken) authcToken;
         if ("admin".equals(authcUserToken.getUsername()) && "admin".equals(new String(authcUserToken.getPwd()))) {
             ZKSecPrincipal<String> p = new ZKSecDefaultUserPrincipal<String>(authcUserToken.getUsername(),
@@ -108,19 +110,19 @@ public class ZKSecSampleRealm extends ZKSecAbstractRealm {
 
 //      zk.sec.000001=用户不存在
         if (!"admin".equals(authcUserToken.getUsername()) && !"test".equals(authcUserToken.getUsername())) {
-            throw new ZKSecCodeException("zk.sec.000001");
+            throw new ZKSecCodeException(KeyExceptionType.authentication, "zk.sec.000001");
         }
 
 //      zk.sec.000002=密码错误
         if (!"admin".equals(new String(authcUserToken.getPwd()))
                 && !"test".equals(new String(authcUserToken.getPwd()))) {
-            throw new ZKSecCodeException("zk.sec.000002");
+            throw new ZKSecCodeException(KeyExceptionType.authentication, "zk.sec.000002");
         }
         return null;
     }
 
     @Override
-    public ZKSecAuthorizationInfo doGetZKSecAuthorizationInfo(ZKSecPrincipalCollection principalCollection) {
+    public <ID> ZKSecAuthorizationInfo doGetZKSecAuthorizationInfo(ZKSecPrincipalCollection<ID> principalCollection) {
         ZKSecSimpleAuthorizationInfo authorizationInfo = new ZKSecSimpleAuthorizationInfo();
         authorizationInfo.addApiCode("zkSecApiCode");
         return authorizationInfo;
@@ -136,8 +138,8 @@ public class ZKSecSampleRealm extends ZKSecAbstractRealm {
      * @return
      */
     @Override
-    protected boolean doCheckPermission(ZKSecPrincipalCollection principalCollection, String permissionCode) {
-        for (ZKSecPrincipal<?> p : principalCollection) {
+    protected <ID> boolean doCheckPermission(ZKSecPrincipalCollection<ID> principalCollection, String permissionCode) {
+        for (ZKSecPrincipal<ID> p : principalCollection) {
             if (p instanceof ZKSecUserPrincipal<?>) {
                 if ("admin".equals(((ZKSecUserPrincipal<?>) p).getUsername())) {
                     if ("test_permissionCode".equals(permissionCode)) {
@@ -159,7 +161,7 @@ public class ZKSecSampleRealm extends ZKSecAbstractRealm {
      * @return
      */
     @Override
-    protected boolean doCheckApiCode(ZKSecPrincipalCollection principalCollection, String apiCode) {
+    protected <ID> boolean doCheckApiCode(ZKSecPrincipalCollection<ID> principalCollection, String apiCode) {
         for (ZKSecPrincipal<?> p : principalCollection) {
             if (p instanceof ZKSecUserPrincipal<?>) {
                 if ("admin".equals(((ZKSecUserPrincipal<?>) p).getUsername())) {
@@ -173,8 +175,8 @@ public class ZKSecSampleRealm extends ZKSecAbstractRealm {
     }
 
     @Override
-    public void doLimitPrincipalTicketCount(ZKSecPrincipalCollection principalCollection) {
-        for (ZKSecPrincipal<?> p : principalCollection) {
+    public <ID> void doLimitPrincipalTicketCount(ZKSecPrincipalCollection<ID> principalCollection) {
+        for (ZKSecPrincipal<ID> p : principalCollection) {
             if (p instanceof ZKSecUserPrincipal<?>) {
                 List<ZKSecTicket> tks = null;
                 ZKSecTicket tk = ZKSecSecurityUtils.getTikcet();
@@ -198,7 +200,7 @@ public class ZKSecSampleRealm extends ZKSecAbstractRealm {
                         // 记住我进来的用户，退出当前用户；
                         log.info("[^_^:20220427-1014-002] 用户已在其他地方登录，请重新登录！");
                         ZKSecSecurityUtils.getSubject().logout();
-                        throw new ZKSecCodeException("zk.sec.000012"); // zk.sec.000012=用户已在其他地方登录，请重新登录
+                        throw new ZKSecCodeException(KeyExceptionType.authentication, "zk.sec.000012"); // zk.sec.000012=用户已在其他地方登录，请重新登录
                     }
                 }
             }

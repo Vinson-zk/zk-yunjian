@@ -67,7 +67,7 @@ public class ZKMyBatisConnect implements ZKDatabaseConnect {
             return columnSourceList;
         }catch (PersistenceException e){
             e.printStackTrace();
-            throw ZKCodeException.as("zk.codeGen.000005", "模块数据库连接异常", (Object[])null, null);
+            throw ZKCodeException.as("zk.codeGen.000005", "模块数据库连接异常");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -87,7 +87,7 @@ public class ZKMyBatisConnect implements ZKDatabaseConnect {
             return columnSourceList;
         }catch (PersistenceException e){
             e.printStackTrace();
-            throw ZKCodeException.as("zk.codeGen.000005", "模块数据库连接异常", (Object[])null, null);
+            throw ZKCodeException.as("zk.codeGen.000005", "模块数据库连接异常");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -106,7 +106,7 @@ public class ZKMyBatisConnect implements ZKDatabaseConnect {
             return pkSourceList;
         }catch (PersistenceException e){
             e.printStackTrace();
-            throw ZKCodeException.as("zk.codeGen.000005", "模块数据库连接异常", (Object[])null, null);
+            throw ZKCodeException.as("zk.codeGen.000005", "模块数据库连接异常");
         }
         catch(Exception e) {
             e.printStackTrace();

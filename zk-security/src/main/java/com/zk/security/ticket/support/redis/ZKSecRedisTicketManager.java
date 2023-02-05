@@ -379,7 +379,7 @@ public class ZKSecRedisTicketManager extends ZKSecAbstractTicketManager implemen
      * @see com.zk.security.ticket.ZKSecTicketManager#findTickeByPrincipal(com.zk.security.principal.ZKSecPrincipal)
      */
     @Override
-    public List<ZKSecTicket> findTickeByPrincipal(ZKSecPrincipal<?> principal) {
+    public <ID> List<ZKSecTicket> findTickeByPrincipal(ZKSecPrincipal<ID> principal) {
        return this.findTickeByPrincipal(principal, null);
     }
 
@@ -399,13 +399,14 @@ public class ZKSecRedisTicketManager extends ZKSecAbstractTicketManager implemen
      *      java.util.List)
      */
     @Override
-    public List<ZKSecTicket> findTickeByPrincipal(ZKSecPrincipal<?> principal, List<ZKSecTicket> filterTickets) {
+    public <ID> List<ZKSecTicket> findTickeByPrincipal(ZKSecPrincipal<ID> principal, List<ZKSecTicket> filterTickets) {
         List<ZKSecRedisTicketBaseInfo> tks = this.getJedisOperator().hValues(ZKRedisKey.Ticket_Mapping);
         List<ZKSecRedisTicketBaseInfo> resTks = Lists.newArrayList();
         for (ZKSecRedisTicketBaseInfo tk : tks) {
             if (tk.isValid()) {
                 if (tk.getType() == ZKSecTicket.KeyType.Security && tk.getPrincipalCollection() != null) {
-                    for (ZKSecPrincipal<?> p : tk.getPrincipalCollection()) {
+                    ZKSecPrincipalCollection<ID> pc = tk.getPrincipalCollection();
+                    for (ZKSecPrincipal<ID> p : pc) {
                         if (p.getPkId().equals(principal.getPkId()) && (p.getType() == principal.getType())) {
                             resTks.add(tk);
                             break;
@@ -471,7 +472,7 @@ public class ZKSecRedisTicketManager extends ZKSecAbstractTicketManager implemen
      * @see com.zk.security.ticket.ZKSecProxyTickerManager#getPrincipalCollection(java.lang.String)
      */
     @Override
-    public ZKSecPrincipalCollection getPrincipalCollection(Serializable identification) {
+    public <ID> ZKSecPrincipalCollection<ID> getPrincipalCollection(Serializable identification) {
         ZKSecRedisTicketBaseInfo tkBaseInfo = this.getJedisOperator().hget(identification.toString(),
                 AttrKeyName.baseInfo);
         return tkBaseInfo.getPrincipalCollection();
@@ -492,7 +493,8 @@ public class ZKSecRedisTicketManager extends ZKSecAbstractTicketManager implemen
      *      com.zk.security.principal.pc.ZKSecPrincipalCollection)
      */
     @Override
-    public void setPrincipalCollection(Serializable identification, ZKSecPrincipalCollection principalCollection) {
+    public <ID> void setPrincipalCollection(Serializable identification,
+            ZKSecPrincipalCollection<ID> principalCollection) {
         ZKSecRedisTicketBaseInfo tkBaseInfo = this.getJedisOperator().hget(identification.toString(),
                 AttrKeyName.baseInfo);
         tkBaseInfo.setPrincipalCollection(principalCollection);

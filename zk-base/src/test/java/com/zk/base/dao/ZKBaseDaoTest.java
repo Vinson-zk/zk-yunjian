@@ -31,7 +31,7 @@ public class ZKBaseDaoTest {
     @Test
     public void testGetSuperclassByName(){
         try {
-            Class<ZKDBBaseEntity> classz = ZKClassUtils.getSuperclassByName(ZKDBBaseDao.class,
+            Class<ZKDBBaseEntity<?>> classz = ZKClassUtils.getSuperclassByName(ZKDBBaseDao.class,
                     ZKBaseHelperDao.class, "E");
             System.out.println("[^_^:20221012-1526-001] classz: " + classz.getName());
             TestCase.assertEquals(ZKBaseHelperEntityLong.class, classz);

@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zk.base.service.ZKBaseService;
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.sys.api.org.ZKSysOrgCompanyApi;
 import com.zk.sys.entity.org.ZKSysOrgCompany;
 import com.zk.wechat.thirdParty.dao.ZKThirdPartyDao;

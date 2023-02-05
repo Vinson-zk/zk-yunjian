@@ -30,7 +30,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
 	<dependencies>
 	
 		<!-- ***** spring boot begin -->
@@ -46,9 +45,9 @@
 	        </exclusions> 
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-log4j2</artifactId>
+	    </dependency>
 		<dependency>
     		<groupId>org.springframework.boot</groupId>
     		<artifactId>spring-boot-configuration-processor</artifactId>
@@ -57,55 +56,31 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>  -->
-		<!-- <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
-        </dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<artifactId>spring-boot-starter-json</artifactId>
 		</dependency>
 		<!-- ##### spring boot end -->
 		
+		<!-- ***** spring framework begin -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+ 				<artifactId>spring-web</artifactId>
+		</dependency> 
+		<!-- ##### spring framework end -->
+		
+		<!-- ***** redis begin -->
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 		</dependency>
-		
-		<!-- ***** log4j begin -->
-		<dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-starter-log4j</artifactId>
-	    </dependency>
-	    <dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-log4j12</artifactId>
-		    <!-- <scope>test</scope> -->
-		</dependency>
-	    <!-- <dependency>
-	        <groupId>org.apache.logging.log4j</groupId>
-	        <artifactId>log4j-api</artifactId>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.apache.logging.log4j</groupId>
-	        <artifactId>log4j-core</artifactId>
-	    </dependency>
-	    <dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-web</artifactId>
-	    </dependency> -->
-	    <!-- ##### log4j end -->
+		<!-- ##### redis end -->
 	
 		<!-- ***** other begin -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
@@ -150,17 +125,17 @@
 		    <groupId>commons-io</groupId>
 		    <artifactId>commons-io</artifactId>
 		</dependency>
+		<!-- ##### other end -->
+		
+		<!-- ***** begin test -->
 		<dependency>
 			<groupId>junit</groupId>
    			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
-		<!-- ##### other end -->
-			
+        <!-- ##### end test -->
 	</dependencies>
 	
 	<build>
-	
 		<plugins>
 			<!-- spring boot 运行插件 -->
             <plugin>
@@ -176,6 +151,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<!-- 测试插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
 			</plugin>
 		</plugins>
 		

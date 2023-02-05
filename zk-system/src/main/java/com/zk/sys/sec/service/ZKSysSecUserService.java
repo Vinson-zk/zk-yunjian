@@ -69,12 +69,12 @@ public class ZKSysSecUserService {
         ZKSysOrgCompany company = this.sysOrgCompanyService.getByCode(authcUserToken.getCompanyCode());
         if (company == null) {
             log.error("[>_<:2022425-1723-001] 公司代码 {} 不存在", authcUserToken.getCompanyCode());
-            throw new ZKSecCodeException("zk.sys.020004", null, new String[] { authcUserToken.getCompanyCode() },
-                    null);
+            throw ZKSecCodeException.as("zk.sys.020004", (String) null, (Object) null,
+                    authcUserToken.getCompanyCode());
         }
         /* --- 公司状态校验 */
         if (company.getStatus() == null || ZKSysOrgCompany.KeyStatus.normal != company.getStatus()) {
-            throw new ZKSecCodeException("zk.sys.020005");
+            throw ZKSecCodeException.as("zk.sys.020005");
         }
 
         /*** 用户部分检验 ---------------------------------- */
@@ -94,18 +94,18 @@ public class ZKSysSecUserService {
             // 用户不存在
             log.error("[>_<:2022426-0922-001] 用户[{}-{}] 不存在", authcUserToken.getCompanyCode(),
                     authcUserToken.getUsername());
-            throw new ZKSecCodeException("zk.sys.020003");
+            throw ZKSecCodeException.as("zk.sys.020003");
         }
         /* --- 校验用户密码 */
         if (!this.checkUserPassword(loginUser, authcUserToken.getPwd())) {
             // 密码错误
             log.error("[>_<:2022426-0922-001] 用户[{}-{}]密码错误", authcUserToken.getCompanyCode(),
                     authcUserToken.getUsername());
-            throw new ZKSecCodeException("zk.sys.020003");
+            throw ZKSecCodeException.as("zk.sys.020003");
         }
         /* --- 校验用户状态 */
         if (loginUser.getStatus() == null || ZKSysOrgUser.KeyStatus.normal != loginUser.getStatus().intValue()) {
-            throw new ZKSecCodeException("zk.sys.020006");
+            throw ZKSecCodeException.as("zk.sys.020006");
         }
         return loginUser;
     }

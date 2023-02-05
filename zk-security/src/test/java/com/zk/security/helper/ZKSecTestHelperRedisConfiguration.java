@@ -25,12 +25,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
+import com.alibaba.fastjson.JSONObject;
+import com.zk.cache.redis.ZKRedisCacheManager;
 import com.zk.core.redis.ZKJedisOperatorByte;
 import com.zk.core.redis.ZKJedisOperatorStringKey;
-import com.zk.core.utils.ZKJsonUtils;
+import com.zk.security.ticket.support.redis.ZKSecRedisTicketManager;
 
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -42,7 +45,8 @@ import redis.clients.jedis.JedisPoolConfig;
 * @version 1.0 
 */
 @Configuration
-@PropertySources(value = { @PropertySource(value = { "classpath:test_redis.properties" }, encoding = "UTF-8") })
+@PropertySources(value = {
+        @PropertySource(value = { "classpath:test.zk.sec.redis.properties" }, encoding = "UTF-8") })
 public class ZKSecTestHelperRedisConfiguration {
 
     private static Logger logger = LoggerFactory.getLogger(ZKSecTestHelperRedisConfiguration.class);
@@ -71,7 +75,7 @@ public class ZKSecTestHelperRedisConfiguration {
     @ConditionalOnBean(name = "jedisPoolConfig")
     public JedisPool jedisPool(JedisPoolConfig jedisPoolConfig) {
         logger.info("[^_^:20210809-1255-001] hosr:{}, port:{}, password:{}", host, port, password);
-        logger.info("[^_^:20210809-1255-001] JedisPoolConfig:{}", ZKJsonUtils.writeObjectJson(jedisPoolConfig));
+        logger.info("[^_^:20210809-1255-001] JedisPoolConfig:{}", JSONObject.toJSONString(jedisPoolConfig));
 
         /** 单机模式 */
         JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password);
@@ -91,6 +95,20 @@ public class ZKSecTestHelperRedisConfiguration {
         ZKJedisOperatorStringKey jedisOperatorStringKey = new ZKJedisOperatorStringKey();
         jedisOperatorStringKey.setJedisOperatorByte(jedisOperatorByte);
         return jedisOperatorStringKey;
+    }
+
+    @Primary
+    @Bean
+    public ZKSecRedisTicketManager zkSecRedisTicketManager(ZKJedisOperatorStringKey jedisOperatorStringKey) {
+        return new ZKSecRedisTicketManager(jedisOperatorStringKey);
+    }
+
+    @Primary
+    @Bean
+    public ZKRedisCacheManager redisCacheManager(ZKJedisOperatorStringKey jedisOperatorStringKey) {
+        ZKRedisCacheManager cm = new ZKRedisCacheManager();
+        cm.setJedisOperator(jedisOperatorStringKey);
+        return cm;
     }
 
 }

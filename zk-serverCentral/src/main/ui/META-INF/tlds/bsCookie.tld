@@ -15,7 +15,7 @@
   <function>
     <description>操作 cookie；从请求中取一个 cookie</description>
     <name>getCookieValue</name>
-    <function-class>com.zk.core.web.utils.ZKCookieUtils</function-class>
+    <function-class>com.zk.webmvc.utils.ZKCookieUtils</function-class>
     <function-signature>java.lang.String getCookieValue(java.lang.String)</function-signature>
     <example>${zkCookie:getCookieValue(cookienName)}</example>  
   </function>
@@ -23,7 +23,7 @@
   <function>
     <description>操作 cookie；从响应中取一个 cookie</description>
     <name>getCookieValueByResponse</name>
-    <function-class>com.zk.core.web.utils.ZKCookieUtils</function-class>
+    <function-class>com.zk.webmvc.utils.ZKCookieUtils</function-class>
     <function-signature>java.lang.String getCookieValueByResponse(java.lang.String)</function-signature>
     <example>${zkCookie:getCookieValueByResponse(cookienName)}</example>  
   </function> 

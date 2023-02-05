@@ -35,10 +35,11 @@ public interface ZKSecStrategy {
     /**
      * 认证策略
      */
-    public ZKSecPrincipalCollection doStrategyAuthentication(Set<ZKSecRealm> realmSet, ZKSecAuthenticationToken token);
+    <ID> ZKSecPrincipalCollection<ID> doStrategyAuthentication(Set<ZKSecRealm> realmSet,
+            ZKSecAuthenticationToken token);
 
     /**
      * 用户在线数量控制策略
      */
-    public void doStrategyPrincipalsCount(Set<ZKSecRealm> realmSet, ZKSecPrincipalCollection pc);
+    <ID> void doStrategyPrincipalsCount(Set<ZKSecRealm> realmSet, ZKSecPrincipalCollection<ID> pc);
 }

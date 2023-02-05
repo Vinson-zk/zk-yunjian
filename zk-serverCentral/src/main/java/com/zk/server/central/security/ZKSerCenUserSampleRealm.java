@@ -33,6 +33,10 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import com.zk.core.utils.ZKStringUtils;
+import com.zk.security.principal.ZKSecDefaultUserPrincipal;
+import com.zk.security.principal.ZKSecPrincipal.APP_TYPE;
+import com.zk.security.principal.ZKSecPrincipal.OS_TYPE;
+import com.zk.security.principal.ZKSecUserPrincipal;
 
 /** 
 * @ClassName: ZKSerCenUserSampleRealm 
@@ -49,7 +53,8 @@ public class ZKSerCenUserSampleRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        ZKPrincipal zkP = (ZKPrincipal) getAvailablePrincipal(principals);
+        @SuppressWarnings("unchecked")
+        ZKSecUserPrincipal<String> zkP = (ZKSecUserPrincipal<String>) getAvailablePrincipal(principals);
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
@@ -64,7 +69,8 @@ public class ZKSerCenUserSampleRealm extends AuthorizingRealm {
         UsernamePasswordToken tk = (UsernamePasswordToken) token;
         String targetPwd = this.assertAccount(tk.getUsername());
         if (this.assertPwd(String.valueOf(tk.getPassword()), targetPwd)) {
-            ZKPrincipal p = new ZKPrincipal(tk.getUsername());
+            ZKSecUserPrincipal<String> p = new ZKSecDefaultUserPrincipal<String>(tk.getUsername(), tk.getUsername(),
+                    tk.getUsername(), OS_TYPE.UNKNOWN, null, APP_TYPE.UNKNOWN, null, null, null, null);
             return new SimpleAuthenticationInfo(p, tk.getPassword(), getName());
         }
         return null;
@@ -73,16 +79,16 @@ public class ZKSerCenUserSampleRealm extends AuthorizingRealm {
     /************************************************************************/
 
     @SuppressWarnings("unchecked")
-    protected Collection<String> getPermissions(ZKPrincipal zkP) {
-        if (zkP.getAccount().equals("admin")) {
+    protected Collection<String> getPermissions(ZKSecUserPrincipal<?> zkP) {
+        if (zkP.getUsername().equals("admin")) {
             return Arrays.asList("admin");
         }
         return Collections.EMPTY_LIST;
     }
 
     @SuppressWarnings("unchecked")
-    protected Collection<String> getRoles(ZKPrincipal zkP) {
-        if (zkP.getAccount().equals("admin")) {
+    protected Collection<String> getRoles(ZKSecUserPrincipal<?> zkP) {
+        if (zkP.getUsername().equals("admin")) {
             return Arrays.asList("admin");
         }
         return Collections.EMPTY_LIST;

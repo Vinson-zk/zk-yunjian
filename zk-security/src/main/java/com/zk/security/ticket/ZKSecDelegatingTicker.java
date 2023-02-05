@@ -69,12 +69,12 @@ public class ZKSecDelegatingTicker extends ZKSecAbstractTicket {
     }
 
     @Override
-    public ZKSecPrincipalCollection getPrincipalCollection() {
+    public <ID> ZKSecPrincipalCollection<ID> getPrincipalCollection() {
         return this.getTickerManager().getPrincipalCollection(this.getTkId());
     }
 
     @Override
-    public void setPrincipalCollection(ZKSecPrincipalCollection principalCollection) {
+    public <ID> void setPrincipalCollection(ZKSecPrincipalCollection<ID> principalCollection) {
         this.getTickerManager().setPrincipalCollection(this.getTkId(), principalCollection);
     }
 

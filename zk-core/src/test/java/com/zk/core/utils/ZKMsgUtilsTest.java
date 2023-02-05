@@ -54,31 +54,29 @@ public class ZKMsgUtilsTest {
             String localeStr = "";
 
             localeStr = "zh_CN";
-            msg = ZKMsgUtils.getMessage("0", null, ZKLocaleUtils.valueOf(localeStr));
+            msg = ZKMsgUtils.getMessage(ZKLocaleUtils.valueOf(localeStr), "0");
             TestCase.assertEquals(expectMsg_0, msg);
-            msg = ZKMsgUtils.getMessage("1", null, ZKLocaleUtils.valueOf(localeStr));
+            msg = ZKMsgUtils.getMessage(ZKLocaleUtils.valueOf(localeStr), "1");
             TestCase.assertEquals(expectMsg_1, msg);
 
-            msg = ZKMsgUtils.getMessage("test.msg.testMsg", null, ZKLocaleUtils.valueOf(localeStr));
+            msg = ZKMsgUtils.getMessage(ZKLocaleUtils.valueOf(localeStr), "test.msg.testMsg");
             TestCase.assertEquals(expectMsg_msg + "{1}{0}", msg);
-            msg = ZKMsgUtils.getMessage("test.msg.testMsg", new String[] { "p0" }, ZKLocaleUtils.valueOf(localeStr));
+            msg = ZKMsgUtils.getMessage(ZKLocaleUtils.valueOf(localeStr), "test.msg.testMsg", "p0");
             TestCase.assertEquals(expectMsg_msg + "{1}p0", msg);
-            msg = ZKMsgUtils.getMessage("test.msg.testMsg", new String[] { "p0", "p1" },
-                    ZKLocaleUtils.valueOf(localeStr));
+            msg = ZKMsgUtils.getMessage(ZKLocaleUtils.valueOf(localeStr), "test.msg.testMsg", "p0", "p1");
             TestCase.assertEquals(expectMsg_msg + "p1p0", msg);
 
             localeStr = "en_US";
-            msg = ZKMsgUtils.getMessage("0", null, ZKLocaleUtils.valueOf(localeStr));
+            msg = ZKMsgUtils.getMessage(ZKLocaleUtils.valueOf(localeStr), "0");
             TestCase.assertEquals(expectMsg_0_en, msg);
-            msg = ZKMsgUtils.getMessage("1", null, ZKLocaleUtils.valueOf(localeStr));
+            msg = ZKMsgUtils.getMessage(ZKLocaleUtils.valueOf(localeStr), "1");
             TestCase.assertEquals(expectMsg_1_en, msg);
 
-            msg = ZKMsgUtils.getMessage("test.msg.testMsg", null, ZKLocaleUtils.valueOf(localeStr));
+            msg = ZKMsgUtils.getMessage(ZKLocaleUtils.valueOf(localeStr), "test.msg.testMsg");
             TestCase.assertEquals(expectMsg_msg_en + "{1}{0}", msg);
-            msg = ZKMsgUtils.getMessage("test.msg.testMsg", new String[] { "p0" }, ZKLocaleUtils.valueOf(localeStr));
+            msg = ZKMsgUtils.getMessage(ZKLocaleUtils.valueOf(localeStr), "test.msg.testMsg", "p0");
             TestCase.assertEquals(expectMsg_msg_en + "{1}p0", msg);
-            msg = ZKMsgUtils.getMessage("test.msg.testMsg", new String[] { "p0", "p1" },
-                    ZKLocaleUtils.valueOf(localeStr));
+            msg = ZKMsgUtils.getMessage(ZKLocaleUtils.valueOf(localeStr), "test.msg.testMsg", "p0", "p1");
             TestCase.assertEquals(expectMsg_msg_en + "p1p0", msg);
 
         }

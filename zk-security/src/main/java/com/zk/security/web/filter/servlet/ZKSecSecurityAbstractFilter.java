@@ -14,7 +14,7 @@
 * @Package com.zk.security.web.filter.servlet 
 * @Description: TODO(simple description this file what to do. ) 
 * @date Jul 28, 2021 9:35:44 AM 
-* @version V1.0 
+* @version V1.0 f
 */
 package com.zk.security.web.filter.servlet;
 
@@ -81,16 +81,6 @@ public class ZKSecSecurityAbstractFilter extends ZKOncePerFilter {
 
     public void setTraceTicketId(boolean traceTicketId) {
         this.traceTicketId = traceTicketId;
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-    }
-
-    @Override
-    public void destroy() {
-        super.destroy();
     }
 
     public ZKSecFilterChainResolver getFilterChainResolver() {

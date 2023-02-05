@@ -310,12 +310,12 @@ public class ZKSecMongoTicketManager extends ZKSecAbstractTicketManager implemen
     }
 
     @Override
-    public List<ZKSecTicket> findTickeByPrincipal(ZKSecPrincipal<?> principal) {
+    public <ID> List<ZKSecTicket> findTickeByPrincipal(ZKSecPrincipal<ID> principal) {
         return this.findTickeByPrincipal(principal, null);
     }
 
     @Override
-    public List<ZKSecTicket> findTickeByPrincipal(ZKSecPrincipal<?> principal, List<ZKSecTicket> filterTickets) {
+    public <ID> List<ZKSecTicket> findTickeByPrincipal(ZKSecPrincipal<ID> principal, List<ZKSecTicket> filterTickets) {
         List<ZKSecTicket> tks = new ArrayList<>();
         ZKFind find = new ZKFind(ZKSecTicket_collection_name);
         List<ZKQueryOpt> queryOpts = new ArrayList<>();
@@ -346,21 +346,23 @@ public class ZKSecMongoTicketManager extends ZKSecAbstractTicketManager implemen
         return tks;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public ZKSecPrincipalCollection getPrincipalCollection(Serializable identification) {
+    public <ID> ZKSecPrincipalCollection<ID> getPrincipalCollection(Serializable identification) {
         Document doc = getAttr(identification, AttrKeyName.principalCollection);
         if (doc != null && doc.get(AttrKeyName.principalCollection) != null) {
             doc = doc.get(AttrKeyName.principalCollection, Document.class);
             if(doc != null && doc.get(AttrKeyName.pcKey_PC) != null) {
                 byte[] r = doc.get(AttrKeyName.pcKey_PC, Binary.class).getData();
-                return (ZKSecPrincipalCollection) ZKObjectUtils.unserialize(r);
+                return (ZKSecPrincipalCollection<ID>) ZKObjectUtils.unserialize(r);
             }
         }
         return null;
     }
 
     @Override
-    public void setPrincipalCollection(Serializable identification, ZKSecPrincipalCollection principalCollection) {
+    public <ID> void setPrincipalCollection(Serializable identification,
+            ZKSecPrincipalCollection<ID> principalCollection) {
         Document pcDoc = new Document();
         pcDoc.put(AttrKeyName.pcKey_PC, ZKObjectUtils.serialize(principalCollection));
         pcDoc.put(AttrKeyName.pcKey_PS, makePsDoc(principalCollection.asSet()));
@@ -602,7 +604,7 @@ public class ZKSecMongoTicketManager extends ZKSecAbstractTicketManager implemen
         }
     }
 
-    private List<Document> makePsDoc(Set<ZKSecPrincipal<?>> principals) {
+    private <ID> List<Document> makePsDoc(Set<ZKSecPrincipal<ID>> principals) {
         List<Document> pDocs = new ArrayList<>();
         Document pDoc = null;
         for (ZKSecPrincipal<?> p : principals) {

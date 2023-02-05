@@ -36,17 +36,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.exception.ZKCodeException;
 import com.zk.core.utils.ZKStreamUtils;
 import com.zk.core.utils.ZKValidateCodeUtils;
 import com.zk.core.utils.ZKValidateCodeUtils.ZKImgUtils;
-import com.zk.core.web.ZKMsgRes;
 import com.zk.core.web.utils.ZKCookieUtils;
 import com.zk.core.web.utils.ZKWebUtils;
+import com.zk.security.principal.ZKSecUserPrincipal;
 import com.zk.server.central.commons.ZKSerCenConstants;
 import com.zk.server.central.commons.ZKSerCenUtils;
 import com.zk.server.central.controller.base.ZKSerCenBaseController;
-import com.zk.server.central.security.ZKPrincipal;
 import com.zk.server.central.security.ZKSerCenAuthenticationFilter;
 import com.zk.server.central.security.ZKSerCenSecurityUtils;
 
@@ -70,7 +70,7 @@ public class ZKSerCenLoginController extends ZKSerCenBaseController {
     public ModelAndView login(HttpServletRequest hReq, HttpServletResponse hRes, Model model)
             throws NoSuchAlgorithmException {
 
-        ZKPrincipal zkPrincipal = ZKSerCenSecurityUtils.getPrincipal();
+        ZKSecUserPrincipal<String> zkPrincipal = ZKSerCenSecurityUtils.getPrincipal();
         if (zkPrincipal != null) {
             // 如果已经登录，则跳转到首页
             ZKWebUtils.redirectUrl(hReq, hRes, "/" + this.adminPath + "/" + this.modulePath);
@@ -133,7 +133,7 @@ public class ZKSerCenLoginController extends ZKSerCenBaseController {
         // 返回的数据；
         Map<String, Object> data = new HashMap<String, Object>();
 
-        ZKPrincipal zkPrincipal = ZKSerCenSecurityUtils.getPrincipal();
+        ZKSecUserPrincipal<String> zkPrincipal = ZKSerCenSecurityUtils.getPrincipal();
         if (zkPrincipal != null) {
             String __url = "/" + this.adminPath + "/" + this.modulePath;
             // 如果已经登录，则跳转到指定页面

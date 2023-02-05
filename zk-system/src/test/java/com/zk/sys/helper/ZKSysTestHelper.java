@@ -42,7 +42,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zk.sys.ZKSysSpringBootMain;
-import com.zk.sys.configuration.ZKSysConfiguration;
+import com.zk.sys.configuration.ZKSysBeforeConfiguration;
 import com.zk.sys.configuration.ZKSysMvcConfiguration;
 
 @SpringBootTest
@@ -58,11 +58,11 @@ import com.zk.sys.configuration.ZKSysMvcConfiguration;
 @EnableTransactionManagement(proxyTargetClass = true)
 //@ComponentScan(basePackages = { "com.zk.server.central.filter" })
 //@ServletComponentScan(basePackages = { "com.zk.server.central.filter" })
-@ImportAutoConfiguration(classes = { 
-        ZKSysConfiguration.class
-//        , ZKMongoAutoConfiguration.class
-        , ZKSysMvcConfiguration.class
-//        , ZKSysShiroConfiguration.class 
+@ImportAutoConfiguration(classes = { //
+        ZKSysBeforeConfiguration.class, //
+//      ZKMongoAutoConfiguration.class, //
+        ZKSysMvcConfiguration.class, //
+//      ZKSysShiroConfiguration.class, //
 })
 @PropertySource(encoding = "UTF-8", value = { "classpath:zk.sys.jdbc.properties", "classpath:zk.sys.mongo.properties" })
 //@AutoConfigureOrder(value = Ordered.HIGHEST_PRECEDENCE)

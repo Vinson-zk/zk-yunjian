@@ -103,12 +103,12 @@ public interface ZKSecTicket extends Serializable {
      * 
      * @return
      */
-    public ZKSecPrincipalCollection getPrincipalCollection();
+    <ID> ZKSecPrincipalCollection<ID> getPrincipalCollection();
 
     /**
      * 设置拥有者标识
      */
-    public void setPrincipalCollection(ZKSecPrincipalCollection principalCollection);
+    <ID> void setPrincipalCollection(ZKSecPrincipalCollection<ID> principalCollection);
 
     /**
      * 取令牌唯一ID

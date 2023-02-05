@@ -39,8 +39,8 @@ public class ZKSecDefaultSecurityManager extends ZKSecAbstractSecurityManager {
      * @return
      */
     @Override
-    public ZKSecPrincipalCollection doAuthentication(ZKSecSubject subject, ZKSecAuthenticationToken token) {
-        ZKSecPrincipalCollection pc = this.getStrategy().doStrategyAuthentication(this.getRealmSet(), token);
+    public <ID> ZKSecPrincipalCollection<ID> doAuthentication(ZKSecSubject subject, ZKSecAuthenticationToken token) {
+        ZKSecPrincipalCollection<ID> pc = this.getStrategy().doStrategyAuthentication(this.getRealmSet(), token);
         if (pc != null && !pc.isEmpty()) {
             // 登录成功
             return pc;
@@ -49,7 +49,7 @@ public class ZKSecDefaultSecurityManager extends ZKSecAbstractSecurityManager {
     }
 
     @Override
-    public boolean doCheckPermission(ZKSecPrincipalCollection pc, String permissionCode) {
+    public <ID> boolean doCheckPermission(ZKSecPrincipalCollection<ID> pc, String permissionCode) {
         boolean cp = false;
         for (ZKSecRealm realm : this.getRealmSet()) {
             if (pc != null && !pc.isEmpty()) {
@@ -63,7 +63,7 @@ public class ZKSecDefaultSecurityManager extends ZKSecAbstractSecurityManager {
     }
 
     @Override
-    public boolean doCheckApiCode(ZKSecPrincipalCollection pc, String apiCode) {
+    public <ID> boolean doCheckApiCode(ZKSecPrincipalCollection<ID> pc, String apiCode) {
         boolean cp = false;
         for (ZKSecRealm realm : this.getRealmSet()) {
             if (pc != null && !pc.isEmpty()) {

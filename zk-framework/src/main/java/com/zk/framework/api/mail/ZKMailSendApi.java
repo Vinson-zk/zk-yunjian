@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.framework.api.ZKApiConstants;
 
 /** 

@@ -27,8 +27,8 @@ import java.util.Map;
 
 import org.springframework.util.ReflectionUtils;
 
+import com.zk.core.commons.ZKJsonObjectMapper;
 import com.zk.core.utils.ZKClassUtils.Param_Name;
-import com.zk.core.web.ZKJsonObjectMapper;
 
 /** 
 * @ClassName: ZKObjectUtils 

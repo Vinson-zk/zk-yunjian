@@ -16,10 +16,11 @@
  * @date Dec 18, 2019 3:00:52 PM 
  * @version V1.0   
 */
-package com.zk.core.web;
+package com.zk.core.commons;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Locale;
 
 import javax.servlet.ServletResponse;
 
@@ -27,13 +28,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zk.core.exception.ZKCodeException;
 import com.zk.core.exception.ZKMsgException;
+import com.zk.core.exception.ZKUnknownException.KeyExceptionType;
 import com.zk.core.utils.ZKExceptionsUtils;
 import com.zk.core.utils.ZKJsonUtils;
 import com.zk.core.utils.ZKMsgUtils;
 import com.zk.core.utils.ZKStringUtils;
-import com.zk.core.web.utils.ZKWebUtils;
 
 /**
  * @ClassName: ZKMsgRes
@@ -41,6 +43,7 @@ import com.zk.core.web.utils.ZKWebUtils;
  * @author Vinson
  * @version 1.0
  */
+@JsonIgnoreProperties(value = { "ok" }, allowGetters = true) // 序列化时不字段不忽略；反序列化时字段忽略；
 public class ZKMsgRes {
 
     /**
@@ -58,40 +61,50 @@ public class ZKMsgRes {
      */
     private String msg;
 
+//    /**
+//     * 响应的国际化语言
+//     */
+//    private Locale locale;
+
     /**
      * 响应数据
      */
     private Object data;
 
-    public ZKMsgRes() {
-
-    }
+    /**
+     * 响应分类，与 ZKUnknownException 异常类型对应
+     */
+    int type;
 
     /**
      * 重载的构造方法，会同步自动设置 msg
+     * 
      * @param code
      */
-    public ZKMsgRes(String code) {
-        this(code, null, null);
+//    public ZKMsgRes(String code, Locale locale) {
+//        this(code, null, locale, null);
+//    }
+//
+//    public ZKMsgRes(String code, Locale locale, String msg) {
+//        this(code, msg, locale, null);
+//    }
+//
+//    public ZKMsgRes(String code, String msg, Locale locale, Object data) {
+//        this(code, msg, locale, null, data);
+//    }
+    protected ZKMsgRes() {
     }
 
-    public ZKMsgRes(String code, String msg) {
-        this(code, msg, null);
-    }
-
-    public ZKMsgRes(String code, String msg, Object data) {
-        this(code, msg, null, data);
-    }
-
-    public ZKMsgRes(String code, String msg, Object[] msgArgs, Object data) {
+    protected ZKMsgRes(int type, Locale locale, String code, String msg, Object data, Object... msgArgs) {
+        this.type = type;
+//      this.locale = locale;
         this.code = code;
-        if (ZKStringUtils.isEmpty(msg)) {
-            this.msg = ZKMsgUtils.getMessage(code, msgArgs, ZKWebUtils.getLocale());
-        }
-        else {
-            this.msg = msg;
-        }
         this.data = data;
+        if(ZKStringUtils.isEmpty(msg)) {
+            this.msg = ZKMsgUtils.getMessage(locale, code, msgArgs);
+        }else {
+            this.msg = msg;
+        }   
     }
 
 //    public ZKMsgRes(ZKMsgException zkMsgE) {
@@ -101,87 +114,118 @@ public class ZKMsgRes {
 //    }
 
     // 返回一个成功，正常的响应数据
-    public static ZKMsgRes successful() {
-        return new ZKMsgRes("zk.0");
-    }
-
-    public static ZKMsgRes as(ZKCodeException zkCodeE) {
-        return new ZKMsgRes(zkCodeE.getCode(), null, zkCodeE.getMsgArgs(), zkCodeE.getData());
-    }
-
-    public static ZKMsgRes as(ZKMsgException zkMsgE) {
-        return new ZKMsgRes(zkMsgE.getCode(), zkMsgE.getMessage(), zkMsgE.getData());
-    }
-
-    public static ZKMsgRes as(String code) {
-        return new ZKMsgRes(code, null, null, null);
-    }
-
-    public static ZKMsgRes as(String code, Object... msgArgs) {
-        return new ZKMsgRes(code, null, msgArgs, null);
-    }
-
-    public static ZKMsgRes as(String code, String msg, Object data) {
-        return new ZKMsgRes(code, msg, data);
+    public static ZKMsgRes asOk() {
+        return new ZKMsgRes(KeyExceptionType.general, (Locale) null, "zk.0", null, null, (Object) null);
     }
 
     public static ZKMsgRes asOk(Object data) {
-        return new ZKMsgRes("zk.0", null, data);
+        return new ZKMsgRes(KeyExceptionType.general, (Locale) null, "zk.0", null, data, (Object) null);
+    }
+
+    public static ZKMsgRes as(String code) {
+        return new ZKMsgRes(KeyExceptionType.general, (Locale) null, code, null, null, (Object) null);
+    }
+
+    public static ZKMsgRes as(String code, String msg) {
+        return new ZKMsgRes(KeyExceptionType.general, (Locale) null, code, msg, null);
+    }
+
+    public static ZKMsgRes as(String code, String msg, Object data) {
+        return new ZKMsgRes(KeyExceptionType.general, (Locale) null, code, msg, data);
+    }
+
+    public static ZKMsgRes as(String code, String msg, Object data, Object... msgArgs) {
+        return new ZKMsgRes(KeyExceptionType.general, (Locale) null, code, msg, data, msgArgs);
+    }
+
+    public static ZKMsgRes as(int type, Locale locale, String code, String msg, Object data, Object... msgArgs) {
+        return new ZKMsgRes(type, locale, code, msg, data, msgArgs);
+    }
+
+    public static ZKMsgRes as(ZKCodeException zkCodeE) {
+        return new ZKMsgRes(zkCodeE.getType(), (Locale) null, zkCodeE.getCode(), null, zkCodeE.getData(),
+                zkCodeE.getMsgArgs());
+    }
+
+    public static ZKMsgRes as(ZKMsgException zkMsgE) {
+        return new ZKMsgRes(zkMsgE.getType(), (Locale) null, zkMsgE.getCode(), zkMsgE.getMessage(), zkMsgE.getData());
     }
 
     ////////////////////////////////////////
 
-    // java Bean 的方法
-    public void setCode(String code) {
-        this.code = code;
-    }
+//    // java Bean 的方法
+//    public void setCode(String code) {
+//        this.code = code;
+//    }
+//
+//    // java Bean 的方法
+//    public void setMsg(String msg) {
+//        this.msg = msg;
+//    }
 
-    // java Bean 的方法
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
+//    /**
+//     * @param locale
+//     *            the locale to set
+//     */
+//    public void setLocale(Locale locale) {
+//        this.locale = locale;
+//    }
+
 
     // java Bean 的方法
     public void setData(Object data) {
         this.data = data;
     }
 
+//    /**
+//     * 重载人 setCode 可以自动设置 Msg;
+//     *
+//     * @Title: setCode
+//     * @Description: TODO(simple description this method what to do.)
+//     * @author Vinson
+//     * @date Aug 30, 2019 12:21:23 AM
+//     * @param code
+//     * @param msg
+//     * @return void
+//     */
+//    public void setCode(String code, String msg) {
+//        this.setCode(code, msg, null);
+//    }
+//
+//    public void setCode(String code, String msg, Object[] msgArgs) {
+//        this.setCode(code, msg, msgArgs, null);
+//    }
+//
+//    public void setCode(String code, String msg, Object[] msgArgs, Object data) {
+//
+//        this.code = code;
+//
+//        if (ZKStringUtils.isEmpty(msg)) {
+//            this.msg = ZKMsgUtils.getMessage(code, msgArgs);
+//        }
+//        else {
+//            this.msg = msg;
+//        }
+//
+//        if (data != null) {
+//            this.data = data;
+//        }
+//    }
+
     /**
-     * 重载人 setCode 可以自动设置 Msg;
-     *
-     * @Title: setCode
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Aug 30, 2019 12:21:23 AM
-     * @param code
-     * @param msg
-     * @return void
+     * @param type
+     *            the type to set
      */
-    public void setCode(String code, String msg) {
-        this.setCode(code, msg, null);
-    }
-
-    public void setCode(String code, String msg, Object[] msgArgs) {
-        this.setCode(code, msg, msgArgs, null);
-    }
-
-    public void setCode(String code, String msg, Object[] msgArgs, Object data) {
-
-        this.code = code;
-
-        if (ZKStringUtils.isEmpty(msg)) {
-            this.msg = ZKMsgUtils.getMessage(code, msgArgs, ZKWebUtils.getLocale());
-        }
-        else {
-            this.msg = msg;
-        }
-
-        if (data != null) {
-            this.data = data;
-        }
+    public void setType(int type) {
+        this.type = type;
     }
 
     ////////////////////////////////////////
+//    @JsonIgnore // 对象序列化时，即转 json 字符串时，忽略
+    public boolean isOk() {
+        return "zk.0".equals(this.getCode());
+    }
+
     /**
      * @return errCode
      */
@@ -195,6 +239,21 @@ public class ZKMsgRes {
     public String getMsg() {
         return msg;
     }
+
+    /**
+     * @return type sa
+     */
+    public int getType() {
+        return type;
+    }
+
+//    /**
+//     * @return locale sa
+//     */
+//    @JsonIgnore
+//    public Locale getLocale() {
+//        return locale;
+//    }
 
     @SuppressWarnings("unchecked")
     public <T> T getData() {
@@ -252,10 +311,6 @@ public class ZKMsgRes {
     @Override
     public String toString() {
         return ZKJsonUtils.writeObjectJson(this);
-    }
-
-    public boolean isOk() {
-        return "zk.0".equals(this.getCode());
     }
 
 }

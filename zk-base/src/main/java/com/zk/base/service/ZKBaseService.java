@@ -33,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.zk.base.dao.ZKBaseDao;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.commons.data.ZKPage;
+import com.zk.core.commons.data.ZKValidationGroup;
 import com.zk.core.exception.ZKValidatorException;
 import com.zk.core.utils.ZKClassUtils;
 import com.zk.core.utils.ZKExceptionsUtils;
@@ -111,11 +112,14 @@ public class ZKBaseService<ID extends Serializable, E extends ZKBaseEntity<ID, E
         try {
             if (entity.isNewRecord()) {
                 entity.preInsert();
+                this.beanValidator(entity, ZKValidationGroup.Insert.class);
+                this.beanValidator(entity, ZKValidationGroup.Update.class);
                 this.beanValidator(entity);
                 return dao.insert(entity);
             }
             else {
                 entity.preUpdate();
+                this.beanValidator(entity, ZKValidationGroup.Update.class);
                 this.beanValidator(entity);
                 return dao.update(entity);
             }

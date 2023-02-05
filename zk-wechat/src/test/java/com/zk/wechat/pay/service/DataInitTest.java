@@ -99,7 +99,7 @@ public class DataInitTest {
             zkPayGetBusinessType = new ZKPayGetBusinessType();
             zkPayGetBusinessType.setCode("gc"); // 垃圾分类回收
             zkPayGetBusinessType.setName(new ZKJson());
-            zkPayGetBusinessType.getName().put(ZKLocaleUtils.getLocale().toString(), "垃圾分类回收");
+            zkPayGetBusinessType.getName().put(ZKLocaleUtils.getDefautLocale().toString(), "垃圾分类回收");
             zkPayGetBusinessType.setStatus(ZKPayGetBusinessType.Status.enabled);
             intRes = s.save(zkPayGetBusinessType);
             TestCase.assertEquals(1, intRes);
@@ -124,7 +124,7 @@ public class DataInitTest {
             payGroup.setWxAppId("wx2947219f7cffd21e");
             payGroup.setCode("gfafl"); // 垃圾分类回收
             payGroup.setName(new ZKJson());
-            payGroup.getName().put(ZKLocaleUtils.getLocale().toString(), "垃圾分类回收");
+            payGroup.getName().put(ZKLocaleUtils.getDefautLocale().toString(), "垃圾分类回收");
             payGroup.setStatus(ZKPayGroup.Status.enabled);
             intRes = s.save(payGroup);
             TestCase.assertEquals(1, intRes);

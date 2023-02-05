@@ -85,7 +85,7 @@ public class ZKWXThirdPartyAuthService {
         ZKSysOrgCompany company = this.thirdPartyService.getCompanyByCode(companyCode);
         if (company == null) {
             log.error("[>_<:20220518-0020-001] 目标公司[]不存在", companyCode);
-            throw ZKCodeException.as("zk.wechat.010013", "目标公司[{0}]不存在", companyCode);
+            throw ZKCodeException.as("zk.wechat.010013", "目标公司[{0}]不存在", null, companyCode);
         }
 
         if (ZKStringUtils.isEmpty(thirdPartyAppid)) {

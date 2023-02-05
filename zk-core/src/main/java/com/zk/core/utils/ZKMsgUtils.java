@@ -59,23 +59,42 @@ public class ZKMsgUtils {
         ZKMsgUtils.messageSource = messageSource;
     }
 
-    public static String getMessage(String code, Object... args) {
-        return getMessage(code, args, ZKWebUtils.getLocale());
-    }
+//    /**
+//     * 使用 getMessage(String code, Object[] args, Locale locale)
+//     *
+//     * @Title: getMessage
+//     * @Description: TODO(simple description this method what tos do.)
+//     * @author Vinson
+//     * @date Jan 29, 2023 2:57:04 PM
+//     * @param code
+//     * @param args
+//     * @return
+//     * @return String
+//     */
+////    @Deprecated
+//    public static String getMessage(String code, Object... args) {
+//        return getMessage(code, args, ZKLocaleUtils.getDefautLocale());
+//    }
+
+//    public static String getMessage(String code, Object... args) {
+//        return getMessage(null, code, args);
+//    }
 
     /**
      * 取国际化信息
+     * 
+     * @param locale
+     *            语言
      * 
      * @param code
      *            代码
      * @param args
      *            替换参数
-     * @param locale
-     *            语言
      * @return
      */
-    public static String getMessage(String code, Object[] args, Locale locale) {
+    public static String getMessage(Locale locale, String code, Object... args) {
         try {
+            locale = locale == null ? getLocale() : locale;
             return getMessageSource().getMessage(code, args, code, locale);
         }
         catch(Exception e) {
@@ -83,6 +102,14 @@ public class ZKMsgUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String getMessage(String code, Object... args) {
+        return getMessage(null, code, args);
+    }
+
+    protected static Locale getLocale() {
+        return ZKWebUtils.getLocale();
     }
 
 }

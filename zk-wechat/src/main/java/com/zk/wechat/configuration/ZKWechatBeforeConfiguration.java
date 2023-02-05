@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.MutableDiscoveryClientOptionalArgs;
@@ -39,18 +40,15 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import com.zk.core.commons.ZKValidatorMessageInterpolator;
-import com.zk.core.utils.ZKEnvironmentUtils;
-import com.zk.core.utils.ZKLocaleUtils;
 import com.zk.core.web.filter.ZKCrosFilter;
-import com.zk.core.web.resolver.ZKExceptionHandlerResolver;
-import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.framework.serCen.ZKSerCenEncrypt;
 import com.zk.framework.serCen.eureka.ZKEurekaTransportClientFactories;
 import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
-import com.zk.log.interceptor.ZKLogAccessInterceptor;
+import com.zk.webmvc.configuration.ZKWebmvcConfiguration;
+import com.zk.webmvc.handler.ZKExceptionHandlerResolver;
+import com.zk.webmvc.interceptor.ZKLogAccessInterceptor;
 
 /** 
 * @ClassName: ZKWechatConfiguration 
@@ -63,6 +61,7 @@ import com.zk.log.interceptor.ZKLogAccessInterceptor;
         ZKWechatJdbcConfiguration.class, 
         ZKWechatRedisConfiguration.class, 
         ZKWechatAfterConfiguration.class,
+        WebMvcAutoConfiguration.class,
         ServletWebServerFactoryAutoConfiguration.class })
 @ImportResource(locations = {
         "classpath:xmlConfig/spring_ctx_application.xml",
@@ -73,12 +72,9 @@ import com.zk.log.interceptor.ZKLogAccessInterceptor;
         "classpath:zk.wechat.wx.officialAccounts.properties",
         "classpath:zk.wechat.wx.thirdParty.properties", 
         "classpath:zk.wechat.wx.pay.properties" })
-public class ZKWechatBeforeConfiguration {
+public class ZKWechatBeforeConfiguration extends ZKWebmvcConfiguration {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    private ApplicationContext applicationContext;
 
     @PostConstruct
     public void postConstruct() {
@@ -86,19 +82,9 @@ public class ZKWechatBeforeConfiguration {
     }
 
     @Autowired
-    public void before(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
-        log.info("[^_^:20200805-1808-001] -------- configuration before begin... ... " + this.getClass());
-        ZKEnvironmentUtils.initContext(applicationContext);
-//        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("en_US"));
-//        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("zh_CN"));
-//        // # 默认语言；注意这里不影响到 localeResolver 的默认语言
-        ZKWebUtils.setLocale(
-                ZKLocaleUtils.distributeLocale(ZKEnvironmentUtils.getString("zk.wechat.default.locale", "zh_CN")));
-
-        // 设置下 RequestMappingHandlerAdapter 的 ignoreDefaultModelOnRedirect=true,
-        // 这样可以提高效率，避免不必要的检索。
-        requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
-        log.info("[^_^:20200805-1808-001] -------- configuration before end______ " + this.getClass());
+    public void beforeWechat() {
+        System.out.println("[^_^:20230205-0416-001] === [" + ZKWechatBeforeConfiguration.class.getSimpleName() + "] " + this);
+        System.out.println("[^_^:20230205-0416-001] ----[" + ZKWechatBeforeConfiguration.class.getSimpleName() + "] " + this);
     }
 
     /******************************************************************/

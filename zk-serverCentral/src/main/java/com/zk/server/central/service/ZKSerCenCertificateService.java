@@ -92,7 +92,7 @@ public class ZKSerCenCertificateService extends ZKBaseService<String, ZKSerCenCe
             log.info("[^_^:20190829-1630-001] serCenCertificate: {}", ZKJsonUtils.writeObjectJson(serCenCertificate));
         }
         catch(NoSuchAlgorithmException e) {
-            throw ZKCodeException.as("zk.ser.cen.000011", null,null,null, e);
+            throw ZKCodeException.as(e, "zk.ser.cen.000011", null, null, null, null);
         }
     }
 

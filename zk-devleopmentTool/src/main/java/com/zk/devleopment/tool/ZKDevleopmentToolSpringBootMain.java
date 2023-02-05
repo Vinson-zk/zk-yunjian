@@ -51,10 +51,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement(proxyTargetClass = true)
 //@ComponentScan(basePackages = { "com.zk.server.central.filter" })
 //@ServletComponentScan(basePackages = { "com.zk.server.central.filter" })
-@PropertySource(encoding = "UTF-8", value = { 
-        "classpath:zk.log.properties",
-        "classpath:zk.devleopment.tool.jdbc.properties"
-        })
+@PropertySource(encoding = "UTF-8", value = { "classpath:zk.log.properties" })
 //@AutoConfigureOrder(value = Ordered.HIGHEST_PRECEDENCE)
 @ComponentScan(basePackages = { "com.zk.devleopment.tool.*", "com.zk.log.*" })
 public class ZKDevleopmentToolSpringBootMain {
@@ -83,9 +80,11 @@ public class ZKDevleopmentToolSpringBootMain {
         /*** 修改默认的配置文件名称和路径 ***/
         // 配置文件路径；默认：[file:./config/, file:./, classpath:/config/, classpath:/]
         springApplicationBuilder = springApplicationBuilder.properties("spring.config.location=classpath:/");
-        // 定义配置文件名；默认：applicaiton；添加下面这一行后，不会读取 properties/yml 配置文件；多个时用英文逗号","
-        // 隔；
-        springApplicationBuilder = springApplicationBuilder.properties("spring.config.name=zk,zk.devleopment.tool,zk.devleopment.tool.env");
+//        springApplicationBuilder = springApplicationBuilder.properties(
+//                "spring.config.location=classpath:zk.properties,zk.devleopment.tool.properties,zk.devleopment.tool.env.properties");
+//        // 定义配置文件名；默认：applicaiton；添加下面这一行后，不会读取 properties/yml 配置文件；多个时用英文逗号 "," 隔；
+        springApplicationBuilder = springApplicationBuilder
+                .properties("spring.config.name=zk,zk.devleopment.tool,zk.devleopment.tool.env");
 
         SpringApplication springApplication = springApplicationBuilder.build();
         springApplication.setWebApplicationType(WebApplicationType.SERVLET);

@@ -11,7 +11,7 @@
  *
  * @Title: ZKOncePerFilter.java 
  * @author Vinson 
- * @Package com.zk.core.web.filter 
+ * @Package com.zk.webmvc.filter 
  * @Description: TODO(simple description this file what to do.) 
  * @date Dec 18, 2019 2:21:30 PM 
  * @version V1.0   
@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -76,5 +77,15 @@ public abstract class ZKOncePerFilter extends ZKServletContextSupport implements
 
     protected abstract void doFilterInternal(ServletRequest request, ServletResponse response, FilterChain chain)
             throws ServletException, IOException;
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
+    @Override
+    public void destroy() {
+
+    }
 
 }

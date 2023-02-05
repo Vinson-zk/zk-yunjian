@@ -43,11 +43,11 @@ import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
 
 import com.zk.base.entity.ZKBaseEntity;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.commons.data.ZKOrder;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.core.commons.data.ZKSortMode;
 import com.zk.core.utils.ZKJsonUtils;
-import com.zk.core.web.ZKMsgRes;
 import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.server.central.entity.ZKSerCenCertificate;
 import com.zk.server.central.helper.ZKSerCenTestRestTemplateMain;
@@ -62,6 +62,7 @@ import junit.framework.TestCase;
 * @author Vinson 
 * @version 1.0 
 */
+@SuppressWarnings("deprecation")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ZKSerCenTestRestTemplateMain.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = { "classpath:/" }, properties = { "spring.config.name=zk.ser.cen" })

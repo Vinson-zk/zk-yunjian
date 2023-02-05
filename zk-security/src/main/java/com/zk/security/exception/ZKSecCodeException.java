@@ -37,12 +37,19 @@ public class ZKSecCodeException extends ZKCodeException {
      * 创建指定代码异常
      * @param code
      */
-    public ZKSecCodeException(String code) {
-        super(KeyExceptionType.general, code, null, null, null, null);
+    public ZKSecCodeException(int type, String code) {
+//        super(KeyExceptionType.authentication, null, code, null, null, (Object) null);
+        super(type, null, code, null, null, (Object) null);
     }
 
-    public ZKSecCodeException(String code, String msg, Object[] msgArgs, Object data) {
-        super(KeyExceptionType.general, code, msg, msgArgs, data, null);
+    public ZKSecCodeException(int type, String code, String msg) {
+//      super(KeyExceptionType.authentication, null, code, null, null, (Object) null);
+        super(type, null, code, msg, null, (Object) null);
+    }
+
+    public ZKSecCodeException(int type, String code, String msg, Object data, Object... msgArgs) {
+//        super(KeyExceptionType.authentication, null, code, msg, data, msgArgs);
+        super(type, null, code, null, null, (Object) null);
     }
 
     /**
@@ -52,8 +59,8 @@ public class ZKSecCodeException extends ZKCodeException {
      * @param msgArgs 消息替换参数
      * @param data 异常数据
      */
-    public ZKSecCodeException(String code, String msg, Object[] msgArgs, Object data, Throwable cause) {
-        super(KeyExceptionType.general, code, msg, msgArgs, data, cause);
+    public ZKSecCodeException(int type, Throwable cause, String code, String msg, Object data, Object... msgArgs) {
+        super(type, cause, code, msg, data, (Object) null);
     }
 
 }

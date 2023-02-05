@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zk.core.redis.ZKJedisOperatorByte;
 import com.zk.core.redis.ZKJedisOperatorStringKey;
 import com.zk.core.utils.ZKJsonUtils;
@@ -46,7 +47,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @PropertySource(encoding = "UTF-8", value = { "classpath:zk.file.redis.properties" })
 public class ZKFileRedisConfiguration {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     /*** jedis 整合 配置 ***/
     @Value("${zk.file.cache.redis.host:127.0.0.1}")
@@ -74,7 +75,7 @@ public class ZKFileRedisConfiguration {
 
         System.out.println("[^_^:20220621-1255-001] ====================================================");
         System.out.println(String.format("[^_^:20220621-1255-001] Redis 链接 hosr:%s, port:%s, password:%s", host, port, password));
-        System.out.println("[^_^:20220621-1255-001] Redis 链接 JedisPoolConfig: " + ZKJsonUtils.writeObjectJson(jedisPoolConfig));
+        System.out.println("[^_^:20220621-1255-001] Redis 链接 JedisPoolConfig: " + JSONObject.toJSONString(jedisPoolConfig));
         System.out.println("[^_^:20220621-1255-001] ====================================================");
 
         /** 单机模式 */

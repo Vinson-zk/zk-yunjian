@@ -61,7 +61,7 @@ public class ZKJavaDemoServiceTest {
         ZKJavaDemoService s = ZKDemoTestHelper.getCtx().getBean(ZKJavaDemoService.class);
         try{
             int result = 0;
-            String id1, id2, id3;
+//            String id1, id2, id3;
             ZKJavaDemoEntity e = new ZKJavaDemoEntity();
             ZKJavaDemoEntity e1 = new ZKJavaDemoEntity();
             ZKJavaDemoEntity e2 = new ZKJavaDemoEntity();

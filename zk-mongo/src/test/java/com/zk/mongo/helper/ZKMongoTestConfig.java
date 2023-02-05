@@ -19,7 +19,9 @@
 package com.zk.mongo.helper;
 
 import org.junit.Test;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.ApplicationContext;
+
+import com.zk.mongo.configuration.ZKMongoAutoConfigurationTest;
 
 import junit.framework.TestCase;
 
@@ -46,38 +48,23 @@ public class ZKMongoTestConfig {
     // 过期索引名称
     public static final String indexExpireTimeName = "_index_expireTime_";
 
-    public static final String config_path_1 = "classpath:test_spring_context_mongo.xml";
+    public static final String config_path = "classpath:test_spring_context_mongo_3.x.xml";
 
-    public static final String config_path_2 = "classpath:test_spring_context_mongo_2.0.xml";
+    private static ApplicationContext ctx;
 
-    private static FileSystemXmlApplicationContext ctx1;
-
-    private static FileSystemXmlApplicationContext ctx2;
-
-    public static FileSystemXmlApplicationContext getCtx1() {
-        if (ctx1 == null) {
-            ctx1 = new FileSystemXmlApplicationContext(config_path_1);
+    public static ApplicationContext getCtx() {
+        if (ctx == null) {
+//            ctx = new FileSystemXmlApplicationContext(config_path);
+            ctx = ZKMongoAutoConfigurationTest.run(new String[] {});
         }
-        return ctx1;
-    }
-
-    public static FileSystemXmlApplicationContext getCtx2() {
-        if (ctx2 == null) {
-            ctx2 = new FileSystemXmlApplicationContext(config_path_2);
-        }
-        return ctx2;
-    }
-
-    public static FileSystemXmlApplicationContext getCtx() {
-        return getCtx2();
+        return ctx;
     }
 
     @Test
     public void test() {
 
         try {
-//            TestCase.assertNotNull(getCtx1());
-            TestCase.assertNotNull(getCtx2());
+            TestCase.assertNotNull(getCtx());
         }
         catch(Exception e) {
             e.printStackTrace();

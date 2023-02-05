@@ -21,7 +21,6 @@ package com.zk.mongo.utils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.bson.Document;
 import org.bson.types.Binary;
@@ -29,7 +28,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.zk.mongo.command.administration.ZKListCollections;
 import com.zk.mongo.command.administration.ZKListIndexes;
-import com.mongodb.CommandResult;
 
 /** 
 * @ClassName: ZKMongoUtils 
@@ -126,46 +124,46 @@ public class ZKMongoUtils {
         return new ArrayList<>();
     }
 
-    /**
-     * 从 mongo 查询命令结果集中取 单一结果
-     * 
-     * @param cRslt
-     * @return
-     */
-    public static <V> V getOneResult(CommandResult cRslt) {
-        Map<?, ?> cursor = (Map<?, ?>) cRslt.get(documentResultAttrNameCursor);
-        if (cursor != null) {
-            @SuppressWarnings("unchecked")
-            List<V> firstBatch = (List<V>) cursor.get(documentResultAttrNameFirstBatch);
-            if (firstBatch != null) {
-                if (firstBatch.size() > 1) {
-                    throw new IllegalArgumentException("The mongo result is more; not single! ");
-                }
-                else {
-                    return firstBatch.size() < 1 ? null : firstBatch.get(0);
-                }
-            }
-        }
-        return null;
-    }
+//    /**
+//     * 从 mongo 查询命令结果集中取 单一结果
+//     * 
+//     * @param cRslt
+//     * @return
+//     */
+//    public static <V> V getOneResult(CommandResult cRslt) {
+//        Map<?, ?> cursor = (Map<?, ?>) cRslt.get(documentResultAttrNameCursor);
+//        if (cursor != null) {
+//            @SuppressWarnings("unchecked")
+//            List<V> firstBatch = (List<V>) cursor.get(documentResultAttrNameFirstBatch);
+//            if (firstBatch != null) {
+//                if (firstBatch.size() > 1) {
+//                    throw new IllegalArgumentException("The mongo result is more; not single! ");
+//                }
+//                else {
+//                    return firstBatch.size() < 1 ? null : firstBatch.get(0);
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
-    /**
-     * 从 mongo 查询命令结果集中取 List 结果
-     * 
-     * @param cRslt
-     * @return
-     */
-    public static <V> List<V> getListResult(CommandResult cRslt) {
-        Map<?, ?> cursor = (Map<?, ?>) cRslt.get(documentResultAttrNameCursor);
-        if (cursor != null) {
-            @SuppressWarnings("unchecked")
-            List<V> firstBatch = (List<V>) cursor.get(documentResultAttrNameFirstBatch);
-            if (firstBatch != null) {
-                return firstBatch;
-            }
-        }
-        return new ArrayList<>();
-    }
+//    /**
+//     * 从 mongo 查询命令结果集中取 List 结果
+//     * 
+//     * @param cRslt
+//     * @return
+//     */
+//    public static <V> List<V> getListResult(CommandResult cRslt) {
+//        Map<?, ?> cursor = (Map<?, ?>) cRslt.get(documentResultAttrNameCursor);
+//        if (cursor != null) {
+//            @SuppressWarnings("unchecked")
+//            List<V> firstBatch = (List<V>) cursor.get(documentResultAttrNameFirstBatch);
+//            if (firstBatch != null) {
+//                return firstBatch;
+//            }
+//        }
+//        return new ArrayList<>();
+//    }
 
     /**
      * 从 mongo 查询命令结果集中取 KEY 属性的 byte[] 值；要求查询结果 单一

@@ -19,7 +19,7 @@
 package com.zk.framework.security.realm;
 
 import com.zk.core.utils.ZKEnvironmentUtils;
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.security.authz.ZKSecAuthorizationInfo;
 import com.zk.security.authz.ZKSecSimpleAuthorizationInfo;
 import com.zk.security.principal.ZKSecPrincipal;

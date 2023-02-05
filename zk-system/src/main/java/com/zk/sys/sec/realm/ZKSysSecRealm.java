@@ -163,9 +163,10 @@ public class ZKSysSecRealm extends ZKSecAbstractRealm {
      * @throws ZKSecCodeException
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     @Override
-    protected ZKSecPrincipalCollection doAuthentication(ZKSecAuthenticationToken authcToken) {
-        ZKSecPrincipalCollection pc = new ZKSecDefaultPrincipalCollection();
+    protected ZKSecPrincipalCollection<String> doAuthentication(ZKSecAuthenticationToken authcToken) {
+        ZKSecPrincipalCollection<String> pc = new ZKSecDefaultPrincipalCollection<String>();
         ZKSecAuthcUserToken authcUserToken = (ZKSecAuthcUserToken) authcToken;
         ZKSysOrgUser loginUser = this.getSecUserService().login(authcUserToken);
         if (loginUser != null) {
@@ -179,13 +180,13 @@ public class ZKSysSecRealm extends ZKSecAbstractRealm {
         else {
             log.error("[>_<:2022425-1723-001] 登录失败，用户名或密码错误 {}-{}", authcUserToken.getCompanyCode(),
                     authcUserToken.getUsername());
-            throw new ZKSecCodeException("zk.sys.020003");
+            throw ZKSecCodeException.as("zk.sys.020003");
         }
     }
 
     @Override
-    public ZKSecAuthorizationInfo doGetZKSecAuthorizationInfo(ZKSecPrincipalCollection principalCollection) {
-        ZKSecPrincipal<?> pp = principalCollection.getPrimaryPrincipal();
+    public <ID> ZKSecAuthorizationInfo doGetZKSecAuthorizationInfo(ZKSecPrincipalCollection<ID> principalCollection) {
+        ZKSecPrincipal<ID> pp = principalCollection.getPrimaryPrincipal();
         if (ZKSecPrincipal.KeyType.Distributed_server == pp.getType()) {
             // 微服务间请求，不较验权限，返回一个空的权限信息
             return new ZKSecSimpleAuthorizationInfo();
@@ -206,7 +207,7 @@ public class ZKSysSecRealm extends ZKSecAbstractRealm {
      * @return
      */
     @Override
-    protected boolean doCheckPermission(ZKSecPrincipalCollection principalCollection, String permissionCode) {
+    protected <ID> boolean doCheckPermission(ZKSecPrincipalCollection<ID> principalCollection, String permissionCode) {
         ZKSecPrincipal<?> pp = principalCollection.getPrimaryPrincipal();
         if (ZKSecPrincipal.KeyType.Distributed_server == pp.getType()) {
             // 微服务单请求，不较验权限
@@ -225,8 +226,8 @@ public class ZKSysSecRealm extends ZKSecAbstractRealm {
      * @return
      */
     @Override
-    protected boolean doCheckApiCode(ZKSecPrincipalCollection principalCollection, String apiCode) {
-        ZKSecPrincipal<?> pp = principalCollection.getPrimaryPrincipal();
+    protected <ID> boolean doCheckApiCode(ZKSecPrincipalCollection<ID> principalCollection, String apiCode) {
+        ZKSecPrincipal<ID> pp = principalCollection.getPrimaryPrincipal();
         if (ZKSecPrincipal.KeyType.Distributed_server == pp.getType()) {
             // 微服务单请求，不较验权限
             return true;
@@ -243,8 +244,8 @@ public class ZKSysSecRealm extends ZKSecAbstractRealm {
     }
 
     @Override
-    public void doLimitPrincipalTicketCount(ZKSecPrincipalCollection principalCollection) {
-        for (ZKSecPrincipal<?> p : principalCollection) {
+    public <ID> void doLimitPrincipalTicketCount(ZKSecPrincipalCollection<ID> principalCollection) {
+        for (ZKSecPrincipal<ID> p : principalCollection) {
             if (p instanceof ZKSecUserPrincipal<?>) {
                 List<ZKSecTicket> tks = null;
                 ZKSecTicket tk = ZKSecSecurityUtils.getTikcet();
@@ -271,7 +272,7 @@ public class ZKSysSecRealm extends ZKSecAbstractRealm {
                     else {
                         // 记住我进来的用户，退出当前用户；
                         ZKSecSecurityUtils.getSubject().logout();
-                        throw new ZKSecCodeException("zk.sec.000012"); // zk.sec.000012=用户已在其他地方登录，请重新登录
+                        throw ZKSecCodeException.as("zk.sec.000012"); // zk.sec.000012=用户已在其他地方登录，请重新登录
                     }
                 }
             }

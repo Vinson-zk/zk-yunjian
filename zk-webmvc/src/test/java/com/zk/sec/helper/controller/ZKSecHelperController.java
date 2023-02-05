@@ -16,7 +16,7 @@
 * @date Jul 4, 2021 9:00:19 AM 
 * @version V1.0 
 */
-package com.zk.security.helper.controller;
+package com.zk.sec.helper.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.security.annotation.ZKSecApiCode;
 import com.zk.security.common.ZKSecConstants;
 import com.zk.security.exception.ZKSecCodeException;

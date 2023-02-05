@@ -11,7 +11,7 @@
  *
  * @Title: ZKWebUtils.java 
  * @author Vinson 
- * @Package com.zk.core.web.utils 
+ * @Package com.zk.webmvc.utils 
  * @Description: TODO(simple description this file what to do.) 
  * @date Dec 3, 2019 4:59:24 PM 
  * @version V1.0   
@@ -41,8 +41,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.util.WebUtils;
 
 import com.zk.core.commons.ZKCoreConstants;
@@ -54,7 +52,7 @@ import com.zk.core.utils.ZKLocaleUtils;
 import com.zk.core.utils.ZKStreamUtils;
 import com.zk.core.utils.ZKStringUtils;
 import com.zk.core.utils.ZKUtils;
-import com.zk.core.web.handler.ZKLocaleResolver;
+import com.zk.core.web.resolver.ZKLocaleResolver;
 
 /** 
 * @ClassName: ZKWebUtils 
@@ -108,70 +106,6 @@ public class ZKWebUtils extends org.springframework.web.util.WebUtils {
             return ((ServletRequestAttributes) requestAttributes).getResponse();
         }
 
-        return null;
-    }
-
-    /**
-     * 
-    *
-    * @Title: getLocaleResolver 
-    * @Description: TODO(simple description this method what to do.) 
-    * @author Vinson 
-    * @date Feb 17, 2021 12:07:59 AM 
-    * @return
-    * @return LocaleResolver
-     */
-    public static LocaleResolver getLocaleResolver() {
-        return getLocaleResolver(getAppCxt(), null);
-    }
-    
-    public static LocaleResolver getLocaleResolver(ApplicationContext ctx) {
-        return getLocaleResolver(ctx, null);
-    }
-
-    /**
-     * 取语言解析器
-     * 
-     * 1、如果有 ApplicationContext 优先从 ApplicationContext 中取语言适配器；
-     * 
-     * 2、如果没有取到语言适配器, 则通过请求 Request 决定语言适配器；如果 Request 不存在，取系统 Request；
-     *
-     * @Title: getLocaleResolver
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Sep 2, 2019 9:43:16 AM
-     * @param ctx
-     * @param hReq
-     * @return
-     * @return LocaleResolver
-     */
-    public static LocaleResolver getLocaleResolver(ApplicationContext ctx, HttpServletRequest hReq) {
-        LocaleResolver localeResolver = null;
-        if (ctx != null) {
-            localeResolver = ctx.getBean(LocaleResolver.class);
-        }
-        if (localeResolver == null) {
-            localeResolver = getLocaleResolverByRequest(hReq == null?getRequest():hReq);
-        }
-        return localeResolver;
-    }
-
-    /**
-     * 通过 Request 请求取语言解析器；
-     *
-     * @Title: getLocaleResolver
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Aug 31, 2019 5:02:59 PM
-     * @param hReq
-     *            hReq 为 null 时，返回 null
-     * @return
-     * @return LocaleResolver
-     */
-    public static LocaleResolver getLocaleResolverByRequest(HttpServletRequest hReq) {
-        if (hReq != null) {
-            return RequestContextUtils.getLocaleResolver(hReq);
-        }
         return null;
     }
 
@@ -321,183 +255,6 @@ public class ZKWebUtils extends org.springframework.web.util.WebUtils {
     public static boolean isTrue(ServletRequest request, String paramName) {
         String value = getCleanParam(request, paramName);
         return ZKUtils.isTrue(value);
-    }
-
-
-    /**
-     * 设置整个系统的默认语言
-     *
-     * @Title: setSystemLocale
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Jun 14, 2019 5:19:02 PM
-     * @param locale
-     * @return void
-     */
-    public static void setLocale(Locale locale) {
-        setLocale(locale, getLocaleResolver(getAppCxt(), getRequest()), getRequest(), getResponse());
-    }
-
-    /**
-     * 设置国际化语言到 国际化语言适配器；
-     * 
-     * 如果 localLocaleResolver 为null，则调用 Locale.setDefault(locale); 设置系统本地语言。
-     *
-     * @Title: setLocale
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Mar 14, 2019 10:55:37 AM
-     * @param locale
-     * @param ctx
-     * @param req
-     * @param rep
-     * @return void
-     */
-    public static void setLocale(Locale locale, LocaleResolver localLocaleResolver, HttpServletRequest hReq,
-            HttpServletResponse hRes) {
-
-        if (localLocaleResolver != null && hRes != null) {
-            try {
-                localLocaleResolver.setLocale(hReq, hRes, locale);
-            }
-            catch(Exception e) {
-                log.error("[>_<:20190314-1056-002] 设置语言到国际化语言适配器失败：locale:[{}]", locale);
-                e.printStackTrace();
-            }
-        }
-        else {
-            ZKLocaleUtils.setLocale(locale);
-        }
-    }
-
-    /**
-     * 取当前国际批语言；不建议使用；建议使用 getLocale(HttpServletRequest httpServletRequest)
-     *
-     * @Title: getLocale
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Mar 14, 2019 11:20:07 AM
-     * @return
-     * @return Locale
-     */
-    public static Locale getLocale() {
-        return getLocale(getRequest());
-    }
-
-    /**
-     * 根据 httpServletRequest 取当前语言
-     *
-     * @Title: getLocale
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Mar 14, 2019 10:47:48 AM
-     * @param httpServletRequest
-     * @return
-     * @return Locale
-     */
-    public static Locale getLocale(HttpServletRequest httpServletRequest) {
-        return getLocale(httpServletRequest, null);
-    }
-
-    /**
-     * 取国际化语言；
-     * 
-     * 1、优先从 HttpServletRequest 取国际化语言；
-     * 
-     * 2、如果没有取到国际化语言，但有语言适配器，优先从语言适配器中取国际化语言；
-     * 
-     * 3、如果以上都没取到国际化语言，则取 系统本地语言
-     *
-     * @Title: getLocale
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Sep 2, 2019 9:35:48 AM
-     * @param localeResolver
-     * @param hReq
-     * @return
-     * @return Locale
-     */
-    public static Locale getLocale(HttpServletRequest hReq, LocaleResolver localeResolver) {
-
-        Locale locale = null;
-        if (hReq != null) {
-            // 优先从 HttpServletRequest 请求中取国际化语言参数；
-            locale = getLocaleByRequest(hReq);
-        }
-
-        if (locale == null) {
-            if(hReq == null) {
-                hReq = getRequest();
-            }
-            if(localeResolver == null) {
-                localeResolver = getLocaleResolver(getAppCxt(), hReq);
-            }
-            if(localeResolver != null) {
-                locale = getLocaleByLocaleResolver(localeResolver, hReq);
-            }
-        }
-
-        if (locale == null) {
-            return getDefautLocale();
-        }
-
-        return locale;
-    }
-    
-    /**
-     * 通过语言适配器取国际化语言；
-    *
-    * @Title: getLocaleByLocaleResolver 
-    * @Description: TODO(simple description this method what to do.) 
-    * @author Vinson 
-    * @date Feb 17, 2021 12:03:37 AM 
-    * @param localeResolver
-    * @param hReq
-    * @return
-    * @return Locale
-     */
-    public static Locale getLocaleByLocaleResolver(LocaleResolver localeResolver, HttpServletRequest hReq) {
-        if (localeResolver != null) {
-            if (hReq == null) {
-                if (localeResolver instanceof ZKLocaleResolver) {
-                    return ((ZKLocaleResolver) localeResolver).getDefaultLocale();
-                }
-            }
-            else {
-                // 如果有语言适配器，优先从语言适配器中取国际化语言；
-                return localeResolver.resolveLocale(hReq);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 从 request 请求头中，通过参数取语言
-     */
-    public static Locale getLocaleByRequest(HttpServletRequest request) {
-        if (request == null) {
-            return null;
-        }
-        String localeStr = request.getHeader(Locale_Flag_In_Header);
-        localeStr = localeStr == null ? "" : localeStr.replace("-", "_");
-        if(ZKStringUtils.isEmpty(localeStr)) {
-            return null;
-        }
-        return ZKLocaleUtils.distributeLocale(localeStr);
-    }
-
-    /**
-     * 取系统默认语言
-     *
-     * @Title: getDefautLocale
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Dec 3, 2019 5:48:41 PM
-     * @return
-     * @return Locale
-     */
-    public static Locale getDefautLocale() {
-        return Locale.getDefault();
     }
 
     /******************************************************************/
@@ -862,6 +619,235 @@ public class ZKWebUtils extends org.springframework.web.util.WebUtils {
             remoteAddr = request.getHeader("WL-Proxy-Client-IP");
         }
         return ZKStringUtils.isNotBlank(remoteAddr) ? remoteAddr : request.getRemoteAddr();
+    }
+
+    // ===============================================
+
+    /**
+     * 
+     *
+     * @Title: getLocaleResolver
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Feb 17, 2021 12:07:59 AM
+     * @return
+     * @return LocaleResolver
+     */
+    public static ZKLocaleResolver getLocaleResolver() {
+        return getLocaleResolver(getAppCxt(), null);
+    }
+
+    public static ZKLocaleResolver getLocaleResolver(ApplicationContext ctx) {
+        return getLocaleResolver(ctx, null);
+    }
+
+    /**
+     * 取语言解析器
+     * 
+     * 1、如果有 ApplicationContext 优先从 ApplicationContext 中取语言适配器；
+     * 
+     * 2、如果没有取到语言适配器, 则通过请求 Request 决定语言适配器；如果 Request 不存在，取系统 Request；
+     *
+     * @Title: getLocaleResolver
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Sep 2, 2019 9:43:16 AM
+     * @param ctx
+     * @param hReq
+     * @return
+     * @return LocaleResolver
+     */
+    public static ZKLocaleResolver getLocaleResolver(ApplicationContext ctx, HttpServletRequest hReq) {
+        ZKLocaleResolver localeResolver = null;
+        if (ctx != null) {
+            localeResolver = ctx.getBean(ZKLocaleResolver.class);
+        }
+//        if (localeResolver == null) {
+//            localeResolver = getLocaleResolverByRequest(hReq);
+//        }
+        return localeResolver;
+    }
+
+//    /**
+//     * 通过 Request 请求取语言解析器；
+//     *
+//     * @Title: getLocaleResolver
+//     * @Description: TODO(simple description this method what to do.)
+//     * @author Vinson
+//     * @date Aug 31, 2019 5:02:59 PM
+//     * @param hReq
+//     *            hReq 为 null 时，返回 null
+//     * @return
+//     * @return LocaleResolver
+//     */
+//    public static ZKLocaleResolver getLocaleResolverByRequest(HttpServletRequest hReq) {
+//        if (hReq == null) {
+//            hReq = getRequest();
+//        }
+//        if (hReq != null) {
+//            return RequestContextUtils.getLocaleResolver(hReq);
+//        }
+//        return null;
+//    }
+
+    /**
+     * 设置整个系统的默认语言
+     *
+     * @Title: setSystemLocale
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Jun 14, 2019 5:19:02 PM
+     * @param locale
+     * @return void
+     */
+    public static void setLocale(Locale locale) {
+        setLocale(locale, getLocaleResolver(getAppCxt(), getRequest()), getRequest(), getResponse());
+    }
+
+    /**
+     * 设置国际化语言到 国际化语言适配器；
+     * 
+     * 如果 localLocaleResolver 为null，则调用 Locale.setDefault(locale); 设置系统本地语言。
+     *
+     * @Title: setLocale
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Mar 14, 2019 10:55:37 AM
+     * @param locale
+     * @param ctx
+     * @param req
+     * @param rep
+     * @return void
+     */
+    public static void setLocale(Locale locale, ZKLocaleResolver localLocaleResolver, HttpServletRequest hReq,
+            HttpServletResponse hRes) {
+
+        if (localLocaleResolver != null && hRes != null) {
+            try {
+                localLocaleResolver.setLocale(hReq, hRes, locale);
+            }
+            catch(Exception e) {
+                log.error("[>_<:20190314-1056-002] 设置语言到国际化语言适配器失败：locale:[{}]", locale);
+                e.printStackTrace();
+            }
+        }
+        else {
+            ZKLocaleUtils.setLocale(locale);
+        }
+    }
+
+    /**
+     * 取当前国际批语言；不建议使用；建议使用 getLocale(HttpServletRequest httpServletRequest)
+     *
+     * @Title: getLocale
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Mar 14, 2019 11:20:07 AM
+     * @return
+     * @return Locale
+     */
+    public static Locale getLocale() {
+        return getLocale(getRequest());
+    }
+
+    /**
+     * 根据 httpServletRequest 取当前语言
+     *
+     * @Title: getLocale
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Mar 14, 2019 10:47:48 AM
+     * @param httpServletRequest
+     * @return
+     * @return Locale
+     */
+    public static Locale getLocale(HttpServletRequest httpServletRequest) {
+        return getLocale(httpServletRequest, null);
+    }
+
+    /**
+     * 取国际化语言；
+     * 
+     * 1、优先从 HttpServletRequest 取国际化语言；
+     * 
+     * 2、如果没有取到国际化语言，但有语言适配器，优先从语言适配器中取国际化语言；
+     * 
+     * 3、如果以上都没取到国际化语言，则取 系统本地语言
+     *
+     * @Title: getLocale
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Sep 2, 2019 9:35:48 AM
+     * @param localeResolver
+     * @param hReq
+     * @return
+     * @return Locale
+     */
+    public static Locale getLocale(HttpServletRequest hReq, ZKLocaleResolver localeResolver) {
+
+        Locale locale = null;
+        if (hReq != null) {
+            // 优先从 HttpServletRequest 请求中取国际化语言参数；
+            locale = getLocaleByRequest(hReq);
+        }
+
+        if (locale == null) {
+            if (hReq == null) {
+                hReq = getRequest();
+            }
+            if (localeResolver == null) {
+                localeResolver = getLocaleResolver(getAppCxt(), hReq);
+            }
+            if (localeResolver != null) {
+                locale = getLocaleByLocaleResolver(localeResolver, hReq);
+            }
+        }
+
+        if (locale == null) {
+            return ZKLocaleUtils.getDefautLocale();
+        }
+
+        return locale;
+    }
+
+    /**
+     * 通过语言适配器取国际化语言；
+     *
+     * @Title: getLocaleByLocaleResolver
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Feb 17, 2021 12:03:37 AM
+     * @param localeResolver
+     * @param hReq
+     * @return
+     * @return Locale
+     */
+    public static Locale getLocaleByLocaleResolver(ZKLocaleResolver localeResolver, HttpServletRequest hReq) {
+        if (localeResolver != null) {
+            if (hReq == null) {
+                return localeResolver.getDefaultLocale();
+            }
+            else {
+                // 如果有语言适配器，优先从语言适配器中取国际化语言；
+                return localeResolver.resolveLocale(hReq);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 从 request 请求头中，通过参数取语言
+     */
+    public static Locale getLocaleByRequest(HttpServletRequest request) {
+        if (request == null) {
+            return null;
+        }
+        String localeStr = request.getHeader(Locale_Flag_In_Header);
+        localeStr = localeStr == null ? "" : localeStr.replace("-", "_");
+        if (ZKStringUtils.isEmpty(localeStr)) {
+            return null;
+        }
+        return ZKLocaleUtils.distributeLocale(localeStr);
     }
 
 }

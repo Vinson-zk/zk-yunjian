@@ -48,96 +48,17 @@
 			<version>${version.zk.db}</version>
 		</dependency>
 		
-		<!-- ***** spring boot begin -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-			<!-- 排除自带的logback依赖 -->
-			<exclusions>
-	            <exclusion>
-	                <groupId>org.springframework.boot</groupId>
-	                <artifactId>spring-boot-starter-logging</artifactId>
-	            </exclusion>
-	        </exclusions> 
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+		<!-- ***** begin test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- ##### spring boot end -->
-		
-		<!-- ***** spring cloud begin -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency> 
-		<!-- ##### spring cloud end -->
-		
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey.contribs</groupId>
-			<artifactId>jersey-apache-client4</artifactId>
-		</dependency>
-		
-		<!-- ***** log4j begin -->
-		<dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-starter-log4j</artifactId>
-	    </dependency>
-	    <dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-log4j12</artifactId>
-		    <!-- <scope>test</scope> -->
-		</dependency>
-
-		<dependency>
-			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus-boot-starter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus</artifactId>
-		</dependency>
-	
-		<!-- ***** other begin -->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>commons-codec</groupId>
-		    <artifactId>commons-codec</artifactId>
-		</dependency>
-		<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-			</dependency>
-		<dependency>
-		    <groupId>commons-io</groupId>
-		    <artifactId>commons-io</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
    			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
-		<!-- ##### other end -->
+		<!-- ##### end test -->
+		
 	</dependencies>
 	
 	<build>

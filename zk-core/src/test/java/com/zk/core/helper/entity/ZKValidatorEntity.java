@@ -16,7 +16,7 @@
  * @date Dec 11, 2019 3:00:59 PM 
  * @version V1.0   
 */
-package com.zk.core.helper;
+package com.zk.core.helper.entity;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

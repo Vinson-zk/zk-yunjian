@@ -42,11 +42,9 @@ public class ZKSpringMyBatisConfiguration {
 //    @Value("${zk.db.dynamic.jdbc.password_r}")
 //    private String dbPwd_r;
 //
-//    @Autowired
-//    ConfigurationPropertiesBindingPostProcessor configurationPropertiesBinder;
-//
+//	  @ConditionalOnClass(value = { ConfigurationPropertiesBindingPostProcessor.class })
 //    @Bean("zkDynamicDataSource")
-//    public ZKDynamicDataSource dynamicDataSource() {
+//    public ZKDynamicDataSource dynamicDataSource(ConfigurationPropertiesBindingPostProcessor configurationPropertiesBinder) {
 //
 //        System.out.println("[^_^:20190821-0943-001] ===== ZKServerCentralConfigutation class dynamicDataSource ");
 //        ZKDynamicDataSource dynamicDataSource = new ZKDynamicDataSource();

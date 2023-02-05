@@ -28,8 +28,8 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.utils.ZKLocaleUtils;
 import com.zk.core.web.filter.ZKDelegatingFilterProxyRegistrationBean;
-import com.zk.core.web.resolver.ZKExceptionHandlerResolver;
 import com.zk.core.web.utils.ZKWebUtils;
+import com.zk.webmvc.handler.ZKExceptionHandlerResolver;
 
 /**
  * @ClassName: ZKShiroTestHelperConfiguration

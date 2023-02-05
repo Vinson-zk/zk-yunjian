@@ -35,16 +35,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.zk.core.commons.ZKContentType;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.core.exception.ZKCodeException;
-import com.zk.core.exception.ZKMsgException;
 import com.zk.core.exception.ZKValidatorException;
 import com.zk.core.utils.ZKEncodingUtils;
 import com.zk.core.utils.ZKMsgUtils;
 import com.zk.core.utils.ZKObjectUtils;
 import com.zk.core.utils.ZKStreamUtils;
 import com.zk.core.utils.ZKStringUtils;
-import com.zk.core.web.ZKMsgRes;
 import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.server.central.controller.base.ZKSerCenBaseController;
 import com.zk.server.central.entity.ZKSerCenCertificate;
@@ -72,7 +71,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
     public ZKMsgRes serviceCertificatePost(@RequestBody ZKSerCenCertificate serCenCertificate)
             throws ZKValidatorException {
 
-        ZKMsgRes zkMsgRes = ZKMsgRes.successful();
+        ZKMsgRes zkMsgRes = ZKMsgRes.asOk();
         if (serCenCertificateService.save(serCenCertificate) > 0) {
             zkMsgRes.setData(serCenCertificate);
         }
@@ -86,7 +85,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
     @RequestMapping(value = "sc", method = RequestMethod.GET)
     public ZKMsgRes serviceCertificateGet(@RequestParam(value = "pkId") String pkId) {
 
-        ZKMsgRes zkMsgRes = ZKMsgRes.successful();
+        ZKMsgRes zkMsgRes = ZKMsgRes.asOk();
         zkMsgRes.setData(serCenCertificateService.get(new ZKSerCenCertificate(pkId)));
         return zkMsgRes;
     }
@@ -97,7 +96,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
         for (String pkId : pkIds) {
             count += this.serCenCertificateService.del(new ZKSerCenCertificate(pkId));
         }
-        ZKMsgRes zkMsgRes = ZKMsgRes.successful();
+        ZKMsgRes zkMsgRes = ZKMsgRes.asOk();
         zkMsgRes.setData(count);
 
         return zkMsgRes;
@@ -117,7 +116,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
      */
     @RequestMapping(value = "scs", method = RequestMethod.GET)
     public ZKMsgRes serviceCertificateList(ZKSerCenCertificate serCenCertificate, HttpServletRequest hReq) {
-        ZKMsgRes zkMsgRes = ZKMsgRes.successful();
+        ZKMsgRes zkMsgRes = ZKMsgRes.asOk();
         zkMsgRes.setData(serCenCertificateService.findList(serCenCertificate));
         return zkMsgRes;
     }
@@ -137,7 +136,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
     @RequestMapping(value = "scPage", method = RequestMethod.GET)
     public ZKMsgRes serviceCertificatePage(ZKSerCenCertificate serCenCertificate, HttpServletRequest hReq) {
 
-        ZKMsgRes zkMsgRes = ZKMsgRes.successful();
+        ZKMsgRes zkMsgRes = ZKMsgRes.asOk();
         ZKPage<ZKSerCenCertificate> page = ZKPage.asPage(hReq);
 
         zkMsgRes.setData(serCenCertificateService.findPage(page, serCenCertificate));
@@ -167,11 +166,11 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
 
         if (status != ZKSerCenCertificate.StatusType.Disabled && status != ZKSerCenCertificate.StatusType.Enable) {
             // 上送的状态不对，需要抛出异常
-            throw ZKCodeException.as("zk.000002", null, null,
+            throw ZKCodeException.as("zk.000002", null,
                     ZKMsgUtils.getMessage("data.validation.rang", new Integer[] { 0, 1 }, ZKWebUtils.getLocale()));
         }
 
-        ZKMsgRes zkMsgRes = ZKMsgRes.successful();
+        ZKMsgRes zkMsgRes = ZKMsgRes.asOk();
         ZKSerCenCertificate zkSc = null;
         int count = 0;
         for (String pkId : pkIds) {

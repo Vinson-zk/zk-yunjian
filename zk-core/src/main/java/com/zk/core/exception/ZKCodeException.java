@@ -61,36 +61,36 @@ public class ZKCodeException extends ZKUnknownException {
      * @return ZKCodeException
      */
     public static ZKCodeException asDataValidator(Map<String, String> validatorMsg) {
-        return as("zk.000002", "", null, validatorMsg);
+        return as(KeyExceptionType.dataValidator, null, "zk.000002", null, validatorMsg, (Object) null);
     }
 
+    // =======================================
     public static ZKCodeException as(String code) {
-        return as(KeyExceptionType.general, code, null, null, null, null);
+        return as(KeyExceptionType.general, null, code, null, (Object) null, (Object) null);
     }
 
     public static ZKCodeException as(String code, String msg) {
-        return as(KeyExceptionType.general, code, msg, null, null, null);
+        return as(KeyExceptionType.general, null, code, msg, null, (Object) null);
     }
 
-    public static ZKCodeException as(String code, String msg, Object... msgArgs) {
-        return as(KeyExceptionType.general, code, msg, msgArgs, null, null);
+    public static ZKCodeException as(String code, String msg, Object data) {
+        return as(KeyExceptionType.general, null, code, msg, data, (Object) null);
     }
 
-    public static ZKCodeException as(String code, String msg, Object[] msgArgs, Object data) {
-        return as(KeyExceptionType.general, code, msg, msgArgs, data, null);
+    public static ZKCodeException as(String code, String msg, Object data, Object... msgArgs) {
+        return as(KeyExceptionType.general, null, code, msg, data, msgArgs);
     }
 
-    public static ZKCodeException as(String code, String msg, Object[] msgArgs, Object data, Throwable cause) {
-        return as(KeyExceptionType.general, code, msg, msgArgs, data, cause);
+    public static ZKCodeException as(Throwable cause, String code, String msg, Object data, Object... msgArgs) {
+        return as(KeyExceptionType.general, cause, code, msg, data, msgArgs);
     }
 
-    ///
-    public static ZKCodeException as(int type, String code, String msg, Object[] msgArgs, Object data,
-        Throwable cause) {
-        return new ZKCodeException(type, code, msg, msgArgs, data, cause);
+    public static ZKCodeException as(int type, Throwable cause, String code, String msg, Object data,
+            Object... msgArgs) {
+        return new ZKCodeException(type, cause, code, msg, data, msgArgs);
     }
 
-    protected ZKCodeException(int type, String code, String msg, Object[] msgArgs, Object data, Throwable cause) {
+    protected ZKCodeException(int type, Throwable cause, String code, String msg, Object data, Object... msgArgs) {
         super(type, msg, cause);
         this.code = code;
         this.msgArgs = msgArgs;

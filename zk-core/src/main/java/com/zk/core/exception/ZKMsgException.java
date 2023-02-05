@@ -18,6 +18,8 @@
 */
 package com.zk.core.exception;
 
+import java.util.Locale;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.core.utils.ZKJsonUtils;
 import com.zk.core.utils.ZKMsgUtils;
@@ -49,29 +51,30 @@ public class ZKMsgException extends ZKUnknownException {
     private Object data;
 
     public static ZKMsgException as(String code) {
-        return as(KeyExceptionType.general, code, null, null, null);
+        return as(KeyExceptionType.general, null, (Locale) null, code, null, null, (Object) null);
     }
 
     public static ZKMsgException as(String code, String msg) {
-        return as(KeyExceptionType.general, code, msg, null, null);
+        return as(KeyExceptionType.general, null, (Locale) null, code, msg, null, (Object) null);
     }
 
     public static ZKMsgException as(String code, String msg, Object data) {
-        return as(KeyExceptionType.general, code, msg, data, null);
+        return as(KeyExceptionType.general, null, (Locale) null, code, msg, data, (Object) null);
     }
 
-    public static ZKMsgException as(String code, String msg, Object data, Throwable cause) {
-        return as(KeyExceptionType.general, code, msg, data, cause);
+    public static ZKMsgException as(String code, String msg, Object data, Object... msgArgs) {
+        return as(KeyExceptionType.general, null, (Locale) null, code, msg, data, msgArgs);
     }
 
-    public static ZKMsgException as(int type, String code, String msg, Object data, Throwable cause) {
-        if(ZKStringUtils.isEmpty(msg)){
-            msg = ZKMsgUtils.getMessage(code, (Object) null);
+    public static ZKMsgException as(int type, Throwable cause, Locale locale, String code, String msg, Object data,
+            Object... msgArgs) {
+        if (ZKStringUtils.isEmpty(msg)) {
+            msg = ZKMsgUtils.getMessage(locale, code, msgArgs);
         }
-        return new ZKMsgException(type, code, msg, data, cause);
+        return new ZKMsgException(type, cause, code, msg, data);
     }
 
-    protected ZKMsgException(int type, String code, String msg, Object data, Throwable cause) {
+    protected ZKMsgException(int type, Throwable cause, String code, String msg, Object data) {
         super(type, msg, cause);
         this.code = code;
         this.data = data;
@@ -112,7 +115,7 @@ public class ZKMsgException extends ZKUnknownException {
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("{type:").append(this.getType()).append(", code:").append(this.getCode()).append(", msg:")
-            .append(super.getMessage()).append(", data:").append(this.getDataStr()).append("}");
+                .append(super.getMessage()).append(", data:").append(this.getDataStr()).append("}");
         return sb.toString();
     }
 

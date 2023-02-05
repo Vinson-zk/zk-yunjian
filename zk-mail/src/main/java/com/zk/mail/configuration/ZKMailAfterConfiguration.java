@@ -27,9 +27,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.zk.log.interceptor.ZKLogAccessInterceptor;
 import com.zk.mail.common.ZKMailAuthenticator;
 import com.zk.mail.utils.ZKMailUtils;
+import com.zk.webmvc.interceptor.ZKLogAccessInterceptor;
 
 /** 
 * @ClassName: ZKMailAfterConfiguration 

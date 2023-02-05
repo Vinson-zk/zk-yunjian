@@ -40,7 +40,7 @@ import com.zk.core.commons.ZKContentType;
 import com.zk.core.exception.ZKCodeException;
 import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.utils.ZKStringUtils;
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.security.ticket.ZKSecTicketManager;
 import com.zk.wechat.officialAccounts.entity.ZKOfficialAccountsUser;

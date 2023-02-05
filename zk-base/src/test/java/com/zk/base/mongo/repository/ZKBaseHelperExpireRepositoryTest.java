@@ -21,7 +21,7 @@ package com.zk.base.mongo.repository;
 import org.junit.Test;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import com.zk.base.helper.ZKBaseHelperSpringBootMain;
+import com.zk.base.helper.ZKBaseHelperCtx;
 import com.zk.base.helper.mongo.doc.ZKBaseHelperExpireDoc;
 import com.zk.base.helper.mongo.repository.ZKBaseHelperExpireRepository;
 
@@ -50,7 +50,7 @@ public class ZKBaseHelperExpireRepositoryTest {
     public void testExpire() {
         try {
 
-            ConfigurableApplicationContext ctx = ZKBaseHelperSpringBootMain.run(new String[] {});
+            ConfigurableApplicationContext ctx = ZKBaseHelperCtx.run(new String[] {});
             TestCase.assertNotNull(ctx);
 
             ZKBaseHelperExpireRepository baseHelperExpireRepository = ctx.getBean(ZKBaseHelperExpireRepository.class);

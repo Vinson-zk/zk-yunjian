@@ -21,6 +21,8 @@ package com.zk.server.central.security;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 
+import com.zk.security.principal.ZKSecUserPrincipal;
+
 /** 
 * @ClassName: ZKSerCenSecurityUtils 
 * @Description: TODO(simple description this class what to do.) 
@@ -29,9 +31,10 @@ import org.apache.shiro.session.Session;
 */
 public class ZKSerCenSecurityUtils extends SecurityUtils {
 
-    public static ZKPrincipal getPrincipal() {
+    @SuppressWarnings("unchecked")
+    public static ZKSecUserPrincipal<String> getPrincipal() {
         if (SecurityUtils.getSubject() != null) {
-            return (ZKPrincipal) SecurityUtils.getSubject().getPrincipal();
+            return (ZKSecUserPrincipal<String>) SecurityUtils.getSubject().getPrincipal();
         }
         return null;
     }

@@ -58,7 +58,7 @@ public interface ZKSecRealm {
      * @param token
      * @return
      */
-    ZKSecPrincipalCollection authentication(ZKSecAuthenticationToken authcToken);
+    <ID> ZKSecPrincipalCollection<ID> authentication(ZKSecAuthenticationToken authcToken);
 
     /**
      * 鉴权，授权
@@ -69,7 +69,7 @@ public interface ZKSecRealm {
      *            权限代码
      * @return
      */
-    boolean checkPermission(ZKSecPrincipalCollection principalCollection, String permissionCode);
+    <ID> boolean checkPermission(ZKSecPrincipalCollection<ID> principalCollection, String permissionCode);
 
     /**
      * 鉴定  api接口权限 代码
@@ -79,7 +79,7 @@ public interface ZKSecRealm {
      *             api接口权限 代码
      * @return true-鉴定成功；反之鉴定失败
      */
-    boolean checkApiCode(ZKSecPrincipalCollection principalCollection, String apiCode);
+    <ID> boolean checkApiCode(ZKSecPrincipalCollection<ID> principalCollection, String apiCode);
 
     /**
      * 身份在线数量控制
@@ -88,7 +88,7 @@ public interface ZKSecRealm {
      *            身份
      * @return
      */
-    void doLimitPrincipalTicketCount(ZKSecPrincipalCollection principalCollection);
+    <ID> void doLimitPrincipalTicketCount(ZKSecPrincipalCollection<ID> principalCollection);
 
     /**
      * 取身份的权限
@@ -100,6 +100,6 @@ public interface ZKSecRealm {
      * @param principalCollection
      * @return void
      */
-    ZKSecAuthorizationInfo getZKSecAuthorizationInfo(ZKSecPrincipalCollection principalCollection);
+    <ID> ZKSecAuthorizationInfo getZKSecAuthorizationInfo(ZKSecPrincipalCollection<ID> principalCollection);
 
 }

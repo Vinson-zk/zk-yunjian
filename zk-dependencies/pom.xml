@@ -23,10 +23,10 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 		
-		<version.springloaded>1.2.8.RELEASE</version.springloaded>
 		<!-- spring boot ****************************************** -->
 		<!-- 2.1.3.RELEASE 3.0.1 -->
-		<version.spring.boot>2.7.6</version.spring.boot>
+		<version.spring.boot>2.7.8</version.spring.boot>
+		
 		<!-- spring cloud ****************************************** -->
 		<!-- <version.spring.cloud>2.0.5.RELEASE</version.spring.cloud>
 		2.1.1.RELEASE	3.1.2
@@ -36,8 +36,8 @@
 		<version.spring.cloud.starter.openfeign>${version.spring.cloud.starter}</version.spring.cloud.starter.openfeign>
 		<version.spring.cloud.starter.config>${version.spring.cloud.starter}</version.spring.cloud.starter.config>
 		<version.spring.cloud.starter.zipkin>2.2.8.RELEASE</version.spring.cloud.starter.zipkin>
-		<version.spring.cloud.starter.task>3.0.0</version.spring.cloud.starter.task>
-		<version.spring.cloud.starter.bus.amqp>${version.spring.cloud.starter}</version.spring.cloud.starter.bus.amqp>
+		<version.spring.cloud.starter.task>2.4.5</version.spring.cloud.starter.task>
+		<version.spring.cloud.starter.bus.amqp>3.1.2</version.spring.cloud.starter.bus.amqp>
 		<!-- 2.1.1.RELEASE	2.2.9.RELEASE -->
 		<version.spring.cloud.starter.netflix>2.2.9.RELEASE</version.spring.cloud.starter.netflix>
 		<version.spring.cloud.starter.netflix.eureka.server>${version.spring.cloud.starter}</version.spring.cloud.starter.netflix.eureka.server>
@@ -53,29 +53,35 @@
 		<!-- 2.1.1.RELEASE 3.1.2 4.0.0 -->
 		<version.spring.cloud.bus>3.0.0</version.spring.cloud.bus>
 		<!-- 2.1.1.RELEASE 2.4.5 3.0.0 -->
-		<version.spring.cloud.task.batch>3.0.0</version.spring.cloud.task.batch>
+		<version.spring.cloud.task.batch>${version.spring.cloud.starter.task}</version.spring.cloud.task.batch>
+
+		<!-- spring ************************** -->
+		<version.spring.framework>5.3.24</version.spring.framework>
+		<!-- 5.3.22  5.3.24 
+		<version.spring.web>${version.spring.framework}</version.spring.web> -->
+		<!-- 2.1.5.RELEASE 
+		<version.spring.amqp>3.0.0</version.spring.amqp> -->
 
 		<!-- ************************** -->
-		<!-- 2.1.5.RELEASE -->
-		<version.spring.amqp>3.0.0</version.spring.amqp>
-		<!-- <version.mongo.driver>3.4.3</version.mongo.driver> -->
-		<version.mongo.spring>2.1.1.RELEASE</version.mongo.spring>
-		<!-- mongo 3.6.3 对应驱动版本 -->
 		<!-- 
-		<version.mongo.driver>3.6.3</version.mongo.driver>
-		<version.mongo.spring>2.0.6.RELEASE</version.mongo.spring> 
+			mongo版本 3.4.3 对应 2.1.1.RELEASE
+			mongo版本 3.6.3 对应 2.0.6.RELEASE
 		-->
-		<version.redis.spring>${version.spring.boot}</version.redis.spring>
+		<!-- <version.mongodb.driver>3.4.3</version.mongodb.driver> -->
+		<!-- <version.mongodb.spring>3.4.7</version.mongodb.spring> -->
+		<!-- <version.mongodb>4.6.1</version.mongodb> -->
+		<!-- <version.redis.spring>${version.spring.boot}</version.redis.spring> -->
+		<version.springloaded>1.2.8.RELEASE</version.springloaded>
 		<version.redis.redisson>3.5.5</version.redis.redisson>
 		<version.redis.jedis>4.3.1</version.redis.jedis>
 		<version.rabbitmq.amqp.client>5.6.0</version.rabbitmq.amqp.client>
-		<version.junit>4.12</version.junit>
+		<version.junit>4.13.2</version.junit>
 		<version.springfox>2.9.2</version.springfox>
 		<version.slf4j>1.7.25</version.slf4j>
 		<!-- <version.log4j>2.11.1</version.log4j> -->
-		<version.log4j>2.15.0</version.log4j>
-		<version.log4j.spring.boot>1.3.8.RELEASE</version.log4j.spring.boot>
-		<version.tomcat.embed>9.0.69</version.tomcat.embed>
+		<!-- <version.log4j>2.15.0</version.log4j>
+		<version.log4j.spring.boot>1.3.8.RELEASE</version.log4j.spring.boot> -->
+		<version.tomcat.embed>9.0.71</version.tomcat.embed>
 		<version.jstl>1.2</version.jstl>
 		<version.mybatis>3.5.6</version.mybatis><!-- 3.5.6, 3.4.6 -->
 		<version.mybatis.spring>1.3.2</version.mybatis.spring>
@@ -96,7 +102,7 @@
 		<version.dom4j>2.0.0</version.dom4j>
 		<version.httpcomponents>4.5.6</version.httpcomponents>
 		<version.httpcomponents.httpcore>4.4.9</version.httpcomponents.httpcore>
-		<version.fasterxml.jackson.core>2.14.1</version.fasterxml.jackson.core>
+		<version.fasterxml.jackson.core>2.13.4</version.fasterxml.jackson.core>
 		<version.javax.servlet>3.1.0</version.javax.servlet>
 		<version.javax.guava>19.0</version.javax.guava>
 		<version.com.sun.jersey>1.19.1</version.com.sun.jersey>
@@ -106,7 +112,8 @@
 		<version.weixin.mp.aes>1.0</version.weixin.mp.aes>
 		<version.quartz.scheduler>2.3.0</version.quartz.scheduler>
 		<version.javax.mail>1.4.7</version.javax.mail>
-		<!-- <version.freemarker>2.3.20</version.freemarker> -->
+		<version.reactor.core>3.5.0</version.reactor.core>
+		<!-- <version.freemarker>2.3.32</version.freemarker> -->
 		<version.sa.token>1.30.0</version.sa.token>
 		<version.mybatis.plus>3.5.1</version.mybatis.plus>
 	</properties>
@@ -120,6 +127,14 @@
                 <artifactId>springloaded</artifactId>
                 <version>${version.springloaded}</version>
             </dependency>
+            
+            <!-- ***** spring framework begin -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+  				<artifactId>spring-web</artifactId>
+				<version>${version.spring.framework}</version>
+			</dependency>
+			<!-- ##### spring framework end -->
             
 			<!-- ***** spring boot begin -->
 			<dependency>
@@ -135,6 +150,11 @@
 		        </exclusions> 
 			</dependency>
 			<dependency>
+		        <groupId>org.springframework.boot</groupId>
+		        <artifactId>spring-boot-starter-log4j2</artifactId>
+				<version>${version.spring.boot}</version>
+		    </dependency>
+			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-json</artifactId>
 				<version>${version.spring.boot}</version>
@@ -142,6 +162,11 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${version.spring.boot}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-data-mongodb</artifactId>
 				<version>${version.spring.boot}</version>
 			</dependency>
 			<dependency>
@@ -159,12 +184,6 @@
 	    		<artifactId>spring-boot-starter-jdbc</artifactId>
 	    		<version>${version.spring.boot}</version>
 	    	</dependency>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-test</artifactId>
-				<scope>test</scope>
-				<version>${version.spring.boot}</version>
-			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-actuator</artifactId>
@@ -254,13 +273,13 @@
 	                	<groupId>javax.servlet</groupId>
 						<artifactId>servlet-api</artifactId>
 					</exclusion>
-					<exclusion>
+					<!-- <exclusion>
 	                	<groupId>org.springframework.cloud</groupId>
 						<artifactId>spring-cloud-netflix-eureka-server</artifactId>
-					</exclusion>
+					</exclusion> -->
 				</exclusions>
 			</dependency>
-			<dependency>
+			<!-- <dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-netflix-eureka-server</artifactId>
 				<version>${version.spring.cloud.netflix.eureka.server}</version>
@@ -274,16 +293,12 @@
 	    				<artifactId>spring-boot-starter-freemarker</artifactId>
 					</exclusion>
 				</exclusions>
-			</dependency> 
+			</dependency>  -->
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 				<version>${version.spring.cloud.starter.netflix.eureka.client}</version>
 				<exclusions>
-					<exclusion>
-						<groupId>org.springframework.cloud</groupId>
-  						<artifactId>spring-cloud-starter</artifactId>
-					</exclusion>
 					<exclusion>
 	                	<groupId>javax.servlet</groupId>
 						<artifactId>servlet-api</artifactId>
@@ -299,23 +314,11 @@
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-netflix-zuul</artifactId>
 				<version>${version.spring.cloud.starter.netflix.zuul}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework.cloud</groupId>
-  						<artifactId>spring-cloud-starter</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
 				<version>${version.spring.cloud.starter.netflix.hystrix}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework.cloud</groupId>
-  						<artifactId>spring-cloud-starter</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
@@ -342,11 +345,11 @@
 				<version>${version.spring.amqp}</version>
 			</dependency> 
 			-->
-			<dependency>
+			<!-- <dependency>
 				<groupId>org.springframework.amqp</groupId>
 				<artifactId>spring-rabbit</artifactId>
 				<version>${version.spring.amqp}</version>
-			</dependency> 
+			</dependency>  -->
 			<!-- ##### spring other end -->
 			
 			<dependency>
@@ -443,7 +446,7 @@
 			    <groupId>javax.servlet</groupId>
 			    <artifactId>javax.servlet-api</artifactId>
 			    <version>${version.javax.servlet}</version>
-			    <scope>provided</scope>
+			    <scope>compile</scope> <!-- provided compile -->
 			</dependency>
 			<!-- ##### servlet end -->
         	
@@ -473,13 +476,7 @@
 			</dependency>
 			<!-- ##### springfox.swagger2 end -->
 			
-			<!-- ***** log4j begin -->
-			<dependency>
-		        <groupId>org.springframework.boot</groupId>
-		        <artifactId>spring-boot-starter-log4j</artifactId>
-		        <version>${version.log4j.spring.boot}</version>
-		    </dependency>
-		    
+			<!-- ***** log4j begin 
 		    <dependency>
 			    <groupId>org.slf4j</groupId>
 			    <artifactId>slf4j-api</artifactId>
@@ -489,9 +486,7 @@
 			    <groupId>org.slf4j</groupId>
 			    <artifactId>slf4j-log4j12</artifactId>
 			    <version>${version.slf4j}</version>
-			    <!-- <scope>test</scope> -->
 			</dependency>
-			
 		    <dependency>
 		        <groupId>org.apache.logging.log4j</groupId>
 		        <artifactId>log4j-api</artifactId>
@@ -501,13 +496,12 @@
 		        <groupId>org.apache.logging.log4j</groupId>
 		        <artifactId>log4j-core</artifactId>
 		        <version>${version.log4j}</version>
-		    </dependency>
-		
+		    </dependency> 
 		    <dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-web</artifactId>
 				<version>${version.log4j}</version>
-		    </dependency>
+		    </dependency> -->
 		    <!-- ##### log4j end -->
 		    
 		    <!-- ***** fileupload begin -->
@@ -547,24 +541,34 @@
 			<!-- ##### shiro end -->
 			
 			<!-- ***** mongo begin -->
-			<dependency>
+			<!-- <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-mongodb</artifactId>
-                <version>${version.mongo.spring}</version>
-                <!-- 
+                <version>${version.mongodb.spring}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>spring-data-commons</artifactId>
                         <groupId>org.springframework.data</groupId>
-                    </exclusion>
+                    </exclusion> 
+                    <exclusion>
+                        <artifactId>spring-context</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion> 
                 </exclusions> 
-                -->
-            </dependency>
-            <!-- <dependency>
+            </dependency> -->
+            <!-- 
+            <dependency>
                 <groupId>org.mongodb</groupId>
                 <artifactId>mongodb-driver</artifactId>
-                <version>${version.mongo.driver}</version>
-            </dependency> -->
+                <version>${version.mongodb.driver}</version>
+            </dependency> 
+            <dependency>
+	            <groupId>org.mongodb</groupId>
+	            <artifactId>mongodb-driver-sync</artifactId>
+	            <version>${version.mongodb}</version>
+	            <optional>true</optional>
+	        </dependency>
+	        -->
 			<!-- ##### mongo end -->
 			
 			<dependency>
@@ -572,17 +576,17 @@
 				<artifactId>jedis</artifactId>
 				 <version>${version.redis.jedis}</version>
 			</dependency>
-            <dependency>
+            <!-- <dependency>
 	            <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-redis</artifactId>
                 <version>${version.redis.spring}</version>
-                <!-- <exclusions>
+                <exclusions>
                     <exclusion>
                         <artifactId>spring-data-commons</artifactId>
                         <groupId>org.springframework.data</groupId>
                     </exclusion>
-                </exclusions> -->
-	        </dependency> 
+                </exclusions> 
+	        </dependency> -->
 	        <!-- -->
 	        <dependency>
 			    <groupId>org.redisson</groupId>
@@ -723,6 +727,11 @@
 				<version>${version.sa.token}</version>
 			</dependency>
 			<dependency>
+				<groupId>io.projectreactor</groupId>
+    			<artifactId>reactor-core</artifactId>
+				<version>${version.reactor.core}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.squareup.okhttp3</groupId>
 				<artifactId>okhttp</artifactId>
 				<version>${version.squareup.okhttp3}</version>
@@ -732,13 +741,31 @@
 				<artifactId>aes-jre1.6</artifactId>
 				<version>${version.weixin.mp.aes}</version>
 			</dependency>
+			<!-- ##### other end -->
+			<!-- ***** test begin -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-test</artifactId>
+				<version>${version.spring.boot}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.junit.jupiter</groupId>
+  						<artifactId>junit-jupiter</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.mockito</groupId>
+  						<artifactId>mockito-junit-jupiter</artifactId>
+					</exclusion>
+				</exclusions>
+				<scope>test</scope>
+			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
     			<artifactId>junit</artifactId>
 				<scope>test</scope>
 				<version>${version.junit}</version>
 			</dependency>
-			<!-- ##### other end -->
+			<!-- ##### test end -->
 			
 		</dependencies>
 	</dependencyManagement>

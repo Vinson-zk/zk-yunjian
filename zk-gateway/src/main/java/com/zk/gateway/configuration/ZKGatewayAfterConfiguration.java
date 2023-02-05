@@ -18,12 +18,11 @@
 */
 package com.zk.gateway.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.EnableWebMvcConfiguration;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import com.zk.log.interceptor.ZKLogAccessInterceptor;
 
 /**
  * @ClassName: ZKGatewayAfterConfiguration
@@ -32,18 +31,18 @@ import com.zk.log.interceptor.ZKLogAccessInterceptor;
  * @version 1.0
  */
 @Configuration
-//@AutoConfigureAfter(value = {
-//        EnableWebMvcConfiguration.class,
-//        ServletWebServerFactoryAutoConfiguration.class,
-//})
+@AutoConfigureAfter(value = {
+        EnableWebMvcConfiguration.class,
+        ServletWebServerFactoryAutoConfiguration.class,
+})
 public class ZKGatewayAfterConfiguration implements WebMvcConfigurer {
 
-    @Autowired
-    private ZKLogAccessInterceptor logAccessInterceptor;
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(this.logAccessInterceptor).addPathPatterns("/**");
-    }
+//    @Autowired
+//    private ZKLogAccessInterceptor logAccessInterceptor;
+//
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(this.logAccessInterceptor).addPathPatterns("/**");
+//    }
 
 }

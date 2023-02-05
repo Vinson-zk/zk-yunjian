@@ -73,7 +73,7 @@ public interface ZKSecSecurityManager {
      *            token
      * @return true-登录成功；false-登录失败；
      */
-    boolean login(ZKSecSubject subject, ZKSecAuthenticationToken token);
+    <ID> boolean login(ZKSecSubject subject, ZKSecAuthenticationToken token);
 
     /**
      * 登出
@@ -87,7 +87,7 @@ public interface ZKSecSecurityManager {
     /**
      * 用户在线数量控制策略
      */
-    public void doPrincipalsCount(ZKSecPrincipalCollection pc);
+    <ID> void doPrincipalsCount(ZKSecPrincipalCollection<ID> pc);
 
     /**
      * 对 api 接口代码对待鉴权
@@ -100,7 +100,7 @@ public interface ZKSecSecurityManager {
      * @param apiCode
      * @return boolean 有权限返回 true; 没有返回 false;
      */
-    boolean checkApiCode(ZKSecPrincipalCollection pc, String apiCode);
+    <ID> boolean checkApiCode(ZKSecPrincipalCollection<ID> pc, String apiCode);
 
     /**
      * 鉴权-权限代码
@@ -110,6 +110,6 @@ public interface ZKSecSecurityManager {
      *            权限代码
      * @return true-鉴权成功；反之鉴权失败
      */
-    boolean checkPermission(ZKSecPrincipalCollection pc, String permissionCode);
+    <ID> boolean checkPermission(ZKSecPrincipalCollection<ID> pc, String permissionCode);
 
 }

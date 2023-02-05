@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zk.core.encrypt.utils.ZKEncryptAesUtils;
+import com.zk.core.exception.ZKUnknownException.KeyExceptionType;
 import com.zk.core.utils.ZKExceptionsUtils;
 import com.zk.core.utils.ZKObjectUtils;
 import com.zk.security.exception.ZKSecCodeException;
@@ -60,7 +61,7 @@ public abstract class ZKSecAbstractRememberMeManager implements ZKSecRememberMeM
      * @param pc
      * @return
      */
-    protected byte[] serialize(ZKSecPrincipalCollection pc) {
+    protected <ID> byte[] serialize(ZKSecPrincipalCollection<ID> pc) {
         if (pc != null) {
             return ZKObjectUtils.serialize(pc);
         }
@@ -74,9 +75,10 @@ public abstract class ZKSecAbstractRememberMeManager implements ZKSecRememberMeM
      * @param bs
      * @return
      */
-    protected ZKSecPrincipalCollection deserialize(byte[] bs) {
+    @SuppressWarnings("unchecked")
+    protected <ID> ZKSecPrincipalCollection<ID> deserialize(byte[] bs) {
         if (bs != null) {
-            return (ZKSecPrincipalCollection) ZKObjectUtils.unserialize(bs);
+            return (ZKSecPrincipalCollection<ID>) ZKObjectUtils.unserialize(bs);
         }
         logger.error("[>_<:20180821-2322-003] bs is null, unserialize return null ");
         return null;
@@ -149,7 +151,8 @@ public abstract class ZKSecAbstractRememberMeManager implements ZKSecRememberMeM
     }
 
     @Override
-    public void onSuccessfulLogin(ZKSecSubject subject, ZKSecAuthenticationToken token, ZKSecPrincipalCollection pc) {
+    public <ID> void onSuccessfulLogin(ZKSecSubject subject, ZKSecAuthenticationToken token,
+            ZKSecPrincipalCollection<ID> pc) {
         try {
             // 先清理以前记住的身份；always clear any previous identity;
             forgetIdentity(subject);
@@ -174,7 +177,7 @@ public abstract class ZKSecAbstractRememberMeManager implements ZKSecRememberMeM
     }
 
     @Override
-    public ZKSecPrincipalCollection getRememberedPrincipals(ZKSecSubject subject) {
+    public <ID> ZKSecPrincipalCollection<ID> getRememberedPrincipals(ZKSecSubject subject) {
         try {
             byte[] pcBytes = getRememberedSerializedIdentity(subject);
             if (pcBytes != null && pcBytes.length > 0) {
@@ -199,12 +202,13 @@ public abstract class ZKSecAbstractRememberMeManager implements ZKSecRememberMeM
      *            主体
      * @return
      */
-    protected ZKSecPrincipalCollection onRememberedPrincipalFailure(Exception e, ZKSecSubject subject) {
+    protected <ID> ZKSecPrincipalCollection<ID> onRememberedPrincipalFailure(Exception e, ZKSecSubject subject) {
         logger.error("[>_<:20180824-1015-001] 记住我身份解密失败！");
         e.printStackTrace();
         forgetIdentity(subject);
         // 记住我发生变化，请重新登录
-        throw new ZKSecCodeException("zk.sec.000009", "记住我发生了变化，请重新登录", null, null, e);
+        throw new ZKSecCodeException(KeyExceptionType.authentication, e, "zk.sec.000009", "记住我发生了变化，请重新登录", null,
+                (Object) null);
     }
 
     /**

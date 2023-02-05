@@ -90,7 +90,7 @@ public abstract class ZKSecAbstractSubject implements ZKSecSubject {
      * 取当前登录用户所有身份
      */
     @Override
-    public ZKSecPrincipalCollection getPrincipalCollection() {
+    public <ID> ZKSecPrincipalCollection<ID> getPrincipalCollection() {
         if (getTicketCheckStatus() != null) {
             return this.ticket.getPrincipalCollection();
         }
@@ -210,7 +210,7 @@ public abstract class ZKSecAbstractSubject implements ZKSecSubject {
                 if (this.ticket.get(ZKSecTicket.KeyTicketInfo.stop_info_code) != null) {
                     throw ZKCodeException.as(this.ticket.get(ZKSecTicket.KeyTicketInfo.stop_info_code).toString());
                 }
-                throw new ZKSecTicketException("zk.sec.000008", "未知原因，令牌禁用", null, null);// 未知的令牌禁用原因
+                throw new ZKSecTicketException("zk.sec.000008", "未知原因，令牌禁用", null, (Object) null);// 未知的令牌禁用原因
             }
         }
         return this.ticket;

@@ -31,11 +31,11 @@
 			<artifactId>zk-core</artifactId>
 			<version>${version.zk.core}</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.zk</groupId>
-			<artifactId>zk-mongo</artifactId>
-			<version>${version.zk.mongo}</version>
-		</dependency> -->
+			<artifactId>zk-webmvc</artifactId>
+			<version>${version.zk.webmvc}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.zk</groupId>
 			<artifactId>zk-db</artifactId>
@@ -57,54 +57,17 @@
 			<version>${version.zk.log}</version>
 		</dependency>
 		
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-		
+		<!-- ***** begin test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-freemarker</artifactId>
+			<artifactId>spring-boot-starter-test</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis</artifactId>
+			<groupId>junit</groupId>
+   			<artifactId>junit</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.dom4j</groupId>
-			<artifactId>dom4j</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-		</dependency>
+		<!-- ##### end test -->
 		
-		<!-- begin jackson json -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-jaxb-annotations</artifactId>
-		</dependency>
-		<!-- end jackson json -->
 	</dependencies>
 	
 	<build>

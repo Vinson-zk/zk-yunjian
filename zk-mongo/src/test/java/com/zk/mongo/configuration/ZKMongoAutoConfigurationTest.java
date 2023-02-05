@@ -26,13 +26,16 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.zk.core.lock.ZKDistributedLock;
+import com.zk.mongo.lock.ZKMongoDistributedLockImpl;
 
 import junit.framework.TestCase;
 
@@ -42,7 +45,9 @@ import junit.framework.TestCase;
 * @author Vinson 
 * @version 1.0 
 */
-@SpringBootApplication
+@SpringBootApplication(exclude = { //
+        MongoAutoConfiguration.class, //
+})
 @ImportAutoConfiguration(classes = { ZKMongoAutoConfiguration.class })
 @AutoConfigureBefore(value = { ZKMongoAutoConfiguration.class })
 public class ZKMongoAutoConfigurationTest {
@@ -88,6 +93,11 @@ public class ZKMongoAutoConfigurationTest {
         return new ZKMongoProperties();
     }
 
+    @Bean
+    public ZKDistributedLock distributedLock(MongoTemplate mongoTemplate) {
+        return new ZKMongoDistributedLockImpl(mongoTemplate);
+    }
+
     @Test
     public void test() {
         try {
@@ -98,8 +108,11 @@ public class ZKMongoAutoConfigurationTest {
             TestCase.assertNotNull(mongoTemplate);
 
             MongoClient mongoClient = ctx.getBean(MongoClient.class);
-
-            TestCase.assertEquals("127.0.0.1", mongoClient.getAddress().getHost());
+            System.out.println("----- 1: " + mongoClient.getClusterDescription().getShortDescription());
+            System.out.println(
+                    "----- 2: " + mongoClient.getClusterDescription().getServerDescriptions().get(0).getAddress());
+            TestCase.assertEquals("127.0.0.1",
+                    mongoClient.getClusterDescription().getServerDescriptions().get(0).getAddress().getHost());
 
         }
         catch(Exception e) {

@@ -49,7 +49,7 @@ public class ZKSecRedisTicketBaseInfo implements Serializable {
 
     Date lastTime;
 
-    ZKSecPrincipalCollection principalCollection;
+    ZKSecPrincipalCollection<?> principalCollection;
 
     public ZKSecRedisTicketBaseInfo() {
     }
@@ -156,15 +156,16 @@ public class ZKSecRedisTicketBaseInfo implements Serializable {
     /**
      * @return pc sa
      */
-    public ZKSecPrincipalCollection getPrincipalCollection() {
-        return principalCollection;
+    @SuppressWarnings("unchecked")
+    public <ID> ZKSecPrincipalCollection<ID> getPrincipalCollection() {
+        return (ZKSecPrincipalCollection<ID>) principalCollection;
     }
 
     /**
      * @param PrincipalCollection
      *            the pc to set
      */
-    public void setPrincipalCollection(ZKSecPrincipalCollection principalCollection) {
+    public <ID> void setPrincipalCollection(ZKSecPrincipalCollection<ID> principalCollection) {
         this.principalCollection = principalCollection;
     }
 

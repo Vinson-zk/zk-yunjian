@@ -16,12 +16,13 @@
  * @date Dec 19, 2019 4:10:44 PM 
  * @version V1.0   
 */
-package com.zk.base.helper;
+package com.zk.base;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -37,9 +38,11 @@ import org.springframework.context.annotation.ImportResource;
 * @version 1.0 
 */
 @SpringBootApplication(exclude = {
-        DataSourceAutoConfiguration.class,
-        MongoAutoConfiguration.class })
-@ImportAutoConfiguration(classes = {
+        MongoRepositoriesAutoConfiguration.class, //
+        DataSourceAutoConfiguration.class, //
+        MongoAutoConfiguration.class, //
+})
+@ImportAutoConfiguration(classes = { //
 //        ZKBaseHelperMongoConfiguration.class,  // 测试 mongo 时，需要引入这个配置
 })
 //@ComponentScan({"com.zk.base.helper.entity", "com.zk.base.helper.controller", "com.zk.base.helper.dao"})
@@ -48,7 +51,7 @@ import org.springframework.context.annotation.ImportResource;
                 "com.zk.base.helper.entity", "com.zk.base.helper.controller", "com.zk.base.helper.dao"
         },
         excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.zk.base.helper.mongo.*.*")
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.zk.base.helper.mongo.*.*")
         }
 )
 @ImportResource(locations = { "classpath:test_spring_context_dynamic_mybatis.xml" })
@@ -75,17 +78,13 @@ public class ZKBaseHelperSpringBootMain {
 //            appCtxBuilder = appCtxBuilder.properties("spring.config.location=classpath:/eureka/");
             // 定义配置文件名；默认：applicaiton；添加下面这一行后，不会读取 application.properties/yml
             // 配置文件；多个时，用英文逗号分隔；
-            appCtxBuilder = appCtxBuilder.properties("spring.config.name=test_mongodb");
+//            appCtxBuilder = appCtxBuilder.properties("spring.config.name=");
 
-            appCtxBuilder = appCtxBuilder.web(WebApplicationType.SERVLET);
-
+            appCtxBuilder = appCtxBuilder.web(WebApplicationType.NONE);
             SpringApplication app = appCtxBuilder.build();
-
             ctx = app.run(args);
         }
-
         return ctx;
-
     }
 
     public static void exit() {

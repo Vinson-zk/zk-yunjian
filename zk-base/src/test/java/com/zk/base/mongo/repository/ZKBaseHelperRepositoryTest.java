@@ -24,7 +24,7 @@ import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import com.zk.base.helper.ZKBaseHelperSpringBootMain;
+import com.zk.base.helper.ZKBaseHelperCtx;
 import com.zk.base.helper.mongo.doc.ZKBaseHelperDoc;
 import com.zk.base.helper.mongo.repository.ZKBaseHelperRepository;
 
@@ -53,7 +53,7 @@ public class ZKBaseHelperRepositoryTest {
     public void testGeneric() {
         try {
 
-            ConfigurableApplicationContext ctx = ZKBaseHelperSpringBootMain.run(new String[] {});
+            ConfigurableApplicationContext ctx = ZKBaseHelperCtx.run(new String[] {});
             TestCase.assertNotNull(ctx);
 
             ZKBaseHelperRepository zkBaseHelperRepository = ctx.getBean(ZKBaseHelperRepository.class);

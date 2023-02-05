@@ -16,7 +16,7 @@
 * @date Jun 14, 2022 10:52:55 AM 
 * @version V1.0 
 */
-package com.zk.log.interceptor;
+package com.zk.webmvc.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -110,7 +110,7 @@ public class ZKLogAccessInterceptor implements HandlerInterceptor {
             throws Exception {
 
         // 保存日志
-        ZKLogUtils.saveAccessLog(request, response, handler, ex);
+        ZKLogUtils.saveAccessLog(request, response, ex);
         // 打印JVM信息。
         // if (logger.isDebugEnabled()){
         // long beginTime = startTimeThreadLocal.get();//得到线程绑定的局部变量（开始时间）

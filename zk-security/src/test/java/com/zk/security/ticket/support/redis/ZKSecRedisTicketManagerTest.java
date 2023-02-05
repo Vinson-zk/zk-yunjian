@@ -23,7 +23,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import com.zk.security.ticket.ZKSecTestHelperTicketTestCtx;
 import com.zk.security.ticket.ZKSecTicketManager;
-import com.zk.security.ticket.ZKSecTicketManagerTest;
+import com.zk.security.ticket.ZKSecTicketManagerTestHelper;
 
 import junit.framework.TestCase;
 
@@ -35,14 +35,14 @@ import junit.framework.TestCase;
 */
 public class ZKSecRedisTicketManagerTest {
 
-    public static ZKSecTicketManagerTest ticketManagerTest;
+    public static ZKSecTicketManagerTestHelper ticketManagerTestHelper;
 
     static {
         try {
             ConfigurableApplicationContext ctx = ZKSecTestHelperTicketTestCtx.run(new String[] {});
             ZKSecTicketManager ticketManager = ctx.getBean(ZKSecRedisTicketManager.class);
             TestCase.assertNotNull(ticketManager);
-            ticketManagerTest = new ZKSecTicketManagerTest(ticketManager);
+            ticketManagerTestHelper = new ZKSecTicketManagerTestHelper(ticketManager);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -55,7 +55,7 @@ public class ZKSecRedisTicketManagerTest {
      */
     @Test
     public void testCreateSecTicket() {
-        ticketManagerTest.testCreateSecTicket();
+        ticketManagerTestHelper.testCreateSecTicket();
     }
 
     /**
@@ -63,7 +63,7 @@ public class ZKSecRedisTicketManagerTest {
      */
     @Test
     public void testCreateTicket() {
-        ticketManagerTest.testCreateTicket();
+        ticketManagerTestHelper.testCreateTicket();
     }
 
     /**
@@ -71,7 +71,7 @@ public class ZKSecRedisTicketManagerTest {
      */
     @Test
     public void testDropTicket() {
-        ticketManagerTest.testDropTicket();
+        ticketManagerTestHelper.testDropTicket();
     }
 
     /**
@@ -79,7 +79,7 @@ public class ZKSecRedisTicketManagerTest {
      */
     @Test
     public void testDropTicketByType() {
-        ticketManagerTest.testDropTicketByType();
+        ticketManagerTestHelper.testDropTicketByType();
     }
 
     /**
@@ -87,7 +87,7 @@ public class ZKSecRedisTicketManagerTest {
      */
     @Test
     public void testDropAll() {
-        ticketManagerTest.testDropAll();
+        ticketManagerTestHelper.testDropAll();
     }
 
     /**
@@ -95,7 +95,7 @@ public class ZKSecRedisTicketManagerTest {
      */
     @Test
     public void testUpdateTicket() {
-        ticketManagerTest.testUpdateTicket();
+        ticketManagerTestHelper.testUpdateTicket();
     }
 
     /**
@@ -103,7 +103,7 @@ public class ZKSecRedisTicketManagerTest {
      */
     @Test
     public void testStopAndStart() {
-        ticketManagerTest.testStopAndStart();
+        ticketManagerTestHelper.testStopAndStart();
     }
 
     /**
@@ -111,7 +111,7 @@ public class ZKSecRedisTicketManagerTest {
      */
     @Test
     public void testValidateTickets() {
-        ticketManagerTest.testValidateTickets();
+        ticketManagerTestHelper.testValidateTickets();
     }
 
     /**
@@ -119,7 +119,7 @@ public class ZKSecRedisTicketManagerTest {
      */
     @Test
     public void testFindTickeByPrincipal() {
-        ticketManagerTest.testFindTickeByPrincipal();
+        ticketManagerTestHelper.testFindTickeByPrincipal();
     }
 
 }

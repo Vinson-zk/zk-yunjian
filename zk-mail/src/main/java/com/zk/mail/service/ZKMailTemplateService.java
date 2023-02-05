@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Maps;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.base.service.ZKBaseService;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.exception.ZKCodeException;
 import com.zk.core.utils.ZKMsgUtils;
 import com.zk.core.utils.ZKStringUtils;
-import com.zk.core.web.ZKMsgRes;
 import com.zk.mail.dao.ZKMailTemplateDao;
 import com.zk.mail.entity.ZKMailTemplate;
 import com.zk.mail.entity.ZKMailTemplate.KeyLocale;
@@ -142,7 +142,7 @@ public class ZKMailTemplateService extends ZKBaseService<String, ZKMailTemplate,
             else {
                 if (mailType.getStatus().intValue() != ZKMailType.KeyStatus.normal) {
                     log.error("[>_<:20220526-1634-003] zk.mail.000002=邮件类型[{}]被禁用；", mailTemplate.getTypeCode());
-                    throw ZKCodeException.as("zk.mail.000002", "邮件类型[{}]被禁用", mailTemplate.getTypeCode());
+                    throw ZKCodeException.as("zk.mail.000002", "邮件类型[{}]被禁用", null, mailTemplate.getTypeCode());
                 }
                 else {
                     mailTemplate.setTypeId(mailType.getPkId());

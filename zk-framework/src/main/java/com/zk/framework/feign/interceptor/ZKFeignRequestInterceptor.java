@@ -11,7 +11,7 @@
 *
 * @Title: ZKFeignRequestInterceptor.java 
 * @author Vinson 
-* @Package com.zk.core.web.interceptor 
+* @Package com.zk.webmvc.interceptor 
 * @Description: TODO(simple description this file what to do. ) 
 * @date May 16, 2022 9:16:20 AM 
 * @version V1.0 

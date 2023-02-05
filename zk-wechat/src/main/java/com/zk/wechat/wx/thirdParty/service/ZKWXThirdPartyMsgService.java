@@ -118,8 +118,7 @@ public class ZKWXThirdPartyMsgService {
         catch(Exception e) {
             e.printStackTrace();
             log.error("[>_<:20180907-0747-001] 处理微信开放平台向第三方开发推送的信息异常！{}", rootElement.asXML());
-            throw ZKCodeException.as("zk.wechat.010004", "处理微信开放平台向第三方开发者推送的令牌信息异常", new String[] { appId },
-                    e.getMessage());
+            throw ZKCodeException.as("zk.wechat.010004", "处理微信开放平台向第三方开发者推送的令牌信息异常", e.getMessage(), appId);
         }
     }
 

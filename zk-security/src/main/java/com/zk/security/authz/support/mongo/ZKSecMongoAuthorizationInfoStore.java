@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
+import com.zk.core.exception.ZKUnknownException.KeyExceptionType;
 import com.zk.core.utils.ZKObjectUtils;
 import com.zk.mongo.command.administration.ZKCreate;
 import com.zk.mongo.command.administration.ZKCreateIndexes;
@@ -89,7 +90,7 @@ public class ZKSecMongoAuthorizationInfoStore implements ZKSecAuthorizationInfoS
 
     public ZKSecMongoAuthorizationInfoStore(MongoTemplate mongoTemplate) {
         if (mongoTemplate == null) {
-            throw new ZKSecCodeException("zk.sec.000011", null, null, "权限信息存储初始化配置异常");
+            throw new ZKSecCodeException(KeyExceptionType.general, "zk.sec.000011", "权限信息存储初始化配置异常");
         }
         this.mongoTemplate = mongoTemplate;
         createAuthorizationInfoStoreCollection();

@@ -43,37 +43,6 @@
 			<version>${version.zk.mongo}</version>
 		</dependency>
 		
-		<!-- ***** spring begin -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-			<!-- 排除自带的logback依赖 -->
-			<exclusions>
-	            <exclusion>
-	                <groupId>org.springframework.boot</groupId>
-	                <artifactId>spring-boot-starter-logging</artifactId>
-	            </exclusion>
-	        </exclusions> 
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-json</artifactId>
-		</dependency>
-		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-		<!-- ##### spring end -->
-		
-		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-		</dependency>
-		
 		<!-- ***** shiro begin -->
 		<dependency>
 		    <groupId>org.apache.shiro</groupId>
@@ -81,66 +50,13 @@
 		</dependency>
 		<!-- ##### shiro end -->
 		
-		<!-- ***** mongo begin -->
-		<dependency>
-		    <groupId>org.springframework.data</groupId>
-		    <artifactId>spring-data-mongodb</artifactId>
-		    <exclusions>
-		        <exclusion>
-		            <artifactId>spring-data-commons</artifactId>
-		            <groupId>org.springframework.data</groupId>
-		        </exclusion>
-		    </exclusions>
-		</dependency>
-		<!-- <dependency>
-		    <groupId>org.mongodb</groupId>
-		    <artifactId>mongodb-driver</artifactId>
-		</dependency> -->
-		<!-- ##### mongo end -->
-		
-		<!-- ***** log4j begin -->
-		<dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-starter-log4j</artifactId>
-	    </dependency>
-	    <dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-log4j12</artifactId>
-		    <!-- <scope>test</scope> -->
-		</dependency>
-		<!-- ##### log4j end -->
-		
-		<!-- ***** other begin -->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>com.google.code.gson</groupId>
-		    <artifactId>gson</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>commons-codec</groupId>
-		    <artifactId>commons-codec</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>commons-io</groupId>
-		    <artifactId>commons-io</artifactId>
-		</dependency>
+		<!-- ***** begin test -->
 		<dependency>
 			<groupId>junit</groupId>
    			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
-		<!-- ##### other end -->
+        <!-- ##### end test -->
+
 	</dependencies>
 	
 	<build>
@@ -151,7 +67,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            -->
+	        -->
 		</plugins>
 		
 	</build>

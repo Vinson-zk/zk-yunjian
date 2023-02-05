@@ -33,16 +33,17 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.commons.data.ZKJsonArray;
 import com.zk.core.exception.ZKCodeException;
 import com.zk.core.exception.ZKMsgException;
+import com.zk.core.exception.ZKUnknownException.KeyExceptionType;
 import com.zk.core.exception.ZKValidatorException;
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.core.utils.ZKEncodingUtils;
 import com.zk.core.utils.ZKJsonUtils;
 import com.zk.core.utils.ZKStringUtils;
-import com.zk.core.web.ZKMsgRes;
 
 /** 
 * @ClassName: ZKBaseController 
@@ -118,7 +119,7 @@ public class ZKBaseController {
     @ExceptionHandler({ BindException.class })
     public String bindException(BindException e) {
         // zk.000005=请求参数解析失败
-        ZKMsgRes msgRes = new ZKMsgRes("zk.000005", null, e);
+        ZKMsgRes msgRes = ZKMsgRes.as("zk.000005", null, e);
         return msgRes.toString();
     }
 
@@ -134,7 +135,8 @@ public class ZKBaseController {
      */
     @ExceptionHandler({ ZKValidatorException.class })
     public String bindException(ZKValidatorException zkValidatorE) {
-        ZKMsgRes msgRes = new ZKMsgRes("zk.000002", null, zkValidatorE.getMessagePropertyAndMessageAsList());
+        ZKMsgRes msgRes = ZKMsgRes.as(KeyExceptionType.dataValidator, null, "zk.000002", null,
+                zkValidatorE.getMessagePropertyAndMessageAsMap());
         return msgRes.toString();
     }
 
@@ -187,7 +189,7 @@ public class ZKBaseController {
     public String bindException(Exception e) {
         log.error("[>_<:20200821-1121-001] exception class:{}",
                 e.getClass().getName());
-        ZKMsgRes msgRes = new ZKMsgRes("zk.1", null, e.getMessage());
+        ZKMsgRes msgRes = ZKMsgRes.as("zk.1", e.getMessage());
         return msgRes.toString();
     }
 

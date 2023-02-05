@@ -41,11 +41,11 @@ public class ZKSecTicketException extends ZKSecCodeException {
      * @param code
      */
     public ZKSecTicketException(String code) {
-        super(code); // TODO Auto-generated constructor stub
+        super(KeyExceptionType.authentication, code); // TODO Auto-generated constructor stub
     }
 
-    public ZKSecTicketException(String code, String msg, Object[] msgArgs, Object data) {
-        super(code, msg, msgArgs, data);
+    public ZKSecTicketException(String code, String msg, Object data, Object... msgArgs) {
+        super(KeyExceptionType.authentication, code, msg, data, msgArgs);
     }
 
 }

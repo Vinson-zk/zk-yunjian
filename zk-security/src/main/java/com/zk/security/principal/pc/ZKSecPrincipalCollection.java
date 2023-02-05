@@ -31,29 +31,29 @@ import com.zk.security.principal.ZKSecPrincipal;
 * @author Vinson 
 * @version 1.0 
 */
-public interface ZKSecPrincipalCollection extends Serializable, Iterable<ZKSecPrincipal<?>> {
+public interface ZKSecPrincipalCollection<ID> extends Serializable, Iterable<ZKSecPrincipal<ID>> {
 
-    ZKSecPrincipal<?> getPrimaryPrincipal();
+    ZKSecPrincipal<ID> getPrimaryPrincipal();
 
-    ZKSecPrincipal<?> getPrimaryPrincipal(String realmName);
+    ZKSecPrincipal<ID> getPrimaryPrincipal(String realmName);
 
-    void add(String realmName, ZKSecPrincipal<?> p);
+    void add(String realmName, ZKSecPrincipal<ID> p);
 
-    void addAll(String realmName, Collection<ZKSecPrincipal<?>> ps);
+    void addAll(String realmName, Collection<ZKSecPrincipal<ID>> ps);
 
-    void addAll(ZKSecPrincipalCollection pc);
+    void addAll(ZKSecPrincipalCollection<ID> pc);
 
-    Collection<ZKSecPrincipal<?>> getByRealmName(String realmName);
+    Collection<ZKSecPrincipal<ID>> getByRealmName(String realmName);
 
     boolean isEmpty();
 
-    Set<ZKSecPrincipal<?>> asSet();
+    Set<ZKSecPrincipal<ID>> asSet();
 
     int size();
 
     Set<String> getRealmNames();
 
-    Set<Entry<String, Set<ZKSecPrincipal<?>>>> asEntrySet();
+    Set<Entry<String, Set<ZKSecPrincipal<ID>>>> asEntrySet();
 
 }
 

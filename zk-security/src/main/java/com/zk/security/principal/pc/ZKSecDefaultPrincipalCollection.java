@@ -35,22 +35,22 @@ import com.zk.security.principal.ZKSecPrincipal;
 * @author Vinson 
 * @version 1.0 
 */
-public class ZKSecDefaultPrincipalCollection implements ZKSecPrincipalCollection {
+public class ZKSecDefaultPrincipalCollection<ID> implements ZKSecPrincipalCollection<ID> {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
-    private Map<String, Set<ZKSecPrincipal<?>>> realmPrincipals;
+    private Map<String, Set<ZKSecPrincipal<ID>>> realmPrincipals;
 
     @Override
-    public Set<ZKSecPrincipal<?>> asSet() {
+    public Set<ZKSecPrincipal<ID>> asSet() {
         if (realmPrincipals == null || realmPrincipals.isEmpty()) {
             return Collections.emptySet();
         }
-        Set<ZKSecPrincipal<?>> ps = new LinkedHashSet<>();
-        for (Set<ZKSecPrincipal<?>> ss : realmPrincipals.values()) {
+        Set<ZKSecPrincipal<ID>> ps = new LinkedHashSet<>();
+        for (Set<ZKSecPrincipal<ID>> ss : realmPrincipals.values()) {
             ps.addAll(ss);
         }
         if (ps.isEmpty()) {
@@ -60,7 +60,7 @@ public class ZKSecDefaultPrincipalCollection implements ZKSecPrincipalCollection
     }
 
     @Override
-    public Set<Entry<String, Set<ZKSecPrincipal<?>>>> asEntrySet() {
+    public Set<Entry<String, Set<ZKSecPrincipal<ID>>>> asEntrySet() {
         if (realmPrincipals == null || realmPrincipals.isEmpty()) {
             return Collections.emptySet();
         }
@@ -73,17 +73,17 @@ public class ZKSecDefaultPrincipalCollection implements ZKSecPrincipalCollection
     }
 
     @Override
-    public Iterator<ZKSecPrincipal<?>> iterator() {
+    public Iterator<ZKSecPrincipal<ID>> iterator() {
         return asSet().iterator();
     }
 
     @Override
-    public ZKSecPrincipal<?> getPrimaryPrincipal() {
+    public ZKSecPrincipal<ID> getPrimaryPrincipal() {
         if (isEmpty()) {
             return null;
         }
-        Iterator<ZKSecPrincipal<?>> iterator = iterator();
-        ZKSecPrincipal<?> p = null;
+        Iterator<ZKSecPrincipal<ID>> iterator = iterator();
+        ZKSecPrincipal<ID> p = null;
         while (iterator.hasNext()) {
             p = iterator.next();
             if (p.isPrimary()) {
@@ -94,14 +94,14 @@ public class ZKSecDefaultPrincipalCollection implements ZKSecPrincipalCollection
     }
 
     @Override
-    public ZKSecPrincipal<?> getPrimaryPrincipal(String realmName) {
+    public ZKSecPrincipal<ID> getPrimaryPrincipal(String realmName) {
         if (isEmpty()) {
             return null;
         }
-        Set<ZKSecPrincipal<?>> sets = this.getPrincipalsLazy(realmName);
-        ZKSecPrincipal<?> p = null;
+        Set<ZKSecPrincipal<ID>> sets = this.getPrincipalsLazy(realmName);
+        ZKSecPrincipal<ID> p = null;
         if (sets != null && !sets.isEmpty()) {
-            for (ZKSecPrincipal<?> t : sets) {
+            for (ZKSecPrincipal<ID> t : sets) {
                 p = t;
                 if (p.isPrimary()) {
                     break;
@@ -112,7 +112,7 @@ public class ZKSecDefaultPrincipalCollection implements ZKSecPrincipalCollection
     }
 
     @Override
-    public void add(String realmName, ZKSecPrincipal<?> principal) {
+    public void add(String realmName, ZKSecPrincipal<ID> principal) {
         if (realmName == null) {
             throw new IllegalArgumentException("realmName argument cannot be null.");
         }
@@ -123,7 +123,7 @@ public class ZKSecDefaultPrincipalCollection implements ZKSecPrincipalCollection
     }
 
     @Override
-    public void addAll(String realmName, Collection<ZKSecPrincipal<?>> principals) {
+    public void addAll(String realmName, Collection<ZKSecPrincipal<ID>> principals) {
         if (realmName == null) {
             throw new IllegalArgumentException("realmName argument cannot be null.");
         }
@@ -136,11 +136,11 @@ public class ZKSecDefaultPrincipalCollection implements ZKSecPrincipalCollection
         getPrincipalsLazy(realmName).addAll(principals);
     }
 
-    protected Set<ZKSecPrincipal<?>> getPrincipalsLazy(String realmName) {
+    protected Set<ZKSecPrincipal<ID>> getPrincipalsLazy(String realmName) {
         if (realmPrincipals == null) {
-            realmPrincipals = new LinkedHashMap<String, Set<ZKSecPrincipal<?>>>();
+            realmPrincipals = new LinkedHashMap<String, Set<ZKSecPrincipal<ID>>>();
         }
-        Set<ZKSecPrincipal<?>> principals = realmPrincipals.get(realmName);
+        Set<ZKSecPrincipal<ID>> principals = realmPrincipals.get(realmName);
         if (principals == null) {
             principals = new LinkedHashSet<>();
             realmPrincipals.put(realmName, principals);
@@ -157,7 +157,7 @@ public class ZKSecDefaultPrincipalCollection implements ZKSecPrincipalCollection
     }
 
     @Override
-    public Collection<ZKSecPrincipal<?>> getByRealmName(String realmName) {
+    public Collection<ZKSecPrincipal<ID>> getByRealmName(String realmName) {
         if (!isEmpty()) {
             return this.realmPrincipals.get(realmName);
         }
@@ -173,12 +173,12 @@ public class ZKSecDefaultPrincipalCollection implements ZKSecPrincipalCollection
     }
 
     @Override
-    public void addAll(ZKSecPrincipalCollection pc) {
+    public void addAll(ZKSecPrincipalCollection<ID> pc) {
         if (realmPrincipals == null) {
-            realmPrincipals = new LinkedHashMap<String, Set<ZKSecPrincipal<?>>>();
+            realmPrincipals = new LinkedHashMap<String, Set<ZKSecPrincipal<ID>>>();
         }
         if (pc != null && !pc.isEmpty()) {
-            for (Entry<String, Set<ZKSecPrincipal<?>>> o : pc.asEntrySet()) {
+            for (Entry<String, Set<ZKSecPrincipal<ID>>> o : pc.asEntrySet()) {
                 if (o.getValue() != null && !o.getValue().isEmpty()) {
                     this.addAll(o.getKey(), o.getValue());
                 }

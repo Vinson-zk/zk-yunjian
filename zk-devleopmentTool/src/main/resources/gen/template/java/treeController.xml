@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.zk.base.controller.ZKBaseController;
 import com.zk.core.commons.data.ZKPage;
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.commons.ZKMsgRes;
 
 import ${zkModule.packagePrefix}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.entity.${zkTableInfo.className};
 import ${zkModule.packagePrefix}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.service.${zkTableInfo.className}Service;       

@@ -28,23 +28,19 @@ import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactor
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.EnableWebMvcConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.netflix.eureka.MutableDiscoveryClientOptionalArgs;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import com.zk.core.utils.ZKEnvironmentUtils;
-import com.zk.core.utils.ZKLocaleUtils;
 import com.zk.core.web.filter.ZKCrosFilter;
-import com.zk.core.web.resolver.ZKExceptionHandlerResolver;
-import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.framework.serCen.ZKSerCenEncrypt;
 import com.zk.framework.serCen.eureka.ZKEurekaTransportClientFactories;
 import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
-import com.zk.log.interceptor.ZKLogAccessInterceptor;
+import com.zk.webmvc.configuration.ZKWebmvcConfiguration;
+import com.zk.webmvc.handler.ZKExceptionHandlerResolver;
+import com.zk.webmvc.interceptor.ZKLogAccessInterceptor;
 
 /** 
 * @ClassName: ZKZuulBeforeConfiguration 
@@ -67,10 +63,7 @@ import com.zk.log.interceptor.ZKLogAccessInterceptor;
     EnableWebMvcConfiguration.class,
     ServletWebServerFactoryAutoConfiguration.class,
 })
-public class ZKZuulBeforeConfiguration {
-
-    @Autowired
-    private ApplicationContext applicationContext;
+public class ZKZuulBeforeConfiguration extends ZKWebmvcConfiguration {
 
     // # 文件上传，最大上传大小，需要比邮件附件单个的文件大小配置值要大；50M=52428800
     @Value("${zk.mail.file.upload.multipartResolver.maxInMemorySize:52428800}")
@@ -88,28 +81,10 @@ public class ZKZuulBeforeConfiguration {
     @Value("${zk.mail.file.upload.multipartResolver.defaultEncoding:UTF-8}")
     String defaultEncoding;
 
-//    @PostConstruct
-//    public void postConstruct() {
-//        // 方法在 @Autowired before 后执行
-//        System.out.println("[^_^:20220614-1940-001] ===== ZKZuulBeforeConfiguration class postConstruct "
-//                + this.applicationContext);
-//    }
-
     @Autowired
-    public void before(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
-        System.out.println("[^_^:20220614-1940-001] -------- configuration before begin... ... " + this.getClass());
-
-        ZKEnvironmentUtils.initContext(applicationContext);
-//        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("en_US"));
-//        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("zh_CN"));
-//        // # 默认语言；注意这里不影响到 localeResolver 的默认语言
-        ZKWebUtils.setLocale(
-                ZKLocaleUtils.distributeLocale(ZKEnvironmentUtils.getString("zk.zuul.default.locale", "zh_CN")));
-
-        // 设置下 RequestMappingHandlerAdapter 的 ignoreDefaultModelOnRedirect=true,
-        // 这样可以提高效率，避免不必要的检索。
-        requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
-        System.out.println("[^_^:20220614-1940-001] -------- configuration before end______ " + this.getClass());
+    public void beforeZuul() {
+        System.out.println("[^_^:20220614-1940-001] === [" + ZKZuulBeforeConfiguration.class.getSimpleName() + "] " + this);
+        System.out.println("[^_^:20220614-1940-001] --- [" + ZKZuulBeforeConfiguration.class.getSimpleName() + "] " + this);
     }
 
     /**

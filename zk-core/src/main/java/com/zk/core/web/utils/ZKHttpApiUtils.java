@@ -11,7 +11,7 @@
  *
  * @Title: ZKHttpApiUtils.java 
  * @author Vinson 
- * @Package com.zk.core.web.utils 
+ * @Package com.zk.webmvc.utils 
  * @Description: TODO(simple description this file what to do.) 
  * @date Dec 12, 2019 9:54:59 AM 
  * @version V1.0   
@@ -257,7 +257,7 @@ public class ZKHttpApiUtils {
             // 配置不存在
 //            throw new ZKUnknownException(String.format("配置的 API 地址错误; {key:%s, url:%s}", key, url));
             // 环境配置项目有误
-            throw ZKCodeException.as("zk.000003", "环境配置项目有误", null,
+            throw ZKCodeException.as("zk.000003", "环境配置项目有误",
                     String.format("配置的 API 地址错误; {key:%s, url:%s}", key, url));
         }
         return url;

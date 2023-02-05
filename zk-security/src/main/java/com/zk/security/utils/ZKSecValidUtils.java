@@ -96,7 +96,7 @@ public class ZKSecValidUtils {
     public static void putLoginFailNum(String id, int num) {
         logger.info("[^_^:20171219-1004-002] put login fail num by key -> {}, num -> {}", id, num);
         try {
-            getLoginFailNumCache(id).put(id, Integer.valueOf(num));
+            getLoginFailNumCache(id).put(KEY_LOGIN_FAIL_NUM, Integer.valueOf(num));
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -153,7 +153,7 @@ public class ZKSecValidUtils {
     public static void putValidCode(String captchaId, String code) {
         logger.info("[^_^:20171219-1004-005] put valid code cache by captchaId -> {}, code -> {}", captchaId, code);
         try {
-            getValidCodeCache(captchaId).put("_code", code);
+            getValidCodeCache(captchaId).put(KEY_CAPTCHA, code);
         }
         catch(Exception e) {
             e.printStackTrace();

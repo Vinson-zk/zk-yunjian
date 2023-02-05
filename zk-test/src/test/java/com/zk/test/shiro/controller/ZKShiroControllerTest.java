@@ -31,7 +31,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.zk.core.utils.ZKJsonUtils;
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.test.shiro.ZKShiroTestHelperSpringBootMain;
 import com.zk.test.shiro.common.ZKShiroConstants;
 

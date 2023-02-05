@@ -16,7 +16,7 @@
 * @date Jul 4, 2021 10:52:46 AM 
 * @version V1.0 
 */
-package com.zk.security.controller;
+package com.zk.sec.controller;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,11 +29,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.utils.ZKJsonUtils;
-import com.zk.core.web.ZKMsgRes;
+import com.zk.sec.helper.ZKSecTestHelperSpringBootMain;
+import com.zk.sec.helper.controller.ZKSecHelperController;
 import com.zk.security.common.ZKSecConstants;
-import com.zk.security.helper.ZKSecTestHelperSpringBootMain;
-import com.zk.security.helper.controller.ZKSecHelperController;
 
 import junit.framework.TestCase;
 
@@ -43,6 +43,7 @@ import junit.framework.TestCase;
 * @author Vinson 
 * @version 1.0 
 */
+@SuppressWarnings("deprecation")
 @RunWith(SpringRunner.class)
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @SpringBootTest(classes = ZKSecTestHelperSpringBootMain.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

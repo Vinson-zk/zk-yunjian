@@ -397,7 +397,7 @@ function f_zkTools(){
 
             // 数据记录行
             // 页码
-            param['page.no'] = param[keyOpt.pageNo];
+            param['page.no'] = param[keyOpt.pageNo] - 1;
             // 每页数据行数
             param['page.size'] = param[keyOpt.pageSize];
             // 数据总行数

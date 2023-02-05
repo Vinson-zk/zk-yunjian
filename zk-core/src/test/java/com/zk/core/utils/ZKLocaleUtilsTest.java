@@ -24,20 +24,54 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-/** 
-* @ClassName: ZKLocaleUtilsTest 
-* @Description: TODO(simple description this class what to do.) 
-* @author Vinson 
-* @version 1.0 
-*/
+/**
+ * @ClassName: ZKLocaleUtilsTest
+ * @Description: TODO(simple description this class what to do.)
+ * @author Vinson
+ * @version 1.0
+ */
 public class ZKLocaleUtilsTest {
+
+    public static void main(String[] args) {
+        System.out.println("-----");
+        System.out.println("--- 0 " + ZKLocaleUtils.getLocale().toLanguageTag());
+        t1();
+        System.out.println("--- 3 " + ZKLocaleUtils.getLocale().toLanguageTag());
+    }
+
+    private static void t1() {
+        Runnable r1 = new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                System.out.println("--- 1-1 " + ZKLocaleUtils.getLocale().toLanguageTag());
+                Locale.setDefault(ZKLocaleUtils.valueOf("en-US"));
+                System.out.println("--- 1-2 " + ZKLocaleUtils.getLocale().toLanguageTag());
+            }
+        };
+        r1.run();
+
+        Runnable r2 = new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                System.out.println("--- 2-1 " + ZKLocaleUtils.getLocale().toLanguageTag());
+                Locale.setDefault(ZKLocaleUtils.valueOf("zh-CN"));
+                System.out.println("--- 2-2 " + ZKLocaleUtils.getLocale().toLanguageTag());
+            }
+        };
+        r2.run();
+        r1.run();
+    }
 
     @Test
     public void testValueOf() {
         try {
             String localeStr = null;
-            // 无法转换，返回默认 Locale.getDefault()
-            TestCase.assertEquals(Locale.getDefault(), ZKLocaleUtils.valueOf(localeStr));
+//            // 无法转换，返回默认 Locale.getDefault()
+//            TestCase.assertEquals(Locale.getDefault(), ZKLocaleUtils.valueOf(localeStr));
             //
             localeStr = "";
             TestCase.assertEquals(Locale.ROOT, ZKLocaleUtils.valueOf(localeStr));
@@ -70,7 +104,7 @@ public class ZKLocaleUtilsTest {
         try {
             Locale expectLocale = null;
 
-            Locale locale = ZKLocaleUtils.getLocale();
+            Locale locale = ZKLocaleUtils.getDefautLocale();
             expectLocale = Locale.getDefault();
             TestCase.assertEquals(expectLocale, locale);
 

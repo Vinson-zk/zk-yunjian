@@ -28,10 +28,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.exception.ZKCodeException;
 import com.zk.core.exception.ZKMsgException;
 import com.zk.core.utils.ZKJsonUtils;
-import com.zk.core.web.ZKMsgRes;
 
 /** 
 * @ClassName: ZKShiroBaseFilter 
@@ -60,8 +60,7 @@ public abstract class ZKShiroBaseFilter extends AccessControlFilter {
 
         }
         catch(Exception e) {
-            resMsg = new ZKMsgRes();
-            resMsg.setCode("zk.core.1");
+            resMsg = ZKMsgRes.as("zk.1");
             resMsg.setData(e.getMessage());
         }
         String resStr = ZKJsonUtils.writeObjectJson(resMsg);

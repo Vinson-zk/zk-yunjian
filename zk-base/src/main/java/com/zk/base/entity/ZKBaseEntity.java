@@ -34,6 +34,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zk.core.commons.data.ZKJson;
+import com.zk.core.commons.data.ZKValidationGroup;
 import com.zk.core.utils.ZKClassUtils;
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.core.utils.ZKIdUtils;
@@ -41,7 +42,8 @@ import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKUpdate;
 import com.zk.db.entity.ZKDBBaseEntity;
-import com.zk.security.utils.ZKSecSecurityUtils;
+import com.zk.security.service.ZKSecPrincipalService;
+import com.zk.security.utils.ZKSecPrincipalUtils;
 
 /** 
 * @ClassName: ZKBaseEntity 
@@ -75,7 +77,7 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
 
     // 实体编号（唯一标识）
     @ZKColumn(name = "c_pk_id", isPk = true, query = @ZKQuery(value = true, isCaseSensitive = true))
-    @NotNull(message = "{zk.core.data.validation.notNull}")
+    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.Insert.class })
     protected ID pkId;
 
     // 创建者, ID
@@ -87,12 +89,13 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
     protected ID updateUserId;
 
     // 创建日期
-    @NotNull(message = "{zk.core.data.validation.notNull}")
+    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.Insert.class })
     @ZKColumn(name = "c_create_date", javaType = Date.class)
     protected Date createDate;
 
     // 更新日期
-    @NotNull(message = "{zk.core.data.validation.notNull}")
+    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.Update.class,
+            ZKValidationGroup.Update.class })
     @ZKColumn(name = "c_update_date", javaType = Date.class, update = @ZKUpdate(true))
     protected Date updateDate;
 
@@ -433,7 +436,10 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
         if (this.getPkId() == null || "".equals(pkId.toString())) {
             this.setPkId(this.genId());
         }
-        this.createUserId = ZKSecSecurityUtils.getUserId();
+        ZKSecPrincipalService sps = ZKSecPrincipalUtils.getSecPrincipalService();
+        if (sps != null) {
+            this.createUserId = sps.getUserId();
+        }
         this.updateUserId = this.createUserId;
         this.createDate = new Date();
         this.updateDate = this.createDate;
@@ -449,7 +455,10 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
      * 更新之前执行方法，子类实现
      */
     public void preUpdate() {
-        this.updateUserId = ZKSecSecurityUtils.getUserId();
+        ZKSecPrincipalService sps = ZKSecPrincipalUtils.getSecPrincipalService();
+        if (sps != null) {
+            this.updateUserId = sps.getUserId();
+        }
         this.updateDate = new Date();
     }
 

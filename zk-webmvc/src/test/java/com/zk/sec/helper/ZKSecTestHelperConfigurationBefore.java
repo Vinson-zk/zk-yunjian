@@ -16,21 +16,20 @@
 * @date Aug 4, 2021 12:31:55 AM 
 * @version V1.0 
 */
-package com.zk.security.helper;
+package com.zk.sec.helper;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.Primary;
 
-import com.zk.core.redis.ZKJedisOperatorStringKey;
-import com.zk.core.web.resolver.ZKExceptionHandlerResolver;
+import com.zk.security.helper.ZKSecTestHelperMongoConfiguration;
+import com.zk.security.helper.ZKSecTestHelperRedisConfiguration;
 import com.zk.security.helper.realm.ZKSecTestRealm;
 import com.zk.security.ticket.ZKSecTicketManager;
-import com.zk.security.ticket.support.redis.ZKSecRedisTicketManager;
 import com.zk.security.web.mgt.ZKSecWebSecurityManager;
 import com.zk.security.web.support.spring.ZKSecStaticMethodMatcherPointcutAdvisor;
+import com.zk.webmvc.handler.ZKExceptionHandlerResolver;
 
 /** 
 * @ClassName: ZKSecTestHelperConfigurationBefore 
@@ -39,23 +38,19 @@ import com.zk.security.web.support.spring.ZKSecStaticMethodMatcherPointcutAdviso
 * @version 1.0 
 */
 @Configuration
-@AutoConfigureAfter(value = { ZKSecTestHelperMongoConfiguration.class, ZKSecTestHelperRedisConfiguration.class })
-@ImportResource(locations = { "classpath:xmlConfig/spring_ctx_application.xml",
-        "classpath:xmlConfig/spring_ctx_mvc.xml", "classpath:test_spring_ctx.xml" })
+@AutoConfigureAfter(value = { //
+        ZKSecTestHelperMongoConfiguration.class, //
+        ZKSecTestHelperRedisConfiguration.class, // 
+})
+@ImportResource(locations = { //
+        "classpath:xmlConfig/spring_ctx_application.xml", //
+        "classpath:xmlConfig/spring_ctx_mvc.xml", //
+        "classpath:sec/test_spring_ctx.xml", //
+})
 public class ZKSecTestHelperConfigurationBefore {
 
-    /**
-     * 异常处理适配器
-     *
-     * @Title: zkExceptionHandlerResolver
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Aug 21, 2020 11:13:24 AM
-     * @return
-     * @return ZKExceptionHandlerResolver
-     */
     @Bean
-    public ZKExceptionHandlerResolver zkExceptionHandlerResolver() {
+    public ZKExceptionHandlerResolver exceptionHandlerResolver() {
         return new ZKExceptionHandlerResolver();
     }
 
@@ -73,17 +68,6 @@ public class ZKSecTestHelperConfigurationBefore {
         ZKSecTestRealm realm = new ZKSecTestRealm();
         realm.setTicketManager(zkSecTicketManager);
         return realm;
-    }
-
-//    @Bean
-//    public ZKSecMongoTicketManager zkSecMongoTicketManager(MongoTemplate mongoTemplate) {
-//        return new ZKSecMongoTicketManager(mongoTemplate);
-//    }
-
-    @Primary
-    @Bean
-    public ZKSecRedisTicketManager zkSecRedisTicketManager(ZKJedisOperatorStringKey jedisOperatorStringKey) {
-        return new ZKSecRedisTicketManager(jedisOperatorStringKey);
     }
 
     @Bean

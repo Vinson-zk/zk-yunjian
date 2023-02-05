@@ -30,6 +30,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.reactive.config.EnableWebFlux;
 
 /** 
 * @ClassName: ZKGatewaySpringBootMain 
@@ -37,15 +38,19 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 * @author Vinson 
 * @version 1.0 
 */
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class, TransactionAutoConfiguration.class,
+@SpringBootApplication(exclude = { 
+        DataSourceAutoConfiguration.class, 
+        TransactionAutoConfiguration.class,
 //        HibernateJpaAutoConfiguration.class,
 //        MongoAutoConfiguration.class,
 //        WebMvcAutoConfiguration.class,
 })
+@EnableWebFlux
 @EnableEurekaClient
 @EnableTransactionManagement(proxyTargetClass = true)
 //@AutoConfigureOrder(value = Ordered.HIGHEST_PRECEDENCE)
-@ComponentScan(basePackages = { "com.zk.gateway.*", "com.zk.log.*" })
+//@ComponentScan(basePackages = { "com.zk.gateway.*", "com.zk.log.*" })
+@ComponentScan(basePackages = { "com.zk.gateway.*" })
 public class ZKGatewaySpringBootMain {
 
     protected static Logger log = LoggerFactory.getLogger(ZKGatewaySpringBootMain.class);

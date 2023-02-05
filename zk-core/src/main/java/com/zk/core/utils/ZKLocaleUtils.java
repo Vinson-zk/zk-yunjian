@@ -22,9 +22,6 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.servlet.LocaleResolver;
-
-import com.zk.core.web.handler.ZKLocaleResolver;
 
 /** 
 * @ClassName: ZKLocaleUtils 
@@ -126,18 +123,11 @@ public class ZKLocaleUtils {
 
     public static Locale getLocale() {
         Locale locale = null;
-        if (ZKEnvironmentUtils.isInit()) {
-            // 有环境 context
-            LocaleResolver localeResolver = ZKEnvironmentUtils.getApplicationContext().getBean(LocaleResolver.class);
-            if (localeResolver != null && (localeResolver instanceof ZKLocaleResolver)) {
-                locale = ((ZKLocaleResolver) localeResolver).getDefaultLocale();
-            }
-        }
         return locale == null ? getDefautLocale() : locale;
     }
 
     /**
-     * 无上下文环境，上下文环境请使用 ZKWebUtils
+     * 无上下文环境; 有上下文环境请使用 ZKWebUtils
      * 
      * 设置整个系统的默认语言
      *

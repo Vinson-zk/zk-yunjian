@@ -18,18 +18,14 @@
 */
 package com.zk.devleopment.tool.gen.configuration;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.Filter;
 import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.EnableWebMvcConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConfigurationPropertiesBindingPostProcessor;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.MutableDiscoveryClientOptionalArgs;
@@ -40,20 +36,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.zk.core.commons.ZKValidatorMessageInterpolator;
-import com.zk.core.utils.ZKEnvironmentUtils;
-import com.zk.core.utils.ZKLocaleUtils;
 import com.zk.core.web.filter.ZKCrosFilter;
-import com.zk.core.web.resolver.ZKExceptionHandlerResolver;
-import com.zk.core.web.utils.ZKWebUtils;
-import com.zk.db.dynamic.spring.dataSource.ZKDynamicDataSource;
-import com.zk.db.dynamic.spring.transaction.ZKDynamicTransactionManager;
 import com.zk.framework.serCen.ZKSerCenEncrypt;
 import com.zk.framework.serCen.eureka.ZKEurekaTransportClientFactories;
 import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
+import com.zk.webmvc.configuration.ZKWebmvcConfiguration;
+import com.zk.webmvc.handler.ZKExceptionHandlerResolver;
 
 /** 
 * @ClassName: ZKDevBeforeConfiguration 
@@ -63,59 +53,22 @@ import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
 */
 @Configuration
 @ImportResource(locations = { "classpath:xmlConfig/spring_ctx_application.xml",
-        "classpath:xmlConfig/spring_ctx_devleopment_tool_application.xml", "classpath:xmlConfig/spring_ctx_mvc.xml",
-        "classpath:xmlConfig/spring_ctx_dynamic_mybatis.xml" })
+        "classpath:xmlConfig/spring_ctx_devleopment_tool_application.xml", "classpath:xmlConfig/spring_ctx_mvc.xml" })
 //@ImportAutoConfiguration(classes = { ZKMongoAutoConfiguration.class })
-@AutoConfigureBefore(value = { 
-//        ZKMongoAutoConfiguration.class, 
-        ZKDevAfterConfiguration.class,
-        ZKDevShiroConfiguration.class,
-        EnableWebMvcConfiguration.class, 
-        ServletWebServerFactoryAutoConfiguration.class
-        })
-public class ZKDevBeforeConfiguration {
-
-    @Value("${zk.sys.db.dynamic.jdbc.username_w}")
-    private String dbUserName_w;
-
-    @Value("${zk.sys.db.dynamic.jdbc.password_w}")
-    private String dbPwd_w;
-
-    @Value("${zk.sys.db.dynamic.jdbc.username_r}")
-    private String dbUserName_r;
-
-    @Value("${zk.sys.db.dynamic.jdbc.password_r}")
-    private String dbPwd_r;
+@AutoConfigureBefore(value = { //
+//        ZKMongoAutoConfiguration.class, //
+        ZKDevAfterConfiguration.class, //
+        ZKDevJdbcConfiguration.class, //
+        ZKDevShiroConfiguration.class, //
+        WebMvcAutoConfiguration.class, //
+        ServletWebServerFactoryAutoConfiguration.class //
+})
+public class ZKDevBeforeConfiguration extends ZKWebmvcConfiguration {
 
     @Autowired
-    private ApplicationContext applicationContext;
-
-    @Autowired
-    ConfigurationPropertiesBindingPostProcessor configurationPropertiesBinder;
-
-    @PostConstruct
-    public void postConstruct() {
-        // 方法在 @Autowired before 后执行
-//        System.out.println("[^_^:20191219-2154-001] ===== ZKSerCenConfiguration class postConstruct ");
-//        System.out.println("[^_^:20191219-2154-001] ----- ZKSerCenConfiguration class postConstruct ");
-    }
-
-    @Autowired
-    public void before(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
-        System.out.println("[^_^:20200805-1808-001] -------- configuration before begin... ... " + this.getClass());
-
-        ZKEnvironmentUtils.initContext(applicationContext);
-//        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("en_US"));
-//        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("zh_CN"));
-//        // # 默认语言；注意这里不影响到 localeResolver 的默认语言
-        ZKWebUtils.setLocale(
-				ZKLocaleUtils.distributeLocale(ZKEnvironmentUtils
-						.getString("zk.default.locale", "zh_CN")));
-
-        // 设置下 RequestMappingHandlerAdapter 的 ignoreDefaultModelOnRedirect=true,
-        // 这样可以提高效率，避免不必要的检索。
-        requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
-        System.out.println("[^_^:20200805-1808-001] -------- configuration before end______ " + this.getClass());
+    public void beforeDev() {
+        System.out.println("[^_^:20200805-1808-001] === [" + ZKDevBeforeConfiguration.class.getSimpleName() + "] " + this);
+        System.out.println("[^_^:20200805-1808-001] --- [" + ZKDevBeforeConfiguration.class.getSimpleName() + "] " + this);
     }
 
     @Bean
@@ -132,85 +85,6 @@ public class ZKDevBeforeConfiguration {
 //        zkCrosFilterInitParams.put(ParamsName.allowHeaders, "__SID,locale,Lang,X-Requested-With");
 //        filterRegistrationBean.setInitParameters(zkCrosFilterInitParams);
         return filterRegistrationBean;
-    }
-
-//    /**
-//     * mongo 属性配置
-//     *
-//     * @Title: zkMongoProperties
-//     * @Description: TODO(simple description this method what to do.)
-//     * @author Vinson
-//     * @date Oct 28, 2019 3:02:22 PM
-//     * @return
-//     * @return ZKMongoProperties
-//     */
-//    @Bean
-//    @ConfigurationProperties(prefix = "zk.sys.mongodb")
-//    public ZKMongoProperties zkMongoProperties() {
-//        return new ZKMongoProperties();
-//    }
-
-    /**
-     * 数据源
-     *
-     * @Title: parentDataSource
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Oct 28, 2019 3:02:07 PM
-     * @return
-     * @return DruidDataSource
-     */
-//    @Primary
-    @Bean("parentDataSource")
-    @ConfigurationProperties(prefix = "zk.sys.db.dynamic.jdbc.druid.pool")
-    public DruidDataSource parentDataSource() {
-        return new DruidDataSource();
-    }
-
-    // 动态数据源
-    @Bean("zkDynamicDataSource")
-    public ZKDynamicDataSource zkDynamicDataSource() {
-
-        ZKDynamicDataSource zkDynamicDataSource = new ZKDynamicDataSource();
-
-        DruidDataSource dds_w = new DruidDataSource();
-        DruidDataSource dds_r = new DruidDataSource();
-
-        configurationPropertiesBinder.postProcessBeforeInitialization(dds_w, "parentDataSource");
-        configurationPropertiesBinder.postProcessBeforeInitialization(dds_r, "parentDataSource");
-
-        System.out.println("[^_^:20221010-0021-001] ====================================================");
-        System.out.println("[^_^:20221010-0021-001] 数据库链接：" + dds_w.getUrl());
-        System.out.println("[^_^:20221010-0021-001] ====================================================");
-
-        dds_w.setUsername(this.dbUserName_w);
-        dds_w.setPassword(dbPwd_w);
-
-        dds_r.setUsername(this.dbUserName_r);
-        dds_r.setPassword(dbPwd_r);
-
-        zkDynamicDataSource.setWriteDataSource(dds_w);
-        zkDynamicDataSource.setReadDataSource(dds_r);
-
-        return zkDynamicDataSource;
-    }
-
-    /**
-     * 动态数据源事务
-     *
-     * @Title: dynamicTransactionManager
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Oct 28, 2019 3:02:16 PM
-     * @param zkDynamicDataSource
-     * @return
-     * @return ZKDynamicTransactionManager
-     */
-    @Bean("dynamicTransactionManager")
-    public ZKDynamicTransactionManager dynamicTransactionManager(ZKDynamicDataSource zkDynamicDataSource) {
-        ZKDynamicTransactionManager zkDynamicTransactionManager = new ZKDynamicTransactionManager();
-        zkDynamicTransactionManager.setDataSource(zkDynamicDataSource);
-        return zkDynamicTransactionManager;
     }
 
     /**

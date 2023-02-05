@@ -28,9 +28,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zk.core.redis.ZKJedisOperatorByte;
 import com.zk.core.redis.ZKJedisOperatorStringKey;
-import com.zk.core.utils.ZKJsonUtils;
 
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -45,7 +45,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @PropertySources(value = { @PropertySource(value = { "classpath:zk.sys.redis.properties" }, encoding = "UTF-8") })
 public class ZKSysRedisConfiguration {
 
-    private static Logger logger = LoggerFactory.getLogger(ZKSysRedisConfiguration.class);
+    protected static Logger logger = LoggerFactory.getLogger(ZKSysRedisConfiguration.class);
 
     /*** jedis 整合 配置 ***/
     @Value("${zk.sys.redis.host:127.0.0.1}")
@@ -72,7 +72,8 @@ public class ZKSysRedisConfiguration {
     public JedisPool jedisPool(JedisPoolConfig jedisPoolConfig) {
         System.out.println("[^_^:20210809-1255-001] ===================================================");
         System.out.println(String.format("[^_^:20210809-1255-001] Redis 连接 hosr:%s, port:%s, password:%s", host, port, password));
-        System.out.println("[^_^:20210809-1255-001] Redis 连接 JedisPoolConfig:{}" + ZKJsonUtils.writeObjectJson(jedisPoolConfig));
+        System.out.println(
+                "[^_^:20210809-1255-001] Redis 连接 JedisPoolConfig:{}" + JSONObject.toJSONString(jedisPoolConfig));
         System.out.println("[^_^:20210809-1255-001] ===================================================");
 
         /** 单机模式 */

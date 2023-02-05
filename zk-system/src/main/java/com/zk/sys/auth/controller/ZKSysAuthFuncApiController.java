@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zk.base.controller.ZKBaseController;
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.sys.auth.entity.ZKSysAuthDefined;
 import com.zk.sys.auth.service.ZKSysAuthDefinedService;
 import com.zk.sys.auth.service.ZKSysAuthFuncApiService;

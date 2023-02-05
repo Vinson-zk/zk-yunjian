@@ -11,7 +11,7 @@
  *
  * @Title: ZKCrosFilter.java 
  * @author Vinson 
- * @Package com.zk.core.web.filter 
+ * @Package com.zk.webmvc.filter 
  * @Description: TODO(simple description this file what to do.) 
  * @date Dec 18, 2019 2:19:48 PM 
  * @version V1.0   
@@ -135,6 +135,22 @@ public class ZKCrosFilter implements Filter {
         if (ZKStringUtils.isNotBlank(arg0.getInitParameter(ParamsName.allowHeaders))) {
             allowHeaders = arg0.getInitParameter("allowHeaders");
         }
+    }
+
+    /**
+     * (not Javadoc)
+     * <p>
+     * Title: destroy
+     * </p>
+     * <p>
+     * Description:
+     * </p>
+     * 
+     * @see javax.servlet.Filter#destroy()
+     */
+    @Override
+    public void destroy() {
+        // TODO Auto-generated method stub
     }
 
 }

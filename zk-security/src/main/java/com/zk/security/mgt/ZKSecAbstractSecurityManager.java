@@ -146,8 +146,8 @@ public abstract class ZKSecAbstractSecurityManager implements ZKSecSecurityManag
      * @return
      */
     @Override
-    public boolean login(ZKSecSubject subject, ZKSecAuthenticationToken token) {
-        ZKSecPrincipalCollection pc = null;
+    public <ID> boolean login(ZKSecSubject subject, ZKSecAuthenticationToken token) {
+        ZKSecPrincipalCollection<ID> pc = null;
         try {
             pc = doAuthentication(subject, token);
             // 登录认证成功
@@ -171,7 +171,8 @@ public abstract class ZKSecAbstractSecurityManager implements ZKSecSecurityManag
      * @param pc
      * @param token
      */
-    public void onSuccessfulLogin(ZKSecSubject subject, ZKSecPrincipalCollection pc, ZKSecAuthenticationToken token) {
+    public <ID> void onSuccessfulLogin(ZKSecSubject subject, ZKSecPrincipalCollection<ID> pc,
+            ZKSecAuthenticationToken token) {
         // 1、将身份放入令牌中
         if (subject.getTicket(true) != null) {
             subject.getTicket(true).setPrincipalCollection(pc);
@@ -206,7 +207,8 @@ public abstract class ZKSecAbstractSecurityManager implements ZKSecSecurityManag
      * @param token
      * @return 返回认证结果的身份
      */
-    public abstract ZKSecPrincipalCollection doAuthentication(ZKSecSubject subject, ZKSecAuthenticationToken token);
+    public abstract <ID> ZKSecPrincipalCollection<ID> doAuthentication(ZKSecSubject subject,
+            ZKSecAuthenticationToken token);
 
     /**
      * 登出
@@ -239,7 +241,7 @@ public abstract class ZKSecAbstractSecurityManager implements ZKSecSecurityManag
      * @return true-鉴权成功；反之鉴权失败
      */
     @Override
-    public boolean checkPermission(ZKSecPrincipalCollection pc, String permissionCode) {
+    public <ID> boolean checkPermission(ZKSecPrincipalCollection<ID> pc, String permissionCode) {
         if (pc == null || pc.isEmpty()) {
             return false;
         }
@@ -255,7 +257,7 @@ public abstract class ZKSecAbstractSecurityManager implements ZKSecSecurityManag
      * @return true-鉴定成功；反之鉴定失败
      */
     @Override
-    public boolean checkApiCode(ZKSecPrincipalCollection pc, String apiCode) {
+    public <ID> boolean checkApiCode(ZKSecPrincipalCollection<ID> pc, String apiCode) {
         if (pc == null || pc.isEmpty()) {
             return false;
         }
@@ -270,7 +272,7 @@ public abstract class ZKSecAbstractSecurityManager implements ZKSecSecurityManag
      *            权限代码
      * @return true-鉴权成功；反之鉴权失败
      */
-    public abstract boolean doCheckPermission(ZKSecPrincipalCollection pc, String permissionCode);
+    public abstract <ID> boolean doCheckPermission(ZKSecPrincipalCollection<ID> pc, String permissionCode);
 
     /**
      * 鉴定 api接口权限 代码
@@ -280,13 +282,13 @@ public abstract class ZKSecAbstractSecurityManager implements ZKSecSecurityManag
      *            api 接口代码
      * @return true-鉴权成功；反之鉴权失败
      */
-    public abstract boolean doCheckApiCode(ZKSecPrincipalCollection pc, String apiCode);
+    public abstract <ID> boolean doCheckApiCode(ZKSecPrincipalCollection<ID> pc, String apiCode);
 
     /**
      * 用户在线数量控制策略
      */
     @Override
-    public void doPrincipalsCount(ZKSecPrincipalCollection pc) {
+    public <ID> void doPrincipalsCount(ZKSecPrincipalCollection<ID> pc) {
         this.getStrategy().doStrategyPrincipalsCount(realmSet, pc);
     }
 

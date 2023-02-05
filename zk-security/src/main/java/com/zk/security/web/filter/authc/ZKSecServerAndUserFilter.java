@@ -21,6 +21,7 @@ package com.zk.security.web.filter.authc;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import com.zk.core.exception.ZKUnknownException.KeyExceptionType;
 import com.zk.security.exception.ZKSecCodeException;
 import com.zk.security.subject.ZKSecSubject;
 import com.zk.security.utils.ZKSecSecurityUtils;
@@ -47,7 +48,7 @@ public class ZKSecServerAndUserFilter extends ZKSecBaseControlFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
         log.error("[>_<:20220514-0916-002] zk.sec.000018 无用户身份或无微服务身份");
-        throw new ZKSecCodeException("zk.sec.000018");
+        throw new ZKSecCodeException(KeyExceptionType.authentication, "zk.sec.000018");
     }
 
 }

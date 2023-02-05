@@ -37,8 +37,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zk.core.commons.ZKJsonObjectMapper;
 import com.zk.core.utils.ZKJsonUtils;
-import com.zk.core.web.ZKJsonObjectMapper;
 
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;

@@ -18,6 +18,7 @@
 */
 package com.zk.server.central.configuration;
 
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -31,6 +32,9 @@ import com.zk.core.web.filter.ZKDelegatingFilterProxyRegistrationBean;
 * @author Vinson 
 * @version 1.0 
 */
+@AutoConfigureBefore(value = { //
+        ZKSerCenAfterConfiguration.class, //
+})
 @Configuration
 @ImportResource(locations = { "classpath:xmlConfig/spring_ctx_sc_shiro.xml" })
 public class ZKSerCenShiroConfiguration {

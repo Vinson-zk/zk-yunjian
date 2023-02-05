@@ -48,12 +48,13 @@ public interface ZKSecProxyTickerManager extends ZKSecTicketManager {
      * 
      * @return
      */
-    public ZKSecPrincipalCollection getPrincipalCollection(Serializable identification);
+    public <ID> ZKSecPrincipalCollection<ID> getPrincipalCollection(Serializable identification);
 
     /**
      * 设置拥有者标识
      */
-    public void setPrincipalCollection(Serializable identification, ZKSecPrincipalCollection principalCollection);
+    public <ID> void setPrincipalCollection(Serializable identification,
+            ZKSecPrincipalCollection<ID> principalCollection);
 
     /**
      * 取令牌状态 0-正常 1-未启用

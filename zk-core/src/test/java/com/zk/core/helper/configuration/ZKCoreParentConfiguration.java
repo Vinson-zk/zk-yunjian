@@ -30,13 +30,10 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.zk.core.commons.ZKFileTransfer;
 import com.zk.core.commons.ZKValidatorMessageInterpolator;
 import com.zk.core.commons.support.ZKDiskFileTransfer;
-import com.zk.core.utils.ZKLocaleUtils;
-import com.zk.core.web.handler.support.ZKSessionLocaleResolver;
 
 /**
  * @ClassName: ZKCoreParentConfiguration
@@ -61,14 +58,14 @@ public class ZKCoreParentConfiguration {
     @Autowired
     public void step() {
 
-        System.out.println("[^_^:20190625-1716-001] -------- zkCoreServerPort:"
+        System.out.println("[^_^:20190625-1716-001] zkCoreServerPort:"
                 + env.getProperty("zk.core.server.port", Integer.class, 8080));
         System.out.println(
                 "[^_^:20190625-1716-001] -------- zk.core.server.port:" + env.getProperty("zk.core.server.port"));
-        System.out.println("[^_^:20190625-1716-001] -------- zk.path.admin:" + env.getProperty("zk.path.admin"));
-        System.out.println("[^_^:20190625-1716-001] -------- zk.path.core:" + env.getProperty("zk.path.core"));
-        System.out.println(
-                "[^_^:20190625-1716-001] -------- zk.core.default.locale:" + env.getProperty("zk.core.default.locale"));
+        System.out.println("[^_^:20190625-1716-001] zk.path.admin:" + env.getProperty("zk.path.admin"));
+        System.out.println("[^_^:20190625-1716-001] zk.path.core:" + env.getProperty("zk.path.core"));
+        System.out
+                .println("[^_^:20190625-1716-001] -------- zk.default.locale:" + env.getProperty("zk.default.locale"));
 
     }
 
@@ -84,14 +81,6 @@ public class ZKCoreParentConfiguration {
         multipartResolver.setMaxUploadSize(20971520);
         multipartResolver.setMaxInMemorySize(40960);
         return multipartResolver;
-    }
-
-    @Bean
-    public SessionLocaleResolver localeResolver() {
-        ZKSessionLocaleResolver zkSessionLocaleResolver = new ZKSessionLocaleResolver();
-        zkSessionLocaleResolver.setDefaultLocale(
-                ZKLocaleUtils.valueOf(env.getProperty("zk.core.default.locale", String.class, "en_US")));
-        return zkSessionLocaleResolver;
     }
 
     /**

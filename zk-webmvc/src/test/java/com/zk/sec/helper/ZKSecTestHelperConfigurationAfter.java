@@ -16,7 +16,7 @@
 * @date Aug 4, 2021 12:32:15 AM 
 * @version V1.0 
 */
-package com.zk.security.helper;
+package com.zk.sec.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -25,7 +25,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.Ordered;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.utils.ZKLocaleUtils;
@@ -39,7 +38,7 @@ import com.zk.core.web.utils.ZKWebUtils;
 * @version 1.0 
 */
 @Configuration
-@ImportResource(locations = { "classpath:test_spring_ctx_sec.xml" })
+@ImportResource(locations = { "classpath:sec/test_spring_ctx_sec.xml" })
 @AutoConfigureAfter(value = { ZKSecTestHelperConfigurationBefore.class })
 public class ZKSecTestHelperConfigurationAfter {
 
@@ -47,7 +46,7 @@ public class ZKSecTestHelperConfigurationAfter {
     private ApplicationContext applicationContext;
 
     @Autowired
-    public void before(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
+    public void before() { // RequestMappingHandlerAdapter requestMappingHandlerAdapter
         System.out.println("[^_^:20210705-1808-001] ===== " + this.getClass() + " class before ");
 
         ZKEnvironmentUtils.initContext(applicationContext);
@@ -59,7 +58,7 @@ public class ZKSecTestHelperConfigurationAfter {
 
         // 设置下 RequestMappingHandlerAdapter 的 ignoreDefaultModelOnRedirect=true,
         // 这样可以提高效率，避免不必要的检索。
-        requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
+//        requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
         System.out.println("[^_^:20210705-1808-001] ----- " + this.getClass() + " class before ");
     }
 

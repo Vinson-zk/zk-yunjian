@@ -29,8 +29,8 @@ import com.zk.cache.ZKCacheManager;
 import com.zk.cache.redis.ZKRedisCacheManager;
 import com.zk.core.redis.ZKJedisOperatorStringKey;
 import com.zk.framework.feign.interceptor.ZKFeignRequestInterceptor;
-import com.zk.log.interceptor.ZKLogAccessInterceptor;
 import com.zk.security.ticket.ZKSecTicketManager;
+import com.zk.webmvc.interceptor.ZKLogAccessInterceptor;
 
 /** 
 * @ClassName: ZKWechatAfterConfiguration 

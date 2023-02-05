@@ -61,7 +61,7 @@ public class ZKSysMenuService extends ZKBaseTreeService<String, ZKSysMenu, ZKSys
                 if (oldSysMenu.getDelFlag().intValue() == ZKBaseEntity.DEL_FLAG.normal) {
                     // code 已存在；抛出异常；
                     log.error("[>_<:20200805-1216-001] 菜单代码: {} 已存在!", zkSysMenu.getCode());
-                    throw ZKCodeException.as("zk.sys.000001", "菜单代码已存在", null, zkSysMenu.getCode());
+                    throw ZKCodeException.as("zk.sys.000001", "菜单代码已存在", zkSysMenu.getCode());
                 }
                 else {
                     // code 已存在，只是已逻辑删除；先物理删除已存在的；

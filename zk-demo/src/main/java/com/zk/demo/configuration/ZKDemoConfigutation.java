@@ -22,8 +22,8 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.zk.core.encrypt.ZKTransferCipherManager;
-import com.zk.core.encrypt.support.ZKSampleRsaAesTransferCipherManager;
+import com.zk.core.web.encrypt.ZKSampleRsaAesTransferCipherManager;
+import com.zk.core.web.encrypt.ZKTransferCipherManager;
 import com.zk.core.web.filter.ZKTransferCipherFilter;
 
 /** 

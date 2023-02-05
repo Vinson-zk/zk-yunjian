@@ -11,7 +11,7 @@
  *
  * @Title: ZKDelegatingFilterProxyRegistrationBean.java 
  * @author Vinson 
- * @Package com.zk.core.web.filter 
+ * @Package com.zk.webmvc.filter 
  * @Description: TODO(simple description this file what to do.) 
  * @date Dec 18, 2019 2:15:36 PM 
  * @version V1.0   

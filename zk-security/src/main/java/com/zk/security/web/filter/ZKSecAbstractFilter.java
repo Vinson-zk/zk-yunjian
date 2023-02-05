@@ -44,11 +44,6 @@ public abstract class ZKSecAbstractFilter extends ZKOncePerFilter implements ZKS
     private String name;
 
     @Override
-    public void destroy() {
-        super.destroy();
-    }
-
-    @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         setFilterConfig(filterConfig);
         try {

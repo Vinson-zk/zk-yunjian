@@ -34,8 +34,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zk.core.encrypt.support.ZKSampleRsaAesTransferCipherManager;
 import com.zk.core.utils.ZKJsonUtils;
+import com.zk.core.web.encrypt.ZKSampleRsaAesTransferCipherManager;
 import com.zk.demo.commons.ZKDemoConstants;
 import com.zk.demo.entity.ZKDemoEntity;
 

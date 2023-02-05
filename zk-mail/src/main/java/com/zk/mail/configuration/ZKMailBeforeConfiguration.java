@@ -18,7 +18,6 @@
 */
 package com.zk.mail.configuration;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.Filter;
 import javax.validation.Validator;
 
@@ -39,18 +38,15 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import com.zk.core.commons.ZKValidatorMessageInterpolator;
-import com.zk.core.utils.ZKEnvironmentUtils;
-import com.zk.core.utils.ZKLocaleUtils;
 import com.zk.core.web.filter.ZKCrosFilter;
-import com.zk.core.web.resolver.ZKExceptionHandlerResolver;
-import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.framework.serCen.ZKSerCenEncrypt;
 import com.zk.framework.serCen.eureka.ZKEurekaTransportClientFactories;
 import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
-import com.zk.log.interceptor.ZKLogAccessInterceptor;
+import com.zk.webmvc.configuration.ZKWebmvcConfiguration;
+import com.zk.webmvc.handler.ZKExceptionHandlerResolver;
+import com.zk.webmvc.interceptor.ZKLogAccessInterceptor;
 
 
 /** 
@@ -71,12 +67,9 @@ import com.zk.log.interceptor.ZKLogAccessInterceptor;
         "classpath:xmlConfig/spring_ctx_mvc.xml" })
 @PropertySource(encoding = "UTF-8", value = { 
         "classpath:zk.log.properties"})
-public class ZKMailBeforeConfiguration {
+public class ZKMailBeforeConfiguration extends ZKWebmvcConfiguration {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    private ApplicationContext applicationContext;
 
     // # 文件上传，最大上传大小，需要比邮件附件单个的文件大小配置值要大；50M=52428800
     @Value("${zk.mail.file.upload.multipartResolver.maxInMemorySize:52428800}")
@@ -94,28 +87,10 @@ public class ZKMailBeforeConfiguration {
     @Value("${zk.mail.file.upload.multipartResolver.defaultEncoding:UTF-8}")
     String defaultEncoding;
 
-    @PostConstruct
-    public void postConstruct() {
-        // 方法在 @Autowired before 后执行
-        // System.out.println("[^_^:20191219-2154-001] ===== ZKSerCenConfiguration class postConstruct ");
-        // System.out.println("[^_^:20191219-2154-001] ----- ZKSerCenConfiguration class postConstruct ");
-    }
-
     @Autowired
-    public void before(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
-        log.info("[^_^:20200805-1808-001] -------- configuration before begin... ... " + this.getClass());
-
-        ZKEnvironmentUtils.initContext(applicationContext);
-//        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("en_US"));
-//        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("zh_CN"));
-//        // # 默认语言；注意这里不影响到 localeResolver 的默认语言
-        ZKWebUtils.setLocale(
-                ZKLocaleUtils.distributeLocale(ZKEnvironmentUtils.getString("zk.wechat.default.locale", "zh_CN")));
-
-        // 设置下 RequestMappingHandlerAdapter 的 ignoreDefaultModelOnRedirect=true,
-        // 这样可以提高效率，避免不必要的检索。
-        requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
-        log.info("[^_^:20200805-1808-001] -------- configuration before end______ " + this.getClass());
+    public void beforeMail() {
+        log.info("[^_^:20200805-1808-001] === [" + ZKMailBeforeConfiguration.class.getSimpleName() + "] " + this);
+        log.info("[^_^:20200805-1808-001] --- [" + ZKMailBeforeConfiguration.class.getSimpleName() + "] " + this);
     }
 
     /******************************************************************/

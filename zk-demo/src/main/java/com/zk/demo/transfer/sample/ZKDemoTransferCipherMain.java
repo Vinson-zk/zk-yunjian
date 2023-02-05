@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
-import com.zk.core.encrypt.support.ZKSampleRsaAesTransferCipherManager;
 import com.zk.core.encrypt.utils.ZKEncryptAesUtils;
 import com.zk.core.encrypt.utils.ZKEncryptRsaUtils;
 import com.zk.core.encrypt.utils.ZKEncryptUtils;
@@ -36,6 +35,7 @@ import com.zk.core.utils.ZKJsonUtils;
 import com.zk.core.utils.ZKParamsUtils;
 import com.zk.core.utils.ZKStreamUtils;
 import com.zk.core.utils.ZKStringUtils;
+import com.zk.core.web.encrypt.ZKSampleRsaAesTransferCipherManager;
 import com.zk.core.web.utils.ZKHttpApiUtils;
 import com.zk.demo.commons.ZKDemoConstants;
 import com.zk.demo.entity.ZKDemoEntity;

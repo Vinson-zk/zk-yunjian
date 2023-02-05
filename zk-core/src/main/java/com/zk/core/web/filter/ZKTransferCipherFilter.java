@@ -11,7 +11,7 @@
  *
  * @Title: ZKTransferCipherFilter.java 
  * @author Vinson 
- * @Package com.zk.core.web.filter 
+ * @Package com.zk.webmvc.filter 
  * @Description: TODO(simple description this file what to do.) 
  * @date Dec 18, 2019 2:59:39 PM 
  * @version V1.0   
@@ -23,20 +23,21 @@ import java.io.OutputStream;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.zk.core.encrypt.ZKTransferCipherManager;
-import com.zk.core.encrypt.support.ZKSampleRsaAesTransferCipherManager;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.exception.ZKMsgException;
 import com.zk.core.exception.ZKUnknownException;
 import com.zk.core.utils.ZKExceptionsUtils;
 import com.zk.core.utils.ZKJsonUtils;
 import com.zk.core.utils.ZKStreamUtils;
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.web.encrypt.ZKSampleRsaAesTransferCipherManager;
+import com.zk.core.web.encrypt.ZKTransferCipherManager;
 import com.zk.core.web.wrapper.ZKRequestWrapper;
 import com.zk.core.web.wrapper.ZKResponseWrapper;
 
@@ -109,17 +110,37 @@ public class ZKTransferCipherFilter extends ZKOncePerFilter implements Filter {
             catch(ZKUnknownException zkE) {
                 zkE.printStackTrace();
                 // "数据传输未达安全要求"
-                printMsg(response, new ZKMsgRes("zk.000001", null, null));
+                printMsg(response, ZKMsgRes.as("zk.000001", null));
 
             }
             catch(Exception e) {
                 e.printStackTrace();
-                printMsg(response, new ZKMsgRes("1", null, null));
+                printMsg(response, ZKMsgRes.as("zk.1", null));
             }
         }
         else {
             chain.doFilter(request, response);
         }
+    }
+
+    /**
+     * 
+     * @param filterConfig
+     * @throws ServletException
+     * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
+     */
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     * 
+     * @see javax.servlet.Filter#destroy()
+     */
+    @Override
+    public void destroy() {
+        // TODO Auto-generated method stub
     }
 
 }

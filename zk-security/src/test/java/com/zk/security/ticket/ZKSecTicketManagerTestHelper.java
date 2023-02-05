@@ -9,7 +9,7 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKSecTicketManagerTest.java 
+* @Title: ZKSecTicketManagerTestHelper.java 
 * @author Vinson 
 * @Package com.zk.security.ticket 
 * @Description: TODO(simple description this file what to do. ) 
@@ -33,17 +33,17 @@ import com.zk.security.ticket.support.redis.ZKSecRedisTicketManager;
 
 import junit.framework.TestCase;
 
-/** 
-* @ClassName: ZKSecTicketManagerTest 
-* @Description: TODO(simple description this class what to do. ) 
-* @author Vinson 
-* @version 1.0 
-*/
-public class ZKSecTicketManagerTest {
+/**
+ * @ClassName: ZKSecTicketManagerTestHelper
+ * @Description: TODO(simple description this class what to do. )
+ * @author Vinson
+ * @version 1.0
+ */
+public class ZKSecTicketManagerTestHelper {
 
     private ZKSecTicketManager ticketManager;
 
-    public ZKSecTicketManagerTest(ZKSecTicketManager ticketManager) {
+    public ZKSecTicketManagerTestHelper(ZKSecTicketManager ticketManager) {
         this.ticketManager = ticketManager;
     }
 
@@ -320,7 +320,7 @@ public class ZKSecTicketManagerTest {
 
             /*** 创建令牌 */
             // 创建一个拥有 userPrincipal身份 与 appPrincipal身份 的令牌
-            ZKSecPrincipalCollection pcUserAndApp = new ZKSecDefaultPrincipalCollection();
+            ZKSecPrincipalCollection<String> pcUserAndApp = new ZKSecDefaultPrincipalCollection<String>();
             pcUserAndApp.add("realmNameUser", userPrincipal);
             pcUserAndApp.add("realmNameApp", appPrincipal);
             Serializable tkIdUserAndApp = ticketManager.generateTkId();
@@ -330,7 +330,7 @@ public class ZKSecTicketManagerTest {
             TestCase.assertEquals(2, tk.getPrincipalCollection().size());
 
             // 创建一个拥有 userPrincipal身份 的令牌
-            ZKSecPrincipalCollection pcUser = new ZKSecDefaultPrincipalCollection();
+            ZKSecPrincipalCollection<String> pcUser = new ZKSecDefaultPrincipalCollection<String>();
             pcUser.add("realmNameUser", userPrincipal);
             Serializable tkIdUser = ticketManager.generateTkId();
             tk = ticketManager.createSecTicket(tkIdUser);
@@ -339,7 +339,7 @@ public class ZKSecTicketManagerTest {
             TestCase.assertEquals(1, tk.getPrincipalCollection().size());
 
             // 创建一个拥有 appPrincipal身份 的令牌
-            ZKSecPrincipalCollection pcApp = new ZKSecDefaultPrincipalCollection();
+            ZKSecPrincipalCollection<String> pcApp = new ZKSecDefaultPrincipalCollection<String>();
             pcApp.add("realmNameApp", appPrincipal);
             Serializable tkIdApp = ticketManager.generateTkId();
             tk = ticketManager.createSecTicket(tkIdApp);
@@ -358,7 +358,7 @@ public class ZKSecTicketManagerTest {
 //            TestCase.assertEquals(2, tk.getPrincipalCollection().size());
 
             // 创建一个拥有 userPrincipalOther身份 的令牌
-            ZKSecPrincipalCollection pcUserOther = new ZKSecDefaultPrincipalCollection();
+            ZKSecPrincipalCollection<String> pcUserOther = new ZKSecDefaultPrincipalCollection<String>();
             pcUserOther.add("realmNameApp", userPrincipalOther);
             Serializable tkIdUserOther = ticketManager.generateTkId();
             tk = ticketManager.createSecTicket(tkIdUserOther);
@@ -367,7 +367,7 @@ public class ZKSecTicketManagerTest {
             TestCase.assertEquals(1, tk.getPrincipalCollection().size());
 
             // 创建一个拥有 appPrincipalOther身份 的令牌
-            ZKSecPrincipalCollection pcAppOther = new ZKSecDefaultPrincipalCollection();
+            ZKSecPrincipalCollection<String> pcAppOther = new ZKSecDefaultPrincipalCollection<String>();
             pcAppOther.add("realmNameApp", appPrincipalOther);
             Serializable tkIdAppOther = ticketManager.generateTkId();
             tk = ticketManager.createSecTicket(tkIdAppOther);

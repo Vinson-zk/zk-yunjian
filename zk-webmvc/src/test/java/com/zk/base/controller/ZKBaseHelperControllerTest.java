@@ -33,7 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.zk.base.helper.ZKBaseHelperSpringBootMain;
+import com.zk.base.ZKBaseHelperSpringBootMain;
 import com.zk.base.helper.entity.ZKBaseHelperEntityString;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.utils.ZKDateUtils;
@@ -47,6 +47,7 @@ import junit.framework.TestCase;
 * @author Vinson 
 * @version 1.0 
 */
+@SuppressWarnings("deprecation")
 @RunWith(SpringRunner.class)
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @SpringBootTest(classes = ZKBaseHelperSpringBootMain.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

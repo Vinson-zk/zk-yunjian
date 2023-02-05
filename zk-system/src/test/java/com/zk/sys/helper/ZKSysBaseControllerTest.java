@@ -34,10 +34,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 * @author Vinson 
 * @version 1.0 
 */
+@SuppressWarnings("deprecation")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ZKSysTestHelper.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = { "classpath:/" }, properties = { "spring.config.name=zk,zk.sys" })
 public class ZKSysBaseControllerTest {
+
 
     @LocalServerPort
     private int port;

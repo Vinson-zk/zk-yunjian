@@ -35,6 +35,7 @@ import junit.framework.TestCase;
 * @author Vinson 
 * @version 1.0 
 */
+@SuppressWarnings("deprecation")
 public class ZKMongoDistributedLockImplTest {
 
     private int serialNum = 0;

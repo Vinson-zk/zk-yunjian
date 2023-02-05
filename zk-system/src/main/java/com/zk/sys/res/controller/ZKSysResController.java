@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.sys.res.entity.ZKSysMenu;
 import com.zk.sys.res.entity.ZKSysNav;
 import com.zk.sys.res.service.ZKSysMenuService;

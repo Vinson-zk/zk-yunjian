@@ -39,11 +39,12 @@ public class ZKSecFullStrategy implements ZKSecStrategy {
      * 此策略为所有认证通过，并返回所有身份
      */
     @Override
-    public ZKSecPrincipalCollection doStrategyAuthentication(Set<ZKSecRealm> realmSet, ZKSecAuthenticationToken token) {
+    public <ID> ZKSecPrincipalCollection<ID> doStrategyAuthentication(Set<ZKSecRealm> realmSet,
+            ZKSecAuthenticationToken token) {
         // TODO Auto-generated method stub
-        ZKSecPrincipalCollection pc = new ZKSecDefaultPrincipalCollection();
+        ZKSecPrincipalCollection<ID> pc = new ZKSecDefaultPrincipalCollection<ID>();
         for (ZKSecRealm realm : realmSet) {
-            ZKSecPrincipalCollection tPc = realm.authentication(token);
+            ZKSecPrincipalCollection<ID> tPc = realm.authentication(token);
             if (tPc != null && !tPc.isEmpty()) {
                 pc.addAll(tPc);
             }
@@ -58,7 +59,7 @@ public class ZKSecFullStrategy implements ZKSecStrategy {
      * 
      */
     @Override
-    public void doStrategyPrincipalsCount(Set<ZKSecRealm> realmSet, ZKSecPrincipalCollection pc) {
+    public <ID> void doStrategyPrincipalsCount(Set<ZKSecRealm> realmSet, ZKSecPrincipalCollection<ID> pc) {
         if (pc != null) {
             for (ZKSecRealm realm : realmSet) {
                 realm.doLimitPrincipalTicketCount(pc);

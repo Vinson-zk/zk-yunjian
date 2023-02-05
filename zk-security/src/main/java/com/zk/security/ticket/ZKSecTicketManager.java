@@ -138,7 +138,7 @@ public interface ZKSecTicketManager extends ZKDestroyable {
     /**
      * 根据身份ID取当前身份所拥有的所有令牌
      */
-    public List<ZKSecTicket> findTickeByPrincipal(ZKSecPrincipal<?> principal);
+    public <ID> List<ZKSecTicket> findTickeByPrincipal(ZKSecPrincipal<ID> principal);
 
     /**
      * 根据身份ID取当前身份所拥有的所有令牌
@@ -148,6 +148,6 @@ public interface ZKSecTicketManager extends ZKDestroyable {
      *            需要过虑的令牌
      * @return
      */
-    public List<ZKSecTicket> findTickeByPrincipal(ZKSecPrincipal<?> principal, List<ZKSecTicket> filterTickets);
+    public <ID> List<ZKSecTicket> findTickeByPrincipal(ZKSecPrincipal<ID> principal, List<ZKSecTicket> filterTickets);
 
 }

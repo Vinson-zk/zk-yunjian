@@ -16,7 +16,7 @@ import com.zk.base.service.ZKBaseTreeService;
 import com.zk.core.exception.ZKCodeException;
 import com.zk.core.utils.ZKMsgUtils;
 import com.zk.core.utils.ZKStringUtils;
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.file.dao.ZKFileDirectoryDao;
 import com.zk.file.entity.ZKFileDirectory;
 import com.zk.sys.api.org.ZKSysOrgCompanyApi;

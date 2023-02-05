@@ -73,19 +73,19 @@ public class ZKPayGetOrderService extends ZKBaseService<String, ZKPayGetOrder, Z
     private void checkBusinessType(String businessCode, ZKPayGetBusinessType businessType) {
         if (businessType == null) {
             log.error("[^_^:20210220-0906-001] 暂不支持此业务类型[{}]", businessCode);
-            throw ZKCodeException.as("zk.wechat.000007", "不支持的业务类型", businessCode);
+            throw ZKCodeException.as("zk.wechat.000007", "不支持的业务类型", null, businessCode);
         }
 
         if (ZKPayGetBusinessType.Status.enabled != businessType.getStatus().intValue()) {
             log.error("[^_^:20210220-0906-002] 业务类型[{}]被禁止使用", businessCode);
-            throw ZKCodeException.as("zk.wechat.000008", "业务类型[{}]被禁止使用", businessCode);
+            throw ZKCodeException.as("zk.wechat.000008", "业务类型[{}]被禁止使用", null, businessCode);
         }
 
         if (businessType.getStartDate() != null) {
             if (businessType.getStartDate().getTime() > (new Date()).getTime()) {
                 log.error("[^_^:20210220-0906-003] 业务类型[{}]于[{}]才开始启用", businessCode,
                         ZKDateUtils.formatDate(businessType.getStartDate(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss));
-                throw ZKCodeException.as("zk.wechat.000009", "业务类型[{}]于[{}]才开始启用", businessCode,
+                throw ZKCodeException.as("zk.wechat.000009", "业务类型[{}]于[{}]才开始启用", null, businessCode,
                         ZKDateUtils.formatDate(businessType.getStartDate(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss));
             }
         }
@@ -94,7 +94,7 @@ public class ZKPayGetOrderService extends ZKBaseService<String, ZKPayGetOrder, Z
             if (businessType.getEndDate().getTime() < (new Date()).getTime()) {
                 log.error("[^_^:20210220-0906-004] 业务类型[{}]于[{}]过期", businessCode,
                         ZKDateUtils.formatDate(businessType.getEndDate(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss));
-                throw ZKCodeException.as("zk.wechat.000010", "业务类型[{}]于[{}]过期", businessCode,
+                throw ZKCodeException.as("zk.wechat.000010", "业务类型[{}]于[{}]过期", null, businessCode,
                         ZKDateUtils.formatDate(businessType.getEndDate(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss));
             }
         }
@@ -104,19 +104,19 @@ public class ZKPayGetOrderService extends ZKBaseService<String, ZKPayGetOrder, Z
     private void checkPayment(String payGroupCode, ZKPayGroup payGroup) {
         if (payGroup == null) {
             log.error("[^_^:20210221-0906-001] 系统支付关系组[{}]不存在", payGroupCode);
-            throw ZKCodeException.as("zk.wechat.000012", "系统支付关系组不存在", payGroupCode);
+            throw ZKCodeException.as("zk.wechat.000012", "系统支付关系组不存在", null, payGroupCode);
         }
 
         if (ZKPayGroup.Status.enabled != payGroup.getStatus().intValue()) {
             log.error("[^_^:20210221-0906-002] 系统支付关系组[{}]被禁止使用", payGroupCode);
-            throw ZKCodeException.as("zk.wechat.000013", "系统支付关系组被禁止使用", payGroupCode);
+            throw ZKCodeException.as("zk.wechat.000013", "系统支付关系组被禁止使用", null, payGroupCode);
         }
 
         if (payGroup.getStartDate() != null) {
             if (payGroup.getStartDate().getTime() > (new Date()).getTime()) {
                 log.error("[^_^:20210221-0906-003] 系统支付关系组[{}]于[{}]才开始启用", payGroupCode,
                         ZKDateUtils.formatDate(payGroup.getStartDate(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss));
-                throw ZKCodeException.as("zk.wechat.000014", "系统支付关系组还没开始启用", payGroupCode,
+                throw ZKCodeException.as("zk.wechat.000014", "系统支付关系组还没开始启用", null, payGroupCode,
                         ZKDateUtils.formatDate(payGroup.getStartDate(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss));
             }
         }
@@ -125,7 +125,7 @@ public class ZKPayGetOrderService extends ZKBaseService<String, ZKPayGetOrder, Z
             if (payGroup.getEndDate().getTime() < (new Date()).getTime()) {
                 log.error("[^_^:20210221-0906-004] 系统支付关系组[{}]于[{}]过期", payGroupCode,
                         ZKDateUtils.formatDate(payGroup.getEndDate(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss));
-                throw ZKCodeException.as("zk.wechat.000015", "系统支付关系组已过有效期", payGroupCode,
+                throw ZKCodeException.as("zk.wechat.000015", "系统支付关系组已过有效期", null, payGroupCode,
                         ZKDateUtils.formatDate(payGroup.getEndDate(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss));
             }
 
@@ -142,7 +142,7 @@ public class ZKPayGetOrderService extends ZKBaseService<String, ZKPayGetOrder, Z
         if (oldPayGetOrder != null) {
             // 支付订单已存在，不能重复支付
             log.error("[>_<:20210221-1049-001] 支付订单[{}-{}]已存在，请务重复支付", businessCode, businessNo);
-            throw ZKCodeException.as("zk.wechat.000016", "支付订单[{0}]已存在，请务重复支付", businessNo);
+            throw ZKCodeException.as("zk.wechat.000016", "支付订单[{0}]已存在，请务重复支付", null, businessNo);
         }
 
         ZKPayGroup payGroup = payGroupService.getByCode(payGroupCode);

@@ -207,34 +207,6 @@
 		    <artifactId>javax.servlet-api</artifactId>
 		</dependency>
        	<!-- ##### jsp end -->
-		
-		<!-- ***** log4j begin -->
-		<dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-starter-log4j</artifactId>
-	    </dependency>
-	    <dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-log4j12</artifactId>
-		    <!-- <scope>test</scope> -->
-		</dependency>
-	    <!-- <dependency>
-	        <groupId>org.apache.logging.log4j</groupId>
-	        <artifactId>log4j-api</artifactId>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.apache.logging.log4j</groupId>
-	        <artifactId>log4j-core</artifactId>
-	    </dependency>
-	    <dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-web</artifactId>
-	    </dependency> -->
-	    <!-- ##### log4j end -->
 	    
 	    <!-- ***** shiro begin -->
 		<!-- ##### shiro end -->
@@ -274,6 +246,10 @@
 		<dependency>
 		    <groupId>commons-io</groupId>
 		    <artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+   			<artifactId>reactor-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

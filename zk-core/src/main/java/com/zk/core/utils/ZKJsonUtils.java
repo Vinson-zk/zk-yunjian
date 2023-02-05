@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zk.core.commons.data.ZKJson;
@@ -112,16 +111,16 @@ public class ZKJsonUtils extends JSON {
     public static String writeObjectJsonForJs(Object obj) {
 
         try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            String result = mapper.writeValueAsString(obj);
-//            result = result.replaceAll("\\\\", "\\\\\\\\");
-////          result = result.replaceAll("\"", "'");
-//            return result;
-
-            String result = JSONObject.toJSONString(obj);
+            ObjectMapper mapper = new ObjectMapper();
+            String result = mapper.writeValueAsString(obj);
             result = result.replaceAll("\\\\", "\\\\\\\\");
 //          result = result.replaceAll("\"", "'");
             return result;
+
+//            String result = JSONObject.toJSONString(obj);
+//            result = result.replaceAll("\\\\", "\\\\\\\\");
+////          result = result.replaceAll("\"", "'");
+//            return result;
         }
         catch(Exception e) {
 //            e.printStackTrace();
@@ -139,9 +138,9 @@ public class ZKJsonUtils extends JSON {
     public static String writeObjectJson(Object obj) {
 
         try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            return mapper.writeValueAsString(obj);
-            return JSONObject.toJSONString(obj);
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(obj);
+//            return JSONObject.toJSONString(obj); // 不会根据注解忽略字段 
         }
         catch(Exception e) {
             e.printStackTrace();

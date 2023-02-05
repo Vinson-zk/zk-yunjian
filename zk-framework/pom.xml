@@ -40,6 +40,12 @@
 			<groupId>com.zk</groupId>
 			<artifactId>zk-security</artifactId>
 			<version>${version.zk.security}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.zk</groupId>
+					<artifactId>zk-mongo</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.zk</groupId>
@@ -55,47 +61,18 @@
 					<groupId>com.zk</groupId>
 					<artifactId>zk-mongo</artifactId>
 				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.data</groupId>
-					<artifactId>spring-data-mongodb</artifactId>
-				</exclusion>
 			</exclusions>
 		</dependency>
 		
-		<!-- ***** spring cloud begin -->
+		<!-- ***** spring cloud begin  -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency> 
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>io.github.openfeign.form</groupId>
-					<artifactId>feign-form-spring</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.github.openfeign.form</groupId>
-					<artifactId>feign-form</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>io.github.openfeign.form</groupId>
-			<artifactId>feign-form-spring</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-fileupload</groupId>
-					<artifactId>commons-fileupload</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>io.github.openfeign.form</groupId>
-			<artifactId>feign-form</artifactId>
-		</dependency>
-		
 		<!-- ##### spring cloud end -->
 		
 		<!-- ***** eureka other begin -->
@@ -107,12 +84,21 @@
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-apache-client4</artifactId>
 		</dependency>
+		<!-- ##### eureka other end -->
+
+		<!-- ***** other begin -->
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+		</dependency>
+		<!-- ##### other end -->
+		
+		<!-- ***** begin test -->
 		<dependency>
 			<groupId>junit</groupId>
    			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
-		<!-- ##### eureka other end -->
+        <!-- ##### end test -->
 			
 	</dependencies>
 	

@@ -67,9 +67,9 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
      * @return
      */
     @Override
-    public ZKSecPrincipalCollection authentication(ZKSecAuthenticationToken authcToken) {
+    public <ID> ZKSecPrincipalCollection<ID> authentication(ZKSecAuthenticationToken authcToken) {
         if (supports(authcToken)) {
-            ZKSecPrincipalCollection pc = doAuthentication(authcToken);
+            ZKSecPrincipalCollection<ID> pc = doAuthentication(authcToken);
 //            this.doLimitPrincipalTicketCount(pc);
             return pc;
         }
@@ -83,7 +83,7 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
      * @return
      * @throws com.zk.security.exception.ZKSecCodeException
      */
-    protected abstract ZKSecPrincipalCollection doAuthentication(ZKSecAuthenticationToken authcToken);
+    protected abstract <ID> ZKSecPrincipalCollection<ID> doAuthentication(ZKSecAuthenticationToken authcToken);
 
     /**
      * (not Javadoc)
@@ -94,7 +94,7 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
      * @see com.zk.security.realm.ZKSecRealm#getZKSecAuthorizationInfo(com.zk.security.principal.pc.ZKSecPrincipalCollection)
      */
     @Override
-    public ZKSecAuthorizationInfo getZKSecAuthorizationInfo(ZKSecPrincipalCollection principalCollection) {
+    public <ID> ZKSecAuthorizationInfo getZKSecAuthorizationInfo(ZKSecPrincipalCollection<ID> principalCollection) {
         ZKSecAuthorizationInfo authorizationInfo = null;
         if (this.getAuthorizationInfoStore() != null) {
             // 优先从 权限存储 中读取
@@ -117,7 +117,8 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
         return authorizationInfo;
     }
 
-    public abstract ZKSecAuthorizationInfo doGetZKSecAuthorizationInfo(ZKSecPrincipalCollection principalCollection);
+    public abstract <ID> ZKSecAuthorizationInfo doGetZKSecAuthorizationInfo(
+            ZKSecPrincipalCollection<ID> principalCollection);
 
     /**
      * 鉴权，授权; 暂未启用
@@ -129,7 +130,7 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
      * @return
      */
     @Override
-    public boolean checkPermission(ZKSecPrincipalCollection principalCollection, String permissionCode) {
+    public <ID> boolean checkPermission(ZKSecPrincipalCollection<ID> principalCollection, String permissionCode) {
         ZKSecAuthorizationInfo authorizationInfo = this.getZKSecAuthorizationInfo(principalCollection);
         boolean b = false;
         if (authorizationInfo != null) {
@@ -153,7 +154,7 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
      * @return true-鉴定成功；反之鉴定失败
      */
     @Override
-    public boolean checkApiCode(ZKSecPrincipalCollection principalCollection, String apiCode) {
+    public <ID> boolean checkApiCode(ZKSecPrincipalCollection<ID> principalCollection, String apiCode) {
         ZKSecAuthorizationInfo authorizationInfo = this.getZKSecAuthorizationInfo(principalCollection);
         boolean b = false;
         if (authorizationInfo != null) {
@@ -180,7 +181,8 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
      *            权限代码
      * @return
      */
-    protected abstract boolean doCheckPermission(ZKSecPrincipalCollection principalCollection, String permissionCode);
+    protected abstract <ID> boolean doCheckPermission(ZKSecPrincipalCollection<ID> principalCollection,
+            String permissionCode);
 
     /**
      * 执行  api接口权限 代码 鉴定
@@ -191,7 +193,7 @@ public abstract class ZKSecAbstractRealm extends ZKSecNameRealm {
      *             api接口权限 代码
      * @return
      */
-    protected abstract boolean doCheckApiCode(ZKSecPrincipalCollection principalCollection, String apiCode);
+    protected abstract <ID> boolean doCheckApiCode(ZKSecPrincipalCollection<ID> principalCollection, String apiCode);
 
 }
 

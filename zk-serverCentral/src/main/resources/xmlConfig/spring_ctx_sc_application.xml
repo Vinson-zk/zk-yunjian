@@ -20,22 +20,18 @@
 		</property>
 	</bean> 
 	
-	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
-    	<property name="defaultLocale" value="en_US" />
-    </bean>
-	
 	<!-- 配置 JSR303 Bean Validator 定义 在 java 配置 类中定义
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
 	    <property name="validationMessageSource" ref="messageSource"/>
 	</bean>   -->
 	
 	<!-- 异常处理 
-	<bean class="com.zk.core.web.resolver.ZKExceptionHandlerResolver"></bean>  -->
+	<bean class="com.zk.webmvc.resolver.ZKExceptionHandlerResolver"></bean>  -->
 	
 	<!-- 这里配置的异常显示界面均仅包括主文件名，至于文件路径和后缀已经在viewResolver中指定
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
 	 -->
-	<bean class="com.zk.core.web.resolver.ZKViewExceptionHandlerResolver">  
+	<bean class="com.zk.webmvc.handler.ZKViewExceptionHandlerResolver">  
 		<!-- <property name="defaultErrorView">    
         	<value>/error/default</value>  
 	    </property>   -->

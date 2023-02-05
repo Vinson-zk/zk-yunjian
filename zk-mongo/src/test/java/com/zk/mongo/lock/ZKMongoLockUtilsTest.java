@@ -19,7 +19,7 @@
 package com.zk.mongo.lock;
 
 import org.junit.Test;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.zk.mongo.helper.ZKMongoTestConfig;
@@ -38,7 +38,7 @@ public class ZKMongoLockUtilsTest {
     public void testIncrByWithExpire() {
         try {
 
-            FileSystemXmlApplicationContext ctx = ZKMongoTestConfig.getCtx();
+            ApplicationContext ctx = ZKMongoTestConfig.getCtx();
             TestCase.assertNotNull(ctx);
             MongoTemplate mongoTemplate = ctx.getBean(MongoTemplate.class);
             TestCase.assertNotNull(mongoTemplate);

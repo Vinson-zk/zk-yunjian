@@ -87,10 +87,22 @@ public class ZKPage<T> {
         public static final String size = "page.size";
     }
 
+    /**
+     * 根据请求做 page
+     *
+     * @Title: asPage
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Jan 30, 2023 1:34:51 PM
+     * @param <T>
+     * @param hReq
+     * @return
+     * @return ZKPage<T>
+     */
     public static <T> ZKPage<T> asPage(HttpServletRequest hReq) {
         ZKPage<T> zkPage = new ZKPage<T>();
-        zkPage.setPageNo(ServletRequestUtils.getIntParameter(hReq, Param_Name.no, 0));
-        zkPage.setPageSize(ServletRequestUtils.getIntParameter(hReq, Param_Name.size, 10));
+        zkPage.setPageNo(ServletRequestUtils.getIntParameter(hReq, ZKPage.Param_Name.no, 0));
+        zkPage.setPageSize(ServletRequestUtils.getIntParameter(hReq, ZKPage.Param_Name.size, 10));
         zkPage.setSorters(ZKOrder.asOrder(hReq));
         return zkPage;
     }

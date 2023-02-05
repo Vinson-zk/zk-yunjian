@@ -50,10 +50,10 @@ public class ZKLogUtils {
     /**
      * 保存日志
      */
-    public static void saveAccessLog(HttpServletRequest hReq, HttpServletResponse hRes, Object handler, Exception ex) {
+    public static void saveAccessLog(HttpServletRequest hReq, HttpServletResponse hRes, Exception ex) {
         try {
             // 保存日志信息
-            new ZKLogSaveThread(hReq, hRes, handler, ex).start();
+            new ZKLogSaveThread(hReq, hRes, ex).start();
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -77,8 +77,7 @@ public class ZKLogUtils {
         private Exception ex;
 
 
-        public ZKLogSaveThread(HttpServletRequest hReq, HttpServletResponse hRes,
-                Object handler, Exception ex) {
+        public ZKLogSaveThread(HttpServletRequest hReq, HttpServletResponse hRes, Exception ex) {
             super(ZKLogSaveThread.class.getSimpleName());
             this.logAccess = createLogAccess(hReq);
             // this.handler = handler;

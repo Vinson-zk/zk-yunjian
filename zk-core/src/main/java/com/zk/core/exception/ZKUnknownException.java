@@ -36,11 +36,29 @@ public class ZKUnknownException extends RuntimeException {
      * 异常分类
      */
     public static interface KeyExceptionType {
+        /**
+         * 一般异常
+         */
         public static final int general = 0;
+
+        /**
+         * 数据校验异常
+         */
+        public static final int dataValidator = 1;
+
+        /**
+         * 权限校验异常
+         */
+        public static final int authority = 2;
+
+        /**
+         * 身份认证异常
+         */
+        public static final int authentication = 3;
     }
 
     /**
-     * 异常的分类，暂未使用，0-未知；方便后继将异常按大类处理，如类型 1-弹出提示，2-xxx
+     * 异常的分类，暂未使用，0-一般异常；方便后继将异常按大类处理，如类型 1-数据校验异常，2-xxx
      */
     int type;
 

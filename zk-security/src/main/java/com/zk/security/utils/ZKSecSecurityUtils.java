@@ -46,7 +46,7 @@ public class ZKSecSecurityUtils {
     /**
      * 取当前登录用户所有身份
      */
-    public static ZKSecPrincipalCollection getPrincipalCollection() {
+    public static <ID> ZKSecPrincipalCollection<ID> getPrincipalCollection() {
         if (getSubject() != null) {
             return getSubject().getPrincipalCollection();
         }
@@ -58,14 +58,14 @@ public class ZKSecSecurityUtils {
      * 
      * @return
      */
-    public static <T> ZKSecUserPrincipal<T> getUserPrincipal() {
+    public static <ID> ZKSecUserPrincipal<ID> getUserPrincipal() {
         return getUserPrincipal(getTikcet());
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> ZKSecUserPrincipal<T> getUserPrincipal(ZKSecTicket tk) {
+    public static <ID> ZKSecUserPrincipal<ID> getUserPrincipal(ZKSecTicket tk) {
         if (tk != null) {
-            return (ZKSecUserPrincipal<T>) getPrincipalByType(tk, ZKSecPrincipal.KeyType.User);
+            return (ZKSecUserPrincipal<ID>) getPrincipalByType(tk, ZKSecPrincipal.KeyType.User);
         }
         return null;
     }
@@ -75,13 +75,14 @@ public class ZKSecSecurityUtils {
      * 
      * @return
      */
-    public static ZKSecDevPrincipal<?> getAppPrincipal() {
+    public static <ID> ZKSecDevPrincipal<ID> getAppPrincipal() {
         return getDevPrincipal(getTikcet());
     }
 
-    public static ZKSecDevPrincipal<?> getDevPrincipal(ZKSecTicket tk) {
+    @SuppressWarnings("unchecked")
+    public static <ID> ZKSecDevPrincipal<ID> getDevPrincipal(ZKSecTicket tk) {
         if (tk != null) {
-            return (ZKSecDevPrincipal<?>) getPrincipalByType(tk, ZKSecPrincipal.KeyType.Developer);
+            return (ZKSecDevPrincipal<ID>) getPrincipalByType(tk, ZKSecPrincipal.KeyType.Developer);
         }
         return null;
     }
@@ -97,7 +98,7 @@ public class ZKSecSecurityUtils {
      * @return
      * @return ZKSecDevPrincipal<?>
      */
-    public static ZKSecPrincipal<?> getServerPrincipal(ZKSecTicket tk) {
+    public static <ID> ZKSecPrincipal<ID> getServerPrincipal(ZKSecTicket tk) {
         if (tk != null) {
             return getPrincipalByType(tk, ZKSecPrincipal.KeyType.Distributed_server);
         }
@@ -110,11 +111,11 @@ public class ZKSecSecurityUtils {
      * @param type
      * @return
      */
-    protected static ZKSecPrincipal<?> getPrincipalByType(ZKSecTicket tk, int type) {
+    public static <ID> ZKSecPrincipal<ID> getPrincipalByType(ZKSecTicket tk, int type) {
         if (tk != null) {
-            ZKSecPrincipalCollection pc = tk.getPrincipalCollection();
+            ZKSecPrincipalCollection<ID> pc = tk.getPrincipalCollection();
             if (pc != null && !pc.isEmpty()) {
-                for (ZKSecPrincipal<?> p : pc.asSet()) {
+                for (ZKSecPrincipal<ID> p : pc.asSet()) {
                     if (p.getType() == type) {
                         return p;
                     }

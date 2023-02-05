@@ -1,6 +1,6 @@
 package com.zk.file.helper.sysApi;
 
-import com.zk.core.web.ZKMsgRes;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.sys.api.org.ZKSysOrgCompanyApi;
 import com.zk.sys.entity.org.ZKSysOrgCompany;
 

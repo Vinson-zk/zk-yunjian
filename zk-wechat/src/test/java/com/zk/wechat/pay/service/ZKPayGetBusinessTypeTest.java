@@ -68,7 +68,7 @@ public class ZKPayGetBusinessTypeTest {
             zkPayGetBusinessType = new ZKPayGetBusinessType();
             zkPayGetBusinessType.setCode(code);
             zkPayGetBusinessType.setName(new ZKJson());
-            zkPayGetBusinessType.getName().put(ZKLocaleUtils.getLocale().toString(), name);
+            zkPayGetBusinessType.getName().put(ZKLocaleUtils.getDefautLocale().toString(), name);
             zkPayGetBusinessType.setStatus(ZKPayGetBusinessType.Status.disabled);
             intRes = s.save(zkPayGetBusinessType);
             dels.add(zkPayGetBusinessType);
@@ -81,13 +81,13 @@ public class ZKPayGetBusinessTypeTest {
                     + ZKJsonUtils.writeObjectJson(zkPayGetBusinessType));
             TestCase.assertEquals(ZKPayGetBusinessType.Status.disabled, zkPayGetBusinessType.getStatus().intValue());
             TestCase.assertEquals(code, zkPayGetBusinessType.getCode());
-            TestCase.assertEquals(name, zkPayGetBusinessType.getName().get(ZKLocaleUtils.getLocale().toString()));
+            TestCase.assertEquals(name, zkPayGetBusinessType.getName().get(ZKLocaleUtils.getDefautLocale().toString()));
 
             // getByCode
             zkPayGetBusinessType = s.getByCode(zkPayGetBusinessType.getCode());
             TestCase.assertEquals(ZKPayGetBusinessType.Status.disabled, zkPayGetBusinessType.getStatus().intValue());
             TestCase.assertEquals(code, zkPayGetBusinessType.getCode());
-            TestCase.assertEquals(name, zkPayGetBusinessType.getName().get(ZKLocaleUtils.getLocale().toString()));
+            TestCase.assertEquals(name, zkPayGetBusinessType.getName().get(ZKLocaleUtils.getDefautLocale().toString()));
 
             // 相同 code 保存
             zkPayGetBusinessType = new ZKPayGetBusinessType();

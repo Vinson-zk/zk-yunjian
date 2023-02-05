@@ -111,6 +111,17 @@ public class ZKOrder implements Serializable {
         return new ZKOrder(columnName, ((sort == null) ? ZKSortMode.DESC : sort));
     }
 
+    /**
+     * 根据请求做排序列表
+     *
+     * @Title: asOrder
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Jan 30, 2023 1:35:02 PM
+     * @param hReq
+     * @return
+     * @return List<ZKOrder>
+     */
     public static List<ZKOrder> asOrder(HttpServletRequest hReq) {
 
         String[] cols = ServletRequestUtils.getStringParameters(hReq, Param_Name.column);
@@ -120,17 +131,16 @@ public class ZKOrder implements Serializable {
             List<ZKOrder> orders = new ArrayList<ZKOrder>();
             for (int i = 0; i < cols.length; ++i) {
                 if (i < modes.length) {
-                    orders.add(asOrder(cols[i], modes[i]));
+                    orders.add(ZKOrder.asOrder(cols[i], modes[i]));
                 }
                 else {
                     // 如果未指定排序模式，默认按升序处理；排序模式与字段按顺序对应
-                    orders.add(asOrder(cols[i], ZKSortMode.ASC));
+                    orders.add(ZKOrder.asOrder(cols[i], ZKSortMode.ASC));
                 }
             }
             return orders;
         }
         return null;
     }
-
 
 }

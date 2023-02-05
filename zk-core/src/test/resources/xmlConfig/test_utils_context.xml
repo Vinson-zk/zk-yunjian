@@ -26,13 +26,6 @@
        <property name="defaultEncoding" value="UTF-8"></property>
     </bean> 
     
-    <!-- id="localeResolver" 
-    org.springframework.web.servlet.i18n.SessionLocaleResolver
-    -->
-    <bean id="localeResolver" class="com.zk.core.web.handler.support.ZKSessionLocaleResolver">
-    	<property name="defaultLocale" value="en_US" />
-    </bean>    
-    
     <!-- 自定义消息处理拦截器 -->
     <bean id="zkValidatorMessageInterpolator" class="com.zk.core.commons.ZKValidatorMessageInterpolator">
     	<constructor-arg ref="messageSource" />

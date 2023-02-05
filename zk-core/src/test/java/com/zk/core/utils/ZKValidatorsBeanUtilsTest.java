@@ -26,7 +26,7 @@ import javax.validation.Validator;
 import org.junit.Test;
 
 import com.zk.core.helper.ZKCoreTestHelper;
-import com.zk.core.helper.ZKValidatorEntity;
+import com.zk.core.helper.entity.ZKValidatorEntity;
 
 import junit.framework.TestCase;
 

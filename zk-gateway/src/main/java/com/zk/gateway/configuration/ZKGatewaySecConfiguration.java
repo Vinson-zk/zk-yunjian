@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 
 import com.zk.core.redis.ZKJedisOperatorStringKey;
-import com.zk.core.web.filter.ZKDelegatingFilterProxyRegistrationBean;
+import com.zk.webmvc.filter.ZKDelegatingFilterProxyRegistrationBean;
 import com.zk.framework.security.realm.ZKDistributedRealm;
 import com.zk.security.ticket.ZKSecTicketManager;
 import com.zk.security.ticket.support.redis.ZKSecRedisTicketManager;

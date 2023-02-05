@@ -16,15 +16,20 @@
 * @date Jul 29, 2021 10:32:22 AM 
 * @version V1.0 
 */
-package com.zk.security.helper;
+package com.zk.sec.helper;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+
+import com.zk.mongo.configuration.ZKMongoAutoConfiguration;
+import com.zk.security.helper.ZKSecTestHelperMongoConfiguration;
+import com.zk.security.helper.ZKSecTestHelperRedisConfiguration;
 
 /** 
 * @ClassName: ZKSecTestHelperSpringBootMain 
@@ -32,7 +37,15 @@ import org.springframework.context.ConfigurableApplicationContext;
 * @author Vinson 
 * @version 1.0 
 */
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class, MongoAutoConfiguration.class })
+@SpringBootApplication(exclude = { //
+        DataSourceAutoConfiguration.class, //
+        MongoAutoConfiguration.class, //
+})
+@ImportAutoConfiguration(value = { //
+        ZKMongoAutoConfiguration.class,
+        ZKSecTestHelperMongoConfiguration.class, //
+        ZKSecTestHelperRedisConfiguration.class, //
+})
 public class ZKSecTestHelperSpringBootMain {
 
     public static void main(String[] args) {

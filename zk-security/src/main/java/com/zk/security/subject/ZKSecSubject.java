@@ -62,7 +62,7 @@ public interface ZKSecSubject {
     /**
      * 取当前登录用户所有身份
      */
-    public ZKSecPrincipalCollection getPrincipalCollection();
+    <ID> ZKSecPrincipalCollection<ID> getPrincipalCollection();
 
     /**
      * 取主体对应令牌

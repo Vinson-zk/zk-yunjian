@@ -79,6 +79,7 @@
 		<version.zk.system>2.0.1</version.zk.system>
 		<version.zk.system.api>2.0.1</version.zk.system.api>
 		<version.zk.test>2.0.1</version.zk.test>
+		<version.zk.webmvc>2.0.1</version.zk.webmvc>
 		<version.zk.wechat>2.0.1</version.zk.wechat>
 		<version.zk.zuul>2.0.1</version.zk.zuul>
 		
@@ -125,6 +126,7 @@
 		<module>../zk-devleopmentTool</module>
 		<module>../zk-test</module>
 		<module>../zk-system</module>
+		<module>../zk-webmvc</module>
 		<module>../zk-wechat</module>
 		<module>../zk-system-api</module>
 		<module>../zk-mail</module>

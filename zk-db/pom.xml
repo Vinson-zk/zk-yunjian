@@ -39,26 +39,10 @@
 		</dependency>
 		
 		<!-- ***** spring begin -->
-		<!-- --><dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter</artifactId>
-	</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!-- <dependency>
-    		<groupId>org.springframework.boot</groupId>
-    		<artifactId>spring-boot-starter-jdbc</artifactId>
-    	</dependency> -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-json</artifactId>
-		</dependency>
-		<dependency>
-    		<groupId>org.springframework.boot</groupId>
-    		<artifactId>spring-boot-configuration-processor</artifactId>
-    	</dependency>
 		<!-- ##### spring end -->
 		
 		<!-- begin mybatis -->
@@ -83,6 +67,7 @@
             </exclusions>
         </dependency>
         <!-- end connection pool -->
+
         <!-- begin jdbc driver -->
         <dependency>
             <groupId>mysql</groupId>
@@ -91,49 +76,19 @@
         </dependency>
         <!-- end jdbc driver -->
 		
-		<!-- ***** log4j begin -->
-		<dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-starter-log4j</artifactId>
-	    </dependency>
-	    <dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-log4j12</artifactId>
-		    <!-- <scope>test</scope> -->
-		</dependency>
-		<!-- ##### log4j end -->
-		
 		<!-- ***** other begin -->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-		</dependency>
 		<dependency>
 		    <groupId>com.google.code.gson</groupId>
 		    <artifactId>gson</artifactId>
 		</dependency>
-		<dependency>
-		    <groupId>commons-codec</groupId>
-		    <artifactId>commons-codec</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>commons-io</groupId>
-		    <artifactId>commons-io</artifactId>
-		</dependency>
+		<!-- ##### other end -->
+
+		<!-- ***** begin test -->
 		<dependency>
 			<groupId>junit</groupId>
    			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
-		<!-- ##### other end -->
+        <!-- ##### end test -->
 	</dependencies>
 	
 	<build>

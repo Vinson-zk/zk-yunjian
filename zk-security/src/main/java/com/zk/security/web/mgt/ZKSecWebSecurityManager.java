@@ -66,7 +66,7 @@ public class ZKSecWebSecurityManager extends ZKSecDefaultSecurityManager {
     /**
      * 创建会话主体
      */
-    public ZKSecSubject createSubject(HttpServletRequest request, HttpServletResponse response) {
+    public <ID> ZKSecSubject createSubject(HttpServletRequest request, HttpServletResponse response) {
         /*
          * 1、确定主体令牌 2、创建主体 3、确定主体身份 4、保存令牌信息
          */
@@ -83,7 +83,7 @@ public class ZKSecWebSecurityManager extends ZKSecDefaultSecurityManager {
         ZKSecSubject subject = this.getSubjectFactory().createSubject(this, request, response, tk);
 
         /*** 3、确定主体身份 ***/
-        ZKSecPrincipalCollection pc = resolvePrincipal(subject);
+        ZKSecPrincipalCollection<ID> pc = resolvePrincipal(subject);
 
         /*** 4、保存主体信息 ***/
         saveToSubject(request, response, subject, pc);
@@ -183,7 +183,7 @@ public class ZKSecWebSecurityManager extends ZKSecDefaultSecurityManager {
      * @param subject
      * @return
      */
-    private ZKSecPrincipalCollection resolvePrincipal(ZKSecSubject subject) {
+    private <ID> ZKSecPrincipalCollection<ID> resolvePrincipal(ZKSecSubject subject) {
         if (this.getRememberMeManager() != null) {
             return this.getRememberMeManager().getRememberedPrincipals(subject);
         }
@@ -198,8 +198,8 @@ public class ZKSecWebSecurityManager extends ZKSecDefaultSecurityManager {
      * @param subject
      * @param pc
      */
-    private void saveToSubject(HttpServletRequest request, HttpServletResponse response, ZKSecSubject subject,
-            ZKSecPrincipalCollection pc) {
+    private <ID> void saveToSubject(HttpServletRequest request, HttpServletResponse response, ZKSecSubject subject,
+            ZKSecPrincipalCollection<ID> pc) {
         if (subject.getTicket(false) != null && subject.getTicket(false).getPrincipalCollection() != null) {
             // 身份已经存在，不用再保存
             logger.info("[^_^:20180824-1204-001] 身份已经存在，不需要再设置！");

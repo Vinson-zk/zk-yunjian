@@ -9,7 +9,7 @@
  * accordance with the terms of the license agreement you entered into 
  * with Vinson. 
  *
- * @Title: ZKSerCenConfiguration.java 
+ * @Title: ZKSerCenBeforeConfiguration.java 
  * @author Vinson 
  * @Package com.zk.server.central.configuration 
  * @Description: TODO(simple description this file what to do.) 
@@ -20,20 +20,16 @@ package com.zk.server.central.configuration;
 
 import java.util.Collections;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.Filter;
 import javax.validation.Validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.EnableWebMvcConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConfigurationPropertiesBindingPostProcessor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.netflix.eureka.EurekaConstants;
 import org.springframework.cloud.netflix.eureka.MutableDiscoveryClientOptionalArgs;
@@ -42,19 +38,13 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.Ordered;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.zk.core.commons.ZKValidatorMessageInterpolator;
-import com.zk.core.configuration.ZKCoreConfiguration;
 import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.web.filter.ZKCrosFilter;
 import com.zk.core.web.filter.ZKOncePerFilter;
-import com.zk.db.dynamic.spring.dataSource.ZKDynamicDataSource;
-import com.zk.db.dynamic.spring.transaction.ZKDynamicTransactionManager;
 import com.zk.framework.serCen.ZKSerCenDecode;
 import com.zk.framework.serCen.ZKSerCenEncrypt;
 import com.zk.framework.serCen.eureka.ZKEurekaTransportClientFactories;
@@ -63,66 +53,43 @@ import com.zk.server.central.commons.ZKSerCenCerCipherManager;
 import com.zk.server.central.commons.support.ZKSerCenCerCipherManagerImpl;
 import com.zk.server.central.filter.ZKSerCenRegisterFilter;
 import com.zk.server.central.interceptor.ZKViewVariateInterceptor;
+import com.zk.webmvc.configuration.ZKWebmvcConfiguration;
 
-/** 
-* @ClassName: ZKSerCenConfiguration 
-* @Description: TODO(simple description this class what to do.) 
-* @author Vinson 
-* @version 1.0 
-*/
+/**
+ * @ClassName: ZKSerCenBeforeConfiguration
+ * @Description: TODO(simple description this class what to do.)
+ * @author Vinson
+ * @version 1.0
+ */
 @ImportResource(locations = { "classpath:xmlConfig/spring_ctx_sc_application.xml",
-        "classpath:xmlConfig/spring_ctx_sc_mvc.xml", "classpath:xmlConfig/spring_ctx_sc_dynamic_mybatis.xml" })
-@PropertySource(encoding = "UTF-8", value = { "classpath:zk.ser.cen.jdbc.properties" })
+        "classpath:xmlConfig/spring_ctx_sc_mvc.xml" })
 //@ImportAutoConfiguration(classes = { ZKMongoAutoConfiguration.class })
 @AutoConfigureBefore(value = { 
-//        ZKMongoAutoConfiguration.class,
-//        ZKSerCenRedisConfiguration.class,
-        ZKSerCenShiroConfiguration.class,
-        ZKSerCenMvcConfiguration.class,
-        EnableWebMvcConfiguration.class,
+//        ZKMongoAutoConfiguration.class, // 
+//        ZKSerCenRedisConfiguration.class, // 
+        ZKSerCenJdbcConfiguration.class, //
+        ZKSerCenShiroConfiguration.class, //
+        ZKSerCenMvcConfiguration.class, //
+        EnableWebMvcConfiguration.class, //
         ServletWebServerFactoryAutoConfiguration.class,
 })
 //@AutoConfigureAfter(value = { ServletWebServerFactoryAutoConfiguration.class })
 //@AutoConfigureOrder(value = Ordered.HIGHEST_PRECEDENCE)
 //@ImportAutoConfiguration(classes = { DispatcherServletAutoConfiguration.class })
 @Configuration
-public class ZKSerCenConfiguration extends ZKCoreConfiguration {
+public class ZKSerCenBeforeConfiguration extends ZKWebmvcConfiguration {
 
-    protected static Logger log = LoggerFactory.getLogger(ZKSerCenConfiguration.class);
-
-    @Value("${zk.ser.cen.db.dynamic.jdbc.username_w}")
-    private String dbUserName_w;
-
-    @Value("${zk.ser.cen.db.dynamic.jdbc.password_w}")
-    private String dbPwd_w;
-
-    @Value("${zk.ser.cen.db.dynamic.jdbc.username_r}")
-    private String dbUserName_r;
-
-    @Value("${zk.ser.cen.db.dynamic.jdbc.password_r}")
-    private String dbPwd_r;
-
-//    @Autowired
-//    private ApplicationContext applicationContext;
+    protected static Logger log = LoggerFactory.getLogger(ZKSerCenBeforeConfiguration.class);
 
     @Autowired
-    ConfigurationPropertiesBindingPostProcessor configurationPropertiesBinder;
-
-    @PostConstruct
-    public void postConstruct() {
-        super.postConstruct();
-        // 方法在 @Autowired before 后执行
-        System.out.println("[^_^:20191219-2154-001] ===== ZKSerCenConfiguration class postConstruct ");
-        System.out.println("[^_^:20191219-2154-001] spring.mvc.view.prefix:"
-                + ZKEnvironmentUtils.getString("spring.mvc.view.prefix"));
-        System.out.println("[^_^:20191219-2154-001] spring.freemarker.prefix:"
-                + ZKEnvironmentUtils.getString("spring.freemarker.prefix"));
-        System.out.println("[^_^:20191219-2154-001] ----- ZKSerCenConfiguration class postConstruct ");
-    }
-
-    @Autowired
-    public void before(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
-        super.before(requestMappingHandlerAdapter);
+    public void beforeSerCen() {
+//        super.before(requestMappingHandlerAdapter);
+        System.out.println(
+                "[^_^:20191219-2154-001] === [" + ZKSerCenBeforeConfiguration.class.getSimpleName() + "] " + this);
+        System.out.println("[^_^:20191219-2154-001] spring.mvc.view.prefix:     " + ZKEnvironmentUtils.getString("spring.mvc.view.prefix"));
+        System.out.println("[^_^:20191219-2154-001] spring.freemarker.prefix:   " + ZKEnvironmentUtils.getString("spring.freemarker.prefix"));
+        System.out.println(
+                "[^_^:20191219-2154-001] --- [" + ZKSerCenBeforeConfiguration.class.getSimpleName() + "] " + this);
     }
 
     @Bean
@@ -142,85 +109,6 @@ public class ZKSerCenConfiguration extends ZKCoreConfiguration {
     }
 
     /**
-     * mongo 属性配置
-     *
-     * @Title: zkMongoProperties
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Oct 28, 2019 3:02:22 PM
-     * @return
-     * @return ZKMongoProperties
-     */
-//    @Bean
-//    @ConfigurationProperties(prefix = "zk.ser.cen.mongodb")
-//    public ZKMongoProperties zkMongoProperties() {
-//        return new ZKMongoProperties();
-//    }
-
-    /**
-     * 数据源
-     *
-     * @Title: parentDataSource
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Oct 28, 2019 3:02:07 PM
-     * @return
-     * @return DruidDataSource
-     */
-//    @Primary
-    @Bean("parentDataSource")
-    @ConfigurationProperties(prefix = "zk.ser.cen.db.dynamic.jdbc.druid.pool")
-    public DruidDataSource parentDataSource() {
-        return new DruidDataSource();
-    }
-
-    // 动态数据源
-    @Bean("zkDynamicDataSource")
-    public ZKDynamicDataSource zkDynamicDataSource() {
-
-        ZKDynamicDataSource zkDynamicDataSource = new ZKDynamicDataSource();
-
-        DruidDataSource dds_w = new DruidDataSource();
-        DruidDataSource dds_r = new DruidDataSource();
-
-        configurationPropertiesBinder.postProcessBeforeInitialization(dds_w, "parentDataSource");
-        configurationPropertiesBinder.postProcessBeforeInitialization(dds_r, "parentDataSource");
-
-        dds_w.setUsername(this.dbUserName_w);
-        dds_w.setPassword(dbPwd_w);
-
-        dds_r.setUsername(this.dbUserName_r);
-        dds_r.setPassword(dbPwd_r);
-
-        System.out.println("[^_^:20220521-1030-001] ====================================================");
-        System.out.println("[^_^:20220521-1030-001] 数据库链接：" + dds_w.getUrl());
-        System.out.println("[^_^:20220521-1030-001] ====================================================");
-
-        zkDynamicDataSource.setWriteDataSource(dds_w);
-        zkDynamicDataSource.setReadDataSource(dds_r);
-
-        return zkDynamicDataSource;
-    }
-
-    /**
-     * 动态数据源事务
-     *
-     * @Title: dynamicTransactionManager
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Oct 28, 2019 3:02:16 PM
-     * @param zkDynamicDataSource
-     * @return
-     * @return ZKDynamicTransactionManager
-     */
-    @Bean("dynamicTransactionManager")
-    public ZKDynamicTransactionManager dynamicTransactionManager(ZKDynamicDataSource zkDynamicDataSource) {
-        ZKDynamicTransactionManager zkDynamicTransactionManager = new ZKDynamicTransactionManager();
-        zkDynamicTransactionManager.setDataSource(zkDynamicDataSource);
-        return zkDynamicTransactionManager;
-    }
-
-    /**
      * 数据验证消息处理
      *
      * @Title: validator
@@ -234,7 +122,6 @@ public class ZKSerCenConfiguration extends ZKCoreConfiguration {
      */
     @Bean
     public Validator validator(MessageSource messageSource, ApplicationContext applicationContext) {
-
         /*
          * 重写这个方法比较好
          * 
@@ -346,10 +233,8 @@ public class ZKSerCenConfiguration extends ZKCoreConfiguration {
     @ConditionalOnClass(name = "com.sun.jersey.api.client.filter.ClientFilter")
 //    @ConditionalOnMissingBean(value = AbstractDiscoveryClientOptionalArgs.class, search = SearchStrategy.CURRENT)
     public MutableDiscoveryClientOptionalArgs discoveryClientOptionalArgs(ZKSerCenEncrypt zkSerCenEncrypt) {
-
         MutableDiscoveryClientOptionalArgs ms = new MutableDiscoveryClientOptionalArgs();
         ms.setTransportClientFactories(new ZKEurekaTransportClientFactories(zkSerCenEncrypt));
-
         return ms;
     }
 

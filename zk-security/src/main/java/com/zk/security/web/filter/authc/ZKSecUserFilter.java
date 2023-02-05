@@ -22,6 +22,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import com.zk.core.exception.ZKUnknownException.KeyExceptionType;
 import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.security.common.ZKSecConstants;
 import com.zk.security.exception.ZKSecCodeException;
@@ -60,11 +61,11 @@ public class ZKSecUserFilter extends ZKSecBaseControlFilter {
         if(request.getAttribute(ZKSecConstants.SEC_KEY.SecIsHaveTicket) != null){
             log.error("[^_^:20221013-1703-001] 用户登录过期，请重新登录；{}", server);
             // 请求中带有令牌，抛出异常； zk.sec.000020=登录已过期，请重新登录
-            throw new ZKSecCodeException("zk.sec.000020=登录已过期，请重新登录");
+            throw new ZKSecCodeException(KeyExceptionType.authentication, "zk.sec.000020", "zk.sec.000020=登录已过期，请重新登录");
         }else {
             log.error("[^_^:20221013-1703-001] 用户未登录；{}", server);
             // 用户未登录，抛出异常；zk.sec.000004=用户未登录
-            throw new ZKSecCodeException("zk.sec.000004");
+            throw new ZKSecCodeException(KeyExceptionType.authentication, "zk.sec.000004");
         }
     }
 

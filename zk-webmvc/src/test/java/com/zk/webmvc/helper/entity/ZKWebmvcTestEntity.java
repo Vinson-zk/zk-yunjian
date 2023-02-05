@@ -9,25 +9,22 @@
  * accordance with the terms of the license agreement you entered into 
  * with Vinson. 
  *
- * @Title: ZKCoreEntity.java 
+ * @Title: ZKWebmvcTestEntity.java 
  * @author Vinson 
  * @Package com.zk.core.helper 
  * @Description: TODO(simple description this file what to do.) 
  * @date Dec 17, 2019 11:03:43 AM 
  * @version V1.0   
 */
-package com.zk.core.helper;
+package com.zk.webmvc.helper.entity;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-/** 
-* @ClassName: ZKCoreEntity 
-* @Description: TODO(simple description this class what to do.) 
-* @author Vinson 
-* @version 1.0 
-*/
-@XmlRootElement(name = "zkCoreEntity")
-public class ZKCoreEntity {
+/**
+ * @ClassName: ZKWebmvcTestEntity
+ * @Description: TODO(simple description this class what to do.)
+ * @author Vinson
+ * @version 1.0
+ */
+public class ZKWebmvcTestEntity {
 
     private String name;
 

@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBindingPostProcessor;
 import org.springframework.context.annotation.Bean;
@@ -58,9 +59,6 @@ public class ZKDemoJdbcConfiguration {
     @Value("${zk.demo.dynamic.jdbc.password_r}")
     private String dbPwd_r;
 
-    @Autowired
-    ConfigurationPropertiesBindingPostProcessor configurationPropertiesBinder;
-
     /**
      * 数据源
      *
@@ -79,8 +77,9 @@ public class ZKDemoJdbcConfiguration {
     }
 
     // 动态数据源
+    @ConditionalOnClass(value = { ConfigurationPropertiesBindingPostProcessor.class })
     @Bean("zkDynamicDataSource")
-    public ZKDynamicDataSource zkDynamicDataSource() {
+    public ZKDynamicDataSource zkDynamicDataSource(ConfigurationPropertiesBindingPostProcessor configurationPropertiesBinder) {
 
         ZKDynamicDataSource zkDynamicDataSource = new ZKDynamicDataSource();
 

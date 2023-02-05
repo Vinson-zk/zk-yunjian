@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zk.core.exception.ZKCodeException;
+import com.zk.core.exception.ZKUnknownException.KeyExceptionType;
 import com.zk.security.authz.ZKSecAuthorizingAnnotationHandler;
 import com.zk.security.authz.hander.ZKSecApiCodeAnnotationHandler;
 import com.zk.security.common.ZKSecAnnotationResolver;
@@ -72,7 +73,8 @@ public class ZKSecAnnotationAuthorizationMethodInterceptor implements MethodInte
         catch(ZKSecAuthorizationException authE) {
             authE.printStackTrace();
             log.error("[>_<:20220511-1923-001] [zk.sec.000003] 您没有操作权限:[{}]", authE.getAuthCode());
-            throw ZKCodeException.as("zk.sec.000003", "您没有操作权限", null, authE.getAuthCode(), authE);
+            throw ZKCodeException.as(KeyExceptionType.authority, authE, "zk.sec.000003", "您没有操作权限", authE.getAuthCode(),
+                    (Object) null);
         }
 
         return invocation.proceed();

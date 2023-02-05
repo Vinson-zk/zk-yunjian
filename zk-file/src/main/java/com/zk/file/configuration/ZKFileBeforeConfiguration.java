@@ -18,7 +18,6 @@
 */
 package com.zk.file.configuration;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.Filter;
 import javax.validation.Validator;
 
@@ -39,18 +38,15 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import com.zk.core.commons.ZKValidatorMessageInterpolator;
-import com.zk.core.utils.ZKEnvironmentUtils;
-import com.zk.core.utils.ZKLocaleUtils;
 import com.zk.core.web.filter.ZKCrosFilter;
-import com.zk.core.web.resolver.ZKExceptionHandlerResolver;
-import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.framework.serCen.ZKSerCenEncrypt;
 import com.zk.framework.serCen.eureka.ZKEurekaTransportClientFactories;
 import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
-import com.zk.log.interceptor.ZKLogAccessInterceptor;
+import com.zk.webmvc.configuration.ZKWebmvcConfiguration;
+import com.zk.webmvc.handler.ZKExceptionHandlerResolver;
+import com.zk.webmvc.interceptor.ZKLogAccessInterceptor;
 
 /** 
 * @ClassName: ZKFileBeforeConfiguration 
@@ -71,33 +67,14 @@ import com.zk.log.interceptor.ZKLogAccessInterceptor;
 @PropertySource(encoding = "UTF-8", value = { 
         "classpath:zk.log.properties",
         })
-public class ZKFileBeforeConfiguration {
+public class ZKFileBeforeConfiguration extends ZKWebmvcConfiguration{
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private ApplicationContext applicationContext;
-
-    @PostConstruct
-    public void postConstruct() {
-        // 方法在 @Autowired before 后执行
-    }
-
-    @Autowired
-    public void before(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
-        log.info("[^_^:20220621-1426-001] -------- configuration before begin... ... " + this.getClass());
-
-        ZKEnvironmentUtils.initContext(applicationContext);
-//        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("en_US"));
-//        ZKLocaleUtils.setLocale(ZKLocaleUtils.valueOf("zh_CN"));
-//        // # 默认语言；注意这里不影响到 localeResolver 的默认语言
-        ZKWebUtils.setLocale(
-                ZKLocaleUtils.distributeLocale(ZKEnvironmentUtils.getString("zk.file.default.locale", "zh_CN")));
-
-        // 设置下 RequestMappingHandlerAdapter 的 ignoreDefaultModelOnRedirect=true,
-        // 这样可以提高效率，避免不必要的检索。
-        requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
-        log.info("[^_^:20220621-1426-001] -------- configuration before end______ " + this.getClass());
+    public void beforeFile() {
+        log.info("[^_^:20220621-1426-001] === [" + ZKFileBeforeConfiguration.class.getSimpleName() + "] " + this);
+        log.info("[^_^:20220621-1426-001] --- [" + ZKFileBeforeConfiguration.class.getSimpleName() + "] " + this);
     }
 
     /******************************************************************/

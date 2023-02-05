@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.bson.Document;
 import org.junit.Test;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.UncategorizedMongoDbException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
@@ -39,7 +39,7 @@ import junit.framework.TestCase;
 * @version 1.0 
 */
 public class ZKAdministrationTest {
-    public static FileSystemXmlApplicationContext ctx;
+    public static ApplicationContext ctx;
 
     public static MongoTemplate mongoTemplate;
 

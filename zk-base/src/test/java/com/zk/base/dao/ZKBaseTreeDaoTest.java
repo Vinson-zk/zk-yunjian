@@ -1,24 +1,24 @@
 package com.zk.base.dao;
 
-import com.zk.base.helper.ZKBaseHelperSpringBootMain;
-import com.zk.core.commons.data.ZKJson;
-import com.zk.core.commons.data.ZKPage;
-import com.zk.core.utils.ZKDateUtils;
-import com.zk.core.utils.ZKJsonUtils;
-import org.junit.Test;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import org.junit.Test;
+import org.springframework.context.ConfigurableApplicationContext;
+
+import com.zk.base.helper.ZKBaseHelperCtx;
 import com.zk.base.helper.dao.ZKBaseHelperTreeDao;
 import com.zk.base.helper.entity.ZKBaseHelperTreeEntity;
+import com.zk.core.commons.data.ZKJson;
+import com.zk.core.commons.data.ZKPage;
 import com.zk.core.utils.ZKClassUtils;
+import com.zk.core.utils.ZKDateUtils;
+import com.zk.core.utils.ZKJsonUtils;
 import com.zk.db.entity.ZKDBBaseEntity;
 import com.zk.db.mybatis.dao.ZKDBBaseDao;
 
 import junit.framework.TestCase;
-import org.springframework.context.ConfigurableApplicationContext;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Copyright (c) 2017-2022 Vinson.
@@ -41,7 +41,7 @@ public class ZKBaseTreeDaoTest {
     @Test
     public void testGetSuperclassByName(){
         try {
-            Class<ZKDBBaseEntity> classz = ZKClassUtils.getSuperclassByName(ZKDBBaseDao.class,
+            Class<ZKDBBaseEntity<?>> classz = ZKClassUtils.getSuperclassByName(ZKDBBaseDao.class,
                     ZKBaseHelperTreeDao.class, "E");
             System.out.println("[^_^:20221012-1526-001] classz: " + classz.getName());
             TestCase.assertEquals(ZKBaseHelperTreeEntity.class, classz);
@@ -53,7 +53,7 @@ public class ZKBaseTreeDaoTest {
 
     @Test
     public void testFindTree(){
-        ConfigurableApplicationContext ctx = ZKBaseHelperSpringBootMain.run(new String[]{});
+        ConfigurableApplicationContext ctx = ZKBaseHelperCtx.run(new String[] {});
         ZKBaseHelperTreeDao dao = ctx.getBean(ZKBaseHelperTreeDao.class);
         TestCase.assertNotNull(dao);
         List<ZKBaseHelperTreeEntity> dels = new ArrayList<>();
@@ -64,7 +64,7 @@ public class ZKBaseTreeDaoTest {
             System.out.println("[^_^:20221017-1453-001] ----------------------------------------");
             System.out.println("[^_^:20221017-1453-001] 初始树形数据，创建完成。");
 
-            int resInt = 0;
+//            int resInt = 0;
             ZKPage<ZKBaseHelperTreeEntity> page = null;
             List<ZKBaseHelperTreeEntity> resList = null;
             ZKBaseHelperTreeEntity e = null;
@@ -76,7 +76,7 @@ public class ZKBaseTreeDaoTest {
             TestCase.assertFalse(resList.isEmpty());
             TestCase.assertEquals(calculateNodeCount(level, nodeCount), resList.size());
 
-            page = new ZKPage();
+            page = new ZKPage<ZKBaseHelperTreeEntity>();
             page.setPageSize(calculateNodeCount(level, nodeCount));
             e.setPage(page);
             resList = dao.findList(e);
@@ -123,19 +123,19 @@ public class ZKBaseTreeDaoTest {
 
     @Test
     public void testFindTreeFilter(){
-        ConfigurableApplicationContext ctx = ZKBaseHelperSpringBootMain.run(new String[]{});
+        ConfigurableApplicationContext ctx = ZKBaseHelperCtx.run(new String[] {});
         ZKBaseHelperTreeDao dao = ctx.getBean(ZKBaseHelperTreeDao.class);
         TestCase.assertNotNull(dao);
         List<ZKBaseHelperTreeEntity> dels = new ArrayList<>();
         try {
-            int nodeCount = 3, level = 3;
+//            int nodeCount = 3, level = 3;
 //            dels.addAll(makeTestTree(dao, KeyName.valueName, nodeCount, level)); // 创建树形数据的层级
 
             System.out.println("[^_^:20221018-1453-001] ----------------------------------------");
             System.out.println("[^_^:20221018-1453-001] 初始树形数据，创建完成。");
 
             int resInt = 0;
-            ZKPage<ZKBaseHelperTreeEntity> page = null;
+//            ZKPage<ZKBaseHelperTreeEntity> page = null;
             List<ZKBaseHelperTreeEntity> resList = null;
             ZKBaseHelperTreeEntity e = null;
 
