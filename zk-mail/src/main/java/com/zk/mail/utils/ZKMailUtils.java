@@ -306,7 +306,7 @@ public class ZKMailUtils {
         properties.put("mail.smtp.port", port);
         properties.put("mail.smtp.auth", validate ? "true" : "false");
 
-        if ("ssl".equalsIgnoreCase(type)) {
+        if ("ssl".equalsIgnoreCase(type.toLowerCase())) {
             properties.put("mail.smtp.socketFactory.port", port);
             properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             properties.put("mail.smtp.ssl.enable", "true");
@@ -317,7 +317,7 @@ public class ZKMailUtils {
                 properties.setProperty("mail.smtp.socketFactory.fallback", "false");
             }
         }
-        else if ("tls".equalsIgnoreCase(type)) {
+        else if ("tls".equalsIgnoreCase(type.toLowerCase())) {
             properties.put("mail.smtp.starttls.enable", "true");
             properties.put("mail.smtp.ssl.checkserveridentity", "false");
             properties.put("mail.smtp.ssl.trust", host);

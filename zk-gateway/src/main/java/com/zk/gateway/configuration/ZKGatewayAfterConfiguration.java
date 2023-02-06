@@ -18,11 +18,7 @@
 */
 package com.zk.gateway.configuration;
 
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.EnableWebMvcConfiguration;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @ClassName: ZKGatewayAfterConfiguration
@@ -31,11 +27,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @version 1.0
  */
 @Configuration
-@AutoConfigureAfter(value = {
-        EnableWebMvcConfiguration.class,
-        ServletWebServerFactoryAutoConfiguration.class,
-})
-public class ZKGatewayAfterConfiguration implements WebMvcConfigurer {
+//@AutoConfigureAfter(value = {
+//        ServletWebServerFactoryAutoConfiguration.class,
+//})
+public class ZKGatewayAfterConfiguration {
 
 //    @Autowired
 //    private ZKLogAccessInterceptor logAccessInterceptor;

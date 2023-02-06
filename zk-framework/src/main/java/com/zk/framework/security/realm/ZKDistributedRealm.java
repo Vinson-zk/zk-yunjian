@@ -18,8 +18,8 @@
 */
 package com.zk.framework.security.realm;
 
-import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.commons.ZKMsgRes;
+import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.security.authz.ZKSecAuthorizationInfo;
 import com.zk.security.authz.ZKSecSimpleAuthorizationInfo;
 import com.zk.security.principal.ZKSecPrincipal;
@@ -88,12 +88,12 @@ public class ZKDistributedRealm extends ZKSecAbstractRealm {
      * @throws Exception
      */
     @Override
-    protected ZKSecPrincipalCollection doAuthentication(ZKSecAuthenticationToken authcToken) {
+    protected <ID> ZKSecPrincipalCollection<ID> doAuthentication(ZKSecAuthenticationToken authcToken) {
         return null;
     }
 
     @Override
-    public ZKSecAuthorizationInfo doGetZKSecAuthorizationInfo(ZKSecPrincipalCollection principalCollection) {
+    public <ID> ZKSecAuthorizationInfo doGetZKSecAuthorizationInfo(ZKSecPrincipalCollection<ID> principalCollection) {
         ZKSecSimpleAuthorizationInfo authorizationInfo = null;
         ZKMsgRes res = this.getSysSecAuthcApi().getUserAuthc();
         if (res.isOk()) {
@@ -117,7 +117,7 @@ public class ZKDistributedRealm extends ZKSecAbstractRealm {
      * @return
      */
     @Override
-    protected boolean doCheckPermission(ZKSecPrincipalCollection principalCollection, String permissionCode) {
+    protected <ID> boolean doCheckPermission(ZKSecPrincipalCollection<ID> principalCollection, String permissionCode) {
         ZKSecPrincipal<?> pp = principalCollection.getPrimaryPrincipal();
         if (ZKSecPrincipal.KeyType.Distributed_server == pp.getType()) {
             // 微服务单请求，不较验权限
@@ -136,7 +136,7 @@ public class ZKDistributedRealm extends ZKSecAbstractRealm {
      * @return
      */
     @Override
-    protected boolean doCheckApiCode(ZKSecPrincipalCollection principalCollection, String apiCode) {
+    protected <ID> boolean doCheckApiCode(ZKSecPrincipalCollection<ID> principalCollection, String apiCode) {
         ZKSecPrincipal<?> pp = principalCollection.getPrimaryPrincipal();
         if (ZKSecPrincipal.KeyType.Distributed_server == pp.getType()) {
             // 微服务单请求，不较验权限
@@ -154,7 +154,7 @@ public class ZKDistributedRealm extends ZKSecAbstractRealm {
     }
 
     @Override
-    public void doLimitPrincipalTicketCount(ZKSecPrincipalCollection principalCollection) {
+    public <ID> void doLimitPrincipalTicketCount(ZKSecPrincipalCollection<ID> principalCollection) {
 
     }
 

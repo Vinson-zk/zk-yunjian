@@ -78,11 +78,11 @@
 	
 	<!-- 五、请求适配器；[HandlerAdapter]    在 java 配置类中配置，这里只配置一些属性； -->
 	<!-- 5.1 适配消息处理 -->
-	<bean id="messageConverters" class="org.springframework.boot.autoconfigure.http.HttpMessageConverters" >
+	<!-- <bean id="messageConverters" class="org.springframework.boot.autoconfigure.http.HttpMessageConverters" >
 		<constructor-arg>
 			<array>
 				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
-					<property name="writeAcceptCharset" value="false" /> <!-- 避免响应头过大 -->
+					<property name="writeAcceptCharset" value="false" /> 避免响应头过大
 					<property name="supportedMediaTypes">
 						<list>
 							<bean class="org.springframework.http.MediaType">
@@ -110,7 +110,7 @@
 				</bean>
 			</array>
 		</constructor-arg>
-	</bean> 
+	</bean>  -->
 
 	<!-- 六、请求异常解析器；[HandlerExceptionResolver] 在 java mvc configuration 配置类中注入 
 	<bean class="com.zk.spring.boot.demo.mvc.resolver.MyExceptionHandlerResolver" /> -->

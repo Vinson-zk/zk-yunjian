@@ -28,9 +28,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zk.core.redis.ZKJedisOperatorByte;
 import com.zk.core.redis.ZKJedisOperatorStringKey;
-import com.zk.core.utils.ZKJsonUtils;
 
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -75,7 +75,7 @@ public class ZKGatewayRedisConfiguration {
         System.out.println("[^_^:20220615-1100-001] ====================================================");
         System.out.println(String.format("[^_^:20220615-1100-001] Redis 连接 hosr:%s, port:%s, password:%s", host, port, password));
         System.out.println(
-                "[^_^:20220615-1100-001] Redis 连接 JedisPoolConfig:" + ZKJsonUtils.writeObjectJson(jedisPoolConfig));
+                "[^_^:20220615-1100-001] Redis 连接 JedisPoolConfig:" + JSONObject.toJSONString(jedisPoolConfig));
         System.out.println("[^_^:20220615-1100-001] ====================================================");
 
         /** 单机模式 */

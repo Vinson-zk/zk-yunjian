@@ -18,8 +18,12 @@
 */
 package com.zk.devleopment.tool.gen.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.zk.webmvc.interceptor.ZKLogAccessInterceptor;
 
 /** 
 * @ClassName: ZKDevAfterConfiguration 
@@ -30,12 +34,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class ZKDevAfterConfiguration implements WebMvcConfigurer {
 
-//    @Autowired
-//    private ZKLogAccessInterceptor logAccessInterceptor;
-//
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(this.logAccessInterceptor).addPathPatterns("/**");
-//    }
+    @Autowired
+    private ZKLogAccessInterceptor logAccessInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(this.logAccessInterceptor).addPathPatterns("/**");
+    }
 
 }

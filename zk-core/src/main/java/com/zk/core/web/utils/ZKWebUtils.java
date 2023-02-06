@@ -660,7 +660,12 @@ public class ZKWebUtils extends org.springframework.web.util.WebUtils {
     public static ZKLocaleResolver getLocaleResolver(ApplicationContext ctx, HttpServletRequest hReq) {
         ZKLocaleResolver localeResolver = null;
         if (ctx != null) {
-            localeResolver = ctx.getBean(ZKLocaleResolver.class);
+            try {
+                localeResolver = ctx.getBean(ZKLocaleResolver.class);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
         }
 //        if (localeResolver == null) {
 //            localeResolver = getLocaleResolverByRequest(hReq);

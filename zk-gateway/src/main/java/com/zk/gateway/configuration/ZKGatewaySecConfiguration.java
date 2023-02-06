@@ -21,8 +21,6 @@ package com.zk.gateway.configuration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.EnableWebMvcConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -30,7 +28,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 
 import com.zk.core.redis.ZKJedisOperatorStringKey;
-import com.zk.webmvc.filter.ZKDelegatingFilterProxyRegistrationBean;
+import com.zk.core.web.filter.ZKDelegatingFilterProxyRegistrationBean;
 import com.zk.framework.security.realm.ZKDistributedRealm;
 import com.zk.security.ticket.ZKSecTicketManager;
 import com.zk.security.ticket.support.redis.ZKSecRedisTicketManager;
@@ -46,11 +44,11 @@ import com.zk.security.web.support.spring.ZKSecStaticMethodMatcherPointcutAdviso
  */
 @Configuration
 @AutoConfigureBefore(value = { ZKGatewayAfterConfiguration.class })
-@AutoConfigureAfter(value = {
-//        ZKMongoAutoConfiguration.class,
-        ZKGatewayRedisConfiguration.class,
-        EnableWebMvcConfiguration.class, 
-        ServletWebServerFactoryAutoConfiguration.class})
+@AutoConfigureAfter(value = { //
+//        ZKMongoAutoConfiguration.class, // 
+        ZKGatewayRedisConfiguration.class, //
+//        ServletWebServerFactoryAutoConfiguration.class, // 
+})
 @ImportResource(locations = { "classpath:xmlConfig/spring_ctx_gateway_sec.xml" })
 public class ZKGatewaySecConfiguration {
 

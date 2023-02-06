@@ -25,6 +25,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -38,19 +39,19 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 * @author Vinson 
 * @version 1.0 
 */
-@SpringBootApplication(exclude = { 
-        DataSourceAutoConfiguration.class, 
-        TransactionAutoConfiguration.class,
-//        HibernateJpaAutoConfiguration.class,
-//        MongoAutoConfiguration.class,
-//        WebMvcAutoConfiguration.class,
+@SpringBootApplication(exclude = { //
+        DataSourceAutoConfiguration.class, //
+        TransactionAutoConfiguration.class, //
+//        HibernateJpaAutoConfiguration.class, //
+//        MongoAutoConfiguration.class, // 
+        WebMvcAutoConfiguration.class, //
 })
 @EnableWebFlux
 @EnableEurekaClient
 @EnableTransactionManagement(proxyTargetClass = true)
 //@AutoConfigureOrder(value = Ordered.HIGHEST_PRECEDENCE)
-//@ComponentScan(basePackages = { "com.zk.gateway.*", "com.zk.log.*" })
-@ComponentScan(basePackages = { "com.zk.gateway.*" })
+@ComponentScan(basePackages = { "com.zk.gateway.*", "com.zk.log.*" })
+//@ComponentScan(basePackages = { "com.zk.gateway.*" })
 public class ZKGatewaySpringBootMain {
 
     protected static Logger log = LoggerFactory.getLogger(ZKGatewaySpringBootMain.class);
@@ -84,7 +85,7 @@ public class ZKGatewaySpringBootMain {
                 .properties("spring.config.name=zk,zk.gateway,zk.gateway.env");
 
         SpringApplication springApplication = springApplicationBuilder.build();
-        springApplication.setWebApplicationType(WebApplicationType.SERVLET);
+        springApplication.setWebApplicationType(WebApplicationType.REACTIVE);
 
         return springApplication.run(args);
     }

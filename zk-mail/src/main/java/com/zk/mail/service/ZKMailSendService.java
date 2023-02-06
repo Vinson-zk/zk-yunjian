@@ -326,7 +326,7 @@ public class ZKMailSendService {
                 mailSendHistory.setSendAddress(sendMailAddr);
             }
 
-            log.info("[^_^:20220527-0216] 发送邮件：getSendAddress：{}", mailSendHistory.getSendAddress());
+            log.info("[^_^:20220527-0216-001] 发送邮件：getSendAddress：{}", mailSendHistory.getSendAddress());
             ZKMailUtils.sendMail(recipientMailAddr, mailProperties, mailAuthenticator, mailSendHistory.getSendAddress(),
                     mailSendHistory.getSendName(), mailSendHistory.getSubject(), mailSendHistory.getContent(), async,
                     attachments);

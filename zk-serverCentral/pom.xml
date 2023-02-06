@@ -109,7 +109,7 @@
 		    <groupId>org.apache.shiro</groupId>
 		    <artifactId>shiro-cas</artifactId>
 		</dependency>
-		<!-- ##### shiro end -->
+		<!-- ##### shiro end -->	
 	    
 	    <!-- ***** begin test -->
 		<dependency>

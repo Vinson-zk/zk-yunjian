@@ -81,7 +81,7 @@
 		<!-- <version.log4j>2.11.1</version.log4j> -->
 		<!-- <version.log4j>2.15.0</version.log4j>
 		<version.log4j.spring.boot>1.3.8.RELEASE</version.log4j.spring.boot> -->
-		<version.tomcat.embed>9.0.71</version.tomcat.embed>
+		<version.tomcat.embed>9.0.69</version.tomcat.embed> <!-- 8.5.37 9.0.69 9.0.71 -->
 		<version.jstl>1.2</version.jstl>
 		<version.mybatis>3.5.6</version.mybatis><!-- 3.5.6, 3.4.6 -->
 		<version.mybatis.spring>1.3.2</version.mybatis.spring>
@@ -93,7 +93,7 @@
 		<version.hibernate.validator>6.0.14.Final</version.hibernate.validator>
 		<version.commons.codec>1.10</version.commons.codec>
 		<version.commons.lang3>3.4</version.commons.lang3>
-		<version.shiro>1.4.2</version.shiro>
+		<version.shiro>1.10.1</version.shiro>
 		<version.google.gson>2.8.5</version.google.gson>
 		<version.openfeign.httpclient>10.1.0</version.openfeign.httpclient>
 		<version.openfeign>3.6.0</version.openfeign>
@@ -163,6 +163,16 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-web</artifactId>
 				<version>${version.spring.boot}</version>
+				<exclusions>
+		            <exclusion>
+		                <groupId>org.apache.tomcat.embed</groupId>
+						<artifactId>tomcat-embed-websocket</artifactId>
+		            </exclusion>
+		            <exclusion>
+		                <groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-tomcat</artifactId>
+		            </exclusion>
+		        </exclusions> 
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -273,10 +283,6 @@
 	                	<groupId>javax.servlet</groupId>
 						<artifactId>servlet-api</artifactId>
 					</exclusion>
-					<!-- <exclusion>
-	                	<groupId>org.springframework.cloud</groupId>
-						<artifactId>spring-cloud-netflix-eureka-server</artifactId>
-					</exclusion> -->
 				</exclusions>
 			</dependency>
 			<!-- <dependency>
@@ -446,7 +452,7 @@
 			    <groupId>javax.servlet</groupId>
 			    <artifactId>javax.servlet-api</artifactId>
 			    <version>${version.javax.servlet}</version>
-			    <scope>compile</scope> <!-- provided compile -->
+			    <!-- <scope>provided</scope> --> <!-- provided compile -->
 			</dependency>
 			<!-- ##### servlet end -->
         	

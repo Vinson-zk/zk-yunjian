@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
+import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.security.service.ZKSecPrincipalService;
 
 /** 
@@ -40,15 +41,22 @@ public class ZKSecPrincipalUtils {
         ZKSecPrincipalUtils.applicationContext = applicationContext;
     }
 
+    public static ApplicationContext getCtx() {
+        if (ZKSecPrincipalUtils.applicationContext == null) {
+            ZKSecPrincipalUtils.applicationContext = ZKEnvironmentUtils.getApplicationContext();
+        }
+        return ZKSecPrincipalUtils.applicationContext;
+    }
+
     static ZKSecPrincipalService sps = null;
 
     public static ZKSecPrincipalService getSecPrincipalService() {
-        if (applicationContext == null) {
+        if (getCtx() == null) {
             log.error("[>_<:20230202-2007-001] 无上下文环境，没法取用户服务！");
             return null;
         }
         if (sps == null) {
-            sps = applicationContext.getBean(ZKSecPrincipalService.class);
+            sps = getCtx().getBean(ZKSecPrincipalService.class);
         }
         if (sps == null) {
             log.error("[>_<:20230202-2007-002] 无用户服务！");

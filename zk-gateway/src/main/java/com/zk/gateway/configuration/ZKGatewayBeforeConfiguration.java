@@ -24,25 +24,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.EnableWebMvcConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.netflix.eureka.MutableDiscoveryClientOptionalArgs;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.reactive.result.method.annotation.RequestMappingHandlerAdapter;
 
+import com.zk.core.configuration.ZKCoreConfiguration;
 import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.utils.ZKLocaleUtils;
-import com.zk.webmvc.filter.ZKCrosFilter;
-import com.zk.webmvc.resolver.ZKExceptionHandlerResolver;
+import com.zk.core.web.filter.ZKCrosFilter;
 import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.framework.serCen.ZKSerCenEncrypt;
 import com.zk.framework.serCen.eureka.ZKEurekaTransportClientFactories;
 import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
+import com.zk.security.service.ZKSecDefaultPrincipalService;
+import com.zk.security.service.ZKSecPrincipalService;
 
 /**
  * @ClassName: ZKGatewayBeforeConfiguration
@@ -51,10 +51,11 @@ import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
  * @version 1.0
  */
 @Configuration
-@ImportResource(locations = {
-        "classpath:xmlConfig/spring_ctx_application.xml",
-        "classpath:xmlConfig/spring_ctx_gateway_application.xml",
-        "classpath:xmlConfig/spring_ctx_mvc.xml" })
+@ImportResource(locations = { //
+        "classpath:xmlConfig/spring_ctx_application.xml", //
+        "classpath:xmlConfig/spring_ctx_gateway_application.xml", //
+//        "classpath:xmlConfig/spring_ctx_mvc.xml", //
+})
 @PropertySource(encoding = "UTF-8", value = { 
         "classpath:zk.log.properties" })
 @AutoConfigureBefore(value = {
@@ -62,13 +63,9 @@ import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
     ZKGatewayRedisConfiguration.class, 
     ZKGatewaySecConfiguration.class,
     ZKGatewayAfterConfiguration.class,
-    EnableWebMvcConfiguration.class,
-    ServletWebServerFactoryAutoConfiguration.class,
+//    ServletWebServerFactoryAutoConfiguration.class,
 })
-public class ZKGatewayBeforeConfiguration extends ZKWebmvcConfiguration {
-
-    @Autowired
-    private ApplicationContext applicationContext;
+public class ZKGatewayBeforeConfiguration extends ZKCoreConfiguration {
 
     // # 文件上传，最大上传大小，需要比邮件附件单个的文件大小配置值要大；50M=52428800
     @Value("${zk.gateway.file.upload.multipartResolver.maxInMemorySize:52428800}")
@@ -87,8 +84,14 @@ public class ZKGatewayBeforeConfiguration extends ZKWebmvcConfiguration {
     String defaultEncoding;
 
     @Autowired
-    public void before() {
+    public void beforeGateway(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
         System.out.println("[^_^:20220614-1940-001] === [" + ZKGatewayBeforeConfiguration.class.getSimpleName() + "] " + this);
+        // # 默认语言；
+        ZKWebUtils
+                .setLocale(ZKLocaleUtils.distributeLocale(ZKEnvironmentUtils.getString("zk.default.locale", "zh_CN")));
+        // 设置下 RequestMappingHandlerAdapter 的 ignoreDefaultModelOnRedirect=true,
+        // 这样可以提高效率，避免不必要的检索。
+//        requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
         System.out.println("[^_^:20220614-1940-001] --- [" + ZKGatewayBeforeConfiguration.class.getSimpleName() + "] " + this);
     }
 
@@ -156,20 +159,20 @@ public class ZKGatewayBeforeConfiguration extends ZKWebmvcConfiguration {
         return filterRegistrationBean;
     }
 
-    /**
-     * 异常处理适配器
-     *
-     * @Title: zkExceptionHandlerResolver
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Aug 21, 2020 11:13:24 AM
-     * @return
-     * @return ZKExceptionHandlerResolver
-     */
-    @Bean
-    public ZKExceptionHandlerResolver zkExceptionHandlerResolver() {
-        return new ZKExceptionHandlerResolver();
-    }
+//    /**
+//     * 异常处理适配器
+//     *
+//     * @Title: zkExceptionHandlerResolver
+//     * @Description: TODO(simple description this method what to do.)
+//     * @author Vinson
+//     * @date Aug 21, 2020 11:13:24 AM
+//     * @return
+//     * @return ZKExceptionHandlerResolver
+//     */
+//    @Bean
+//    public ZKExceptionHandlerResolver zkExceptionHandlerResolver() {
+//        return new ZKExceptionHandlerResolver();
+//    }
 
     /**
      * 文件上传 适配器
@@ -191,6 +194,21 @@ public class ZKGatewayBeforeConfiguration extends ZKWebmvcConfiguration {
         multipartResolver.setMaxUploadSizePerFile(maxUploadSizePerFile);
 
         return multipartResolver;
+    }
+
+    /**
+     * 当用登录用户获取服务
+     *
+     * @Title: secPrincipalService
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Feb 6, 2023 9:59:33 AM
+     * @return
+     * @return ZKSecPrincipalService
+     */
+    @Bean
+    public ZKSecPrincipalService secPrincipalService() {
+        return new ZKSecDefaultPrincipalService();
     }
 
 }

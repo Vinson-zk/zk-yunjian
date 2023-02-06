@@ -67,19 +67,19 @@ public class ZKMailUtilsTest {
             // # 发送邮件账号信息，账号、密码、名称
             String account = "binary_space@126.com";
             // # DABDSDVNUZPVLCRD qaz123wsx CJBDKRMXRZPGQESW
-            String password = "DABDSDVNUZPVLCRD";
+            String password = "BAUFJQWLOZBGRDQO";
             Properties mailProperties = this.get126Properties();
 
-            account = "xzrs@zhgxfz.com";
-            password = "Zjb&0128";
-            mailProperties = this.getQQProperties();
+//            account = "xzrs@zhgxfz.com";
+//            password = "Zjb&0128";
+//            mailProperties = this.getQQProperties();
 
             String sendAddress = account;
             String sendName = "sendName-Vinson-测试";
             String subject = "subject-Vinson-测试";
             String content = "content-Vinson-测试";
             String recipientMailAddr = "binary_space@126.com";
-            recipientMailAddr = "it@zhgxfz.com";
+//            recipientMailAddr = "it@zhgxfz.com";
 
             InputStream is = new ByteArrayInputStream("inputStream-Attachments".getBytes());
 //            File file = new File("testFileAttachments.txt");

@@ -44,6 +44,8 @@ import com.zk.core.web.filter.ZKCrosFilter;
 import com.zk.framework.serCen.ZKSerCenEncrypt;
 import com.zk.framework.serCen.eureka.ZKEurekaTransportClientFactories;
 import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
+import com.zk.security.service.ZKSecDefaultPrincipalService;
+import com.zk.security.service.ZKSecPrincipalService;
 import com.zk.webmvc.configuration.ZKWebmvcConfiguration;
 import com.zk.webmvc.handler.ZKExceptionHandlerResolver;
 import com.zk.webmvc.interceptor.ZKLogAccessInterceptor;
@@ -230,6 +232,21 @@ public class ZKMailBeforeConfiguration extends ZKWebmvcConfiguration {
     @Bean
     public ZKLogAccessInterceptor logAccessInterceptor() {
         return new ZKLogAccessInterceptor();
+    }
+
+    /**
+     * 当用登录用户获取服务
+     *
+     * @Title: secPrincipalService
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Feb 6, 2023 9:59:33 AM
+     * @return
+     * @return ZKSecPrincipalService
+     */
+    @Bean
+    public ZKSecPrincipalService secPrincipalService() {
+        return new ZKSecDefaultPrincipalService();
     }
 
 }

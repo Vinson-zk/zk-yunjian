@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.EnableWebMvcConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.netflix.eureka.MutableDiscoveryClientOptionalArgs;
 import org.springframework.context.annotation.Bean;
@@ -55,13 +55,13 @@ import com.zk.webmvc.interceptor.ZKLogAccessInterceptor;
         "classpath:xmlConfig/spring_ctx_mvc.xml" })
 @PropertySource(encoding = "UTF-8", value = { 
         "classpath:zk.log.properties" })
-@AutoConfigureBefore(value = {
-    ZKZuulJdbcConfiguration.class, 
-    ZKZuulRedisConfiguration.class, 
-    ZKZuulSecConfiguration.class,
-    ZKZuulAfterConfiguration.class,
-    EnableWebMvcConfiguration.class,
-    ServletWebServerFactoryAutoConfiguration.class,
+@AutoConfigureBefore(value = { //
+        ZKZuulJdbcConfiguration.class, //
+        ZKZuulRedisConfiguration.class, //
+        ZKZuulSecConfiguration.class, //
+        ZKZuulAfterConfiguration.class, //
+        WebMvcAutoConfiguration.class, //
+        ServletWebServerFactoryAutoConfiguration.class, //
 })
 public class ZKZuulBeforeConfiguration extends ZKWebmvcConfiguration {
 
@@ -184,7 +184,6 @@ public class ZKZuulBeforeConfiguration extends ZKWebmvcConfiguration {
         multipartResolver.setMaxInMemorySize(this.maxInMemorySize);
         // 设置单个文件最大大小
         multipartResolver.setMaxUploadSizePerFile(maxUploadSizePerFile);
-
         return multipartResolver;
     }
 

@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.EnableWebMvcConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.netflix.eureka.EurekaConstants;
 import org.springframework.cloud.netflix.eureka.MutableDiscoveryClientOptionalArgs;
@@ -70,7 +70,7 @@ import com.zk.webmvc.configuration.ZKWebmvcConfiguration;
         ZKSerCenJdbcConfiguration.class, //
         ZKSerCenShiroConfiguration.class, //
         ZKSerCenMvcConfiguration.class, //
-        EnableWebMvcConfiguration.class, //
+        WebMvcAutoConfiguration.class, //
         ServletWebServerFactoryAutoConfiguration.class,
 })
 //@AutoConfigureAfter(value = { ServletWebServerFactoryAutoConfiguration.class })
@@ -171,11 +171,11 @@ public class ZKSerCenBeforeConfiguration extends ZKWebmvcConfiguration {
 //        return new RestTemplate(messageConverters.getConverters());
 //    }
 
-    // 异常处理 xml 中定义
-//  @Bean
-//  public ZKViewExceptionHandlerResolver exceptionResolver() {
-//      return new ZKViewExceptionHandlerResolver();
-//  }
+//    // 异常处理 xml 中定义
+//    @Bean
+//    public ZKViewExceptionHandlerResolver exceptionResolver() {
+//        return new ZKViewExceptionHandlerResolver();
+//    }
 
 //    @Bean
 //    @DependsOn(value = { "messageConverters" })
@@ -183,7 +183,7 @@ public class ZKSerCenBeforeConfiguration extends ZKWebmvcConfiguration {
 //        RequestMappingHandlerAdapter requestMappingHandlerAdapter = new RequestMappingHandlerAdapter();
 //        // session 线程安全配置
 //        requestMappingHandlerAdapter.setSynchronizeOnSession(
-//                ZKWebUtils.isTrue(ZKEnvironmentUtils.getString("zk.core.web.mvc.synchronizeOnSession", "true")));
+//                ZKUtils.isTrue(ZKEnvironmentUtils.getString("zk.core.web.mvc.synchronizeOnSession", "true")));
 //        // 一定要在这些设置 HttpMessageConverters 因为其他需要属性需要用到这个属性；
 //        requestMappingHandlerAdapter.setMessageConverters(messageConverters.getConverters());
 //        return requestMappingHandlerAdapter;

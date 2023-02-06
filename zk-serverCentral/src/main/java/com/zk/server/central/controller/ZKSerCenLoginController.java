@@ -29,10 +29,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -56,7 +57,7 @@ import com.zk.server.central.security.ZKSerCenSecurityUtils;
 * @author Vinson 
 * @version 1.0 
 */
-@RestController
+@Controller
 @RequestMapping("${zk.path.admin}/${zk.path.serCen}/l")
 public class ZKSerCenLoginController extends ZKSerCenBaseController {
 
@@ -69,7 +70,7 @@ public class ZKSerCenLoginController extends ZKSerCenBaseController {
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public ModelAndView login(HttpServletRequest hReq, HttpServletResponse hRes, Model model)
             throws NoSuchAlgorithmException {
-
+//        System.out.println("============= " + hReq.getRequestURI());
         ZKSecUserPrincipal<String> zkPrincipal = ZKSerCenSecurityUtils.getPrincipal();
         if (zkPrincipal != null) {
             // 如果已经登录，则跳转到首页
@@ -118,6 +119,7 @@ public class ZKSerCenLoginController extends ZKSerCenBaseController {
      * 登录失败，真正登录的POST请求由Filter完成
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
+    @ResponseBody
     public ZKMsgRes loginPost(HttpServletRequest hReq, HttpServletResponse hRes, Model model,
             RedirectAttributes attr) {
 
@@ -196,6 +198,7 @@ public class ZKSerCenLoginController extends ZKSerCenBaseController {
     }
 
     @RequestMapping(value = "captcha", method = RequestMethod.GET)
+    @ResponseBody
     public void validateCode(HttpServletRequest hReq, HttpServletResponse hRes) {
 
         hRes.setHeader("Pragma", "no-cache");
@@ -221,6 +224,7 @@ public class ZKSerCenLoginController extends ZKSerCenBaseController {
     }
 
     @RequestMapping(value = "doingCaptcha")
+    @ResponseBody
     public boolean doingCaptcha(HttpServletRequest hReq, HttpServletResponse hRes) {
 
 //        ZKMsgRes zkMsgRes = new ZKMsgRes("0");
