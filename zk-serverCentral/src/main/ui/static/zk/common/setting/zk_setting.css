@@ -1,0 +1,53 @@
+/*
+* @Author: Vinson
+* @Date:   2020-01-31 22:31:23
+* @Last Modified by:   Vinson
+* @Last Modified time: 2020-02-29 22:14:08
+* 
+* 
+* 
+*/
+
+/* 用户设置条 */
+.zk_setting_bar {
+  font-size: 14px;
+}
+.zk_setting_bar>ul {
+  margin: 0px;
+  padding: 0px;
+  display: flex; 
+  display: -webkit-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+}
+.zk_setting_bar>ul>li {
+  margin: 0px;
+  list-style: none; /* 将默认的列表符号去掉 */
+  float: left;
+}
+.zk_setting_bar a {
+  border: 0px solid;
+  display: block;
+  text-decoration: none;
+  line-height: 20px;
+  padding: 15px 15px;
+  color: var(--primary-font-color);
+}
+.zk_setting_bar a:hover {
+	/*background: rgba(24, 144, 255, 0.1);*/
+	background-color: var(--primary-h-color);
+}
+.zk_setting_bar img {
+	float: left;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 6px;
+    margin-top: -2px;
+}
+.zk_setting_item {
+
+}
+.zk_setting_item_activate {
+	background: rgba(0, 0, 0, 0.1);
+}

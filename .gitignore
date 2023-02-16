@@ -1,0 +1,35 @@
+#.gitignore
+# 过虑指定后缀的文件
+.exe
+.project
+.classpath
+.factorypath
+.deployables
+.class
+.log
+.DS_Store
+*.exe
+*.project
+*.classpath
+*.factorypath
+*.deployables
+*.class
+*.log
+*.DS_Store
+
+# 过虑指定的目录
+.settings
+.idea
+.git
+.svn
+logs
+
+# 其他过虑
+*.iml
+
+target
+node_modules
+dist
+
+codeGenFile
+

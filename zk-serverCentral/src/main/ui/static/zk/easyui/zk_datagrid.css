@@ -1,0 +1,35 @@
+/*
+* @Author: Vinson
+* @Date:   2020-01-14 16:20:43
+* @Last Modified by:   Vinson
+* @Last Modified time: 2020-02-29 22:13:59
+* 
+* 
+* 
+*/
+
+.datagrid-btable {
+    background-color:#ffffff;
+}
+
+.datagrid-row-selected {
+    background: #ffe48d !important;
+    color: #000000;
+}
+
+.datagrid-btable tbody tr:nth-child(even), tbody tr:nth-child(even) {
+    background-color:#F5FFFA;
+}
+
+.datagrid-btable tbody tr:nth-child(odd), tbody tr:nth-child(odd) {
+    background-color:#ffffff;
+}
+
+.datagrid-btable tbody tr:hover {
+    /* background: #fcffe6; */
+    background: #eaf2ff;
+}
+
+.dg_datagrid-cell-c2-opt {
+	height: 100%;
+}

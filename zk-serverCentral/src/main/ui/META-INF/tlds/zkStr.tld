@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+  version="2.0">
+    
+  <description>JSTL 1.1 functions library</description>
+  <display-name>JSTL functions cms</display-name>
+  <tlib-version>1.1</tlib-version>
+  <short-name>zkStr</short-name>
+  <!-- <uri>http://java.sun.com/jsp/jstl/functionsc</uri> -->
+  <uri>/tlds/zkStr.tld</uri>
+  
+  <!-- <tag>
+    <description>替换字符串中指定内容</description>
+    <name>replaceAll</name>
+    <tag-class>com.zk.core.utils.ZKStringUtils</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+        <description>
+			Message key to be looked up.
+        </description>
+        <name>key</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag> -->
+  
+  <function>
+    <description>替换字符串中指定内容</description>
+    <name>replaceAll</name>
+    <function-class>com.zk.core.utils.ZKStringUtils</function-class>
+    <function-signature>java.lang.String replaceAll(java.lang.String, java.lang.String, java.lang.String)</function-signature>
+    <example>${zkStr:replaceAll(str, regex, replacement)}</example>  
+  </function>
+
+  <function>
+    <description>字符串转大写</description>
+    <name>toUpperCase</name>
+    <function-class>com.zk.core.utils.ZKStringUtils</function-class>
+    <function-signature>java.lang.String toUpperCase(java.lang.String)</function-signature>
+    <example>${zkStr:toUpperCase(str)}</example>  
+  </function>
+  
+  <function>
+    <description>字符串转小写</description>
+    <name>toLowerCase</name>
+    <function-class>com.zk.core.utils.ZKStringUtils</function-class>
+    <function-signature>java.lang.String toLowerCase(java.lang.String)</function-signature>
+    <example>${zkStr:toLowerCase(str)}</example>  
+  </function>
+
+  <function>
+    <description>判断字符串是否为空</description>
+    <name>isEmpty</name>
+    <function-class>com.zk.core.utils.ZKStringUtils</function-class>
+    <function-signature>java.lang.Boolean isEmpty(java.lang.String)</function-signature>
+    <example>${zkStr:isEmpty(str)}</example>  
+  </function>
+  
+ </taglib>
+ 
+ 

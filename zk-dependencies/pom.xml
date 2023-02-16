@@ -1,0 +1,783 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.zk</groupId>
+		<artifactId>zk-parent</artifactId>
+		<version>2.0.2</version>
+		<relativePath>../zk-parent</relativePath>
+	</parent>
+	<!-- <groupId>com.zk</groupId> -->
+	<artifactId>zk-dependencies</artifactId>
+	<version>${version.zk.dependencies}</version>
+	<packaging>pom</packaging>
+	<name>zk-dependencies</name>
+	<description>Vinson project zk-dependencies</description>
+	
+	<properties>
+	
+		<downloadSources>true</downloadSources>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+		
+		<!-- spring boot ****************************************** -->
+		<!-- 2.1.3.RELEASE 3.0.1 -->
+		<version.spring.boot>2.7.8</version.spring.boot>
+		
+		<!-- spring cloud ****************************************** -->
+		<!-- <version.spring.cloud>2.0.5.RELEASE</version.spring.cloud>
+		2.1.1.RELEASE	3.1.2
+		-->
+		<version.spring.cloud.starter>3.1.4</version.spring.cloud.starter>
+		<version.spring.cloud.starter.gateway>${version.spring.cloud.starter}</version.spring.cloud.starter.gateway>
+		<version.spring.cloud.starter.openfeign>${version.spring.cloud.starter}</version.spring.cloud.starter.openfeign>
+		<version.spring.cloud.starter.config>${version.spring.cloud.starter}</version.spring.cloud.starter.config>
+		<version.spring.cloud.starter.zipkin>2.2.8.RELEASE</version.spring.cloud.starter.zipkin>
+		<version.spring.cloud.starter.task>2.4.5</version.spring.cloud.starter.task>
+		<version.spring.cloud.starter.bus.amqp>3.1.2</version.spring.cloud.starter.bus.amqp>
+		<!-- 2.1.1.RELEASE	2.2.9.RELEASE -->
+		<version.spring.cloud.starter.netflix>2.2.9.RELEASE</version.spring.cloud.starter.netflix>
+		<version.spring.cloud.starter.netflix.eureka.server>${version.spring.cloud.starter}</version.spring.cloud.starter.netflix.eureka.server>
+		<version.spring.cloud.starter.netflix.eureka.client>${version.spring.cloud.starter}</version.spring.cloud.starter.netflix.eureka.client>
+		<version.spring.cloud.starter.netflix.ribbon>${version.spring.cloud.starter.netflix}</version.spring.cloud.starter.netflix.ribbon>
+		<version.spring.cloud.starter.netflix.zuul>${version.spring.cloud.starter.netflix}</version.spring.cloud.starter.netflix.zuul>
+		<version.spring.cloud.starter.netflix.hystrix>${version.spring.cloud.starter.netflix}</version.spring.cloud.starter.netflix.hystrix>
+		<version.spring.cloud.starter.netflix.hystrix.dashboard>${version.spring.cloud.starter.netflix}</version.spring.cloud.starter.netflix.hystrix.dashboard>
+		<version.spring.cloud.starter.netflix.turbine>2.2.9.RELEASE</version.spring.cloud.starter.netflix.turbine>
+		<version.spring.cloud.netflix.eureka.server>${version.spring.cloud.starter}</version.spring.cloud.netflix.eureka.server>
+		<!-- 2.1.2.RELEASE	4.0.0-->
+		<version.spring.cloud.config.server>3.0.0</version.spring.cloud.config.server>
+		<!-- 2.1.1.RELEASE 3.1.2 4.0.0 -->
+		<version.spring.cloud.bus>3.0.0</version.spring.cloud.bus>
+		<!-- 2.1.1.RELEASE 2.4.5 3.0.0 -->
+		<version.spring.cloud.task.batch>${version.spring.cloud.starter.task}</version.spring.cloud.task.batch>
+
+		<!-- spring ************************** -->
+		<version.spring.framework>5.3.24</version.spring.framework>
+		<!-- 5.3.22  5.3.24 
+		<version.spring.web>${version.spring.framework}</version.spring.web> -->
+		<!-- 2.1.5.RELEASE 
+		<version.spring.amqp>3.0.0</version.spring.amqp> -->
+
+		<!-- ************************** -->
+		<!-- 
+			mongo版本 3.4.3 对应 2.1.1.RELEASE
+			mongo版本 3.6.3 对应 2.0.6.RELEASE
+		-->
+		<!-- <version.mongodb.driver>3.4.3</version.mongodb.driver> -->
+		<!-- <version.mongodb.spring>3.4.7</version.mongodb.spring> -->
+		<!-- <version.mongodb>4.6.1</version.mongodb> -->
+		<!-- <version.redis.spring>${version.spring.boot}</version.redis.spring> -->
+		<version.springloaded>1.2.8.RELEASE</version.springloaded>
+		<version.redis.redisson>3.5.5</version.redis.redisson>
+		<version.redis.jedis>4.3.1</version.redis.jedis>
+		<version.rabbitmq.amqp.client>5.6.0</version.rabbitmq.amqp.client>
+		<version.junit>4.13.2</version.junit>
+		<version.springfox>2.9.2</version.springfox>
+		<version.slf4j>1.7.25</version.slf4j>
+		<!-- <version.log4j>2.11.1</version.log4j> -->
+		<!-- <version.log4j>2.15.0</version.log4j>
+		<version.log4j.spring.boot>1.3.8.RELEASE</version.log4j.spring.boot> -->
+		<version.tomcat.embed>9.0.69</version.tomcat.embed> <!-- 8.5.37 9.0.69 9.0.71 -->
+		<version.jstl>1.2</version.jstl>
+		<version.mybatis>3.5.6</version.mybatis><!-- 3.5.6, 3.4.6 -->
+		<version.mybatis.spring>1.3.2</version.mybatis.spring>
+		<version.mybatis.spring.boot>1.3.2</version.mybatis.spring.boot>
+		<version.alibaba.druid>1.1.10</version.alibaba.druid>
+		<version.jdbc.driver.mysql>8.0.13</version.jdbc.driver.mysql>
+		<version.commons.io>2.4</version.commons.io>
+		<version.commons.fileupload>1.3.3</version.commons.fileupload>
+		<version.hibernate.validator>6.0.14.Final</version.hibernate.validator>
+		<version.commons.codec>1.10</version.commons.codec>
+		<version.commons.lang3>3.4</version.commons.lang3>
+		<version.shiro>1.10.1</version.shiro>
+		<version.google.gson>2.8.5</version.google.gson>
+		<version.openfeign.httpclient>10.1.0</version.openfeign.httpclient>
+		<version.openfeign>3.6.0</version.openfeign>
+		<version.zipkin>2.12.9</version.zipkin>
+		<version.alibaba.fastjson>1.2.83</version.alibaba.fastjson>
+		<version.dom4j>2.0.0</version.dom4j>
+		<version.httpcomponents>4.5.6</version.httpcomponents>
+		<version.httpcomponents.httpcore>4.4.9</version.httpcomponents.httpcore>
+		<version.fasterxml.jackson.core>2.13.4</version.fasterxml.jackson.core>
+		<version.javax.servlet>3.1.0</version.javax.servlet>
+		<version.javax.guava>19.0</version.javax.guava>
+		<version.com.sun.jersey>1.19.1</version.com.sun.jersey>
+		<version.com.sun.jersey.contribs>1.19.1</version.com.sun.jersey.contribs>
+		<version.cxf>3.2.4</version.cxf>
+		<version.squareup.okhttp3>3.3.0</version.squareup.okhttp3>
+		<version.weixin.mp.aes>1.0</version.weixin.mp.aes>
+		<version.quartz.scheduler>2.3.0</version.quartz.scheduler>
+		<version.javax.mail>1.4.7</version.javax.mail>
+		<version.reactor.core>3.5.0</version.reactor.core>
+		<version.freemarker>2.3.32</version.freemarker>
+		<version.sa.token>1.30.0</version.sa.token>
+		<version.mybatis.plus>3.5.1</version.mybatis.plus>
+	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+			<!-- ***** xxx begin -->
+			<!-- ##### xxx end -->
+			<dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>springloaded</artifactId>
+                <version>${version.springloaded}</version>
+            </dependency>
+            
+            <!-- ***** spring framework begin -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+  				<artifactId>spring-web</artifactId>
+				<version>${version.spring.framework}</version>
+			</dependency>
+			<!-- ##### spring framework end -->
+            
+			<!-- ***** spring boot begin -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter</artifactId>
+				<version>${version.spring.boot}</version>
+				<!-- 排除自带的logback依赖 -->
+				<exclusions>
+		            <exclusion>
+		                <groupId>org.springframework.boot</groupId>
+		                <artifactId>spring-boot-starter-logging</artifactId>
+		            </exclusion>
+		        </exclusions> 
+			</dependency>
+			<dependency>
+		        <groupId>org.springframework.boot</groupId>
+		        <artifactId>spring-boot-starter-log4j2</artifactId>
+				<version>${version.spring.boot}</version>
+		    </dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-json</artifactId>
+				<version>${version.spring.boot}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${version.spring.boot}</version>
+				<exclusions>
+		            <exclusion>
+		                <groupId>org.apache.tomcat.embed</groupId>
+						<artifactId>tomcat-embed-websocket</artifactId>
+		            </exclusion>
+		            <exclusion>
+		                <groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-tomcat</artifactId>
+		            </exclusion>
+		        </exclusions> 
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-data-mongodb</artifactId>
+				<version>${version.spring.boot}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-data-jpa</artifactId>
+				<version>${version.spring.boot}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-batch</artifactId>
+				<version>${version.spring.boot}</version>
+			</dependency>
+			<dependency>
+	    		<groupId>org.springframework.boot</groupId>
+	    		<artifactId>spring-boot-starter-jdbc</artifactId>
+	    		<version>${version.spring.boot}</version>
+	    	</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-actuator</artifactId>
+				<version>${version.spring.boot}</version>
+			</dependency>
+	    	<dependency>
+	    		<groupId>org.springframework.boot</groupId>
+	    		<artifactId>spring-boot-starter-freemarker</artifactId>
+	    		<version>${version.spring.boot}</version>
+	    	</dependency>
+			<dependency>
+	    		<groupId>org.springframework.boot</groupId>
+	    		<artifactId>spring-boot-configuration-processor</artifactId>
+	    		<version>${version.spring.boot}</version>
+	    	</dependency>
+	    	<!-- 热部署模块 -->
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-devtools</artifactId>
+			    <!-- <optional>true</optional> --> <!-- 这个需要为 true 热部署才有效 -->
+			    <version>${version.spring.boot}</version>
+			</dependency>
+			<dependency>
+	            <groupId>org.springframework.boot</groupId>
+	            <artifactId>spring-boot-starter-data-redis</artifactId>
+			    <version>${version.spring.boot}</version>
+	        </dependency>
+	        <dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-aop</artifactId>
+				<version>${version.spring.boot}</version>
+			</dependency>
+			<!-- ##### spring boot end -->
+			
+			<!-- ***** spring cloud begin -->
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter</artifactId>
+				<version>${version.spring.cloud.starter}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-gateway</artifactId>
+				<version>${version.spring.cloud.starter.gateway}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-config-server</artifactId>
+				<version>${version.spring.cloud.config.server}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-config</artifactId>
+				<version>${version.spring.cloud.starter.config}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-task-batch</artifactId>
+				<version>${version.spring.cloud.task.batch}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-zipkin</artifactId>
+				<version>${version.spring.cloud.starter.zipkin}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-task</artifactId>
+				<version>${version.spring.cloud.starter.task}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-bus</artifactId>
+				<version>${version.spring.cloud.bus}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-bus-amqp</artifactId>
+				<version>${version.spring.cloud.starter.bus.amqp}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+				<version>${version.spring.cloud.starter.netflix.eureka.server}</version>
+				<exclusions>
+					<exclusion>
+	                	<groupId>javax.servlet</groupId>
+						<artifactId>servlet-api</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<!-- <dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-netflix-eureka-server</artifactId>
+				<version>${version.spring.cloud.netflix.eureka.server}</version>
+				<exclusions>
+					<exclusion>
+	                	<groupId>javax.servlet</groupId>
+						<artifactId>servlet-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework.boot</groupId>
+	    				<artifactId>spring-boot-starter-freemarker</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>  -->
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+				<version>${version.spring.cloud.starter.netflix.eureka.client}</version>
+				<exclusions>
+					<exclusion>
+	                	<groupId>javax.servlet</groupId>
+						<artifactId>servlet-api</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+				<version>${version.spring.cloud.starter.netflix.ribbon}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+				<version>${version.spring.cloud.starter.netflix.zuul}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+				<version>${version.spring.cloud.starter.netflix.hystrix}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
+				<version>${version.spring.cloud.starter.netflix.hystrix.dashboard}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-netflix-turbine</artifactId>
+				<version>${version.spring.cloud.starter.netflix.turbine}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-openfeign</artifactId>
+				<version>${version.spring.cloud.starter.openfeign}</version>
+			</dependency>
+			<!-- ##### spring cloud end -->
+			
+			<!-- ***** spring other begin -->
+			<!-- 
+			<dependency>
+				<groupId>org.springframework.amqp</groupId>
+				<artifactId>spring-amqp</artifactId>
+				<version>${version.spring.amqp}</version>
+			</dependency> 
+			-->
+			<!-- <dependency>
+				<groupId>org.springframework.amqp</groupId>
+				<artifactId>spring-rabbit</artifactId>
+				<version>${version.spring.amqp}</version>
+			</dependency>  -->
+			<!-- ##### spring other end -->
+			
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz</artifactId>
+				<version>${version.quartz.scheduler}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			
+			<!-- ***** eureka other begin -->
+			<dependency>
+				<groupId>com.sun.jersey</groupId>
+				<artifactId>jersey-client</artifactId>
+				<version>${version.com.sun.jersey}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.jersey.contribs</groupId>
+				<artifactId>jersey-apache-client4</artifactId>
+				<version>${version.com.sun.jersey.contribs}</version>
+			</dependency>
+			<!-- ##### eureka other end -->
+			
+			<!-- ***** jdbc driver begin -->
+			<dependency>
+			    <groupId>mysql</groupId>
+			    <artifactId>mysql-connector-java</artifactId>
+			    <version>${version.jdbc.driver.mysql}</version>
+			</dependency>
+			<!-- ##### jdbc driver end -->
+			
+			<!-- ***** connection pool 数据库链接池 begin -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${version.alibaba.druid}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>tools</artifactId>
+                        <groupId>com.alibaba</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- ##### connection pool 数据库链接池 end -->
+			
+			<!-- ***** mybatis begin -->
+			<dependency>
+			    <groupId>org.mybatis</groupId>
+			    <artifactId>mybatis</artifactId>
+			    <version>${version.mybatis}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.mybatis</groupId>
+			    <artifactId>mybatis-spring</artifactId>
+			    <version>${version.mybatis.spring}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.mybatis.spring.boot</groupId>
+			    <artifactId>mybatis-spring-boot-starter</artifactId>
+			    <version>${version.mybatis.spring.boot}</version>
+			</dependency>
+			<!-- ##### mybatis end -->
+
+			<dependency>
+				<groupId>com.baomidou</groupId>
+				<artifactId>mybatis-plus-boot-starter</artifactId>
+				<version>${version.mybatis.plus}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.baomidou</groupId>
+				<artifactId>mybatis-plus</artifactId>
+				<version>${version.mybatis.plus}</version>
+			</dependency>
+			
+			<!-- ***** jsp begin -->
+			<dependency>
+			    <groupId>org.apache.tomcat.embed</groupId>
+			    <artifactId>tomcat-embed-jasper</artifactId>
+			    <version>${version.tomcat.embed}</version>
+			</dependency>
+			<dependency>
+			    <groupId>javax.servlet</groupId>
+			    <artifactId>jstl</artifactId>
+			    <version>${version.jstl}</version>
+			</dependency>
+        	<!-- ##### jsp end -->
+        	
+        	<!-- ##### servlet begin -->
+			<dependency>
+			    <groupId>javax.servlet</groupId>
+			    <artifactId>javax.servlet-api</artifactId>
+			    <version>${version.javax.servlet}</version>
+			    <!-- <scope>provided</scope> --> <!-- provided compile -->
+			</dependency>
+			<!-- ##### servlet end -->
+        	
+        	<!-- ***** zipkin begin -->
+			<dependency>
+			    <groupId>io.zipkin.java</groupId>
+			    <artifactId>zipkin-server</artifactId>
+			    <version>${version.zipkin}</version>
+			</dependency>  
+			<dependency>
+			    <groupId>io.zipkin.java</groupId>
+			    <artifactId>zipkin-autoconfigure-ui</artifactId>
+			    <version>${version.zipkin}</version>
+			</dependency>
+			<!-- ##### zipkin end -->
+			
+			<!-- ***** springfox.swagger2 begin -->
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>${version.springfox}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger-ui</artifactId>
+				<version>${version.springfox}</version>
+			</dependency>
+			<!-- ##### springfox.swagger2 end -->
+			
+			<!-- ***** log4j begin 
+		    <dependency>
+			    <groupId>org.slf4j</groupId>
+			    <artifactId>slf4j-api</artifactId>
+			    <version>${version.slf4j}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.slf4j</groupId>
+			    <artifactId>slf4j-log4j12</artifactId>
+			    <version>${version.slf4j}</version>
+			</dependency>
+		    <dependency>
+		        <groupId>org.apache.logging.log4j</groupId>
+		        <artifactId>log4j-api</artifactId>
+		        <version>${version.log4j}</version>
+		    </dependency>
+		    <dependency>
+		        <groupId>org.apache.logging.log4j</groupId>
+		        <artifactId>log4j-core</artifactId>
+		        <version>${version.log4j}</version>
+		    </dependency> 
+		    <dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-web</artifactId>
+				<version>${version.log4j}</version>
+		    </dependency> -->
+		    <!-- ##### log4j end -->
+		    
+		    <!-- ***** fileupload begin -->
+		    <dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>${version.commons.fileupload}</version>
+			</dependency>
+			<!-- ##### fileupload end -->
+			
+			<!-- ***** shiro begin -->
+			<dependency>
+			    <groupId>org.apache.shiro</groupId>
+			    <artifactId>shiro-spring</artifactId>
+			    <version>${version.shiro}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.shiro</groupId>
+			    <artifactId>shiro-core</artifactId>
+			    <version>${version.shiro}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.shiro</groupId>
+			    <artifactId>shiro-web</artifactId>
+			    <version>${version.shiro}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.shiro</groupId>
+			    <artifactId>shiro-ehcache</artifactId>
+			    <version>${version.shiro}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.shiro</groupId>
+			    <artifactId>shiro-cas</artifactId>
+			    <version>${version.shiro}</version>
+			</dependency>
+			<!-- ##### shiro end -->
+			
+			<!-- ***** mongo begin -->
+			<!-- <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>${version.mongodb.spring}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>spring-data-commons</artifactId>
+                        <groupId>org.springframework.data</groupId>
+                    </exclusion> 
+                    <exclusion>
+                        <artifactId>spring-context</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion> 
+                </exclusions> 
+            </dependency> -->
+            <!-- 
+            <dependency>
+                <groupId>org.mongodb</groupId>
+                <artifactId>mongodb-driver</artifactId>
+                <version>${version.mongodb.driver}</version>
+            </dependency> 
+            <dependency>
+	            <groupId>org.mongodb</groupId>
+	            <artifactId>mongodb-driver-sync</artifactId>
+	            <version>${version.mongodb}</version>
+	            <optional>true</optional>
+	        </dependency>
+	        -->
+			<!-- ##### mongo end -->
+			
+			<dependency>
+				<groupId>redis.clients</groupId>
+				<artifactId>jedis</artifactId>
+				 <version>${version.redis.jedis}</version>
+			</dependency>
+            <!-- <dependency>
+	            <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-redis</artifactId>
+                <version>${version.redis.spring}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>spring-data-commons</artifactId>
+                        <groupId>org.springframework.data</groupId>
+                    </exclusion>
+                </exclusions> 
+	        </dependency> -->
+	        <!-- -->
+	        <dependency>
+			    <groupId>org.redisson</groupId>
+			    <artifactId>redisson</artifactId>
+			    <version>${version.redis.redisson}</version>
+			</dependency> 
+			
+			<!-- ***** fasterxml.jackson begin -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${version.fasterxml.jackson.core}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${version.fasterxml.jackson.core}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${version.fasterxml.jackson.core}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.module</groupId>
+				<artifactId>jackson-module-jaxb-annotations</artifactId>
+				<version>${version.fasterxml.jackson.core}</version>
+			</dependency>
+			<!-- ##### fasterxml.jackson end -->
+			
+			<!-- ***** cxf begin -->
+			<dependency>
+	            <groupId>org.apache.cxf</groupId>
+	            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+	            <version>${version.cxf}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.apache.cxf</groupId>
+	            <artifactId>cxf-rt-transports-http-jetty</artifactId>
+	            <version>${version.cxf}</version>
+	        </dependency>
+        	<!-- ##### cxf end -->
+		
+			<!-- ***** other begin -->
+<!-- <dependency>
+    <groupId>com.netflix.turbine</groupId>
+    <artifactId>turbine-core</artifactId>
+    <version>2.0.0-DP.2</version>
+</dependency> -->
+			<dependency>
+				<groupId>org.freemarker</groupId>
+				<artifactId>freemarker</artifactId>
+				<version>${version.freemarker}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.openfeign.form</groupId>
+				<artifactId>feign-form-spring</artifactId>
+				<version>${version.openfeign}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.openfeign.form</groupId>
+				<artifactId>feign-form</artifactId>
+				<version>${version.openfeign}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.mail</groupId>
+				<artifactId>mail</artifactId>
+				<version>${version.javax.mail}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.google.guava</groupId>
+			    <artifactId>guava</artifactId>
+			    <version>${version.javax.guava}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.httpcomponents</groupId>
+			    <artifactId>httpclient</artifactId>
+			    <version>${version.httpcomponents}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.httpcomponents</groupId>
+			    <artifactId>httpmime</artifactId>
+			    <version>${version.httpcomponents}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.httpcomponents</groupId>
+			    <artifactId>httpcore</artifactId>
+   				<version>${version.httpcomponents.httpcore}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dom4j</groupId>
+				<artifactId>dom4j</artifactId>
+				<version>${version.dom4j}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>${version.alibaba.fastjson}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.rabbitmq</groupId>
+			    <artifactId>amqp-client</artifactId>
+			    <version>${version.rabbitmq.amqp.client}</version>
+			</dependency>		
+			<dependency>
+				<groupId>io.github.openfeign</groupId>
+				<artifactId>feign-httpclient</artifactId>
+				<version>${version.openfeign.httpclient}</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.google.code.gson</groupId>
+			    <artifactId>gson</artifactId>
+			    <version>${version.google.gson}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate.validator</groupId>
+		        <artifactId>hibernate-validator</artifactId>
+		        <version>${version.hibernate.validator}</version>
+			</dependency>
+			<dependency>
+			    <groupId>commons-codec</groupId>
+			    <artifactId>commons-codec</artifactId>
+			    <version>${version.commons.codec}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${version.commons.lang3}</version>
+			</dependency>
+			<dependency>
+			    <groupId>commons-io</groupId>
+			    <artifactId>commons-io</artifactId>
+			    <version>${version.commons.io}</version>
+			</dependency>
+			<dependency>
+				<groupId>cn.dev33</groupId>
+				<artifactId>sa-token-spring-boot-starter</artifactId>
+				<version>${version.sa.token}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.projectreactor</groupId>
+    			<artifactId>reactor-core</artifactId>
+				<version>${version.reactor.core}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.squareup.okhttp3</groupId>
+				<artifactId>okhttp</artifactId>
+				<version>${version.squareup.okhttp3}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.qq.weixin.mp.aes</groupId>
+				<artifactId>aes-jre1.6</artifactId>
+				<version>${version.weixin.mp.aes}</version>
+			</dependency>
+			<!-- ##### other end -->
+			<!-- ***** test begin -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-test</artifactId>
+				<version>${version.spring.boot}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.junit.jupiter</groupId>
+  						<artifactId>junit-jupiter</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.mockito</groupId>
+  						<artifactId>mockito-junit-jupiter</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>com.vaadin.external.google</groupId>
+  						<artifactId>android-json</artifactId>
+					</exclusion>
+				</exclusions>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+    			<artifactId>junit</artifactId>
+				<scope>test</scope>
+				<version>${version.junit}</version>
+			</dependency>
+			<!-- ##### test end -->
+			
+		</dependencies>
+	</dependencyManagement>
+	
+</project>

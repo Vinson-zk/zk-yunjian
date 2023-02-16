@@ -1,0 +1,5 @@
+# org.springframework.boot.env.PropertySourceLoader=com.zk.core.commons.ZKPropertiesPropertySourceLoader
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.zk.demo.context.configuration.ZKConfigAutoOne,\
+com.zk.demo.context.configuration.ZKConfigAutoTwo
