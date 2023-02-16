@@ -81,7 +81,6 @@
 		<version.zk.test>2.0.1</version.zk.test>
 		<version.zk.webmvc>2.0.1</version.zk.webmvc>
 		<version.zk.wechat>2.0.1</version.zk.wechat>
-		<version.zk.zuul>2.0.1</version.zk.zuul>
 		
 		<!-- maven 插件版本 -->
 		<!-- <plugin.version.maven.clean>2.6.1</plugin.version.maven.clean>
@@ -131,7 +130,6 @@
 		<module>../zk-system-api</module>
 		<module>../zk-mail</module>
 		<module>../zk-log</module>
-		<module>../zk-zuul</module>
 		<module>../zk-file</module>
 		<module>../zk-gateway</module>
 	</modules> 
