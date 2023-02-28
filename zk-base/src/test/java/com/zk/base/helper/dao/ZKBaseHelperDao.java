@@ -1,7 +1,7 @@
 package com.zk.base.helper.dao;
 
 import com.zk.base.dao.ZKBaseDao;
-import com.zk.base.helper.entity.ZKBaseHelperEntityLong;
+import com.zk.base.helper.dto.ZKBaseHelperDto;
 
 /**
  * Copyright (c) 2017-2022 Vinson.
@@ -20,5 +20,5 @@ import com.zk.base.helper.entity.ZKBaseHelperEntityLong;
  * @DATE 2022-10-12 15:34:37
  **/
 //@ZKMyBatisDao
-public interface ZKBaseHelperDao extends ZKBaseDao<Long, ZKBaseHelperEntityLong> {
+public interface ZKBaseHelperDao extends ZKBaseDao<Long, ZKBaseHelperDto> {
 }

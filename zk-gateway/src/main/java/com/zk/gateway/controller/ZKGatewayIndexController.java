@@ -19,6 +19,7 @@
 package com.zk.gateway.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,9 +39,12 @@ import com.zk.core.web.utils.ZKWebUtils;
 public class ZKGatewayIndexController {
 
     @RequestMapping({ "", "index" })
-    public ZKMsgRes welcome() {
-        return ZKMsgRes.asOk("index: " + ZKMsgUtils.getMessage(ZKWebUtils.getLocale(), "zk.gateway.msg.welcome") + " "
-                + ZKEnvironmentUtils.getString("spring.application.name", "zk Gateway"));
+    public ZKMsgRes welcome(@RequestParam(value = "q", required = false) String q) {
+        ZKMsgRes res = ZKMsgRes.as("zk.0",
+                "index: " + ZKMsgUtils.getMessage(ZKWebUtils.getLocale(), "zk.gateway.msg.welcome") + " -> "
+                        + ZKEnvironmentUtils.getString("spring.application.name", "zk Gateway"));
+        res.setData(q);
+        return res;
     }
 
     @RequestMapping({ "user" })

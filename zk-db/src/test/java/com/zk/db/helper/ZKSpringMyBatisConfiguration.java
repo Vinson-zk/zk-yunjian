@@ -22,7 +22,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.context.support.ResourceBundleMessageSource;
 
 import com.zk.core.configuration.ZKEnableCore;
 import com.zk.db.configuration.ZKDBProperties;
@@ -55,13 +54,13 @@ public class ZKSpringMyBatisConfiguration {
 //        return ZKEnvironmentUtils.getZKEnvironment();
 //    }
 
-    @Bean
-    public ResourceBundleMessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setUseCodeAsDefaultMessage(true);
-        messageSource.setCacheSeconds(3600);
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
+//    @Bean
+//    public ResourceBundleMessageSource messageSource() {
+//        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+//        messageSource.setUseCodeAsDefaultMessage(true);
+//        messageSource.setCacheSeconds(3600);
+//        messageSource.setDefaultEncoding("UTF-8");
+//        return messageSource;
+//    }
 
 }

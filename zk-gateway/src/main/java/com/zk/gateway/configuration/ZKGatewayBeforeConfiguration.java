@@ -18,29 +18,27 @@
 */
 package com.zk.gateway.configuration;
 
-import javax.servlet.Filter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.netflix.eureka.MutableDiscoveryClientOptionalArgs;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.reactive.result.method.annotation.RequestMappingHandlerAdapter;
+import org.springframework.web.server.WebFilter;
 
 import com.zk.core.configuration.ZKCoreConfiguration;
 import com.zk.core.redis.configuration.ZKRedisProperties;
-import com.zk.core.web.filter.ZKCrosFilter;
 import com.zk.core.web.filter.ZKFilterUtils.ZKFilterLevel;
+import com.zk.core.web.webFilter.ZKCrosWebFilter;
 import com.zk.db.configuration.ZKDBProperties;
 import com.zk.framework.serCen.ZKSerCenEncrypt;
 import com.zk.framework.serCen.eureka.ZKEurekaTransportClientFactories;
 import com.zk.framework.serCen.support.ZKSerCenSampleCipher;
-import com.zk.log.filter.ZKLogAccessFilter;
+import com.zk.log.webFilter.ZKLogAccessWebFilter;
 
 /**
  * @ClassName: ZKGatewayBeforeConfiguration
@@ -134,36 +132,29 @@ public class ZKGatewayBeforeConfiguration extends ZKCoreConfiguration {
     /******************************************************************/
 
     // 日志拦截器
-    @Bean("logAccessFilterRegistrationBean")
-    public FilterRegistrationBean<Filter> logAccessFilterRegistrationBean() {
-        System.out.println("[^_^:20230211-1022-001] ----- logAccessFilterRegistrationBean 配置 zk 日志过滤器 Filter --- ["
+    @Bean("logAccessWebFilter")
+    public WebFilter logAccessWebFilter() {
+        System.out.println("[^_^:20230211-1022-001] ----- logAccessFilterWebFilter 配置 zk 日志过滤器 WebFilter --- ["
                 + this.getClass().getSimpleName() + "] " + this.hashCode());
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<Filter>();
         // 访问日志记录 过虑器
-        ZKLogAccessFilter logAccessFilter = new ZKLogAccessFilter();
-        filterRegistrationBean.setFilter(logAccessFilter);
-        filterRegistrationBean.setOrder(ZKFilterLevel.Log.HIGHEST);
-        filterRegistrationBean.addUrlPatterns("/*");
-        filterRegistrationBean.setName("logAccessFilter");
-        return filterRegistrationBean;
+        ZKLogAccessWebFilter logAccessWebFilter = new ZKLogAccessWebFilter();
+        logAccessWebFilter.setOrder(ZKFilterLevel.Log.HIGHEST);
+        return logAccessWebFilter;
     }
 
-    @Bean
-    public FilterRegistrationBean<Filter> zkCrosFilterRegistrationBean() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<Filter>();
-        ZKCrosFilter zkCrosFilter = new ZKCrosFilter();
-        filterRegistrationBean.setFilter(zkCrosFilter);
-        filterRegistrationBean.addUrlPatterns("/*");
-        filterRegistrationBean.setName("zkCrosFilter");
-        filterRegistrationBean.setOrder(ZKFilterLevel.Normal.HIGHEST);
-//        Map<String, String> zkCrosFilterInitParams = new HashMap<>();
-//        zkCrosFilterInitParams.put(ParamsName.allowOrigin, "*");
-//        zkCrosFilterInitParams.put(ParamsName.maxAge, "3600");
-//        zkCrosFilterInitParams.put(ParamsName.allowMethods, "POST,GET");
-//        zkCrosFilterInitParams.put(ParamsName.allowHeaders, "__SID,locale,Lang,X-Requested-With");
-//        filterRegistrationBean.setInitParameters(zkCrosFilterInitParams);
-        return filterRegistrationBean;
+    @Bean("zkCrosFilter")
+    public ZKCrosWebFilter zkCrosFilter() {
+        ZKCrosWebFilter zkCrosFilter = new ZKCrosWebFilter();
+        zkCrosFilter.setOrder(ZKFilterLevel.Normal.HIGHEST);
+        return zkCrosFilter;
     }
+
+//    @Bean("zkExceptionHandlerWebFilter")
+//    public ZKExceptionHandlerWebFilter zkExceptionHandlerWebFilter() {
+//        ZKExceptionHandlerWebFilter zkExceptionHandlerWebFilter = new ZKExceptionHandlerWebFilter();
+//        zkExceptionHandlerWebFilter.setOrder(ZKFilterLevel.Exception.HIGHEST);
+//        return zkExceptionHandlerWebFilter;
+//    }
 
     /**
      * 文件上传 适配器

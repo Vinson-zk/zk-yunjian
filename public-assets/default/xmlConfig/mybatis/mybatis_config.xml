@@ -47,8 +47,8 @@
 	<plugins>
 		<plugin interceptor="com.zk.db.mybatis.plugins.ZKSqlPage" />
 		<!-- <plugin interceptor="com.zk.db.mybatis.plugins.ZKSqlLikeParameter" /> -->
-		<plugin interceptor="com.zk.db.mybatis.plugins.ZKCustomParams" />
 		<plugin interceptor="com.zk.db.dynamic.mybatis.ZKDynamicDataSourcePlugin" />
+		<plugin interceptor="com.zk.db.mybatis.plugins.ZKCustomParams" />
 		<plugin interceptor="com.zk.db.mybatis.plugins.ZKSqlRunCost" />
     </plugins>
 	 

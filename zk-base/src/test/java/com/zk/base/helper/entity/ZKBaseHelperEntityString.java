@@ -28,7 +28,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 * @author Vinson 
 * @version 1.0 
 */
-public class ZKBaseHelperEntityString extends ZKBaseEntity<String, ZKBaseHelperEntityString> {
+public class ZKBaseHelperEntityString<E extends ZKBaseHelperEntityString<E>> extends ZKBaseEntity<String, E> {
 
     /**
      * @Fields serialVersionUID : TODO(simple description what to do.)

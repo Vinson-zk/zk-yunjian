@@ -41,7 +41,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 * @author Vinson 
 * @version 1.0 
 */
-public abstract class ZKDBBaseEntity<E extends ZKDBBaseEntity<E>> implements Serializable {
+public abstract class ZKDBBaseEntity<E extends ZKDBBaseEntity<E>> implements ZKDBEntity<E>, Serializable {
 
     /**
      * @Fields serialVersionUID : TODO(simple description what to do.)

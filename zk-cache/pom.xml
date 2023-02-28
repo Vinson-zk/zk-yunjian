@@ -40,6 +40,7 @@
 		<dependency>
 			<groupId>com.zk</groupId>
 			<artifactId>zk-mongo</artifactId>
+		    <scope>provided</scope>
 			<version>${version.zk.mongo}</version>
 		</dependency>
 		
@@ -47,6 +48,7 @@
 		<dependency>
 		    <groupId>org.apache.shiro</groupId>
 		    <artifactId>shiro-core</artifactId>
+		    <scope>provided</scope>
 		</dependency>
 		<!-- ##### shiro end -->
 		

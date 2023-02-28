@@ -61,8 +61,12 @@
 		<!-- ***** spring framework begin -->
 		<dependency>
 			<groupId>org.springframework</groupId>
- 				<artifactId>spring-web</artifactId>
+ 			<artifactId>spring-web</artifactId>
 		</dependency> 
+		<dependency>
+			<groupId>org.springframework</groupId>
+ 			<artifactId>spring-webflux</artifactId>
+		</dependency>
 		<!-- ##### spring framework end -->
 		
 		<!-- ***** redis begin -->

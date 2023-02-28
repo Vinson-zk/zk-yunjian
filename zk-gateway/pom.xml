@@ -64,16 +64,6 @@
 			<groupId>com.zk</groupId>
 			<artifactId>zk-cache</artifactId>
 			<version>${version.zk.cache}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.zk</groupId>
-					<artifactId>zk-mongo</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.data</groupId>
-					<artifactId>spring-data-mongodb</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.zk</groupId>
@@ -101,11 +91,34 @@
 			<version>${version.zk.log}</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-el</artifactId>
+		</dependency>
+		
 		<!-- ***** spring cloud begin -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-gateway</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+ 			<artifactId>spring-boot-starter-reactor-netty</artifactId>
+		</dependency>
+		<!-- 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+ 			<artifactId>spring-boot-starter-reactor-netty</artifactId> 
+		</dependency>
+		-->
 		<!-- ##### spring cloud end -->
 		
 		<!-- ***** begin test -->

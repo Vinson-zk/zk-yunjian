@@ -45,7 +45,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 })
 @ComponentScan(basePackages = "com.zk.db.helper")
 @EnableTransactionManagement(proxyTargetClass = true)
-@ImportAutoConfiguration(classes = { ZKBeanLifeCycleHelper.class, ZKSpringMyBatisConfiguration.class })
+@ImportAutoConfiguration(classes = { ZKSpringMyBatisConfiguration.class })
 public class ZKDBSpringBootMain {
 
     protected static Logger log = LoggerFactory.getLogger(ZKDBSpringBootMain.class);

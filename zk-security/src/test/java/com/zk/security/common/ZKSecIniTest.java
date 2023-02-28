@@ -18,7 +18,6 @@
 */
 package com.zk.security.common;
 
-import org.apache.shiro.config.Ini;
 import org.junit.Test;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
@@ -55,14 +54,14 @@ public class ZKSecIniTest {
             String iniStr = ctx.getBean("filterChainDefinitions", String.class);
             System.out.println("=================== \n" + iniStr);
 
-            Ini ini = new Ini();
+            ZKSecIni ini = new ZKSecIni();
             ini.load(iniStr);
-            Ini.Section section = ini.getSection(ZKSecIni.URLS);
+            ZKSecIni.Section section = ini.getSection(ZKSecIni.URLS);
             if (ZKCollectionUtils.isEmpty(section)) {
                 // no urls section. Since this _is_ a urls chain definition
                 // property, just assume the
                 // default section contains only the definitions:
-                section = ini.getSection(Ini.DEFAULT_SECTION_NAME);
+                section = ini.getSection(ZKSecIni.DEFAULT_SECTION_NAME);
             }
             TestCase.assertTrue(!ZKCollectionUtils.isEmpty(section));
 

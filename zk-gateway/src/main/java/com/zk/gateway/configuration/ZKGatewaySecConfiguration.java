@@ -25,13 +25,14 @@ import javax.servlet.Filter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
+import org.springframework.web.server.WebFilter;
 
+import com.zk.core.web.filter.ZKFilterUtils.ZKFilterLevel;
 import com.zk.framework.security.configuration.ZKSecDefaultConfiguration;
 import com.zk.security.configuration.ZKEnableSecurity;
 import com.zk.security.mgt.ZKSecSecurityManager;
 import com.zk.security.web.filter.ZKSecFilterFactoryBean;
+import com.zk.security.web.webFilter.ZKSecProxyWebFilter;
 
 /**
  * @ClassName: ZKGatewaySecConfiguration
@@ -65,19 +66,14 @@ public class ZKGatewaySecConfiguration {
      * @throws Exception
      * @return FilterRegistrationBean<Filter>
      */
-    @Bean("zkSecFilter")
-    public FilterRegistrationBean<Filter> zkSecFilter(ZKSecSecurityManager securityManager) throws Exception {
+//    @Bean("zkSecProxyWebFilter")
+    public WebFilter zkSecProxyWebFilter(ZKSecSecurityManager securityManager) throws Exception {
 
-        System.out.println("[^_^:20230211-1022-001] ----- zkSecFilter 配置 zk 权限过滤器 Filter --- ["
+        System.out.println("[^_^:20230211-1022-001] ----- zkSecProxyWebFilter 配置 zk 权限过滤器 WebFilter --- ["
                 + this.getClass().getSimpleName() + "] " + this.hashCode());
 
         ZKSecFilterFactoryBean zkSecFilterFactoryBean = new ZKSecFilterFactoryBean();
         zkSecFilterFactoryBean.setSecurityManager(securityManager);
-
-//        // 过滤器配置
-//        LinkedHashMap<String, Filter> filterChainDefinitionMap = new LinkedHashMap<>();
-//        filterChainDefinitionMap.put("user", new ZKSecUserFilter());
-//        zkSecFilterFactoryBean.setFilters(filterChainDefinitionMap);
 
         // 过虑路径设置
         LinkedHashMap<String, String> setFilterChainMap = new LinkedHashMap<>();
@@ -97,24 +93,11 @@ public class ZKGatewaySecConfiguration {
         setFilterChainMap.put("/**", "user");
         zkSecFilterFactoryBean.setFilterChainDefinitionMap(setFilterChainMap);
 
-        FilterRegistrationBean<Filter> zkSecFilterRegistrationBean = new FilterRegistrationBean<Filter>();
-        zkSecFilterRegistrationBean.setFilter((Filter) zkSecFilterFactoryBean.getObject());// 设置过滤器对象
-        zkSecFilterRegistrationBean.addUrlPatterns("/*");// 配置过滤规则
-//        zkSecFilterRegistrationBean.setOrder(ZKFilterLevel.Security.HIGHEST); // order的数值越小 则优先级越高
-        zkSecFilterRegistrationBean.setOrder(0); // order的数值越小 则优先级越高
-        zkSecFilterRegistrationBean.setName("zkSecFilter");// 配置名称;
+        ZKSecProxyWebFilter zkSecProxyWebFilter = new ZKSecProxyWebFilter((Filter) zkSecFilterFactoryBean.getObject());
+        zkSecProxyWebFilter.setOrder(ZKFilterLevel.Security.HIGHEST);
 
-        return zkSecFilterRegistrationBean;
+        return zkSecProxyWebFilter;
     }
 
-//    @Bean
-//    public GlobalFilter globalFilter() {
-//
-//        ZKSecFilterFactoryBean zkSecFilterFactoryBean = new ZKSecFilterFactoryBean();
-////        zkSecFilterFactoryBean.setSecurityManager(securityManager);
-//
-////        OrderedGatewayFilter of = new OrderedGatewayFilter((Filter) zkSecFilterFactoryBean.getObject(), 0);
-//        return null;
-//    }
 
 }

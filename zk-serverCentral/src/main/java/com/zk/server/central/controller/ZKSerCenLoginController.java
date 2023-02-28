@@ -198,7 +198,6 @@ public class ZKSerCenLoginController extends ZKSerCenBaseController {
     }
 
     @RequestMapping(value = "captcha", method = RequestMethod.GET)
-    @ResponseBody
     public void validateCode(HttpServletRequest hReq, HttpServletResponse hRes) {
 
         hRes.setHeader("Pragma", "no-cache");

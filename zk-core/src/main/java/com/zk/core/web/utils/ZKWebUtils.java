@@ -38,6 +38,7 @@ import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -618,7 +619,27 @@ public class ZKWebUtils extends org.springframework.web.util.WebUtils {
         if (ZKStringUtils.isBlank(remoteAddr)) {
             remoteAddr = request.getHeader("WL-Proxy-Client-IP");
         }
+        if (ZKStringUtils.isBlank(remoteAddr)) {
+            remoteAddr = request.getHeader("Host");
+        }
         return ZKStringUtils.isNotBlank(remoteAddr) ? remoteAddr : request.getRemoteAddr();
+    }
+
+    public static String getRemoteAddr(ServerHttpRequest request) {
+        String remoteAddr = request.getHeaders().getFirst("X-Real-IP");
+        if (ZKStringUtils.isBlank(remoteAddr)) {
+            remoteAddr = request.getHeaders().getFirst("X-Forwarded-For");
+        }
+        if (ZKStringUtils.isBlank(remoteAddr)) {
+            remoteAddr = request.getHeaders().getFirst("Proxy-Client-IP");
+        }
+        if (ZKStringUtils.isBlank(remoteAddr)) {
+            remoteAddr = request.getHeaders().getFirst("WL-Proxy-Client-IP");
+        }
+        if (ZKStringUtils.isBlank(remoteAddr)) {
+            remoteAddr = request.getHeaders().getFirst("Host");
+        }
+        return ZKStringUtils.isNotBlank(remoteAddr) ? remoteAddr : request.getRemoteAddress().toString();
     }
 
     // ===============================================

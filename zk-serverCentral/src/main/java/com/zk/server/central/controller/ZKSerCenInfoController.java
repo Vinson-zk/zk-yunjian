@@ -18,8 +18,8 @@
 */
 package com.zk.server.central.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 /** 
@@ -28,7 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 * @author Vinson 
 * @version 1.0 
 */
-@RestController
+@Controller
 @RequestMapping("${zk.path.admin}/${zk.path.serCen}/info")
 public class ZKSerCenInfoController {
 

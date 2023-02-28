@@ -23,15 +23,11 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import com.zk.db.mybatis.session.ZKDBMybatisConfiguration;
 
 /**
- * Copyright (c) 2017-2022 Vinson.
- * address:
- * All rights reserved
- * This software is the confidential and proprietary information of Vinson.
- * ("Confidential Information"). You shall not disclose such Confidential Information
- * and shall use it only in accordance with the terms of the license agreement you
- * entered into with Vinson;
+ * Copyright (c) 2017-2022 Vinson. address: All rights reserved This software is the confidential and proprietary information of Vinson. ("Confidential
+ * Information"). You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement you entered
+ * into with Vinson;
  *
- * @Description: 自定义参数插件
+ * @Description: 自定义参数插件；需要配置在其他有处理 sql 的插件前执行；
  * @ClassName ZKCustomParams
  * @Package com.zk.db.mybatis.plugins
  * @PROJECT zk-parent

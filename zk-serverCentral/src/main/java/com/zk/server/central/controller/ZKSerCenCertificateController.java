@@ -27,11 +27,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.zk.core.commons.ZKContentType;
@@ -55,7 +56,7 @@ import com.zk.server.central.service.ZKSerCenCertificateService;
 * @author Vinson 
 * @version 1.0 
 */
-@RestController
+@Controller
 @RequestMapping("${zk.path.admin}/${zk.path.serCen}/cer")
 public class ZKSerCenCertificateController extends ZKSerCenBaseController {
 
@@ -68,6 +69,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
      * @throws ZKValidatorException
      ***/
     @RequestMapping(value = "sc", method = RequestMethod.POST)
+    @ResponseBody
     public ZKMsgRes serviceCertificatePost(@RequestBody ZKSerCenCertificate serCenCertificate)
             throws ZKValidatorException {
 
@@ -83,6 +85,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
     }
 
     @RequestMapping(value = "sc", method = RequestMethod.GET)
+    @ResponseBody
     public ZKMsgRes serviceCertificateGet(@RequestParam(value = "pkId") String pkId) {
 
         ZKMsgRes zkMsgRes = ZKMsgRes.asOk();
@@ -91,6 +94,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
     }
 
     @RequestMapping(value = "sc", method = RequestMethod.DELETE)
+    @ResponseBody
     public ZKMsgRes serviceCertificateDelete(@RequestParam(value = "pkIds", required = true) List<String> pkIds) {
         int count = 0;
         for (String pkId : pkIds) {
@@ -115,6 +119,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
      * @return ZKMsgRes
      */
     @RequestMapping(value = "scs", method = RequestMethod.GET)
+    @ResponseBody
     public ZKMsgRes serviceCertificateList(ZKSerCenCertificate serCenCertificate, HttpServletRequest hReq) {
         ZKMsgRes zkMsgRes = ZKMsgRes.asOk();
         zkMsgRes.setData(serCenCertificateService.findList(serCenCertificate));
@@ -134,6 +139,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
      * @return ZKMsgRes
      */
     @RequestMapping(value = "scPage", method = RequestMethod.GET)
+    @ResponseBody
     public ZKMsgRes serviceCertificatePage(ZKSerCenCertificate serCenCertificate, HttpServletRequest hReq) {
 
         ZKMsgRes zkMsgRes = ZKMsgRes.asOk();
@@ -161,6 +167,7 @@ public class ZKSerCenCertificateController extends ZKSerCenBaseController {
      * @return ZKMsgRes
      */
     @RequestMapping(value = "scStatus", method = RequestMethod.POST)
+    @ResponseBody
     public ZKMsgRes scStatus(@RequestParam(value = "pkIds", required = true) List<String> pkIds,
             @RequestParam(value = "status", required = true) int status) {
 

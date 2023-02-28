@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.server.ServerWebExchange;
 
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.core.utils.ZKEnvironmentUtils;
@@ -63,6 +64,16 @@ public class ZKLogUtils {
         }
     }
 
+    public static void saveAccessLog(ServerWebExchange exchange, Exception ex) {
+        try {
+            // 保存日志信息
+            new ZKLogSaveThread(exchange, ex).start();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 保存日志线程
      */
@@ -81,24 +92,48 @@ public class ZKLogUtils {
 
         public ZKLogSaveThread(HttpServletRequest hReq, HttpServletResponse hRes, Exception ex) {
             super(ZKLogSaveThread.class.getSimpleName());
-            this.logAccess = createLogAccess(hReq, hRes);
+            this.logAccess = createLogAccess();
+            createLogAccess(this.logAccess, hReq, hRes);
             // this.handler = handler;
             this.ex = ex;
         }
 
-        private ZKLogAccess createLogAccess(HttpServletRequest hReq, HttpServletResponse hRes) {
+        public ZKLogSaveThread(ServerWebExchange exchange, Exception ex) {
+            super(ZKLogSaveThread.class.getSimpleName());
+            this.logAccess = createLogAccess();
+            createLogAccess(this.logAccess, exchange);
+            // this.handler = handler;
+            this.ex = ex;
+        }
+
+        private ZKLogAccess createLogAccess() {
             ZKLogAccess logAccess = new ZKLogAccess();
             logAccess.setTitle(null);
+            logAccess.setDateTime(ZKDateUtils.getToday());
+            logAccess.setGroupCode(secPrincipalService == null ? null : secPrincipalService.getGroupCode());
+            logAccess.setCompanyId(secPrincipalService == null ? null : secPrincipalService.getCompanyId());
+            logAccess.setCompanyCode(secPrincipalService == null ? null : secPrincipalService.getCompanyCode());
+            return logAccess;
+        }
+
+        private ZKLogAccess createLogAccess(ZKLogAccess logAccess, HttpServletRequest hReq, HttpServletResponse hRes) {
             logAccess.setRemoteAddr(ZKWebUtils.getRemoteAddr(hReq));
             logAccess.setUserAgent(hReq.getHeader("user-agent"));
             logAccess.setRequestUri(ZKWebUtils.getPathWithinApplication(hReq));
             logAccess.setParamsMap(hReq.getParameterMap());
             logAccess.setMethod(hReq.getMethod());
-            logAccess.setDateTime(ZKDateUtils.getToday());
-            logAccess.setGroupCode(secPrincipalService == null ? null : secPrincipalService.getGroupCode());
-            logAccess.setCompanyId(secPrincipalService == null ? null : secPrincipalService.getCompanyId());
-            logAccess.setCompanyCode(secPrincipalService == null ? null : secPrincipalService.getCompanyCode());
             logAccess.setResStatus(String.valueOf(hRes.getStatus()));
+            return logAccess;
+        }
+
+        private ZKLogAccess createLogAccess(ZKLogAccess logAccess, ServerWebExchange exchange) {
+            logAccess.setRemoteAddr(ZKWebUtils.getRemoteAddr(exchange.getRequest()));
+            logAccess.setUserAgent(exchange.getRequest().getHeaders().getFirst("user-agent"));
+            logAccess.setRequestUri(exchange.getRequest().getURI().getPath());
+            logAccess.setParams(exchange.getFormData().toString());
+//          logAccess.setParamsMap(exchange.getFormData().toString());
+            logAccess.setMethod(exchange.getRequest().getMethodValue());
+            logAccess.setResStatus(String.valueOf(exchange.getResponse().getStatusCode().value()));
             return logAccess;
         }
 

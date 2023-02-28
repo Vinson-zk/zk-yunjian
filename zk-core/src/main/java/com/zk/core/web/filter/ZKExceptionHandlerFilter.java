@@ -32,6 +32,7 @@ import org.springframework.http.MediaType;
 
 import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.utils.ZKExceptionsUtils;
+import com.zk.core.web.ZKWebConstants.HeaderKey;
 
 /** 
 * @ClassName: ZKExceptionHandlerFilter 
@@ -55,7 +56,7 @@ public class ZKExceptionHandlerFilter extends ZKOncePerFilter {
     protected void doFilterInternal(ServletRequest request, ServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         if (!(request instanceof HttpServletRequest) || !(response instanceof HttpServletResponse)) {
-            throw new ServletException("ZKLogAccessFilter just supports HTTP requests");
+            throw new ServletException("ZKExceptionHandlerFilter just supports HTTP requests");
         }
         HttpServletRequest hReq = (HttpServletRequest) request;
         HttpServletResponse hRes = (HttpServletResponse) response;
@@ -72,7 +73,7 @@ public class ZKExceptionHandlerFilter extends ZKOncePerFilter {
                 hRes.setStatus(HttpStatus.OK.value()); // 设置状态码
                 hRes.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置ContentType
                 hRes.setCharacterEncoding("UTF-8"); // 避免乱码
-                hRes.setHeader("Cache-Control", "no-cache, must-revalidate");
+                hRes.setHeader(HeaderKey.cacheControl, "no-cache, must-revalidate");
                 ZKMsgRes msgRes = ZKExceptionsUtils.as(ex);
                 log.error("[>_<:20230214-2357-001] {} 请求处理结果异常 -> status code:{}; msg:{}; exception class:{}; ",
                         this.getClass().getSimpleName(), hRes.getStatus(), msgRes.toString(), ex.getClass().getName());

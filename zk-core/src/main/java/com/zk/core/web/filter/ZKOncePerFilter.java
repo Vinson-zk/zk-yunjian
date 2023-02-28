@@ -20,7 +20,6 @@ package com.zk.core.web.filter;
 
 import java.io.IOException;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -40,7 +39,7 @@ import com.zk.core.web.wrapper.ZKServletContextSupport;
  * @author Vinson
  * @version 1.0
  */
-public abstract class ZKOncePerFilter extends ZKServletContextSupport implements Filter {
+public abstract class ZKOncePerFilter extends ZKServletContextSupport implements ZKServletFilter {
 
     protected Logger log = LoggerFactory.getLogger(getClass());
 

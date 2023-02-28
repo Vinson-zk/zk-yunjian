@@ -35,6 +35,14 @@ import com.zk.security.configuration.ZKEnableSecurity;
 @ZKEnableDB
 @ZKEnableRedis
 @ZKEnableSecurity
+//@EnableWebFlux
+//@ImportAutoConfiguration(value = { //
+//        WebFluxAutoConfiguration.class, //
+//        WebSocketReactiveAutoConfiguration.class, //
+//        GatewayAutoConfiguration.class, //
+//        ServletWebServerFactoryAutoConfiguration.class, //
+//})
+//@Enable
 public class ZKGatewayAfterConfiguration {
 
 

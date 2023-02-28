@@ -20,7 +20,6 @@ package com.zk.core.web.filter;
 
 import java.io.IOException;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -29,6 +28,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import com.zk.core.utils.ZKStringUtils;
+import com.zk.core.web.ZKWebConstants.HeaderKey;
+import com.zk.core.web.ZKWebConstants.HeaderValue;
 
 /**
  * 跨域拦截器
@@ -38,7 +39,7 @@ import com.zk.core.utils.ZKStringUtils;
  * @author Vinson
  * @version 1.0
  */
-public class ZKCrosFilter implements Filter {
+public class ZKCrosFilter extends ZKOncePerFilter {
 
     public static interface ParamsName {
         /**
@@ -65,54 +66,22 @@ public class ZKCrosFilter implements Filter {
     /***
      * header中的Access-Control-Allow-Origin,为空时禁止跨域
      */
-    private String allowOrigin = "*";
+    public static String allowOrigin = HeaderValue.allowOrigin;
 
     /***
      * header 中的 Access-Control-Allow-Methods
      */
-    private String allowMethods = "POST,GET";
+    public static String allowMethods = HeaderValue.allowMethods;
 
     /***
      * header 中的 Access-Control-Max-Age
      */
-    private String maxAge = "3600";
+    public static String maxAge = HeaderValue.maxAge;
 
     /***
      * header 中的 Access-Control-Allow-Headers
      */
-    private String allowHeaders = "__SID,locale,Lang,X-Requested-With";
-
-    /**
-     * (not Javadoc)
-     * <p>
-     * Title: doFilter
-     * </p>
-     * <p>
-     * Description:
-     * </p>
-     * 
-     * @param request
-     * @param response
-     * @param chain
-     * @throws IOException
-     * @throws ServletException
-     * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
-     *      javax.servlet.ServletResponse, javax.servlet.FilterChain)
-     */
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
-        if (ZKStringUtils.isNotBlank(allowOrigin)) {
-            HttpServletResponse hRes = (HttpServletResponse) response;
-            hRes.setHeader("Access-Control-Allow-Origin", allowOrigin);
-            hRes.setHeader("Access-Control-Allow-Methods", allowMethods);
-            hRes.setHeader("Access-Control-Max-Age", maxAge);
-            hRes.setHeader("Access-Control-Allow-Headers", allowHeaders);
-        }
-
-        chain.doFilter(request, response);
-
-    }
+    public static String allowHeaders = HeaderValue.allowHeaders;
 
     /**
      * @param arg0
@@ -138,19 +107,34 @@ public class ZKCrosFilter implements Filter {
     }
 
     /**
-     * (not Javadoc)
-     * <p>
-     * Title: destroy
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @see javax.servlet.Filter#destroy()
      */
     @Override
     public void destroy() {
         // TODO Auto-generated method stub
+    }
+
+    /**
+     * 
+     * @param request
+     * @param response
+     * @param chain
+     * @throws ServletException
+     * @throws IOException
+     * @see com.zk.core.web.filter.ZKOncePerFilter#doFilterInternal(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
+     */
+    @Override
+    protected void doFilterInternal(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+        if (ZKStringUtils.isNotBlank(allowOrigin)) {
+            HttpServletResponse hRes = (HttpServletResponse) response;
+            hRes.setHeader(HeaderKey.allowOrigin, allowOrigin);
+            hRes.setHeader(HeaderKey.allowMethods, allowMethods);
+            hRes.setHeader(HeaderKey.maxAge, maxAge);
+            hRes.setHeader(HeaderKey.allowHeaders, allowHeaders);
+        }
+        chain.doFilter(request, response);
     }
 
 }

@@ -42,6 +42,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.zk</groupId>
+			<artifactId>zk-mongo</artifactId>
+			<version>${version.zk.mongo}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
 			<artifactId>zk-base</artifactId>
 			<version>${version.zk.base}</version>
 			<classifier>tests</classifier>
@@ -66,6 +71,10 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-tomcat</artifactId>
+			</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
@@ -77,7 +86,7 @@
 		</dependency> -->
 		<!-- ##### spring boot end -->
 		
-		<!-- ***** jsp begin -->
+		<!-- ***** jsp begin  -->
 		<dependency>
 		    <groupId>org.apache.tomcat.embed</groupId>
 		    <artifactId>tomcat-embed-jasper</artifactId>
