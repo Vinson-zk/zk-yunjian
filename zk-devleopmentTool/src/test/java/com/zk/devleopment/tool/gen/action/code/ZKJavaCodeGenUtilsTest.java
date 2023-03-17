@@ -57,7 +57,7 @@ public class ZKJavaCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             ZKJavaCodeGenUtils.genMapper(rootPath, templatePath, zkModule, zkTableInfo);
@@ -112,7 +112,7 @@ public class ZKJavaCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             ZKJavaCodeGenUtils.genMapper(rootPath, templatePath, zkModule, zkTableInfo);
@@ -137,7 +137,7 @@ public class ZKJavaCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             ZKJavaCodeGenUtils.genEntity(rootPath, templatePath, zkModule, zkTableInfo);
@@ -162,7 +162,7 @@ public class ZKJavaCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             ZKJavaCodeGenUtils.genDao(rootPath, templatePath, zkModule, zkTableInfo);
@@ -187,7 +187,7 @@ public class ZKJavaCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             ZKJavaCodeGenUtils.genService(rootPath, templatePath, zkModule, zkTableInfo);
@@ -212,7 +212,7 @@ public class ZKJavaCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             ZKJavaCodeGenUtils.genController(rootPath, templatePath, zkModule, zkTableInfo);

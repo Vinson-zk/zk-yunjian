@@ -43,21 +43,21 @@ public class ZKTreeSqlHelper extends ZKDBSqlHelper {
         this.blockSqlWhereTree = entity.getZKDbWhereTree(sqlConvert, this.getMapInfo())
             .toQueryCondition(sqlConvert, this.getMapInfo().getAlias());
 
-        this.blockSqlWhereTreeFilter = entity.getZKDbWhereTreeFilter(sqlConvert, this.getMapInfo()).toQueryCondition(sqlConvert, this.getMapInfo().getAlias());
+//        this.blockSqlWhereTreeFilter = entity.getZKDbWhereTreeFilter(sqlConvert, this.getMapInfo()).toQueryCondition(sqlConvert, this.getMapInfo().getAlias());
     }
 
     // 递归查询树形节点; 1.不支持子节点过虑; 2.仅支持根节点过滤与分页；
     String blockSqlWhereTree;
 
     // 树形所有节点，统一过滤，过滤结果中不是根结点时，如果父节点不在过滤结果中，升级为结果中的根节点；如果父节点在过滤结果中，则不做为返回结果; 且不递归查询子节点；
-    String blockSqlWhereTreeFilter;
+//    String blockSqlWhereTreeFilter;
 
     public String getBlockSqlWhereTree() {
         return blockSqlWhereTree;
     }
 
-    public String getBlockSqlWhereTreeFilter() {
-        return blockSqlWhereTreeFilter;
-    }
+//    public String getBlockSqlWhereTreeFilter() {
+//        return blockSqlWhereTreeFilter;
+//    }
 
 }

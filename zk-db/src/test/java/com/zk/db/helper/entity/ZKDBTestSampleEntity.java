@@ -16,7 +16,7 @@ import com.zk.db.annotation.ZKTable;
 import com.zk.db.annotation.ZKUpdate;
 import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.entity.ZKDBBaseEntity;
+import com.zk.db.entity.ZKDBEntity;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /**
@@ -36,7 +36,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
  * @DATE 2022-09-27 16:40:31
  **/
 @ZKTable(name = "t_zk_db_test")
-public class ZKDBTestSampleEntity extends ZKDBBaseEntity<ZKDBTestSampleEntity> {
+public class ZKDBTestSampleEntity extends ZKDBEntity<ZKDBTestSampleEntity> {
 
     /**
      * @Fields serialVersionUID : TODO(simple description what to do.)

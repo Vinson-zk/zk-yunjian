@@ -54,7 +54,7 @@ import com.zk.webmvc.configuration.ZKEnableWebmvc;
         @PropertySource(ignoreResourceNotFound = true, encoding = "UTF-8", value = { "classpath:test.zk.base.db.properties" }), // 
 })
 @ImportAutoConfiguration(classes = { //
-//        ZKBaseHelperMongoConfiguration.class,  // 测试 mongo 时，需要引入这个配置
+//        ZKBaseHelperMongoConfiguration.class, // 测试 mongo 时，需要引入这个配置
 })
 @ComponentScan(
         basePackages = {
@@ -65,7 +65,7 @@ import com.zk.webmvc.configuration.ZKEnableWebmvc;
         }
 )
 @ZKEnableCore
-@ZKEnableDB(configLocation = "test_mybatis_config.xml")
+@ZKEnableDB(configLocation = "classpath:mybatis/test_mybatis_config.xml")
 @ZKEnableWebmvc
 public class ZKBaseHelperSpringBootMain {
 

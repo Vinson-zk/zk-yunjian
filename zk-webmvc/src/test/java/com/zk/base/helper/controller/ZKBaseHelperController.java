@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zk.base.controller.ZKBaseController;
-import com.zk.base.helper.entity.ZKBaseHelperEntityString;
+import com.zk.base.helper.dto.ZKBaseHelperEntityStringDto;
 import com.zk.core.utils.ZKJsonUtils;
 
 /** 
@@ -38,7 +38,7 @@ public class ZKBaseHelperController extends ZKBaseController {
 
     @RequestMapping("data")
     @ResponseBody
-    public ZKBaseHelperEntityString data(ZKBaseHelperEntityString he) {
+    public ZKBaseHelperEntityStringDto data(ZKBaseHelperEntityStringDto he) {
 
         System.out.println("[^_^:20190809-1535-001]: " + ZKJsonUtils.writeObjectJson(he));
 

@@ -49,23 +49,23 @@ public class ZKMyBatisTreeSqlProvider {
         return sb.toString();
     }
 
-    public String selectTreeFilter(ZKBaseTreeEntity<?, ?> entity) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(ZKDBScriptKey.Script[0]);
-        sb.append(ZKSqlConvert.SqlKeyword.select);
-        sb.append(entity.getSqlHelper().getBlockSqlCols());
-        sb.append(ZKSqlConvert.SqlKeyword.from);
-        sb.append(entity.getSqlHelper().getTableName());
-        sb.append(ZKSqlConvert.SqlKeyword.space);
-        sb.append(entity.getSqlHelper().getTableAlias());
-        sb.append(ZKSqlConvert.SqlKeyword.space);
-        sb.append(ZKDBScriptKey.where[0]);
-        sb.append(entity.getTreeSqlHelper().getBlockSqlWhereTreeFilter());
-        sb.append(ZKDBScriptKey.where[1]);
-        ZKDBMybatisSqlProvider.appendOrderBySql(entity, sb);
-        sb.append(ZKDBScriptKey.Script[1]);
-        return sb.toString();
-    }
+//    public String selectTreeFilter(ZKBaseTreeEntity<?, ?> entity) {
+//        StringBuffer sb = new StringBuffer();
+//        sb.append(ZKDBScriptKey.Script[0]);
+//        sb.append(ZKSqlConvert.SqlKeyword.select);
+//        sb.append(entity.getSqlHelper().getBlockSqlCols());
+//        sb.append(ZKSqlConvert.SqlKeyword.from);
+//        sb.append(entity.getSqlHelper().getTableName());
+//        sb.append(ZKSqlConvert.SqlKeyword.space);
+//        sb.append(entity.getSqlHelper().getTableAlias());
+//        sb.append(ZKSqlConvert.SqlKeyword.space);
+//        sb.append(ZKDBScriptKey.where[0]);
+//        sb.append(entity.getTreeSqlHelper().getBlockSqlWhereTreeFilter());
+//        sb.append(ZKDBScriptKey.where[1]);
+//        ZKDBMybatisSqlProvider.appendOrderBySql(entity, sb);
+//        sb.append(ZKDBScriptKey.Script[1]);
+//        return sb.toString();
+//    }
 
     public String selectTreeDetail(ZKBaseTreeEntity<?, ?> entity) {
         StringBuffer sb = new StringBuffer();

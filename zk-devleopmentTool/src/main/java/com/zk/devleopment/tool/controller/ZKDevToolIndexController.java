@@ -9,7 +9,7 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKCodeGenIndexController.java 
+* @Title: ZKDevToolIndexController.java 
 * @author Vinson 
 * @Package com.zk.code.generate.controller 
 * @Description: TODO(simple description this file what to do. ) 
@@ -25,26 +25,26 @@ import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.utils.ZKMsgUtils;
 import com.zk.core.web.utils.ZKWebUtils;
 
-/** 
-* @ClassName: ZKCodeGenIndexController 
-* @Description: TODO(simple description this class what to do. ) 
-* @author Vinson 
-* @version 1.0 
-*/
+/**
+ * @ClassName: ZKDevToolIndexController
+ * @Description: TODO(simple description this class what to do. )
+ * @author Vinson
+ * @version 1.0
+ */
 @RestController
-@RequestMapping("${zk.path.admin}/${zk.path.devleopmentTool}/${zk.devleopmentTool.version}")
-public class ZKCodeGenIndexController {
+@RequestMapping("${zk.path.admin}/${zk.path.dev.tool}/${zk.dev.tool.version}")
+public class ZKDevToolIndexController {
 
     @RequestMapping({ "", "index" })
 //  @ResponseBody
     public String welcome() {
-        return "index: " + ZKMsgUtils.getMessage(ZKWebUtils.getLocale(), "zk.codeGen.msg.welcome") + " "
+        return "index: " + ZKMsgUtils.getMessage(ZKWebUtils.getLocale(), "zk.dev.tool.msg.welcome") + " "
                 + ZKEnvironmentUtils.getString("spring.application.name", "zk code Gen");
     }
 
     @RequestMapping("user")
     public String user() {
-        return "user: " + ZKMsgUtils.getMessage(ZKWebUtils.getLocale(), "zk.codeGen.msg.welcome") + " "
+        return "user: " + ZKMsgUtils.getMessage(ZKWebUtils.getLocale(), "zk.dev.tool.msg.welcome") + " "
                 + ZKEnvironmentUtils.getString("spring.application.name", "zk code Gen");
     }
 

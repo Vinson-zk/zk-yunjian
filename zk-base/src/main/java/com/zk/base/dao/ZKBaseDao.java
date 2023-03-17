@@ -21,7 +21,7 @@ package com.zk.base.dao;
 import java.io.Serializable;
 
 import com.zk.base.entity.ZKBaseEntity;
-import com.zk.db.mybatis.dao.ZKDBBaseDao;
+import com.zk.db.mybatis.dao.ZKDBDao;
 
 /** 
 * @ClassName: ZKBaseDao 
@@ -29,7 +29,7 @@ import com.zk.db.mybatis.dao.ZKDBBaseDao;
 * @author Vinson 
 * @version 1.0 
 */
-public interface ZKBaseDao<ID extends Serializable, E extends ZKBaseEntity<ID, E>> extends ZKDBBaseDao<E> {
+public interface ZKBaseDao<ID extends Serializable, E extends ZKBaseEntity<ID, E>> extends ZKDBDao<E> {
     
 //    @Override
 //    @SelectProvider(type = ZKDBMybatisSqlProvider.class, method = "get")

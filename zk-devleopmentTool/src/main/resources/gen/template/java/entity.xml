@@ -89,7 +89,7 @@ public class ${zkTableInfo.className} extends ZKBaseEntity<${zkTableInfo.pkAttrT
 	@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     @JsonFormat(pattern = ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss, timezone = timezone)
 	public ${zkCol.attrType} get${zkCol.attrName?cap_first}() {
-		return ${zkCol.attrName?uncap_first};
+		return this.${zkCol.attrName?uncap_first};
 	}
 			<#else>
 	/**

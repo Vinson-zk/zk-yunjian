@@ -51,10 +51,10 @@ public class ZKCodeGenService {
      */
     protected Logger log = LoggerFactory.getLogger(getClass());
 
-    @Value("${zk.devleopmentTool.codeGen.root.path:codeGenFile/}")
+    @Value("${zk.dev.tool.code.gen.root.path:codeGenFile/}")
     String genCodeRootPath = "";
 
-    @Value("${zk.devleopmentTool.codeGen.code.template.path:\"\"}")
+    @Value("${zk.dev.tool.code.gen.code.template.path:\"\"}")
     String genCodeTemplatePath = "";
 
 	@Autowired
@@ -66,7 +66,7 @@ public class ZKCodeGenService {
 	@Autowired
     ZKColInfoService zkColInfoService;
 
-    public String genCode(String moduleId, String[] tableIds) throws Exception {
+    public String genCode(String moduleId, String... tableIds) throws Exception {
         ZKModule module = zkModuleService.get(new ZKModule(moduleId));
         if (module == null) {
             log.error("[^_^:20210417-1702-001] 功能模块：{}，不存在；", moduleId);
@@ -75,7 +75,7 @@ public class ZKCodeGenService {
         return this.genCode(module, tableIds);
     }
 
-    public String genCode(ZKModule module, String[] tableIds) throws Exception {
+    public String genCode(ZKModule module, String... tableIds) throws Exception {
 
         if (module == null) {
             log.error("[^_^:20210417-1702-002] 功能模块为 null");

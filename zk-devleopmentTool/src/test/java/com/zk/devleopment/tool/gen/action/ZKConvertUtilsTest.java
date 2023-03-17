@@ -47,11 +47,11 @@ public class ZKConvertUtilsTest {
 
         namePrefix = zkModule.getModulePrefix() + zkModule.getModuleNameCap() + zkTableInfo.getSubModuleName();
         zkModule.setIsRemovePrefix(true);
-        ZKConvertUtils.convert(zkModule, zkTableInfo);
+        ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
         TestCase.assertEquals(namePrefix + "TestTableGen", zkTableInfo.getClassName());
 
         zkModule.setIsRemovePrefix(false);
-        ZKConvertUtils.convert(zkModule, zkTableInfo);
+        ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
         TestCase.assertEquals(namePrefix + "TTestTableGen", zkTableInfo.getClassName());
     }
 
@@ -156,7 +156,7 @@ public class ZKConvertUtilsTest {
 
             jdbcType = "VARCHAR(200)";
             attributeType = "String";
-            ZKConvertUtils.convertJdbcType(jdbcType, zkCol);
+            ZKConvertUtils.convertColClass(jdbcType, zkCol);
             transferType = zkCol.getAttrType();
             System.out.println("[^_^:201705271153-007] " + transferType);
             TestCase.assertEquals(attributeType, transferType);

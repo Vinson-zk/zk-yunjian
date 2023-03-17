@@ -9,7 +9,7 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKDBBaseDao.java 
+* @Title: ZKDBDao.java 
 * @author Vinson 
 * @Package com.zk.db.mybatis.dao 
 * @Description: TODO(simple description this file what to do. ) 
@@ -28,13 +28,13 @@ import org.apache.ibatis.annotations.UpdateProvider;
 import com.zk.db.entity.ZKDBEntity;
 import com.zk.db.mybatis.provider.ZKDBMybatisSqlProvider;
 
-/** 
-* @ClassName: ZKDBBaseDao 
-* @Description: TODO(simple description this class what to do. ) 
-* @author Vinson 
-* @version 1.0 
-*/
-public interface ZKDBBaseDao<E extends ZKDBEntity<E>> {
+/**
+ * @ClassName: ZKDBDao
+ * @Description: TODO(simple description this class what to do. )
+ * @author Vinson
+ * @version 1.0
+ */
+public interface ZKDBDao<E extends ZKDBEntity<E>> {
 
     /**
      * 插入

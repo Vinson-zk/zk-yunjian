@@ -3,7 +3,6 @@
  */
 package com.zk.file.service;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Maps;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.base.service.ZKBaseTreeService;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.exception.ZKCodeException;
 import com.zk.core.utils.ZKMsgUtils;
 import com.zk.core.utils.ZKStringUtils;
-import com.zk.core.commons.ZKMsgRes;
 import com.zk.file.dao.ZKFileDirectoryDao;
 import com.zk.file.entity.ZKFileDirectory;
 import com.zk.sys.api.org.ZKSysOrgCompanyApi;
@@ -33,14 +32,6 @@ public class  ZKFileDirectoryService extends ZKBaseTreeService<String, ZKFileDir
 
     @Autowired
     private ZKSysOrgCompanyApi sysOrgCompanyApi;
-
-	/**
-     * 执行树形查询；
-     */
-    @Override
-    public List<ZKFileDirectory> doFindTree(ZKFileDirectory fileDirectory) {
-        return this.dao.findTree(fileDirectory);
-    }
 
 	/**
 	 * 查询详情，包含父节点

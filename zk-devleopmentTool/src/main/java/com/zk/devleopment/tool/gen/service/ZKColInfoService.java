@@ -52,7 +52,44 @@ public class ZKColInfoService extends ZKBaseService<String, ZKColInfo, ZKColInfo
     @Autowired
     ZKTableInfoService zkTableInfoService;
 
-    // 查询指定表的 字段信息
+    // ---------------------------------------------------------------
+    /**
+     * 制作表字段信息; 不会删除已存在的表字段信息；
+     *
+     * @Title: makeColInfo
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Mar 6, 2023 11:05:56 PM
+     * @param isCover
+     * @param module
+     * @param tableInfo
+     * @return
+     * @return List<ZKColInfo>
+     */
+    protected List<ZKColInfo> makeColInfo(boolean isCover, ZKModule module, ZKTableInfo tableInfo) {
+        List<String> pkList = ZKGetTableInfoUtils.getPkSourceList(module, tableInfo.getTableName());
+        List<Map<String, Object>> dbColInfos = ZKGetTableInfoUtils.getDbColInfos(module, tableInfo.getTableName());
+        List<ZKColInfo> cols = ZKCollectionUtils.newArrayList();
+        String colName = null;
+        ZKColInfo col = null;
+        for (Map<String, Object> dbColInfo : dbColInfos) {
+            col = null;
+            colName = (String) dbColInfo.get(ZKCodeGenConstant.KeyCol.columnName);
+            col = this.getByColName(tableInfo.getPkId(), colName);
+            if (col == null || isCover) {
+                // 表字段信息不存在，或覆盖重新生成
+                col = new ZKColInfo();
+                col = ZKGetTableInfoUtils.makeColInfo(dbColInfo, pkList, col);
+                // 转换字段信息
+                ZKConvertUtils.convertAttrInfo(module, tableInfo, col);
+            }
+            cols.add(col);
+        }
+        return cols;
+    }
+    // ---------------------------------------------------------------
+
+    // 查询指定表的 字段信息；这里不会通过数据库表生成表字段信息
     public List<ZKColInfo> findByTableId(String tableId) {
         ZKColInfo colInfo = new ZKColInfo();
         colInfo.setTableId(tableId);
@@ -92,25 +129,10 @@ public class ZKColInfoService extends ZKBaseService<String, ZKColInfo, ZKColInfo
     }
 
     @Transactional(readOnly = false)
-    public List<ZKColInfo> updateAddByTable(ZKModule module, ZKTableInfo tableInfo) {
-        List<String> pkList = ZKGetTableInfoUtils.getPkSourceList(module, tableInfo.getTableName());
-        List<Map<String, Object>> dbColInfos = ZKGetTableInfoUtils.getDbColInfos(module, tableInfo.getTableName());
-        ZKColInfo col = null;
-        List<ZKColInfo> newCols = ZKCollectionUtils.newArrayList();
-        String colName = null;
-        for (Map<String, Object> dbColInfo : dbColInfos) {
-            colName = (String) dbColInfo.get(ZKCodeGenConstant.KeyCol.columnName);
-            col = this.getByColName(tableInfo.getPkId(), colName);
-            if (col == null) {
-                col = new ZKColInfo();
-            }
-            col = ZKGetTableInfoUtils.makeColInfo(dbColInfo, pkList, col);
-            // 转换字段信息
-            ZKConvertUtils.convertAttrInfo(module, tableInfo, col);
-            this.save(col);
-            newCols.add(col);
-        }
-        return newCols;
+    private List<ZKColInfo> updateAddByTable(ZKModule module, ZKTableInfo tableInfo) {
+        List<ZKColInfo> cols = this.makeColInfo(false, module, tableInfo);
+        this.saveBatch(cols);
+        return cols;
     }
 
     // 全量更新；会删除表中不存的字段；
@@ -130,21 +152,12 @@ public class ZKColInfoService extends ZKBaseService<String, ZKColInfo, ZKColInfo
     }
 
     @Transactional(readOnly = false)
-    public List<ZKColInfo> updateAllByTable(ZKModule module, ZKTableInfo tableInfo) {
+    private List<ZKColInfo> updateAllByTable(ZKModule module, ZKTableInfo tableInfo) {
         this.diskDelByTableId(tableInfo.getPkId());
-        List<String> pkList = ZKGetTableInfoUtils.getPkSourceList(module, tableInfo.getTableName());
-        List<Map<String, Object>> dbColInfos = ZKGetTableInfoUtils.getDbColInfos(module, tableInfo.getTableName());
-        ZKColInfo col = null;
-        List<ZKColInfo> newCols = ZKCollectionUtils.newArrayList();
-        for (Map<String, Object> dbColInfo : dbColInfos) {
-            // 生成字段信息
-            col = ZKGetTableInfoUtils.makeColInfo(dbColInfo, pkList);
-            // 转换字段信息
-            ZKConvertUtils.convertAttrInfo(module, tableInfo, col);
-            this.save(col);
-            newCols.add(col);
-        }
-        return newCols;
+
+        List<ZKColInfo> cols = this.makeColInfo(true, module, tableInfo);
+        this.saveBatch(cols);
+        return cols;
     }
 
     // 根据表ID 删除字段信息

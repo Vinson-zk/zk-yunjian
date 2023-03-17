@@ -22,14 +22,11 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zk.core.exception.ZKCodeException;
 import com.zk.devleopment.tool.gen.action.ZKCodeGenConstant;
-import com.zk.devleopment.tool.gen.action.connect.myBatis.ZKMyBatisConnect;
-import com.zk.devleopment.tool.gen.action.connect.myBatis.ZKMyBatisSessionFactory;
+import com.zk.devleopment.tool.gen.action.connect.myBatis.ZKGetTableInfoMyBatisUtils;
 import com.zk.devleopment.tool.gen.entity.ZKColInfo;
 import com.zk.devleopment.tool.gen.entity.ZKModule;
 import com.zk.devleopment.tool.gen.entity.ZKTableInfo;
@@ -46,112 +43,6 @@ public class ZKGetTableInfoUtils {
      * 日志对象
      */
     protected static Logger log = LoggerFactory.getLogger(ZKGetTableInfoUtils.class);
-
-    public static List<String> getPkSourceList(ZKModule zkModule, String tableName) {
-        ZKMyBatisConnect zkConnect = null;
-        try {
-            ZKMyBatisSessionFactory.createSessionFactory(ZKMyBatisSessionFactory.createDataSource(zkModule),
-                    ZKCodeGenConstant.mappers);
-            SqlSession session = ZKMyBatisSessionFactory.openSession();
-//            Assert.notNull(session);
-            zkConnect = new ZKMyBatisConnect(session);
-
-            return zkConnect.getPkSourceList(zkModule.getDbType(), tableName);
-
-        } finally {
-            if (zkConnect != null) {
-                zkConnect.close();
-            }
-            ZKMyBatisSessionFactory.clean();
-        }
-    }
-
-    /**
-     * 查询功能模块下的所有表
-     *
-     * @Title: getDbTableInfos
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Mar 31, 2021 9:11:38 AM
-     * @param zkModule
-     * @return
-     * @return List<ZKTableInfo>
-     */
-    public static List<Map<String, Object>> getDbTableInfos(ZKModule zkModule, String tableName) {
-        ZKMyBatisConnect zkConnect = null;
-        try {
-            ZKMyBatisSessionFactory.createSessionFactory(ZKMyBatisSessionFactory.createDataSource(zkModule),
-                    ZKCodeGenConstant.mappers);
-            SqlSession session = ZKMyBatisSessionFactory.openSession();
-//            Assert.notNull(session);
-            zkConnect = new ZKMyBatisConnect(session);
-
-            return zkConnect.findTableList(zkModule.getDbType(), tableName);
-        } finally {
-            if (zkConnect != null) {
-                zkConnect.close();
-            }
-            ZKMyBatisSessionFactory.clean();
-        }
-    }
-
-    public static Map<String, Object> getDbTableInfo(ZKModule zkModule, String tableName) {
-        ZKMyBatisConnect zkConnect = null;
-        try {
-            ZKMyBatisSessionFactory.createSessionFactory(ZKMyBatisSessionFactory.createDataSource(zkModule),
-                    ZKCodeGenConstant.mappers);
-            SqlSession session = ZKMyBatisSessionFactory.openSession();
-//            Assert.notNull(session);
-            zkConnect = new ZKMyBatisConnect(session);
-
-            List<Map<String, Object>> tableInfoList = zkConnect.findTableList(zkModule.getDbType(), tableName);
-            if (tableInfoList != null && !tableInfoList.isEmpty()) {
-                if (tableInfoList.size() != 1) {
-                    log.error("[^_^:20210401-0704-003] 表:{}, 信息不唯一；", tableName);
-                    throw ZKCodeException.as("zk.codeGen.000003", "表信息不唯一", tableName);
-                }
-                return tableInfoList.get(0);
-            }
-            return null;
-
-        } finally {
-            if (zkConnect != null) {
-                zkConnect.close();
-            }
-            ZKMyBatisSessionFactory.clean();
-        }
-    }
-
-    /**
-     * 查询 表字段信息
-     *
-     * @Title: getDbColInfos
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Apr 1, 2021 12:09:44 AM
-     * @param zkModule
-     * @param tableName
-     * @return
-     * @return List<ZKColInfo>
-     */
-    public static List<Map<String, Object>> getDbColInfos(ZKModule zkModule, String tableName) {
-        ZKMyBatisConnect zkConnect = null;
-        try {
-            ZKMyBatisSessionFactory.createSessionFactory(ZKMyBatisSessionFactory.createDataSource(zkModule),
-                    ZKCodeGenConstant.mappers);
-            SqlSession session = ZKMyBatisSessionFactory.openSession();
-//            Assert.notNull(session);
-            zkConnect = new ZKMyBatisConnect(session);
-
-            return zkConnect.getColumnSourceList(zkModule.getDbType(), tableName);
-
-        } finally {
-            if (zkConnect != null) {
-                zkConnect.close();
-            }
-            ZKMyBatisSessionFactory.clean();
-        }
-    }
 
     /**
      * 做一个表信息对象；注意：这里未转换为 java 属性信息
@@ -216,6 +107,47 @@ public class ZKGetTableInfoUtils {
             }
         }
         return outColInfo;
+    }
+
+    // ---------------------------------------------------------------------
+
+    public static List<String> getPkSourceList(ZKModule zkModule, String tableName) {
+        return ZKGetTableInfoMyBatisUtils.getPkSourceList(zkModule, tableName);
+    }
+
+    /**
+     * 查询功能模块下的所有表
+     *
+     * @Title: getDbTableInfos
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Mar 31, 2021 9:11:38 AM
+     * @param zkModule
+     * @return
+     * @return List<ZKTableInfo>
+     */
+    public static List<Map<String, Object>> getDbTableInfos(ZKModule zkModule, String tableName) {
+        return ZKGetTableInfoMyBatisUtils.getDbTableInfos(zkModule, tableName);
+    }
+
+    public static Map<String, Object> getDbTableInfo(ZKModule zkModule, String tableName) {
+        return ZKGetTableInfoMyBatisUtils.getDbTableInfo(zkModule, tableName);
+    }
+
+    /**
+     * 查询 表字段信息
+     *
+     * @Title: getDbColInfos
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Apr 1, 2021 12:09:44 AM
+     * @param zkModule
+     * @param tableName
+     * @return
+     * @return List<ZKColInfo>
+     */
+    public static List<Map<String, Object>> getDbColInfos(ZKModule zkModule, String tableName) {
+        return ZKGetTableInfoMyBatisUtils.getDbColInfos(zkModule, tableName);
     }
 
 }

@@ -34,7 +34,7 @@ public interface ZKSysOrgDeptDao extends ZKBaseTreeDao<String, ZKSysOrgDept> {
      */
     @SelectProvider(type = ZKMyBatisTreeSqlProvider.class, method = "selectTree")
     @Results(id = "treeResult", value = {
-            @Result(column = "{parentId=pkId}", property = "children", javaType = List.class, many = @Many(select = "com.zk.sys.org.dao.ZKSysOrgDeptDao.findTree", fetchType = FetchType.EAGER)) })
+            @Result(column = "{parentId=pkId,delFlag=delFlag}", property = "children", javaType = List.class, many = @Many(select = "com.zk.sys.org.dao.ZKSysOrgDeptDao.findTree", fetchType = FetchType.EAGER)) })
     List<ZKSysOrgDept> findTree(ZKSysOrgDept sysOrgDept);
 
 	/**

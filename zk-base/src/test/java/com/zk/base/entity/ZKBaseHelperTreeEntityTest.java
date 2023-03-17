@@ -29,7 +29,6 @@ public class ZKBaseHelperTreeEntityTest {
         try {
             ZKBaseHelperTreeEntity helperTreeEntity = new ZKBaseHelperTreeEntity();
             System.out.println("[^_^:20221017-2146-001] " + helperTreeEntity.getTreeSqlHelper().getBlockSqlWhereTree());
-            System.out.println("[^_^:20221017-2146-001] " + helperTreeEntity.getTreeSqlHelper().getBlockSqlWhereTreeFilter());
         }
         catch(Exception e) {
             e.printStackTrace();

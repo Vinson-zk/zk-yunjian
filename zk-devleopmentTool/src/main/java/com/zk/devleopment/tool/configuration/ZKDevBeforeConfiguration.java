@@ -86,7 +86,7 @@ public class ZKDevBeforeConfiguration {
         System.out.println("[^_^:20200805-1808-001] --- zk-devleopmentTool config: ResourceBundleMessageSource --- ["
                 + this.getClass().getSimpleName() + "] " + this.hashCode());
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.addBasenames("msg/gen/zkMsg_codeGen");
+        messageSource.addBasenames("msg/zkMsg_devTool");
         messageSource.setUseCodeAsDefaultMessage(true);
         messageSource.setCacheSeconds(3600);
         messageSource.setDefaultEncoding("UTF-8");

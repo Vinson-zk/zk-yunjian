@@ -36,7 +36,6 @@ import com.zk.security.principal.ZKSecUserPrincipal;
 import com.zk.security.principal.pc.ZKSecDefaultPrincipalCollection;
 import com.zk.security.principal.pc.ZKSecPrincipalCollection;
 import com.zk.security.realm.ZKSecAbstractRealm;
-import com.zk.security.realm.ZKSecSampleRealm;
 import com.zk.security.ticket.ZKSecTicket;
 import com.zk.security.ticket.ZKSecTicketManager;
 import com.zk.security.token.ZKSecAuthcUserToken;
@@ -87,7 +86,7 @@ public class ZKSysSecRealm extends ZKSecAbstractRealm {
     ZKSecTicketManager ticketManager;
 
     public ZKSysSecRealm() {
-        super(ZKSecSampleRealm.class.getName());
+        super(ZKSysSecRealm.class.getName());
         this.setAuthorizationInfoStore(null);
     }
 

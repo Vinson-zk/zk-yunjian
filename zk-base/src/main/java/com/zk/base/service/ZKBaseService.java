@@ -130,6 +130,25 @@ public class ZKBaseService<ID extends Serializable, E extends ZKBaseEntity<ID, E
         }
     }
     
+    @SuppressWarnings("unchecked")
+    @Transactional(readOnly = false)
+    public int saveBatch(E... entitys) throws ZKValidatorException {
+        int res = 0;
+        for (E e : entitys) {
+            res += this.save(e);
+        }
+        return res;
+    }
+
+    @Transactional(readOnly = false)
+    public int saveBatch(List<E> entitys) throws ZKValidatorException {
+        int res = 0;
+        for (E e : entitys) {
+            res += this.save(e);
+        }
+        return res;
+    }
+
     private E getEntity(ID pkId) {
         Class<E> classz = ZKClassUtils.getSuperclassByName(ZKBaseService.class, this.getClass(), "E");
         try {

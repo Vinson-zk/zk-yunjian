@@ -9,25 +9,26 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKFileDao.java 
+* @Title: ZKBaseHelperEntityStringDtoDao.java 
 * @author Vinson 
-* @Package com.zk.file.dao 
+* @Package com.zk.base.helper.dao 
 * @Description: TODO(simple description this file what to do. ) 
-* @date Feb 28, 2023 5:04:35 PM 
+* @date Mar 2, 2023 7:30:25 PM 
 * @version V1.0 
 */
-package com.zk.file.dao;
+package com.zk.base.helper.dao;
 
 import com.zk.base.dao.ZKBaseDao;
-import com.zk.file.dto.ZKFileDto;
-import com.zk.file.entity.ZKFile;
+import com.zk.base.helper.dto.ZKBaseHelperEntityStringDto;
+import com.zk.db.annotation.ZKMyBatisDao;
 
 /** 
-* @ClassName: ZKFileDao 
+* @ClassName: ZKBaseHelperEntityStringDtoDao 
 * @Description: TODO(simple description this class what to do. ) 
 * @author Vinson 
 * @version 1.0 
 */
-public interface ZKFileDao extends ZKBaseDao<String, ZKFileDto<ID, ZKFile>> {
+@ZKMyBatisDao
+public interface ZKBaseHelperEntityStringDtoDao extends ZKBaseDao<String, ZKBaseHelperEntityStringDto> {
 
 }

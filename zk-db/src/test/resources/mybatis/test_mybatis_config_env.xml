@@ -60,7 +60,7 @@
 	    <environment id="development">
 			<transactionManager type="JDBC"/>
 			<dataSource type="POOLED">
-				<!-- <property name="driver" value="com.mysql.jdbc.Driver"/> -->
+				<!-- <property name="driver" value="com.mysql.cj.jdbc.Driver"/> -->
 				<property name="driver" value="com.mysql.cj.jdbc.Driver"/>
 				<property name="url" value="${zk.db.dynamic.jdbc.publicDruidPool.url}"/>
 				

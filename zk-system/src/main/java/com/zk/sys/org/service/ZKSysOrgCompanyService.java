@@ -3,7 +3,6 @@
  */
 package com.zk.sys.org.service;
  
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,14 +46,6 @@ public class ZKSysOrgCompanyService extends ZKBaseTreeService<String, ZKSysOrgCo
 
     @Autowired
     ZKSysOrgUserTypeService sysOrgUserTypeService;
-
-	/**
-     * 树形查询； 不分页
-     */
-    @Override
-    public List<ZKSysOrgCompany> doFindTree(ZKSysOrgCompany sysOrgCompany) {
-        return this.dao.findTree(sysOrgCompany);
-    }
 
 	/**
 	 * 查询详情，包含父节点

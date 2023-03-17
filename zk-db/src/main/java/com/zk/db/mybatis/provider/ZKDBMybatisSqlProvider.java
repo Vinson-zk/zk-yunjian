@@ -20,7 +20,7 @@ package com.zk.db.mybatis.provider;
 
 import com.zk.core.utils.ZKStringUtils;
 import com.zk.db.commons.ZKSqlConvert;
-import com.zk.db.entity.ZKDBBaseEntity;
+import com.zk.db.entity.ZKDBEntity;
 import com.zk.db.mybatis.commons.ZKDBScriptKey;
 
 /** 
@@ -31,27 +31,27 @@ import com.zk.db.mybatis.commons.ZKDBScriptKey;
 */
 public class ZKDBMybatisSqlProvider {
 
-    public String insert(ZKDBBaseEntity<?> entity) {
+    public String insert(ZKDBEntity<?> entity) {
         return entity.getSqlHelper().getSqlInsert();
     }
 
-    public String update(ZKDBBaseEntity<?> entity) {
+    public String update(ZKDBEntity<?> entity) {
         return entity.getSqlHelper().getSqlUpdate();
     }
 
-    public String del(ZKDBBaseEntity<?> entity) {
+    public String del(ZKDBEntity<?> entity) {
         return entity.getSqlHelper().getSqlDel();
     }
 
-    public String diskDel(ZKDBBaseEntity<?> entity) {
+    public String diskDel(ZKDBEntity<?> entity) {
         return entity.getSqlHelper().getSqlDiskDel();
     }
 
-    public String get(ZKDBBaseEntity<?> entity) {
+    public String get(ZKDBEntity<?> entity) {
         return entity.getSqlHelper().getSqlGet();
     }
 
-    public String selectList(ZKDBBaseEntity<?> entity) {
+    public String selectList(ZKDBEntity<?> entity) {
 
 //        System.out.println("======== " + ZKJsonUtils.writeObjectJson(entity));
 //        return "<script>SELECT t0.c_json AS \"json\", t0.c_id AS \"id\", t0.c_type AS \"type\", t0.c_value AS \"value\", t0.c_remarks AS \"remarks\" FROM t_test t0 <where><if test=' type != null '>AND t0.c_type = #{type}</if></where> </script>";
@@ -65,7 +65,7 @@ public class ZKDBMybatisSqlProvider {
         return sb.toString();
     }
 
-    public static void appendOrderBySql(ZKDBBaseEntity<?> entity, StringBuffer sb){
+    public static void appendOrderBySql(ZKDBEntity<?> entity, StringBuffer sb) {
         if (entity.getPage() == null || entity.getPage().getSorters() == null) {
             if(!ZKStringUtils.isEmpty(entity.getSqlHelper().getBlockSqlOrderBy())){
                 sb.append(ZKSqlConvert.SqlKeyword.orderBy);

@@ -51,11 +51,11 @@ public class ZKDevSecConfiguration {
     
     @Value("${zk.path.admin}")
     String pathAdmin;
-    @Value("${zk.path.devleopmentTool}")
+    @Value("${zk.path.dev.tool}")
     String pathDevTool;
-    @Value("${zk.devleopmentTool.version}")
+    @Value("${zk.dev.tool.version}")
     String pathVersion;
-    @Value("${zk.path.devleopmentTool.codeGen}")
+    @Value("${zk.path.dev.tool.code.gen}")
     String pathCodeGen;
     
     /**

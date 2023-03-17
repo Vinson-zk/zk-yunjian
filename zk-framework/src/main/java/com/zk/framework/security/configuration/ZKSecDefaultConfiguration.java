@@ -24,7 +24,9 @@ import org.springframework.context.annotation.Primary;
 
 import com.zk.core.redis.ZKJedisOperatorStringKey;
 import com.zk.framework.security.realm.ZKDistributedRealm;
+import com.zk.security.configuration.ZKEnableSecurity;
 import com.zk.security.realm.ZKSecRealm;
+import com.zk.security.rememberMe.ZKSecRememberMeManager;
 import com.zk.security.ticket.ZKSecTicketManager;
 import com.zk.security.ticket.support.redis.ZKSecRedisTicketManager;
 import com.zk.security.web.mgt.ZKSecWebSecurityManager;
@@ -42,6 +44,8 @@ public class ZKSecDefaultConfiguration {
     @ConditionalOnMissingBean(value = { ZKSecStaticMethodMatcherPointcutAdvisor.class })
     @Bean
     public ZKSecStaticMethodMatcherPointcutAdvisor zkSecStaticMethodMatcherPointcutAdvisor() {
+        System.out.println(ZKEnableSecurity.printLog + " zkSecStaticMethodMatcherPointcutAdvisor: "
+                + ZKSecStaticMethodMatcherPointcutAdvisor.class.getSimpleName());
         return new ZKSecStaticMethodMatcherPointcutAdvisor();
     }
 
@@ -58,17 +62,18 @@ public class ZKSecDefaultConfiguration {
      */
     @ConditionalOnMissingBean(value = { ZKSecRealm.class })
     @Bean
-    public ZKDistributedRealm secRealm(ZKSecRedisTicketManager secRedisTicketManager) {
+    public ZKDistributedRealm zkSecRealm(ZKSecTicketManager zkSecTicketManager) {
+        System.out.println(ZKEnableSecurity.printLog + " zkSecRealm: " + ZKDistributedRealm.class.getSimpleName());
         ZKDistributedRealm realm = new ZKDistributedRealm();
 //        realm.setSecUserService(secUserService);
-        realm.setTicketManager(secRedisTicketManager);
+        realm.setTicketManager(zkSecTicketManager);
         return realm;
     }
 
 //    // mongo 令牌管理
 //    @ConditionalOnMissingBean(value = { ZKSecTicketManager.class })
 //    @Bean
-//    public ZKSecMongoTicketManager zkSecMongoTicketManager(MongoTemplate mongoTemplate) {
+//    public ZKSecMongoTicketManager zkSecTicketManager(MongoTemplate mongoTemplate) {
 //        return new ZKSecMongoTicketManager(mongoTemplate);
 //    }
 
@@ -76,43 +81,39 @@ public class ZKSecDefaultConfiguration {
     @ConditionalOnMissingBean(value = { ZKSecTicketManager.class })
     @Primary
     @Bean
-    public ZKSecRedisTicketManager redisTicketManager(ZKJedisOperatorStringKey jedisOperatorStringKey) {
+    public ZKSecRedisTicketManager zkSecTicketManager(ZKJedisOperatorStringKey jedisOperatorStringKey) {
+        System.out.println(
+                ZKEnableSecurity.printLog + " zkSecTicketManager: " + ZKSecRedisTicketManager.class.getSimpleName());
         return new ZKSecRedisTicketManager(jedisOperatorStringKey);
     }
 
     // cookie 记住我管理
+    @ConditionalOnMissingBean(value = { ZKSecRememberMeManager.class })
     @Bean
     public ZKSecCookieRememberMemanager secCookieRememberMemanager() {
+        System.out.println(ZKEnableSecurity.printLog + " secCookieRememberMemanager: "
+                + ZKSecCookieRememberMemanager.class.getSimpleName());
         ZKSecCookieRememberMemanager secCookieRememberMemanager = new ZKSecCookieRememberMemanager();
         return secCookieRememberMemanager;
     }
 
     // 权限管理
     @Bean
-    public ZKSecWebSecurityManager zkSecWebSecurityManager(ZKSecCookieRememberMemanager rememberMeManager,
-            ZKSecTicketManager zkSecTicketManager, ZKSecRealm secRealm) {
+    public ZKSecWebSecurityManager zkSecWebSecurityManager(ZKSecRememberMeManager rememberMeManager,
+            ZKSecTicketManager zkSecTicketManager, ZKSecRealm zkSecRealm) {
+        System.out.println(ZKEnableSecurity.printLog + " zkSecWebSecurityManager: "
+                + ZKSecWebSecurityManager.class.getSimpleName());
+        System.out.println(ZKEnableSecurity.printLog + " zkSecWebSecurityManager.rememberMeManager: "
+                + rememberMeManager.getClass().getSimpleName());
+        System.out.println(ZKEnableSecurity.printLog + " zkSecWebSecurityManager.zkSecTicketManager: "
+                + zkSecTicketManager.getClass().getSimpleName());
+        System.out.println(ZKEnableSecurity.printLog + " zkSecWebSecurityManager.zkSecRealm: "
+                + zkSecRealm.getClass().getSimpleName());
         ZKSecWebSecurityManager sm = new ZKSecWebSecurityManager();
         sm.setTicketManager(zkSecTicketManager);
         sm.setRememberMeManager(rememberMeManager);
-        sm.setRealm(secRealm);
+        sm.setRealm(zkSecRealm);
         return sm;
     }
-
-//  /**
-//   * 权限管理，与鉴权服务
-//   *
-//   * @Title: getSecAuthService
-//   * @Description: TODO(simple description this method what to do.)
-//   * @author Vinson
-//   * @date May 11, 2022 3:52:24 PM
-//   * @return
-//   * @return ZKSecAuthService<String>
-//   */
-//  @Bean
-//  @Primary
-//  public ZKSecAuthService<String> getSecAuthService() {
-//      ZKSecAuthService<String> bean = new ZKSysSecAuthService();
-//      return bean;
-//  }
 
 }

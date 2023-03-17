@@ -35,12 +35,6 @@ public class ZKSecDefaultPrincipalService implements ZKSecPrincipalService {
 
     /**
      * (not Javadoc)
-     * <p>
-     * Title: getPrincipalCollection
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @param <ID>
      * @return
@@ -53,12 +47,6 @@ public class ZKSecDefaultPrincipalService implements ZKSecPrincipalService {
 
     /**
      * (not Javadoc)
-     * <p>
-     * Title: getUserPrincipal
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @param <ID>
      * @return
@@ -71,12 +59,6 @@ public class ZKSecDefaultPrincipalService implements ZKSecPrincipalService {
 
     /**
      * (not Javadoc)
-     * <p>
-     * Title: getUserPrincipal
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @param <ID>
      * @param tk
@@ -90,12 +72,6 @@ public class ZKSecDefaultPrincipalService implements ZKSecPrincipalService {
 
     /**
      * (not Javadoc)
-     * <p>
-     * Title: getAppPrincipal
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @param <ID>
      * @return
@@ -108,12 +84,6 @@ public class ZKSecDefaultPrincipalService implements ZKSecPrincipalService {
 
     /**
      * (not Javadoc)
-     * <p>
-     * Title: getDevPrincipal
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @param <ID>
      * @param tk
@@ -127,12 +97,6 @@ public class ZKSecDefaultPrincipalService implements ZKSecPrincipalService {
 
     /**
      * (not Javadoc)
-     * <p>
-     * Title: getServerPrincipal
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @param <ID>
      * @param tk
@@ -146,12 +110,6 @@ public class ZKSecDefaultPrincipalService implements ZKSecPrincipalService {
 
     /**
      * (not Javadoc)
-     * <p>
-     * Title: getPrincipalByType
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @param <ID>
      * @param tk
@@ -166,12 +124,6 @@ public class ZKSecDefaultPrincipalService implements ZKSecPrincipalService {
 
     /**
      * (not Javadoc)
-     * <p>
-     * Title: getUserId
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @param <ID>
      * @return
@@ -184,12 +136,6 @@ public class ZKSecDefaultPrincipalService implements ZKSecPrincipalService {
 
     /**
      * (not Javadoc)
-     * <p>
-     * Title: getCompanyId
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @param <ID>
      * @return
@@ -202,12 +148,6 @@ public class ZKSecDefaultPrincipalService implements ZKSecPrincipalService {
 
     /**
      * (not Javadoc)
-     * <p>
-     * Title: getCompanyCode
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @return
      * @see com.zk.security.service.ZKSecPrincipalService#getCompanyCode()
@@ -219,12 +159,6 @@ public class ZKSecDefaultPrincipalService implements ZKSecPrincipalService {
 
     /**
      * (not Javadoc)
-     * <p>
-     * Title: getGroupCode
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @return
      * @see com.zk.security.service.ZKSecPrincipalService#getGroupCode()
@@ -236,12 +170,6 @@ public class ZKSecDefaultPrincipalService implements ZKSecPrincipalService {
 
     /**
      * (not Javadoc)
-     * <p>
-     * Title: getTikcet
-     * </p>
-     * <p>
-     * Description:
-     * </p>
      * 
      * @return
      * @see com.zk.security.service.ZKSecPrincipalService#getTikcet()

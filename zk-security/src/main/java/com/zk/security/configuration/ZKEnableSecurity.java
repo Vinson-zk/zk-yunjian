@@ -46,11 +46,8 @@ public @interface ZKEnableSecurity {
 
     public class ZKSecurityInit {
         
-        @Autowired(required = false)
-        ZKSecPrincipalService zkSecPrincipalService;
-
         @Autowired
-        public ZKSecurityInit(AbstractResourceBasedMessageSource messageSource) {
+        public ZKSecurityInit(AbstractResourceBasedMessageSource messageSource, ZKSecPrincipalService zkSecPrincipalService) {
             System.out.println(printLog + "init [" + this.getClass().getSimpleName() + ":" + this.hashCode()
                     + "] =================================");
 

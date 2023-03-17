@@ -3,7 +3,6 @@
  */
 package com.zk.sys.res.service;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,14 +98,6 @@ public class ZKSysResDictService extends ZKBaseTreeService<String, ZKSysResDict,
             e.setDictType(et);
         }
         return e;
-    }
-
-    /**
-     * 树形查询
-     */
-    @Override
-    public List<ZKSysResDict> doFindTree(ZKSysResDict sysResDic) {
-        return this.dao.findTree(sysResDic);
     }
 
 }

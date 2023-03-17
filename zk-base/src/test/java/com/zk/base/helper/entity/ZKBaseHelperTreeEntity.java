@@ -34,7 +34,8 @@ import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
 import com.zk.db.annotation.ZKUpdate;
-import com.zk.db.commons.*;
+import com.zk.db.commons.ZKDBOptComparison;
+import com.zk.db.commons.ZKSqlConvertDelegating;
 
 /** 
 * @ClassName: ZKBaseHelperTreeEntity 
@@ -228,11 +229,6 @@ public class ZKBaseHelperTreeEntity extends ZKBaseTreeEntity<String, ZKBaseHelpe
     @ZKColumn(isInsert = false, isResult = false)
     public ZKJson getpDesc() {
         return super.getpDesc();
-    }
-
-    @Override
-    public ZKDBQueryWhere getZKDbWhereTreeFilter(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
-        return this.getZKDbWhereTreeFilter(sqlConvert, mapInfo, "c_id", "c_parent_id");
     }
 
 }

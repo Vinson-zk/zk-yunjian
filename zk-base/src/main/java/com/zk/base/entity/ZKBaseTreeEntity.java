@@ -19,7 +19,6 @@
 package com.zk.base.entity;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlTransient;
@@ -31,23 +30,31 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.zk.base.commons.ZKTreeSqlHelper;
 import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKQuery;
-import com.zk.db.commons.*;
+import com.zk.db.commons.ZKDBMapInfo;
+import com.zk.db.commons.ZKDBOptComparison;
+import com.zk.db.commons.ZKDBQuery;
+import com.zk.db.commons.ZKDBQueryColSql;
+import com.zk.db.commons.ZKDBQueryWhere;
+import com.zk.db.commons.ZKSqlConvert;
 import com.zk.db.mybatis.commons.ZKDBQueryScript;
-import com.zk.db.mybatis.commons.ZKDBScriptKey;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
-/** 
-* @ClassName: ZKBaseTreeEntity 
-* @Description: TODO(simple description this class what to do. ) 
-* @author Vinson 
-* @version 1.0 
-*/
-public abstract class ZKBaseTreeEntity<ID extends Serializable, E extends ZKBaseTreeEntity<ID, E>> extends ZKBaseEntity<ID, E> {
+/**
+ * 树形实体中有一个 parentIdIsEmpty 属性，用于在 parentId 为空时，只查询 parentId 为 null 或为空的节点；
+ * 即在 parentId 为空时，只查询根结点
+ * 
+ * @ClassName: ZKBaseTreeEntity
+ * @Description: TODO(simple description this class what to do. )
+ * @author Vinson
+ * @version 1.0
+ */
+public abstract class ZKBaseTreeEntity<ID extends Serializable, E extends ZKBaseTreeEntity<ID, E>>
+        extends ZKBaseEntity<ID, E> {
 
-    @Override
     @Transient
     @XmlTransient
     @JsonIgnore
+    @Override
     public ZKDBSqlHelper getSqlHelper(){
         return this.getTreeSqlHelper();
     }
@@ -196,10 +203,10 @@ public abstract class ZKBaseTreeEntity<ID extends Serializable, E extends ZKBase
     /////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////
 
-    @Override
     @Transient
     @JsonIgnore
     @XmlTransient
+    @Override
     public ZKDBQueryWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
         return this.getZKDbWhereTree(sqlConvert, mapInfo);
     }
@@ -221,64 +228,64 @@ public abstract class ZKBaseTreeEntity<ID extends Serializable, E extends ZKBase
     public ZKDBQueryWhere getZKDbWhereTree(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
         ZKDBQueryWhere where = sqlConvert.resolveQueryCondition(mapInfo);
         // 制作 c_parent_id 为 null 或为空的 查询根节点的查询条件
-        ZKDBQuery parentIdIsEmpty = this.getParentIsNullCondition(this.getPkIDClass(), "c_parent_id");
+        ZKDBQuery parentIdIsEmptyCondition = this.getParentIsNullCondition(this.getPkIDClass(), "c_parent_id");
         // 当 parentId 为null或为空, 且 parentIdIsEmpty 为 true，指定只查询 c_parent_id 为 null 或为空的根节点;
-        parentIdIsEmpty = ZKDBQueryScript.asIf(parentIdIsEmpty, 0, "parentIdIsEmpty", Boolean.class);
-        where.put(ZKDBQueryScript.asIf(parentIdIsEmpty, 4, "parentId", this.getPkIDClass()));
+        parentIdIsEmptyCondition = ZKDBQueryScript.asIf(parentIdIsEmptyCondition, 0, "parentIdIsEmpty", Boolean.class);
+        where.put(ZKDBQueryScript.asIf(parentIdIsEmptyCondition, 4, "parentId", this.getPkIDClass()));
         return where;
     }
 
-    /**
-     * 树形所有节点，统一过滤，过滤结果中不是根结点时，如果父节点不在过滤结果中，升级为结果中的根节点；如果父节点在过滤结果中，则不做为返回结果; 且不递归查询子节点；
-     * @MethodName getZKDbWhereTreeFilter
-     * @param sqlConvert
-     * @param mapInfo
-     * @return com.zk.db.commons.ZKDBQueryWhere
-     * @throws
-     * @Author bs
-     * @DATE 2022-10-18 23:03:984
-     */
-    @JsonIgnore
-    @XmlTransient
-    @Transient
-    public ZKDBQueryWhere getZKDbWhereTreeFilter(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
-        return this.getZKDbWhereTreeFilter(sqlConvert, mapInfo,"c_pk_id", "c_parent_id");
-    }
-
-    protected ZKDBQueryWhere getZKDbWhereTreeFilter(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo,
-        String pkColumnName, String parentColumnName) {
-        ZKDBQueryWhere where = sqlConvert.resolveQueryCondition(mapInfo, Arrays.asList("parentId"));
-
-        // 查询 所以结果的ID
-        String selSqlResIds = this.getResIdsSelSql(where, sqlConvert, mapInfo, pkColumnName);
-        // 父ID 不在指定 ID集合 中
-        ZKDBQuery parentIdNotIn = ZKDBQueryColSql.as(ZKDBOptComparison.NIN, parentColumnName, selSqlResIds);
-
-        // 制作 c_parent_id 为 null 或为空的 查询根节点的查询条件
-        ZKDBQuery parentIdIsEmpty = this.getParentIsNullCondition(this.getPkIDClass(), parentColumnName);
-
-        // 查询 结果中的 根结点
-        ZKDBQueryWhere pIdOrWhere = ZKDBQueryWhere.asOr("(",")",parentIdNotIn);
-        pIdOrWhere.put(ZKDBQueryScript.asIf(parentIdIsEmpty, 4, "parentId", this.getPkIDClass()));
-        pIdOrWhere.put(ZKDBQueryScript.asIf(
-                ZKDBQueryCol.as(ZKDBOptComparison.EQ, parentColumnName, "parentId", this.getPkIDClass(),null, true),
-                0, "parentId", this.getPkIDClass()));
-        where.put(pIdOrWhere);
-
-        return where;
-    }
-
-    private String getResIdsSelSql(ZKDBQueryWhere where, ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo,
-                                 String pkColumnName){
-        // 过滤出所有结果ID 的 sql
-        StringBuffer sb = new StringBuffer();
-        sb.append("(");
-        sb.append(ZKSqlConvert.SqlKeyword.select).append("_t.").append(pkColumnName);
-        sb.append(ZKSqlConvert.SqlKeyword.from).append(mapInfo.getTableName()).append(" _t ");
-        sb.append(ZKDBScriptKey.where[0]).append(where.toQueryCondition(sqlConvert, " _t")).append(ZKDBScriptKey.where[1]);
-        sb.append(")");
-        return sb.toString();
-    }
+//    /**
+//     * 树形所有节点，统一过滤，过滤结果中不是根结点时，如果父节点不在过滤结果中，升级为结果中的根节点；如果父节点在过滤结果中，则不做为返回结果; 且不递归查询子节点；
+//     * @MethodName getZKDbWhereTreeFilter
+//     * @param sqlConvert
+//     * @param mapInfo
+//     * @return com.zk.db.commons.ZKDBQueryWhere
+//     * @throws
+//     * @Author bs
+//     * @DATE 2022-10-18 23:03:984
+//     */
+//    @JsonIgnore
+//    @XmlTransient
+//    @Transient
+//    public ZKDBQueryWhere getZKDbWhereTreeFilter(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
+//        return this.getZKDbWhereTreeFilter(sqlConvert, mapInfo,"c_pk_id", "c_parent_id");
+//    }
+//
+//    protected ZKDBQueryWhere getZKDbWhereTreeFilter(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo,
+//        String pkColumnName, String parentColumnName) {
+//        ZKDBQueryWhere where = sqlConvert.resolveQueryCondition(mapInfo, Arrays.asList("parentId"));
+//
+//        // 查询 所以结果的ID
+//        String selSqlResIds = this.getResIdsSelSql(where, sqlConvert, mapInfo, pkColumnName);
+//        // 父ID 不在指定 ID集合 中
+//        ZKDBQuery parentIdNotIn = ZKDBQueryColSql.as(ZKDBOptComparison.NIN, parentColumnName, selSqlResIds);
+//
+//        // 制作 c_parent_id 为 null 或为空的 查询根节点的查询条件
+//        ZKDBQuery parentIdIsEmpty = this.getParentIsNullCondition(this.getPkIDClass(), parentColumnName);
+//
+//        // 查询 结果中的 根结点
+//        ZKDBQueryWhere pIdOrWhere = ZKDBQueryWhere.asOr("(",")",parentIdNotIn);
+//        pIdOrWhere.put(ZKDBQueryScript.asIf(parentIdIsEmpty, 4, "parentId", this.getPkIDClass()));
+//        pIdOrWhere.put(ZKDBQueryScript.asIf(
+//                ZKDBQueryCol.as(ZKDBOptComparison.EQ, parentColumnName, "parentId", this.getPkIDClass(),null, true),
+//                0, "parentId", this.getPkIDClass()));
+//        where.put(pIdOrWhere);
+//
+//        return where;
+//    }
+//
+//    private String getResIdsSelSql(ZKDBQueryWhere where, ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo,
+//                                 String pkColumnName){
+//        // 过滤出所有结果ID 的 sql
+//        StringBuffer sb = new StringBuffer();
+//        sb.append("(");
+//        sb.append(ZKSqlConvert.SqlKeyword.select).append("_t.").append(pkColumnName);
+//        sb.append(ZKSqlConvert.SqlKeyword.from).append(mapInfo.getTableName()).append(" _t ");
+//        sb.append(ZKDBScriptKey.where[0]).append(where.toQueryCondition(sqlConvert, " _t")).append(ZKDBScriptKey.where[1]);
+//        sb.append(")");
+//        return sb.toString();
+//    }
 
     // 当 parentId 为 null 或为空 的查询条件
     @JsonIgnore

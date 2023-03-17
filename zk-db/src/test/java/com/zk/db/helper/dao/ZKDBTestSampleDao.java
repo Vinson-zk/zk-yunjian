@@ -1,10 +1,11 @@
 package com.zk.db.helper.dao;
 
-import com.zk.db.annotation.ZKMyBatisDao;
-import com.zk.db.helper.entity.ZKDBTestSampleEntity;
-import com.zk.db.mybatis.dao.ZKDBBaseDao;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+
+import com.zk.db.annotation.ZKMyBatisDao;
+import com.zk.db.helper.entity.ZKDBTestSampleEntity;
+import com.zk.db.mybatis.dao.ZKDBDao;
 
 /**
  * Copyright (c) 2017-2022 Vinson.
@@ -23,7 +24,7 @@ import org.apache.ibatis.annotations.Select;
  * @DATE 2022-09-27 18:39:57
  **/
 @ZKMyBatisDao
-public interface ZKDBTestSampleDao extends ZKDBBaseDao<ZKDBTestSampleEntity> {
+public interface ZKDBTestSampleDao extends ZKDBDao<ZKDBTestSampleEntity> {
 
     /*
     getBlockSqlCols

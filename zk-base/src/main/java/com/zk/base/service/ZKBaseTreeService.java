@@ -39,7 +39,7 @@ public abstract class ZKBaseTreeService<ID extends Serializable, E extends ZKBas
      */
     public List<E> findTree(E entity) {
         entity.setParentIdIsEmpty(true);
-        return this.doFindTree(entity);
+        return this.dao.findTree(entity);
     }
 
     /**
@@ -48,10 +48,8 @@ public abstract class ZKBaseTreeService<ID extends Serializable, E extends ZKBas
     public ZKPage<E> findTree(ZKPage<E> page, E entity) {
         entity.setParentIdIsEmpty(true);
         entity.setPage(page);
-        page.setResult(this.doFindTree(entity));
+        page.setResult(this.dao.findTree(entity));
         return page;
     }
-
-    public abstract List<E> doFindTree(E entity);
 
 }

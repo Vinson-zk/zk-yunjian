@@ -70,7 +70,9 @@ public interface ZKFileTransfer {
      *            文件存在时，是否覆盖？true 是；false 否
      * @return List<File>
      */
-    List<File> transferFile(Collection<MultipartFile> files, String path, boolean isNewName, boolean isOverride);
+    List<File> transferFile(String path, boolean isNewName, boolean isOverride, Collection<MultipartFile> files);
+
+    List<File> transferFile(String path, boolean isNewName, boolean isOverride, MultipartFile... files);
 
     /**
      *

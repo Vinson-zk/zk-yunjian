@@ -10,9 +10,9 @@ import org.apache.ibatis.io.ResolverUtil;
 
 import com.zk.core.utils.ZKClassUtils;
 import com.zk.core.utils.ZKExceptionsUtils;
-import com.zk.db.entity.ZKDBBaseEntity;
+import com.zk.db.entity.ZKDBEntity;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
-import com.zk.db.mybatis.dao.ZKDBBaseDao;
+import com.zk.db.mybatis.dao.ZKDBDao;
 import com.zk.db.mybatis.session.ZKDBMybatisConfiguration;
 
 /**
@@ -42,7 +42,7 @@ public class ZKDBMapperCustomInfoHandler {
     }
 
     public <T> void addMapper(Class<T> type) {
-        if(isZKDBBaseDao(type)){
+        if (isZKDBDao(type)) {
             ZKDBSqlHelper sqlHelper = null;
             if(!this.hasSqlHelper(type)){
                 sqlHelper = this.loadSqlHelper(type);
@@ -81,14 +81,14 @@ public class ZKDBMapperCustomInfoHandler {
         this.addMappers(packageName, Object.class);
     }
 
-    private boolean isZKDBBaseDao(Class<?> type){
-        return ZKDBBaseDao.class.isAssignableFrom(type);
+    private boolean isZKDBDao(Class<?> type) {
+        return ZKDBDao.class.isAssignableFrom(type);
     }
 
     private ZKDBSqlHelper loadSqlHelper(Class<?> type) {
         try {
-            Class<ZKDBBaseEntity<?>> classz = ZKClassUtils.getSuperclassByName(ZKDBBaseDao.class, type, "E");
-            ZKDBBaseEntity<?> entity = ZKClassUtils.newInstance(classz);
+            Class<ZKDBEntity<?>> classz = ZKClassUtils.getSuperclassByName(ZKDBDao.class, type, "E");
+            ZKDBEntity<?> entity = ZKClassUtils.newInstance(classz);
             return entity.getSqlHelper();
         } catch (InstantiationException|IllegalAccessException e) {
             ZKExceptionsUtils.unchecked(e);

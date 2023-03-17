@@ -19,6 +19,7 @@
 package com.zk.base.helper.entity;
 
 import com.zk.base.entity.ZKBaseEntity;
+import com.zk.db.annotation.ZKTable;
 import com.zk.db.commons.ZKSqlConvertDelegating;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
@@ -28,6 +29,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 * @author Vinson 
 * @version 1.0 
 */
+@ZKTable(name = "t_zk_db_test", alias = "t")
 public class ZKBaseHelperEntityLong extends ZKBaseEntity<Long, ZKBaseHelperEntityLong> {
 
     /**

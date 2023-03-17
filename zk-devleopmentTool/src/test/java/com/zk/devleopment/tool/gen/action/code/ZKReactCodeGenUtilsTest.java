@@ -53,7 +53,7 @@ public class ZKReactCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             File f = ZKReactCodeGenUtils.genDetail(rootPath, templatePath, zkModule, zkTableInfo);
@@ -79,7 +79,7 @@ public class ZKReactCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             // edit
@@ -107,7 +107,7 @@ public class ZKReactCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
 
@@ -136,7 +136,7 @@ public class ZKReactCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             // index
@@ -164,7 +164,7 @@ public class ZKReactCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             // model
@@ -192,7 +192,7 @@ public class ZKReactCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             // model
@@ -220,7 +220,7 @@ public class ZKReactCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             // service
@@ -248,7 +248,7 @@ public class ZKReactCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             // 生成 react 功能引用 js 代码
@@ -276,7 +276,7 @@ public class ZKReactCodeGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             // locales

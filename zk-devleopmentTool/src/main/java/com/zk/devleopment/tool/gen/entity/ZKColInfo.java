@@ -686,9 +686,16 @@ public class ZKColInfo extends ZKBaseEntity<String, ZKColInfo> {
         else if ("String".equals(this.getAttrType())) {
             r.add("java.lang.String");
         }
+        else if ("BigDecimal".equals(this.getAttrType())) {
+            r.add("java.math.BigDecimal");
+        }
+        else if ("BigInteger".equals(this.getAttrType())) {
+            r.add("java.math.BigInteger");
+        }
         else if (this.getAttrType().startsWith("ZKJson")) {
             r.add("com.zk.core.commons.data.ZKJson");
         }
+
         return r;
     }
 

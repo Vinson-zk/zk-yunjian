@@ -49,7 +49,6 @@ public class ZKModuleService extends ZKBaseService<String, ZKModule, ZKModuleDao
         if(ZKStringUtils.isEmpty(moduleName)){
             return null;
         }
-        return this.dao.getByModuleName(ZKModule.sqlHelper().getTableName(), ZKModule.sqlHelper().getBlockSqlCols(),
-            ZKModule.sqlHelper().getTableAlias(), moduleName);
+        return this.dao.getByModuleName(moduleName);
     }
 }

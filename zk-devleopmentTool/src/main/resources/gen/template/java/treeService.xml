@@ -26,14 +26,6 @@ import ${zkModule.packagePrefix}<#if zkTableInfo.subModuleName??&zkTableInfo.sub
 public class ${zkTableInfo.className}Service extends ZKBaseTreeService<${zkTableInfo.pkAttrType}, ${zkTableInfo.className}, ${zkTableInfo.className}Dao> {
 
 	/**
-     * 执行树形查询；
-     */
-    @Override
-    public List<${zkTableInfo.className}> doFindTree(${zkTableInfo.className} ${zkTableInfo.funcName?uncap_first}) {
-        return this.dao.findTree(${zkTableInfo.funcName?uncap_first});
-    }
-
-	/**
 	 * 查询详情，包含父节点
 	 */
     public ${zkTableInfo.className} getDetail(${zkTableInfo.className} ${zkTableInfo.funcName?uncap_first}) {

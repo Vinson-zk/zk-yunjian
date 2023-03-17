@@ -9,28 +9,46 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKBaseHelperDto.java 
+* @Title: ZKBaseHelperEntityStringDto.java 
 * @author Vinson 
 * @Package com.zk.base.helper.dto 
 * @Description: TODO(simple description this file what to do. ) 
-* @date Feb 28, 2023 5:38:28 PM 
+* @date Mar 2, 2023 5:27:38 PM 
 * @version V1.0 
 */
 package com.zk.base.helper.dto;
 
 import com.zk.base.helper.entity.ZKBaseHelperEntityString;
+import com.zk.db.annotation.ZKTable;
+import com.zk.db.commons.ZKSqlConvertDelegating;
+import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /** 
-* @ClassName: ZKBaseHelperDto 
+* @ClassName: ZKBaseHelperEntityStringDto 
 * @Description: TODO(simple description this class what to do. ) 
 * @author Vinson 
 * @version 1.0 
 */
-public class ZKBaseHelperDto extends ZKBaseHelperEntityString<ZKBaseHelperDto> {
+@ZKTable(name = "t_zk_db_test", alias = "t")
+public class ZKBaseHelperEntityStringDto extends ZKBaseHelperEntityString<ZKBaseHelperEntityStringDto> {
 
     /**
      * @Fields serialVersionUID : TODO(simple description what to do.)
      */
     private static final long serialVersionUID = 1L;
+
+    static ZKDBSqlHelper sqlHelper;
+
+    @Override
+    public ZKDBSqlHelper getSqlHelper() {
+        return sqlHelper();
+    }
+
+    public static ZKDBSqlHelper sqlHelper() {
+        if (sqlHelper == null) {
+            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKBaseHelperEntityStringDto());
+        }
+        return sqlHelper;
+    }
 
 }

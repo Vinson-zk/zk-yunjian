@@ -35,7 +35,7 @@ import com.zk.devleopment.tool.gen.action.connect.api.ZKDatabaseConnect;
 * @author Vinson 
 * @version 1.0 
 */
-public class ZKMyBatisConnect implements ZKDatabaseConnect {
+class ZKMyBatisConnect implements ZKDatabaseConnect {
 
     SqlSession sqlSession = null;
 

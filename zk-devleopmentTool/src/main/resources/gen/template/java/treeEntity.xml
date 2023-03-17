@@ -84,7 +84,7 @@ public class ${zkTableInfo.className} extends ZKBaseTreeEntity<${zkTableInfo.pkA
 	 * ${zkCol.colComments}	
 	 */	
 	public ${zkCol.attrType} get${zkCol.attrName?cap_first}() {
-		return ${zkCol.attrName?uncap_first};
+		return this.${zkCol.attrName?uncap_first};
 	}
 	
 	/**

@@ -48,7 +48,7 @@ public class ZKConvertUtils {
     /**
      * 将做好的表信息，包含字段信息，转换为 java 属性信息；
      *
-     * @Title: convert
+     * @Title: convertTableInfo
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
      * @date Mar 25, 2021 6:44:36 PM
@@ -56,16 +56,16 @@ public class ZKConvertUtils {
      * @param zkTableInfo
      * @return void
      */
-    public static void convert(ZKModule zkModule, ZKTableInfo zkTableInfo) {
+    public static void convertTableInfo(ZKModule zkModule, ZKTableInfo zkTableInfo) {
         if (zkModule.getIsRemovePrefix()) {
-            convertClassInfo(zkModule, zkModule.getTableNamePrefix(), zkTableInfo);
+            convertTableInfo(zkModule, zkModule.getTableNamePrefix(), zkTableInfo);
         }
         else {
-            convertClassInfo(zkModule, "", zkTableInfo);
+            convertTableInfo(zkModule, "", zkTableInfo);
         }
 
         if (zkTableInfo.getCols() != null) {
-            convert(zkModule, zkTableInfo, zkTableInfo.getCols());
+            convertAttrInfo(zkModule, zkTableInfo, zkTableInfo.getCols());
         }
     }
 
@@ -80,7 +80,7 @@ public class ZKConvertUtils {
      * 
      * 表标签：label = 表的说明
      *
-     * @Title: convertClassInfo
+     * @Title: convertTableInfo
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
      * @date Jan 9, 2022 5:01:48 PM
@@ -89,7 +89,7 @@ public class ZKConvertUtils {
      * @param zkTableInfo
      * @return void
      */
-    private static void convertClassInfo(ZKModule zkModule, String tableNamePrefix, ZKTableInfo zkTableInfo) {
+    private static void convertTableInfo(ZKModule zkModule, String tableNamePrefix, ZKTableInfo zkTableInfo) {
         String name = zkModule.getModuleNameCap();
         name += zkTableInfo.getSubModuleName();
         name += convertTableName(tableNamePrefix, zkTableInfo.getSubModuleName(), zkTableInfo.getTableName());
@@ -108,7 +108,7 @@ public class ZKConvertUtils {
     /**
      * 转换字段信息
      *
-     * @Title: convert
+     * @Title: convertAttrInfo
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
      * @date Apr 1, 2021 12:34:39 AM
@@ -117,7 +117,7 @@ public class ZKConvertUtils {
      * @param cols
      * @return void
      */
-    public static void convert(ZKModule zkModule, ZKTableInfo zkTableInfo, Collection<ZKColInfo> cols) {
+    public static void convertAttrInfo(ZKModule zkModule, ZKTableInfo zkTableInfo, Collection<ZKColInfo> cols) {
         for (ZKColInfo col : cols) {
             convertAttrInfo(zkModule, zkTableInfo, col);
         }
@@ -141,7 +141,7 @@ public class ZKConvertUtils {
 
     // 设置好 表字段信息后，转换字段信息为 java 属性信息；
     private static void convertAttrInfo(String colNamePrefix, ZKColInfo col, boolean isTree) {
-        convertJdbcType(col.getColJdbcType(), col);
+        convertColClass(col.getColJdbcType(), col);
         col.setAttrName(convertColName(colNamePrefix, col.getColName()));
         // 判断是不是父类的字段
         col.setAttrIsBaseField(isBaseField(col.getAttrName(), isTree));
@@ -161,49 +161,9 @@ public class ZKConvertUtils {
     }
 
     /**
-     * 根据 jdbc 类型取长度；没长度时，返回 null;
-     *
-     * @Title: convertJdbcLength
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date Apr 1, 2021 12:46:50 PM
-     * @param jdbcType
-     * @return
-     * @return int[]
-     */
-    public static int[] convertJdbcLength(String sourceJdbcType) {
-        try {
-            String jdbcType = sourceJdbcType.toUpperCase();
-            if (jdbcType.startsWith("ENUM")) {
-                // ENUM 枚举类型
-                return new int[] { 2, 0 };
-            }
-            if (jdbcType.indexOf("(") != -1 && jdbcType.indexOf(")") != -1) {
-                String length = jdbcType.substring(jdbcType.indexOf("(") + 1, jdbcType.indexOf(")"));
-                jdbcType = jdbcType.substring(0, jdbcType.indexOf("("));
-
-                String[] str = length.split(",");
-                int[] lengths = new int[2];
-                lengths[0] = Integer.parseInt(str[0]);
-                if (str.length == 2 && Integer.parseInt(str[1]) > 0) {
-                    lengths[1] = Integer.parseInt(str[1]);
-                }
-                else {
-                    lengths[1] = 0;
-                }
-                return lengths;
-            }
-            return null;
-        }catch (Exception e) {
-            log.error("[>_<:20211126-1209-001] 取 jdbcType 长度失败；jdbcType:{}", sourceJdbcType);
-            throw e;
-        }
-    }
-
-    /**
      * 根据表字段的类型制作 java 类中属性的类型
      *
-     * @Title: convertJdbcType
+     * @Title: convertColClass
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
      * @date Mar 23, 2021 8:38:12 AM
@@ -211,56 +171,8 @@ public class ZKConvertUtils {
      * @param col
      *            输出参数
      */
-    public static void convertJdbcType(String jdbcType, ZKColInfo col) {
-
-        jdbcType = jdbcType.toUpperCase();
-        String pType = null;
-
-        int[] lengths = convertJdbcLength(jdbcType);
-
-        if (jdbcType.indexOf("(") != -1 && jdbcType.indexOf(")") != -1) {
-            jdbcType = jdbcType.substring(0, jdbcType.indexOf("("));
-        }
-
-        // 设置java类型
-        switch (jdbcType) {
-            case "TINYINT":
-                pType = "Boolean";
-                break;
-            case "JSON":
-                pType = "ZKJson";
-                break;
-            case "DATETIME":
-            case "DATE":
-            case "TIMESTAMP":
-                pType = "Date";
-                break;
-//            case "BIGINT":
-            case "NUMBER":
-            case "DOUBLE":
-            case "FLOAT":
-            case "INT":
-                // 数字类型如果长度大于了 9 使用字符串类型。
-                if (lengths == null) {
-                    pType = "Long";
-                }
-                else {
-                    if (lengths[0] > 9) {
-                        pType = "String";
-                    }
-                    else {
-                        if (lengths[1] > 0) {
-                            pType = "Double";
-                        }
-                        else {
-                            pType = "Long";
-                        }
-                    }
-                }
-                break;
-            default:
-                pType = "String";
-        }
+    public static void convertColClass(String jdbcType, ZKColInfo col) {
+        String pType = convertJdbcTypeToClassName(jdbcType);
         col.setAttrType(pType);
     }
 
@@ -449,6 +361,129 @@ public class ZKConvertUtils {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 
+     *
+     * @Title: convertJdbcTypeToClassName
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Mar 8, 2023 4:03:28 PM
+     * @param sourceJdbcType
+     * @return
+     * @return String
+     */
+    public static String convertJdbcTypeToClassName(String sourceJdbcType) {
+        String javaClassSimpleName = null;
+        String jdbcType = sourceJdbcType.toUpperCase();
+
+        int[] lengths = convertJdbcLength(jdbcType);
+
+        if (jdbcType.indexOf("(") != -1 && jdbcType.indexOf(")") != -1) {
+            jdbcType = jdbcType.substring(0, jdbcType.indexOf("("));
+        }
+
+        // 设置java类型
+        switch (jdbcType) {
+            case "TINYINT":
+                javaClassSimpleName = "Integer";
+                break;
+            case "JSON":
+                javaClassSimpleName = "ZKJson";
+                break;
+            case "DATETIME":
+            case "DATE":
+            case "TIMESTAMP":
+                javaClassSimpleName = "Date";
+                break;
+            case "NUMBER":
+            case "DOUBLE":
+            case "FLOAT":
+            case "INT":
+                // 数字类型如果长度大于了 (19, ~) 使用 BigInteger/BigDecimal; (9-19] 使用 Long/Double; (~, 9] 使用 Integer/Float
+                if (lengths == null) {
+                    javaClassSimpleName = "BigInteger";
+                }
+                else {
+                    if (lengths[0] > 19) {
+                        if (lengths[1] > 0) {
+                            javaClassSimpleName = "BigDecimal";
+                        }
+                        else {
+                            javaClassSimpleName = "BigInteger";
+                        }
+                    }
+                    else if (lengths[0] > 9) {
+                        if (lengths[1] > 0) {
+                            javaClassSimpleName = "Double";
+                        }
+                        else {
+                            javaClassSimpleName = "Long";
+                        }
+                    }
+                    else {
+                        if (lengths[1] > 0) {
+                            javaClassSimpleName = "Float";
+                        }
+                        else {
+                            javaClassSimpleName = "Integer";
+                        }
+                    }
+                }
+                break;
+            case "BIGINT":
+                javaClassSimpleName = "BigInteger";
+                break;
+            case "DECIMAL":
+                javaClassSimpleName = "BigDecimal";
+                break;
+            default:
+                javaClassSimpleName = "String";
+        }
+        log.info("[^_^:20230308-1940-001] jdbcType: [{}] 对应 java 类型: [{}] ", sourceJdbcType, javaClassSimpleName);
+        return javaClassSimpleName;
+    }
+
+    /**
+     * 根据 jdbc 类型取长度；没长度时，返回 null;
+     *
+     * @Title: convertJdbcLength
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Apr 1, 2021 12:46:50 PM
+     * @param jdbcType
+     * @return
+     * @return int[]
+     */
+    public static int[] convertJdbcLength(String sourceJdbcType) {
+        try {
+            String jdbcType = sourceJdbcType.toUpperCase();
+            if (jdbcType.startsWith("ENUM")) {
+                // ENUM 枚举类型
+                return new int[] { 2, 0 };
+            }
+            if (jdbcType.indexOf("(") != -1 && jdbcType.indexOf(")") != -1) {
+                String length = jdbcType.substring(jdbcType.indexOf("(") + 1, jdbcType.indexOf(")"));
+                jdbcType = jdbcType.substring(0, jdbcType.indexOf("("));
+
+                String[] str = length.split(",");
+                int[] lengths = new int[2];
+                lengths[0] = Integer.parseInt(str[0]);
+                if (str.length == 2 && Integer.parseInt(str[1]) > 0) {
+                    lengths[1] = Integer.parseInt(str[1]);
+                }
+                else {
+                    lengths[1] = 0;
+                }
+                return lengths;
+            }
+            return null;
+        }
+        catch(Exception e) {
+            log.error("[>_<:20211126-1209-001] 取 jdbcType 长度失败；jdbcType:{}", sourceJdbcType);
+            throw e;
+        }
     }
 
 }

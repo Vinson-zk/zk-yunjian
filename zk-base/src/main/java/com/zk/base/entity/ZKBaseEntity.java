@@ -41,17 +41,35 @@ import com.zk.core.utils.ZKIdUtils;
 import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKUpdate;
-import com.zk.db.entity.ZKDBBaseEntity;
+import com.zk.db.entity.ZKDBEntity;
 import com.zk.security.service.ZKSecPrincipalService;
 import com.zk.security.utils.ZKSecPrincipalUtils;
 
-/** 
-* @ClassName: ZKBaseEntity 
-* @Description: TODO(simple description this class what to do.) 
-* @author Vinson 
-* @version 1.0 
-*/
-public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEntity<ID, E>> extends ZKDBBaseEntity<E> {
+/**
+ * @ClassName: ZKBaseEntity
+ * @Description: TODO(simple description this class what to do.)
+ * @author Vinson
+ * @version 1.0
+ */
+public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEntity<ID, E>> extends ZKDBEntity<E> {
+
+    /**
+     * 删除标记
+     * 
+     * @author zk
+     *
+     */
+    public static interface DEL_FLAG {
+        /**
+         * 正常
+         */
+        public static final int normal = 0;
+
+        /**
+         * 删除
+         */
+        public static final int delete = 1;
+    }
 
     @Transient
     @XmlTransient
@@ -134,24 +152,6 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
 
     // 是否是新记录（默认：false），调用setNewRecord()设置新记录，使用自定义ID。设置为true后强制执行插入语句，ID不会自动生成，需从手动传入。
     protected boolean isNewRecord;
-
-    /**
-     * 删除标记
-     * 
-     * @author zk
-     *
-     */
-    public static interface DEL_FLAG {
-        /**
-         * 正常
-         */
-        public static final int normal = 0;
-
-        /**
-         * 删除
-         */
-        public static final int delete = 1;
-    }
 
     /**
      * 是否是新记录（ 默认：false ），调用setIsNewRecord()设置新记录，使用自定义ID。
@@ -448,7 +448,7 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
 
     @SuppressWarnings("unchecked")
     protected ID genId() {
-        return (ID) ZKIdUtils.genId();
+        return (ID) ZKIdUtils.genLongStringId();
     }
 
     /**

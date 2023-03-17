@@ -18,8 +18,10 @@
 */
 package com.zk.base.myBaits.provider;
 
-import com.zk.base.helper.entity.ZKBaseHelperTreeEntity;
 import org.junit.Test;
+
+import com.zk.base.helper.entity.ZKBaseHelperTreeEntity;
+
 import junit.framework.TestCase;
 
 /** 
@@ -58,11 +60,6 @@ FROM t_test a
             str = treeSqlProvider.selectTree(e);
             System.out.println("[^_^:20220418-2021-002] selectTree: " + str);
             System.out.println("=======================================");
-            
-            str = treeSqlProvider.selectTreeFilter(e);
-            System.out.println("[^_^:20220418-2021-003] selectTreeNoLevel:" + str);
-            System.out.println("=======================================");
-
 
         }catch (Exception e) {
             e.printStackTrace();

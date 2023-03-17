@@ -37,7 +37,6 @@ public class ZKEnvironmentUtils {
 
     private static ZKEnvironment zkEnv = null;
 
-
     public static void setZKEnvironment(ZKEnvironment zkEnv) {
         ZKEnvironmentUtils.zkEnv = zkEnv;
     }

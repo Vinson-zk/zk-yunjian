@@ -19,7 +19,7 @@ JSON.stringify(params)
 contentType:'application/json; charset=utf-8'}
 */
 // 编辑 
-export async function edit${zkTableInfo.funcName}(params) {
+export async function sEdit${zkTableInfo.funcName}(params) {
     return zkToolsAjax.reqPretreatment(
         `/${"$"}{api}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">/${zkTableInfo.subModuleName?uncap_first}</#if>/${zkTableInfo.funcName?uncap_first}/${zkTableInfo.funcName?uncap_first}`, 
         {method:'POST', data:JSON.stringify(params), contentType:'application/json; charset=utf-8'},
@@ -34,17 +34,17 @@ export async function edit${zkTableInfo.funcName}(params) {
 }
 
 // 删除
-export async function del${zkTableInfo.funcName}(params) {
+export async function sDel${zkTableInfo.funcName}(params) {
     return zkToolsAjax.reqPretreatment(`/${"$"}{api}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">/${zkTableInfo.subModuleName?uncap_first}</#if>/${zkTableInfo.funcName?uncap_first}/${zkTableInfo.funcName?uncap_first}`, {method:'DELETE', data:params});
 }
 
 // 查询 详情
-export async function get${zkTableInfo.funcName}(params) {
+export async function sGet${zkTableInfo.funcName}(params) {
 	return zkToolsAjax.reqPretreatment(`/${"$"}{api}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">/${zkTableInfo.subModuleName?uncap_first}</#if>/${zkTableInfo.funcName?uncap_first}/${zkTableInfo.funcName?uncap_first}`, {method:'GET', data:params});
 }
 
 // 查询 分页列表
-export async function find${zkTableInfo.funcName}s(params) {
+export async function sFind${zkTableInfo.funcName}s(params) {
 	return zkToolsAjax.reqPretreatment(`/${"$"}{api}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">/${zkTableInfo.subModuleName?uncap_first}</#if>/${zkTableInfo.funcName?uncap_first}/${zkTableInfo.funcName?uncap_first}sPage`, {method:'GET', data:params});
 }
 

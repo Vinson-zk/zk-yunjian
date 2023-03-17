@@ -18,8 +18,6 @@
 */
 package com.zk.sys.res.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,14 +89,6 @@ public class ZKSysMenuService extends ZKBaseTreeService<String, ZKSysMenu, ZKSys
         }
         return this.dao.getByCode(ZKSysMenu.sqlHelper().getTableName(),
                 ZKSysMenu.sqlHelper().getBlockSqlCols(""), code);
-    }
-
-    /**
-     * 树形查询菜单
-     */
-    @Override
-    public List<ZKSysMenu> doFindTree(ZKSysMenu zkSysMenu) {
-        return this.dao.findTree(zkSysMenu);
     }
 
     public ZKSysMenu getDetail(ZKSysMenu sysMenu) {

@@ -28,9 +28,11 @@ import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfigu
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zk.gateway.configuration.ZKGatewayAfterConfiguration;
 import com.zk.gateway.configuration.ZKGatewayBeforeConfiguration;
@@ -52,8 +54,8 @@ import com.zk.gateway.configuration.ZKGatewaySecConfiguration;
         ServletWebServerFactoryAutoConfiguration.class, //
 })
 //@EnableWebFlux
-//@EnableEurekaClient
-//@EnableTransactionManagement(proxyTargetClass = true)
+@EnableEurekaClient
+@EnableTransactionManagement(proxyTargetClass = true)
 @ComponentScan(basePackages = { "com.zk.gateway.*" })
 //@ServletComponentScan 
 @Import(value = { //

@@ -36,10 +36,12 @@ import com.zk.framework.security.configuration.ZKSecDefaultConfiguration;
 import com.zk.framework.security.service.ZKSecAuthService;
 import com.zk.security.configuration.ZKEnableSecurity;
 import com.zk.security.mgt.ZKSecSecurityManager;
+import com.zk.security.ticket.support.redis.ZKSecRedisTicketManager;
 import com.zk.security.web.filter.ZKSecFilterFactoryBean;
 import com.zk.security.web.filter.authc.ZKSecAuthcUserFilter;
 import com.zk.security.web.filter.authc.ZKSecLogoutFilter;
 import com.zk.security.web.filter.authc.ZKSecUserFilter;
+import com.zk.sys.sec.realm.ZKSysSecRealm;
 import com.zk.sys.sec.service.ZKSysSecAuthService;
 
 /** 
@@ -98,8 +100,8 @@ public class ZKSysSecConfiguration {
         setFilterChainMap.put(prefix, "anon");
         setFilterChainMap.put(prefix + "/", "anon");
         setFilterChainMap.put(prefix + "/index", "anon");
-        setFilterChainMap.put(prefix + "/sec/login", "anon");
-        setFilterChainMap.put(prefix + "/sec/logout", "anon");
+        setFilterChainMap.put(prefix + "/sec/login", "login");
+        setFilterChainMap.put(prefix + "/sec/logout", "logout");
         setFilterChainMap.put(prefix + "/org/sysOrgCompany/sysOrgCompanyByCode", "serverOrUser");
         setFilterChainMap.put(prefix + "/sec/authc/getUserAuthc", "serverAndUser");
         setFilterChainMap.put("/**", "user");
@@ -129,6 +131,16 @@ public class ZKSysSecConfiguration {
     public ZKSecAuthService<String> getSecAuthService() {
         ZKSecAuthService<String> bean = new ZKSysSecAuthService();
         return bean;
+    }
+
+    @Bean
+    public ZKSysSecRealm zkSecRealm(ZKSecRedisTicketManager secRedisTicketManager) {
+        System.out.println(
+                "[^_^:20230308-0613-001] ----- zk-sys config: zkSecRealm: " + ZKSysSecRealm.class.getSimpleName());
+        ZKSysSecRealm realm = new ZKSysSecRealm();
+//        realm.setSecUserService(secUserService);
+        realm.setTicketManager(secRedisTicketManager);
+        return realm;
     }
 
 }

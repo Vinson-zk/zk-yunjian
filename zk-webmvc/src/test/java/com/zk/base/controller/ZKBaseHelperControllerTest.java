@@ -33,7 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.zk.base.ZKBaseHelperSpringBootMain;
-import com.zk.base.helper.entity.ZKBaseHelperEntityString;
+import com.zk.base.helper.dto.ZKBaseHelperEntityStringDto;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.core.utils.ZKJsonUtils;
@@ -98,7 +98,7 @@ public class ZKBaseHelperControllerTest {
             zkJson.put(Param_Name.nArray, zkrayInt);
             zkJson.put(Param_Name.nZKJson, zkJsonTemp);
 
-            ZKBaseHelperEntityString zkBhe = new ZKBaseHelperEntityString();
+            ZKBaseHelperEntityStringDto zkBhe = new ZKBaseHelperEntityStringDto();
             zkBhe.setSpareJson(zkJson);
             zkBhe.setCreateDate(new Date());
             zkBhe.setSpare2("spare2");

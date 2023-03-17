@@ -53,7 +53,7 @@ public class ZKAssetsGenUtilsTest {
             templatePath = "gen/template";
             zkModule = ZKDevleopmentToolTestHelper.getTestModule();
             zkTableInfo = ZKDevleopmentToolTestHelper.getTestTable(zkModule);
-            ZKConvertUtils.convert(zkModule, zkTableInfo);
+            ZKConvertUtils.convertTableInfo(zkModule, zkTableInfo);
 
             rootPath = ZKCodeFileUtils.getCodeRootPath(rootPath, zkModule);
             // assets

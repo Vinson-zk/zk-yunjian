@@ -9,7 +9,7 @@ import com.zk.db.commons.ZKDBMapInfo;
 import com.zk.db.commons.ZKDBQueryWhere;
 import com.zk.db.commons.ZKSqlConvert;
 import com.zk.db.commons.ZKSqlConvert.SqlKeyword;
-import com.zk.db.entity.ZKDBBaseEntity;
+import com.zk.db.entity.ZKDBEntity;
 
 /**
  * Copyright (c) 2017-2022 Vinson.
@@ -41,11 +41,11 @@ public class ZKDBSqlHelper {
         return sqlConvert;
     }
 
-    public static ZKDBSqlHelper as(ZKSqlConvert sqlConvert, ZKDBBaseEntity<?> entity){
+    public static ZKDBSqlHelper as(ZKSqlConvert sqlConvert, ZKDBEntity<?> entity) {
         return new ZKDBSqlHelper(sqlConvert, entity);
     }
 
-    public ZKDBSqlHelper(ZKSqlConvert sqlConvert, ZKDBBaseEntity<?> entity) {
+    public ZKDBSqlHelper(ZKSqlConvert sqlConvert, ZKDBEntity<?> entity) {
         this.mapInfo = new ZKDBMapInfo(entity.getClass());
         this.sqlConvert = sqlConvert;
 

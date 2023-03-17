@@ -39,7 +39,7 @@ import com.zk.db.annotation.ZKMyBatisDao;
 import com.zk.db.configuration.ZKEnableDB.AnnotationKey.MapperKey;
 import com.zk.db.configuration.ZKEnableDB.AnnotationKey.SqlSessionFactoryKey;
 import com.zk.db.configuration.ZKEnableDB.ZKDBAnnotationConfiguration;
-import com.zk.db.entity.ZKDBBaseEntity;
+import com.zk.db.entity.ZKDBEntity;
 
 /**
  * 需要要注入 "zkDBProperties" bean; 且 zkDBProperties bean 中 publicDruidPool 不能为空
@@ -65,7 +65,7 @@ public @interface ZKEnableDB {
 
     String typeAliasesPackage() default "com.zk.**.entity";
 
-    Class<?> typeAliasesSuperType() default ZKDBBaseEntity.class;
+    Class<?> typeAliasesSuperType() default ZKDBEntity.class;
 
     String[] mapperLocations() default { "classpath:mappers/**/*.xml" };
 

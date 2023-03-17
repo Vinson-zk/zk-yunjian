@@ -22,8 +22,8 @@ import java.util.Date;
 
 import org.junit.Test;
 
+import com.zk.base.helper.dto.ZKBaseHelperEntityStringDto;
 import com.zk.base.helper.entity.ZKBaseHelperEntityLong;
-import com.zk.base.helper.entity.ZKBaseHelperEntityString;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.core.utils.ZKJsonUtils;
@@ -41,19 +41,20 @@ public class ZKBaseHelperEntityTest {
     @Test
     public void test() {
         try {
-            ZKBaseEntity<?, ?> helperEntity = new ZKBaseHelperEntityString();
+            ZKBaseEntity<?, ?> helperEntityStringDto = new ZKBaseHelperEntityStringDto();
             ZKBaseEntity<?, ?> helperEntityLong = new ZKBaseHelperEntityLong();
 
-            System.out.println("[^_^:20190808-1543-001] pkID class name: " + helperEntity.getPkIDClass().getName());
+            System.out.println(
+                    "[^_^:20190808-1543-001] pkID class name: " + helperEntityStringDto.getPkIDClass().getName());
             System.out.println("[^_^:20190808-1543-002] pkID class name: " + helperEntityLong.getPkIDClass().getName());
 
-            TestCase.assertNull(helperEntity.getPkId());
+            TestCase.assertNull(helperEntityStringDto.getPkId());
             TestCase.assertNull(helperEntityLong.getPkId());
 
-            TestCase.assertTrue(helperEntity.getPkIDClass() == String.class);
+            TestCase.assertTrue(helperEntityStringDto.getPkIDClass() == String.class);
             TestCase.assertTrue(helperEntityLong.getPkIDClass() == Long.class);
 
-            TestCase.assertFalse(helperEntity.getPkIDClass() == Long.class);
+            TestCase.assertFalse(helperEntityStringDto.getPkIDClass() == Long.class);
             TestCase.assertFalse(helperEntityLong.getPkIDClass() == String.class);
 
             // 期望值
@@ -62,49 +63,50 @@ public class ZKBaseHelperEntityTest {
             String actualValue = "";
 
             expected = "{\"delFlag\":0,\"version\":0,\"isNewRecord\":true}";
-            actualValue = ZKJsonUtils.writeObjectJson(helperEntity);
+            actualValue = ZKJsonUtils.writeObjectJson(helperEntityStringDto);
             System.out.println("[^_^:20190808-1543-003] string: " + actualValue);
             TestCase.assertEquals(expected, actualValue);
 
-            helperEntity.setRemarks("remarks");
+            helperEntityStringDto.setRemarks("remarks");
             ZKJson zkJson = new ZKJson();
             zkJson.put("zkJson1", "zkJson");
             zkJson.put("zkJson2", 1);
-            helperEntity.setSpareJson(zkJson);
+            helperEntityStringDto.setSpareJson(zkJson);
             expected = "{\"remarks\":\"remarks\",\"spareJson\":{\"zkJson2\":1,\"zkJson1\":\"zkJson\"},\"delFlag\":0,\"version\":0,\"isNewRecord\":true}";
-            actualValue = ZKJsonUtils.writeObjectJson(helperEntity);
+            actualValue = ZKJsonUtils.writeObjectJson(helperEntityStringDto);
             System.out.println("[^_^:20190808-1543-004] string: " + actualValue);
             TestCase.assertEquals(expected, actualValue);
 
-            helperEntity.setRemarks(null);
-            helperEntity.setSpareJson(null);
+            helperEntityStringDto.setRemarks(null);
+            helperEntityStringDto.setSpareJson(null);
             expected = "{\"delFlag\":0,\"version\":0,\"isNewRecord\":true}";
-            actualValue = ZKJsonUtils.writeObjectJson(helperEntity);
+            actualValue = ZKJsonUtils.writeObjectJson(helperEntityStringDto);
             System.out.println("[^_^:20190808-1543-005] string: " + actualValue);
             TestCase.assertEquals(expected, actualValue);
 
-            helperEntity.setRemarks("");
-            helperEntity.setSpareJson(new ZKJson());
+            helperEntityStringDto.setRemarks("");
+            helperEntityStringDto.setSpareJson(new ZKJson());
             expected = "{\"delFlag\":0,\"version\":0,\"isNewRecord\":true}";
-            actualValue = ZKJsonUtils.writeObjectJson(helperEntity);
+            actualValue = ZKJsonUtils.writeObjectJson(helperEntityStringDto);
             System.out.println("[^_^:20190808-1543-006] string: " + actualValue);
             TestCase.assertEquals(expected, actualValue);
 
-            helperEntity.setUpdateDate(new Date());
+            helperEntityStringDto.setUpdateDate(new Date());
             expected = "{\"updateDate\":\""
-                    + ZKDateUtils.formatDate(helperEntity.getUpdateDate(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss)
+                    + ZKDateUtils.formatDate(helperEntityStringDto.getUpdateDate(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss)
                     + "\",\"delFlag\":0,\"version\":0,\"isNewRecord\":true}";
-            actualValue = ZKJsonUtils.writeObjectJson(helperEntity);
+            actualValue = ZKJsonUtils.writeObjectJson(helperEntityStringDto);
             System.out.println("[^_^:20190808-1543-007] string: " + actualValue);
             TestCase.assertEquals(expected, actualValue);
 
-            System.out.println("[^_^:20190808-1543-008-1] string: " + helperEntity.toString());
+            System.out.println("[^_^:20190808-1543-008-1] string: " + helperEntityStringDto.toString());
 
-            helperEntity.preInsert();
-            helperEntity.setRemarks("remarks");
-            System.out.println("[^_^:20190808-1543-008-2] string: " + ZKJsonUtils.writeObjectJson(helperEntity));
+            helperEntityStringDto.preInsert();
+            helperEntityStringDto.setRemarks("remarks");
+            System.out
+                    .println("[^_^:20190808-1543-008-2] string: " + ZKJsonUtils.writeObjectJson(helperEntityStringDto));
 
-            System.out.println("[^_^:20190808-1543-008-3] string: " + helperEntity.toString());
+            System.out.println("[^_^:20190808-1543-008-3] string: " + helperEntityStringDto.toString());
 
         }
         catch(Exception e) {
@@ -116,9 +118,18 @@ public class ZKBaseHelperEntityTest {
     @Test
     public void testGetPkIDClass() {
         try {
+
+            ZKBaseEntity<?, ?> helperEntityStringDto = new ZKBaseHelperEntityStringDto();
             ZKBaseEntity<?, ?> helperEntityLong = new ZKBaseHelperEntityLong();
 
-            System.out.println("[^_^:20220504-1358-001] pkID class name: " + helperEntityLong.getPkIDClass().getName());
+            System.out.println(
+                    "[^_^:20190808-1543-001] pkID class name: " + helperEntityStringDto.getPkIDClass().getName());
+            System.out.println("[^_^:20190808-1543-002] pkID class name: " + helperEntityLong.getPkIDClass().getName());
+
+            TestCase.assertNull(helperEntityStringDto.getPkId());
+            TestCase.assertTrue(helperEntityStringDto.getPkIDClass() == String.class);
+            TestCase.assertFalse(helperEntityStringDto.getPkIDClass() == Long.class);
+
             TestCase.assertNull(helperEntityLong.getPkId());
             TestCase.assertTrue(helperEntityLong.getPkIDClass() == Long.class);
             TestCase.assertFalse(helperEntityLong.getPkIDClass() == String.class);

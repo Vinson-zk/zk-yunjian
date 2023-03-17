@@ -9,7 +9,7 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKDBBaseEntity.java 
+* @Title: ZKDBEntity.java 
 * @author Vinson 
 * @Package com.zk.db.commons 
 * @Description: TODO(simple description this file what to do. ) 
@@ -35,13 +35,13 @@ import com.zk.db.commons.ZKDBQueryWhere;
 import com.zk.db.commons.ZKSqlConvert;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
-/** 
-* @ClassName: ZKDBBaseEntity 
-* @Description: TODO(simple description this class what to do. ) 
-* @author Vinson 
-* @version 1.0 
-*/
-public abstract class ZKDBBaseEntity<E extends ZKDBBaseEntity<E>> implements ZKDBEntity<E>, Serializable {
+/**
+ * @ClassName: ZKDBEntity
+ * @Description: TODO(simple description this class what to do. )
+ * @author Vinson
+ * @version 1.0
+ */
+public abstract class ZKDBEntity<E extends ZKDBEntity<E>> implements Serializable {
 
     /**
      * @Fields serialVersionUID : TODO(simple description what to do.)

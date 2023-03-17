@@ -36,7 +36,7 @@ import com.zk.devleopment.tool.gen.service.ZKModuleService;
 * @version 1.0 
 */
 @RestController
-@RequestMapping("${zk.path.admin}/${zk.path.devleopmentTool}/${zk.devleopmentTool.version}/${zk.path.devleopmentTool.codeGen}/fm")
+@RequestMapping("${zk.path.admin}/${zk.path.dev.tool}/${zk.dev.tool.version}/${zk.path.dev.tool.code.gen}/fm")
 public class ZKModuleController extends ZKBaseController {
 
     @Autowired

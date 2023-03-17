@@ -111,11 +111,11 @@ public class ZKWebmvcTestFileController {
             throws FileUploadException, IOException {
 
         List<String> fs = new ArrayList<String>();
-        List<File> fileList = this.zkFileTransfer.transferFile(Arrays.asList(mf1), this.targetPath, false, true);
+        List<File> fileList = this.zkFileTransfer.transferFile(this.targetPath, false, true, Arrays.asList(mf1));
         for (File f : fileList) {
             fs.add(f.getAbsolutePath());
         }
-        fileList = this.zkFileTransfer.transferFile(mfs, this.targetPath, false, true);
+        fileList = this.zkFileTransfer.transferFile(this.targetPath, false, true, mfs);
         for (File f : fileList) {
             fs.add(f.getAbsolutePath());
         }

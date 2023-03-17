@@ -18,15 +18,12 @@
 */
 package com.zk.base;
 
-import com.zk.db.configuration.ZKEnableDB;
-
 /** 
 * @ClassName: ZKBaseHelperConfiguration 
 * @Description: TODO(simple description this class what to do. ) 
 * @author Vinson 
 * @version 1.0 
 */
-@ZKEnableDB(configLocation = "test_mybatis_config.xml")
 public class ZKBaseHelperConfiguration {
 
 }

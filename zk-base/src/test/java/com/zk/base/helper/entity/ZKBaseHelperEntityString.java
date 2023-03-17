@@ -19,8 +19,6 @@
 package com.zk.base.helper.entity;
 
 import com.zk.base.entity.ZKBaseEntity;
-import com.zk.db.commons.ZKSqlConvertDelegating;
-import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /** 
 * @ClassName: ZKBaseHelperEntityString 
@@ -28,25 +26,12 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 * @author Vinson 
 * @version 1.0 
 */
-public class ZKBaseHelperEntityString<E extends ZKBaseHelperEntityString<E>> extends ZKBaseEntity<String, E> {
+public abstract class ZKBaseHelperEntityString<E extends ZKBaseHelperEntityString<E>> extends ZKBaseEntity<String, E> {
 
     /**
      * @Fields serialVersionUID : TODO(simple description what to do.)
      */
     private static final long serialVersionUID = 1L;
 
-    static ZKDBSqlHelper sqlHelper;
-
-    @Override
-    public ZKDBSqlHelper getSqlHelper() {
-        return sqlHelper();
-    }
-
-    public static ZKDBSqlHelper sqlHelper() {
-        if (sqlHelper == null) {
-            sqlHelper = new ZKDBSqlHelper(new ZKSqlConvertDelegating(), new ZKBaseHelperEntityString());
-        }
-        return sqlHelper;
-    }
 
 }

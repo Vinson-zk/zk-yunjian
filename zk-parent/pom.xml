@@ -247,7 +247,7 @@
 					<version>${plugin.version.maven.compiler}</version>
 					<configuration>
 						<source>${maven.compiler.source}</source>
-						<target>${maven.compiler.source}</target>
+						<target>${maven.compiler.target}</target>
 					</configuration>
 				</plugin>
 				<!-- 测试插件 -->

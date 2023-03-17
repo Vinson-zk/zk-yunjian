@@ -34,7 +34,7 @@ import com.zk.devleopment.tool.gen.entity.ZKModule;
 @ZKMyBatisDao
 public interface ZKModuleDao extends ZKBaseDao<String, ZKModule> {
 
-    @Select({ "SELECT ${sCols} FROM ${tn} ${alias} WHERE c_module_name = #{moduleName} "})
-    ZKModule getByModuleName(@Param("sCols") String sCols, @Param("tn") String tn, @Param("alias") String alias, @Param("moduleName") String moduleName);
+    @Select({ "SELECT ${_zkSql.cols} FROM ${_zkSql.tn} ${_zkSql.ta} WHERE c_module_name = #{moduleName} " })
+    ZKModule getByModuleName(@Param("moduleName") String moduleName);
 
 }

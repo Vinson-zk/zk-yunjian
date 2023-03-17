@@ -9,7 +9,7 @@
  * @Last Modified time: 
  */
 
-import { edit${zkTableInfo.funcName}, del${zkTableInfo.funcName}, get${zkTableInfo.funcName}, find${zkTableInfo.funcName}sTree } from './service';
+import { sEdit${zkTableInfo.funcName}, sDel${zkTableInfo.funcName}, sFet${zkTableInfo.funcName}, sFind${zkTableInfo.funcName}sTree } from './service';
 
 import { zkTools } from 'zkFramework';
 const { zkToolsUtils, zkToolsMsg } = zkTools;
@@ -59,7 +59,7 @@ const model = {
                 delete payload.parentId;
             }
             
-            let res = yield call(edit${zkTableInfo.funcName}, payload);
+            let res = yield call(sEdit${zkTableInfo.funcName}, payload);
             let f = errors=>{
                 if (callback instanceof Function) {
                     callback.call(this, errors);
@@ -77,7 +77,7 @@ const model = {
         },
         // 删除
         *del${zkTableInfo.funcName}({ payload, callback }, { call }) {
-            let res = yield call(del${zkTableInfo.funcName}, payload);
+            let res = yield call(sDel${zkTableInfo.funcName}, payload);
             if(res.code == "zk.0"){
                 zkToolsMsg.alertMsg(null, null, {type:"success", msg:res.msg});
             }
@@ -87,7 +87,7 @@ const model = {
         },
         // 查询 详情
         *get${zkTableInfo.funcName}({ payload, isParent = false }, { call, put }) {
-            let res = yield call(get${zkTableInfo.funcName}, payload);
+            let res = yield call(sGet${zkTableInfo.funcName}, payload);
             if (res.code == 'zk.0') {
                 if(isParent){
                 	let optEntity = {};
@@ -110,7 +110,7 @@ const model = {
             if(pagination){
                 params = { ...params, ...zkToolsUtils.convertPageParam(pagination) };
             }
-            let res = yield call(find${zkTableInfo.funcName}sTree, params);
+            let res = yield call(sFind${zkTableInfo.funcName}sTree, params);
             let restState = {}
             if (res.code == 'zk.0') {
                 restState = {

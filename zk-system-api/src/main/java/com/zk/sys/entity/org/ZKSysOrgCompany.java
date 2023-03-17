@@ -26,7 +26,12 @@ import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKTable;
 import com.zk.db.annotation.ZKUpdate;
-import com.zk.db.commons.*;
+import com.zk.db.commons.ZKDBMapInfo;
+import com.zk.db.commons.ZKDBOptComparison;
+import com.zk.db.commons.ZKDBQueryCol;
+import com.zk.db.commons.ZKDBQueryWhere;
+import com.zk.db.commons.ZKSqlConvert;
+import com.zk.db.commons.ZKSqlConvertDelegating;
 import com.zk.db.mybatis.commons.ZKDBQueryScript;
 
 /**
@@ -581,7 +586,7 @@ public class ZKSysOrgCompany extends ZKBaseTreeEntity<String, ZKSysOrgCompany> {
     @JsonIgnore
     @XmlTransient
     public ZKDBQueryWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
-        ZKDBQueryWhere where = super.getZKDbWhere(sqlConvert, mapInfo);
+        ZKDBQueryWhere where = super.getZKDbWhereTree(sqlConvert, mapInfo);
         // 制作一个根据名称和代码同时查询的 查询条件，用过度 java 属性 searchValue 为传参数值
         ZKDBQueryWhere sWhere = ZKDBQueryWhere.asOr("(", ")",
             ZKDBQueryCol.as(ZKDBOptComparison.LIKE, "c_name", "searchValue", String.class, null, false),

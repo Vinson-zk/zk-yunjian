@@ -47,7 +47,7 @@ import com.zk.devleopment.tool.gen.entity.ZKModule;
 * @author Vinson 
 * @version 1.0 
 */
-public class ZKMyBatisSessionFactory {
+class ZKMyBatisSessionFactory {
 
     protected static Logger log = LoggerFactory.getLogger(ZKMyBatisSessionFactory.class);
 

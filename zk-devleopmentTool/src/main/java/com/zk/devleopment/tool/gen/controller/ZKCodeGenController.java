@@ -43,7 +43,7 @@ import com.zk.devleopment.tool.gen.service.ZKCodeGenService;
  * @version 1.0
  */
 @Controller // 直接下载文件，没有 @responseBody
-@RequestMapping("${zk.path.admin}/${zk.path.devleopmentTool}/${zk.devleopmentTool.version}/${zk.path.devleopmentTool.codeGen}/cg")
+@RequestMapping("${zk.path.admin}/${zk.path.dev.tool}/${zk.dev.tool.version}/${zk.path.dev.tool.code.gen}/cg")
 public class ZKCodeGenController {
 
     @Autowired
