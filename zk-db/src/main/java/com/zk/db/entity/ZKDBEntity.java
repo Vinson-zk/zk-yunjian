@@ -9,11 +9,11 @@
 * accordance with the terms of the license agreement you entered into 
 * with ZK-Vinson. 
 *
-* @Title: ZKDBEntity.java 
+* @Title: ZKDBBaseEntity.java 
 * @author Vinson 
-* @Package com.zk.db.entity 
+* @Package com.zk.db.commons 
 * @Description: TODO(simple description this file what to do. ) 
-* @date Feb 28, 2023 5:11:52 PM 
+* @date Sep 10, 2020 3:45:28 PM 
 * @version V1.0 
 */
 package com.zk.db.entity;
@@ -27,21 +27,52 @@ import org.springframework.data.annotation.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.Maps;
 import com.zk.core.commons.data.ZKPage;
+import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.db.commons.ZKDBMapInfo;
 import com.zk.db.commons.ZKDBQueryWhere;
 import com.zk.db.commons.ZKSqlConvert;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 /** 
-* @ClassName: ZKDBEntity 
+* @ClassName: ZKDBBaseEntity 
 * @Description: TODO(simple description this class what to do. ) 
 * @author Vinson 
 * @version 1.0 
 */
-public interface ZKDBEntity<E extends ZKDBEntity<E>> extends Serializable {
+public abstract class ZKDBBaseEntity<E extends ZKDBBaseEntity<E>> implements ZKDBEntity<E>, Serializable {
 
-    ZKPage<E> getPage();
+    /**
+     * @Fields serialVersionUID : TODO(simple description what to do.)
+     */
+    private static final long serialVersionUID = 1L;
+
+    // 额外参数集合; 用于传输额外的查询参数，自定义SQL（SQL标识，SQL内容）或返回额外的关联参数；
+    @Transient
+    @XmlTransient
+    @JsonIgnore
+    protected Map<String, Object> extraParams;
+
+    @Transient
+    protected ZKPage<E> page;
+
+    /**
+     * @return page
+     */
+    @JsonIgnore
+    @XmlTransient
+    public ZKPage<E> getPage() {
+        return page;
+    }
+
+    /**
+     * @param page
+     *            the page to set
+     */
+    public void setPage(ZKPage<E> page) {
+        this.page = page;
+    }
 
     /**
      * 额外参数集合
@@ -49,12 +80,20 @@ public interface ZKDBEntity<E extends ZKDBEntity<E>> extends Serializable {
      * @return extraParams
      */
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    public Map<String, Object> getExtraParams();
+    public Map<String, Object> getExtraParams() {
+        if (extraParams == null) {
+            extraParams = Maps.newHashMap();
+        }
+        return extraParams;
+    }
 
+    @SuppressWarnings("unchecked")
     @JsonIgnore
     @XmlTransient
     @Transient
-    public <T> T getParamByName(String paramName);
+    public <T> T getParamByName(String paramName) {
+        return (T) this.getExtraParams().get(paramName);
+    }
 
     /**
      * 获取数据库名称
@@ -62,7 +101,9 @@ public interface ZKDBEntity<E extends ZKDBEntity<E>> extends Serializable {
     @Transient
     @XmlTransient
     @JsonIgnore
-    public String getJdbcType();
+    public String getJdbcType() {
+        return ZKEnvironmentUtils.getString("jdbc.type", "mysql");
+    }
 
     /********************************************************/
     /*** 转换实体到持久层信息的一些实体 **/
@@ -131,6 +172,8 @@ public interface ZKDBEntity<E extends ZKDBEntity<E>> extends Serializable {
     @Transient
     @JsonIgnore
     @XmlTransient
-    public ZKDBQueryWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo);
+    public ZKDBQueryWhere getZKDbWhere(ZKSqlConvert sqlConvert, ZKDBMapInfo mapInfo) {
+        return sqlConvert.resolveQueryCondition(mapInfo);
+    }
 
 }
