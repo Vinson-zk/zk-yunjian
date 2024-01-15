@@ -85,7 +85,7 @@ public class ZKModule extends ZKBaseEntity<String, ZKModule> {
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 128, message = "{zk.core.data.validation.length}")
     @ZKColumn(name = "c_db_driver", update = @ZKUpdate(true))
-    String driver = "com.mysql.cj.jdbc.Driver";
+    String driver = "com.mysql.jdbc.Driver";
 
     @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 128, message = "{zk.core.data.validation.length}")

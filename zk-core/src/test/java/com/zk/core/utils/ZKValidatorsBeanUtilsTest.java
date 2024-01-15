@@ -82,6 +82,7 @@ public class ZKValidatorsBeanUtilsTest {
         }
     }
 
+    // 一般验证测试
     @Test
     public void testGeneric() {
         try {
@@ -98,6 +99,7 @@ public class ZKValidatorsBeanUtilsTest {
             try {
                 ve.setpMax(9);
                 ve.setpLength("1");
+                ve.setpPattern("t");
                 ZKValidatorsBeanUtils.validateWithException(validator, ve);
                 TestCase.assertTrue(false);
             }
@@ -105,7 +107,7 @@ public class ZKValidatorsBeanUtilsTest {
                 cve = e;
             }
             TestCase.assertNotNull(cve);
-            TestCase.assertEquals(6, cve.getConstraintViolations().size());
+            TestCase.assertEquals(7, cve.getConstraintViolations().size());
 
             // 测试数据难后异常消息处理
             list = ZKValidatorsBeanUtils.extractPropertyAndMessageAsList(cve, ":");
@@ -129,6 +131,9 @@ public class ZKValidatorsBeanUtilsTest {
                 if (s.startsWith("pNotNullLocaleMsg:")) {
                     TestCase.assertEquals("pNotNullLocaleMsg:测试消息，不能为空；", s);
                 }
+                if (s.startsWith("pPattern:")) {
+                    TestCase.assertEquals("pPattern:输入字符正则较验：^[a-zA-Z0-9_\\.-][a-zA-Z0-9_\\.-]{1,6}$；", s);
+                }
             }
 
             // 返回英文 消息
@@ -145,7 +150,7 @@ public class ZKValidatorsBeanUtilsTest {
                 cve = e;
             }
             TestCase.assertNotNull(cve);
-            TestCase.assertEquals(6, cve.getConstraintViolations().size());
+            TestCase.assertEquals(7, cve.getConstraintViolations().size());
 
             // 测试数据难后异常消息处理
             list = ZKValidatorsBeanUtils.extractPropertyAndMessageAsList(cve, ":");
@@ -168,6 +173,9 @@ public class ZKValidatorsBeanUtilsTest {
                 }
                 if (s.startsWith("pNotNullLocaleMsg:")) {
                     TestCase.assertEquals("pNotNullLocaleMsg:test msg not null;", s);
+                }
+                if (s.startsWith("pPattern:")) {
+                    TestCase.assertEquals("pPattern:en:输入字符正则较验: ^[a-zA-Z0-9_\\.-][a-zA-Z0-9_\\.-]{1,6}$;", s);
                 }
             }
         }

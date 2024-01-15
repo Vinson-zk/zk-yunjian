@@ -41,20 +41,20 @@ public class ZKMySqlDialectTest {
     @Test
     public void testReplaceLikeParam() {
         try {
-            ZKDialect dialect = new ZKMySqlDialect();
+            ZKMySqlDialect dialect = new ZKMySqlDialect();
 
             String str, expectedStr;
 
-//          str = " select * from talbe t where t.column1 like #{obj.column1} and t.column2 like #{obj.column2} ";
+//          str = " select * from talbe t where t.column1 LIKE #{obj.column1} and t.column2 LIKE #{obj.column2} ";
 //          expectedStr = " select * from talbe t where t.column1 LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(#{obj.column1}, '%', '\\%'), '_', '\\_'), '\\\\', '\\\\\\\\'), '%') and t.column2 LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(#{obj.column2}, '%', '\\%'), '_', '\\_'), '\\\\', '\\\\\\\\'), '%') ";
-            str = " select * from talbe t where t.column1 like ? and t.column2 like ? ";
+            str = " select * from talbe t where t.column1 LIKE ? and t.column2 LIKE ? ";
             expectedStr = " select * from talbe t where t.column1 LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(?, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%') and t.column2 LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(?, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%') ";
             System.out.println("[^_^:20180109-0039-001]\n" + dialect.replaceLikeParam(str));
             TestCase.assertEquals(expectedStr, dialect.replaceLikeParam(str));
 
-//          str = "select * from talbe where column1 like #{column1} and column2 like #{column2}";
+//          str = "select * from talbe where column1 LIKE #{column1} and column2 LIKE #{column2}";
 //          expectedStr = "select * from talbe where column1 LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(#{column1}, '%', '\\%'), '_', '\\_'), '\\\\', '\\\\\\\\'), '%') and column2 LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(#{column2}, '%', '\\%'), '_', '\\_'), '\\\\', '\\\\\\\\'), '%')";
-            str = "select * from talbe where column1 like ? and column2 like ?";
+            str = "select * from talbe where column1 LIKE ? and column2 LIKE ?";
             expectedStr = "select * from talbe where column1 LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(?, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%') and column2 LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(?, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%')";
             System.out.println("[^_^:20180109-0039-002]\n" + dialect.replaceLikeParam(str));
             TestCase.assertEquals(expectedStr, dialect.replaceLikeParam(str));
@@ -232,7 +232,7 @@ public class ZKMySqlDialectTest {
     public void testIsPage() {
         try {
             String s = "SELECT \n" + "t.uuid AS \"uuid\" \n"
-                    + " ? AND json_extract(t.name, concat('$.', ?)) like #{test} \n and like #{test} \n and like  concat('%', REPLACE(REPLACE(#{test})";
+                    + " ? AND json_extract(t.name, concat('$.', ?)) LIKE #{test} \n and LIKE #{test} \n and LIKE  concat('%', REPLACE(REPLACE(#{test})";
             ZKMySqlDialect mySqlDialect = new ZKMySqlDialect();
 
             String str = s;
@@ -286,7 +286,7 @@ public class ZKMySqlDialectTest {
     public void testIsReplace() {
         try {
             String s = "SELECT \n" + "t.uuid AS \"uuid\" \n"
-                    + " ? AND json_extract(t.name, concat('$.', ?)) like #{test} \n and like #{test} \n and like  concat('%', ";
+                    + " ? AND json_extract(t.name, concat('$.', ?)) LIKE #{test} \n and LIKE #{test} \n and LIKE  concat('%', ";
             ZKMySqlDialect mySqlDialect = new ZKMySqlDialect();
 
             String str = s;

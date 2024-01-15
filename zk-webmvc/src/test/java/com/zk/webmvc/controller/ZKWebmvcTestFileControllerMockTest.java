@@ -39,6 +39,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.zk.core.commons.ZKContentType;
+import com.zk.core.commons.ZKCoreConstants;
 import com.zk.core.utils.ZKFileUtils;
 import com.zk.core.utils.ZKJsonUtils;
 import com.zk.core.utils.ZKStringUtils;
@@ -84,11 +85,13 @@ public class ZKWebmvcTestFileControllerMockTest {
 
     final String boundary = "7678sadfasdfaf9876ad7f8a";
 
-    private final static String filePath = ZKWebmvcTestFileControllerTest.filePath;
+    private final static String sourceFileRootPath = ZKWebmvcTestFileControllerTest.sourceFileRootPath;
 
-    private final static String filePathSource = ZKWebmvcTestFileControllerTest.filePathSource;
+    private final static String uploadFileRootPath = ZKWebmvcTestFileControllerTest.uploadFileRootPath;
 
-    private final static String filePathTarget = ZKWebmvcTestFileControllerTest.filePathTarget;
+    private final static String source = ZKWebmvcTestFileControllerTest.source;
+
+    private final static String upload = ZKWebmvcTestFileControllerTest.upload;
 
     @Test
     public void testUploadStream() {
@@ -119,7 +122,7 @@ public class ZKWebmvcTestFileControllerMockTest {
             mockReqBuilder.header("fileName", ZKStringUtils.encodedString(fileName, "ISO-8859-1"));
             strBuf = new StringBuffer();
 
-//            file = new File(filePath + File.separator + filePathSource + File.separator + fileName);
+//            file = new File(filePath + File.separator + source + File.separator + fileName);
             fileContent = "池中濯足水，门外打头风。";
 //            ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
 
@@ -129,7 +132,7 @@ public class ZKWebmvcTestFileControllerMockTest {
             mockRes = mvcRes.getResponse();
             resStr = mockRes.getContentAsString();
             System.out.println("[^_^:20191217-2146-001] resStr: " + resStr);
-            file = new File(filePath + File.separator + filePathTarget + File.separator + fileName);
+            file = new File(uploadFileRootPath + File.separator + upload + File.separator + fileName);
             TestCase.assertEquals(file.getAbsolutePath(), resStr);
             resStr = new String(ZKFileUtils.readFile(file));
             TestCase.assertEquals(fileContent, resStr);
@@ -166,9 +169,10 @@ public class ZKWebmvcTestFileControllerMockTest {
             /*** 二进制流上传测试 multipart ***/
             url = baseUrl + "/uploadMultipart";
             mockReqBuilder = MockMvcRequestBuilders.post(url);
+//            mockReqBuilder.characterEncoding(ZKCoreConstants.Consts.UTF_8);
             mockReqBuilder.contentType(ZKContentType.MULTIPART_FORM_DATA_UTF8 + "; boundary=" + boundary);
             strBuf = new StringBuffer();
-            contentType = ZKContentType.X_FORM.toString();
+            contentType = ZKContentType.X_FORM_UTF8.toString();
             /**
              * Content-Disposition: 说明
              * 
@@ -178,7 +182,7 @@ public class ZKWebmvcTestFileControllerMockTest {
             // 文件 f1；
             fileContent = "孤犊触乳，骄子骂母";
             fileName = "mock mvc stream uploadMultipart 文件1.txt";
-            file = ZKFileUtils.createFile(filePath + File.separator + filePathSource, fileName, true);
+            file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
             ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
             strBuf.append("\r\n").append("--").append(boundary);
             strBuf.append("\r\n").append(
@@ -188,7 +192,7 @@ public class ZKWebmvcTestFileControllerMockTest {
             // 文件 fs
             fileContent = "两鬓风霜，途次早行之客。";
             fileName = "mock mvc stream uploadMultipart 文件2.txt";
-            file = ZKFileUtils.createFile(filePath + File.separator + filePathSource, fileName, true);
+            file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
             ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
             strBuf.append("\r\n").append("--").append(boundary);
             strBuf.append("\r\n").append(
@@ -198,7 +202,7 @@ public class ZKWebmvcTestFileControllerMockTest {
             // 文件 fs
             fileContent = "一蓑烟雨，溪边晚钓之翁。";
             fileName = "mock mvc stream uploadMultipart 文件3.txt";
-            file = ZKFileUtils.createFile(filePath + File.separator + filePathSource, fileName, true);
+            file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
             ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
             strBuf.append("\r\n").append("--").append(boundary);
             strBuf.append("\r\n").append(
@@ -211,6 +215,7 @@ public class ZKWebmvcTestFileControllerMockTest {
             mockReqBuilder.content(strBuf.toString());
             mvcRes = mvc.perform(mockReqBuilder).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
             mockRes = mvcRes.getResponse();
+            mockRes.setCharacterEncoding(ZKCoreConstants.Consts.UTF_8.toString());
             resStr = mockRes.getContentAsString();
             System.out.println("[^_^:20191217-1549-001] resStr: " + resStr);
             fs = ZKJsonUtils.jsonStrToList(resStr);
@@ -219,7 +224,8 @@ public class ZKWebmvcTestFileControllerMockTest {
             for (String fStr : fs) {
                 file = new File(fStr);
                 resStr = new String(ZKFileUtils.readFile(file));
-                file = new File(fStr.replace(filePathTarget, filePathSource));
+                file = new File(fStr.replace(File.separator + upload + File.separator,
+                        File.separator + source + File.separator));
                 fileContent = new String(ZKFileUtils.readFile(file));
                 TestCase.assertEquals(fileContent, resStr);
             }
@@ -234,7 +240,7 @@ public class ZKWebmvcTestFileControllerMockTest {
 
             fileContent = "沿对革，异对同，白叟对黄童。";
             fileName = "mock mvc multiport uploadMultipart 文件1.txt";
-            file = ZKFileUtils.createFile(filePath + File.separator + filePathSource, fileName, true);
+            file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
             ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
             fIs = new FileInputStream(file);
             mFile = new MockMultipartFile(f1Name, fileName, null, fIs);
@@ -242,7 +248,7 @@ public class ZKWebmvcTestFileControllerMockTest {
 
             fileContent = "江风对海雾，牧子对渔翁。";
             fileName = "mock mvc multiport uploadMultipart 文件2.txt";
-            file = ZKFileUtils.createFile(filePath + File.separator + filePathSource, fileName, true);
+            file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
             ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
             fIs = new FileInputStream(file);
             mFile = new MockMultipartFile(fsName, fileName, null, fIs);
@@ -250,7 +256,7 @@ public class ZKWebmvcTestFileControllerMockTest {
 
             fileContent = "彦巷陋，阮途穷，冀北对辽东。";
             fileName = "mock mvc multiport uploadMultipart 文件3.txt";
-            file = ZKFileUtils.createFile(filePath + File.separator + filePathSource, fileName, true);
+            file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
             ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
             fIs = new FileInputStream(file);
             mFile = new MockMultipartFile(fsName, fileName, null, fIs);
@@ -258,6 +264,7 @@ public class ZKWebmvcTestFileControllerMockTest {
 
             mvcRes = mvc.perform(mockMultipartBuilder).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
             mockRes = mvcRes.getResponse();
+            mockRes.setCharacterEncoding(ZKCoreConstants.Consts.UTF_8.toString());
             resStr = mockRes.getContentAsString();
             System.out.println("[^_^:20191217-1549-002] resStr: " + resStr);
             fs = ZKJsonUtils.jsonStrToList(resStr);
@@ -266,9 +273,78 @@ public class ZKWebmvcTestFileControllerMockTest {
             for (String fStr : fs) {
                 file = new File(fStr);
                 resStr = new String(ZKFileUtils.readFile(file));
-                file = new File(fStr.replace(filePathTarget, filePathSource));
+                file = new File(fStr.replace(File.separator + upload + File.separator,
+                        File.separator + source + File.separator));
                 fileContent = new String(ZKFileUtils.readFile(file));
                 TestCase.assertEquals(fileContent, resStr);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            TestCase.assertTrue(false);
+        }
+    }
+    
+    // 测试上传取文件类型和 contentType
+    @Test
+    public void testUploadMultipartContentType() {
+
+        // 删除测试数据，防止影响测试结果
+        ZKWebmvcTestFileControllerTest.deleteTestData();
+
+        try {
+            MvcResult mvcRes = null;
+            MockHttpServletResponse mockRes = null;
+            String resStr = null;
+            List<String> fs = new ArrayList<>();
+//            ZKFileType fileType = null;
+//            ZKContentType contentType = null;
+            File file = null;
+            String fileName = "";
+            String url = baseUrl + "/uploadMultipart";
+
+            /*** MultipartFile 上传测试 multipart ***/
+            MockMultipartHttpServletRequestBuilder mockMultipartBuilder = null;
+            MockMultipartFile mFile = null;
+            FileInputStream fIs = null;
+
+            mockMultipartBuilder = MockMvcRequestBuilders.multipart(url);
+            mockMultipartBuilder.characterEncoding("UTF-8");
+
+            fileName = "mock-图片-1.jpg";
+            file = new File(sourceFileRootPath + File.separator + fileName);
+            fIs = new FileInputStream(file);
+            mFile = new MockMultipartFile("f1", fileName, null, fIs);
+            mockMultipartBuilder.file(mFile);
+
+            fileName = "mock-md-1.md";
+            file = new File(sourceFileRootPath + File.separator + fileName);
+            fIs = new FileInputStream(file);
+            mFile = new MockMultipartFile("fs", fileName, null, fIs);
+            mockMultipartBuilder.file(mFile);
+
+            mvcRes = mvc.perform(mockMultipartBuilder).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+            mockRes = mvcRes.getResponse();
+            mockRes.setCharacterEncoding(ZKCoreConstants.Consts.UTF_8.toString());
+            resStr = mockRes.getContentAsString();
+            System.out.println("[^_^:20230527-1006-001] resStr: " + resStr);
+            fs = ZKJsonUtils.jsonStrToList(resStr);
+
+            System.out.println("[^_^:20230527-1008-001] =======================================");
+            for (String fStr : fs) {
+                file = new File(fStr);
+                System.out.println("[^_^:20230527-1008-001] " + file.getName() + " ----------------------------------");
+//                fileType = ZKFileUtils.getFileType(file);
+//                System.out.println("[^_^:20230527-1008-001] " + fileType.name());
+//                contentType = ZKContentType.getContentTypeByFileExt(fileType.name());
+//                System.out.println("[^_^:20230527-1008-001] " + contentType.toString());
+
+                file = new File(fStr.replace(upload, "zk"));
+                System.out.println("[^_^:20230527-1008-001] " + file.getName());
+//                fileType = ZKFileUtils.getFileType(file);
+//                System.out.println("[^_^:20230527-1008-001] " + fileType.name());
+//                contentType = ZKContentType.getContentTypeByFileExt(fileType.name());
+//                System.out.println("[^_^:20230527-1008-001] " + contentType.toString());
             }
         }
         catch(Exception e) {
@@ -316,7 +392,7 @@ public class ZKWebmvcTestFileControllerMockTest {
             // 文件 f1；
             fileContent = "孤犊触乳，骄子骂母";
             fileName = "stream uploadMultipart 文件1.txt";
-            file = ZKFileUtils.createFile(filePath + File.separator + filePathSource, fileName, true);
+            file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
             ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
             strBuf.append("\r\n").append("--").append(boundary);
             strBuf.append("\r\n").append(
@@ -327,7 +403,7 @@ public class ZKWebmvcTestFileControllerMockTest {
             // 文件 fs
             fileContent = "两鬓风霜，途次早行之客。";
             fileName = "stream uploadMultipart 文件2.txt";
-            file = ZKFileUtils.createFile(filePath + File.separator + filePathSource, fileName, true);
+            file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
             ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
             strBuf.append("\r\n").append("--").append(boundary);
             strBuf.append("\r\n").append(
@@ -338,7 +414,7 @@ public class ZKWebmvcTestFileControllerMockTest {
             // 文件 fs
             fileContent = "一蓑烟雨，溪边晚钓之翁。";
             fileName = "stream uploadMultipart 文件3.txt";
-            file = ZKFileUtils.createFile(filePath + File.separator + filePathSource, fileName, true);
+            file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
             ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
             strBuf.append("\r\n").append("--").append(boundary);
             strBuf.append("\r\n").append(
@@ -359,7 +435,8 @@ public class ZKWebmvcTestFileControllerMockTest {
             for (String fStr : fs) {
                 file = new File(fStr);
                 resStr = new String(ZKFileUtils.readFile(file));
-                file = new File(fStr.replace(filePathTarget, filePathSource));
+                file = new File(fStr.replace(File.separator + upload + File.separator,
+                        File.separator + source + File.separator));
                 fileContent = new String(ZKFileUtils.readFile(file));
                 TestCase.assertEquals(fileContent, resStr);
             }

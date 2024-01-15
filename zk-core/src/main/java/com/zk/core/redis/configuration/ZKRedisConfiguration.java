@@ -64,6 +64,9 @@ public class ZKRedisConfiguration {
         /** 单机模式 */
         JedisPool jedisPool = new JedisPool(jedisPoolConfig, redisProperties.getHost(), redisProperties.getPort(),
                 redisProperties.getTimeout(), redisProperties.getPassword(), redisProperties.getDatabase());
+        
+//        ZKRedisUtils.printJedisPoolInfo(this.getClass().getName(), jedisPool);
+
         return jedisPool;
     }
 

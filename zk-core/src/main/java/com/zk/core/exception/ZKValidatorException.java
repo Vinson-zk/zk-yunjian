@@ -130,4 +130,8 @@ public class ZKValidatorException extends ConstraintViolationException {
         return this.getConstraintViolations().size();
     }
 
+    public String getMessageByPropertyPath(String propertyPath) {
+        return this.getMessagePropertyAndMessageAsMap().get(propertyPath);
+    }
+
 }

@@ -31,7 +31,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.MutableDiscoveryClientOptionalArgs;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -176,7 +175,7 @@ public class ZKFileBeforeConfiguration extends ZKWebmvcConfiguration{
      * @return Validator
      */
     @Bean
-    public Validator validator(MessageSource messageSource, ApplicationContext applicationContext) {
+    public Validator validator(MessageSource messageSource) {
 
         /*
          * 重写这个方法比较好

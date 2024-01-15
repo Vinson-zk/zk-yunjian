@@ -28,6 +28,12 @@ import java.nio.charset.Charset;
 */
 public interface ZKCoreConstants {
 
+    public static interface System {
+
+        public static final String userName = "user.name";
+
+    }
+
     public static interface Consts {
 
         public static final Charset UTF_8 = Charset.forName("UTF-8");

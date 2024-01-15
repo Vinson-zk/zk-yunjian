@@ -43,7 +43,7 @@ public class ZKCodeGenServiceTest {
     public static ZKModule configModule() {
         ZKModule module = new ZKModule();
         
-        module.setDriver("com.mysql.cj.jdbc.Driver");
+        module.setDriver("com.mysql.jdbc.Driver");
         module.setUrl("jdbc:mysql://10.211.55.11:3306/zk-file?useUnicode=true&characterEncoding=utf8&useTimezone=true&serverTimezone=GMT%2B8");
         module.setUsername("zk_r");
         module.setPassword("zk_r");

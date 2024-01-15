@@ -121,7 +121,7 @@ class ZKMyBatisSessionFactory {
     public static DataSource createDataSource(ZKModule zkModule) {
         try {
             Properties ps = new Properties();
-//            ps.setProperty("driver", "com.mysql.cj.jdbc.Driver");
+//            ps.setProperty("driver", "com.mysql.jdbc.Driver");
 //            ps.setProperty("url", properties.getProperty("zk.db.dynamic.jdbc.url"));
 //            ps.setProperty("username", properties.getProperty("zk.db.dynamic.jdbc.writeUserName"));
 //            ps.setProperty("password", properties.getProperty("zk.db.dynamic.jdbc.writePwd"));

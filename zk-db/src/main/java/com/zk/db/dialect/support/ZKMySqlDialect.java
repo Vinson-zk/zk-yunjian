@@ -22,8 +22,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.zk.core.commons.data.ZKJson;
+import com.zk.core.commons.data.ZKPage;
 import com.zk.core.utils.ZKJsonUtils;
 import com.zk.db.dialect.ZKDialect;
+import com.zk.db.parser.ZKCountSqlParser;
+import com.zk.db.parser.ZKCountSqlParser.ZKModel;
+import com.zk.db.parser.ZKDefaultCountSqlParser;
 
 /**
  * @ClassName: ZKMySqlDialect
@@ -33,13 +37,14 @@ import com.zk.db.dialect.ZKDialect;
  */
 public class ZKMySqlDialect implements ZKDialect {
 
-//  public static final String patternStr = "(\\b)like(\\b)([^\\#\\{,^\\$\\{]*)\\#\\{(\\S*)\\}";
-    public static final String patternStr = "(\\b)like(\\b)([^\\?]*)\\?";
+    static ZKCountSqlParser DFAULT_COUNTSQLPARSER = new ZKDefaultCountSqlParser();
 
     /**
      * 不区分大小写替换
      */
-    public static final Pattern likeParamPattern = Pattern.compile(patternStr,
+//    public static final Pattern likeParamPattern = Pattern.compile("(\\b)like(\\b)([^\\#\\{,^\\$\\{]*)\\#\\{(\\S*)\\}",
+//            Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+    public static final Pattern likeParamPattern = Pattern.compile("(\\b)like(\\b)([^\\?]*)\\?",
             Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
 
 //  public static final String replaceString = "$1LIKE$2$3CONCAT('%', REPLACE(REPLACE(REPLACE(#{$4}, '\\\\\\\\', '\\\\\\\\\\\\\\\\'), '_', '\\\\_'), '%', '\\\\%'), '%')";
@@ -57,42 +62,59 @@ public class ZKMySqlDialect implements ZKDialect {
     private static final Pattern isReplacePattern = Pattern.compile("(\\S*)REPLACE\\(([^\\)]+)\\)",
             Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
 
-    @Override
-    public String getLimitString(String sql, int offset, int limit) {
-        return getLimitString(sql, offset, Integer.toString(offset), Integer.toString(limit));
+    public boolean supportsPage() {
+        return true;
     }
 
-    public boolean supportsLimit() {
+    @Override
+    public boolean supportsJson() {
         return true;
     }
 
     /**
-     * 将sql变成分页sql语句,提供将offset及limit使用占位符号(placeholder)替换.
-     * 
-     * <pre>
-     * 如mysql
-     * dialect.getLimitString("select * from user", 12, ":offset",0,":limit") 将返回
-     * select * from user limit :offset,:limit
-     * </pre>
      *
-     * @param sql
-     *            实际SQL语句
+     * @Title: getCountSql
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Jan 3, 2024 11:23:31 PM
+     * @param sourceSql
+     *            原查询 sql
+     * @param countSqlBlock
+     *            统计记数的 sql 片段，默认为 count(0)
+     * @param model
+     *            生成的 countSql 模式，Simple 模是最简单的模式; 默认：Perfect
+     * @param removeOrderBy
+     *            是否需要删除 orderBy true-是；false-不是；默认 false;
+     * @return String
+     */
+    public String getCountSql(String sourceSql, String countSqlBlock, ZKModel model, boolean removeOrderBy) {
+        return DFAULT_COUNTSQLPARSER.getCountSql(sourceSql, countSqlBlock, model, removeOrderBy);
+    }
+
+    public String getPageSql(String sourceSql, ZKPage<?> page) {
+        return getPageSql(sourceSql, page.getStartRow(), page.getPageSize());
+    }
+
+    /**
+     * 
+     * @param sourceSql
+     *            查询 sql
      * @param offset
      *            分页开始纪录条数
-     * @param offsetPlaceholder
-     *            分页开始纪录条数－占位符号
-     * @param limitPlaceholder
-     *            分页纪录条数占位符号
-     * @return 包含占位符的分页sql
+     * @param limit
+     *            分页纪录条数
+     * @return 分页查询 sql
+     * @see com.zk.db.dialect.ZKDialect#getPageSql(java.lang.String, int, int)
      */
-    public String getLimitString(String sql, int offset, String offsetPlaceholder, String limitPlaceholder) {
-        StringBuilder stringBuilder = new StringBuilder(sql);
+    @Override
+    public String getPageSql(String sourceSql, int offset, int limit) {
+        StringBuilder stringBuilder = new StringBuilder(sourceSql);
         stringBuilder.append(" limit ");
         if (offset > 0) {
-            stringBuilder.append(offsetPlaceholder).append(",").append(limitPlaceholder);
+            stringBuilder.append(offset).append(",").append(limit);
         }
         else {
-            stringBuilder.append(limitPlaceholder);
+            stringBuilder.append(limit);
         }
         return stringBuilder.toString();
     }
@@ -129,16 +151,12 @@ public class ZKMySqlDialect implements ZKDialect {
     }
 
     @Override
+    @Deprecated
     public String replaceLikeParam(String sql) {
-        // 不做这个替换，直接自己在 sql 中写
+        // 不做这个替换，则需要直接自己在 sql 中写
         Matcher matcher = likeParamPattern.matcher(sql);
         return matcher.replaceAll(replaceString);
 //        return sql;
-    }
-
-    @Override
-    public boolean supportsJson() {
-        return true;
     }
 
     @Override

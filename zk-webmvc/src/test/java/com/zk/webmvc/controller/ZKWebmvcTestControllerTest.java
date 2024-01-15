@@ -77,7 +77,7 @@ public class ZKWebmvcTestControllerTest {
     public void setUp() {
         this.baseUrl = String.format("http://127.0.0.1:%s/%s/%s", port,
                 ZKEnvironmentUtils.getString("zk.path.admin", "zk"),
-                ZKEnvironmentUtils.getString("zk.path.core", "c"));
+                ZKEnvironmentUtils.getString("zk.path.webmvc", "c"));
         System.out.println("[^_^:20191218-1555-001] base url:" + this.baseUrl);
     }
 

@@ -18,8 +18,8 @@
 */
 package com.zk.core.commons;
 
-import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
 
@@ -52,7 +52,9 @@ public interface ZKFileTransfer {
      *            当文件存在时，是追加内容，还是从头开始写内容
      * @return File
      */
-    File transferFile(InputStream inputStream, String path, String fileName, boolean isOverride, boolean appendFlag);
+    String transferFile(InputStream inputStream, String path, String fileName, boolean isOverride, boolean appendFlag);
+
+    String transferFile(String path, String fileName, boolean isOverride, MultipartFile mFile);
 
     /**
      *
@@ -70,21 +72,34 @@ public interface ZKFileTransfer {
      *            文件存在时，是否覆盖？true 是；false 否
      * @return List<File>
      */
-    List<File> transferFile(String path, boolean isNewName, boolean isOverride, Collection<MultipartFile> files);
+    List<String> transferFile(String path, boolean isNewName, boolean isOverride, Collection<MultipartFile> files);
 
-    List<File> transferFile(String path, boolean isNewName, boolean isOverride, MultipartFile... files);
+    List<String> transferFile(String path, boolean isNewName, boolean isOverride, MultipartFile... files);
+
+//    /**
+//     * 
+//     * @Title: getFile
+//     * @Description: TODO(simple description this method what to do.)
+//     * @author Vinson
+//     * @date Dec 16, 2019 4:17:31 PM
+//     * @param fileId
+//     *            文件唯一标识，磁盘存储时，可以是文件路径和名称；
+//     * @return File 返回 null 文件不存在；
+//     */
+//    File getFile(String fileId);
 
     /**
+     * 
      *
      * @Title: getFile
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
-     * @date Dec 16, 2019 4:17:31 PM
-     * @param filePathAndName
-     * @return
-     * @return File
+     * @date May 26, 2023 3:50:20 PM
+     * @param fileId
+     * @param os
+     * @return boolean 返回 false 文件不存在；
      */
-    File getFile(String filePathAndName);
+    boolean getFile(String fileId, OutputStream os);
 
     /**
      * 验证文件大小

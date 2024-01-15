@@ -69,7 +69,7 @@ public class ZKUtils {
      * @author zhenx
      * @date Sep 7, 2017 5:36:08 PM
      * @param relativePathAndFileName
-     *            文件相对路径及文件名
+     *            文件相对 classpath 的路径及文件名
      * @return
      * @return String
      */

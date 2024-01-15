@@ -19,6 +19,8 @@
 package com.zk.db.dialect;
 
 import com.zk.core.commons.data.ZKJson;
+import com.zk.core.commons.data.ZKPage;
+import com.zk.db.parser.ZKCountSqlParser.ZKModel;
 
 /**
  * @ClassName: ZKDialect
@@ -29,14 +31,61 @@ import com.zk.core.commons.data.ZKJson;
 public interface ZKDialect {
 
     /**
+     * 获取的 countSql
+     *
+     * @param sql
+     */
+    default String getCountSql(String sourceSql) {
+        return getCountSql(sourceSql, "count(0)");
+    }
+
+    /**
+     * 获取的 countSql
+     *
+     * @param sql
+     * @param countSqlBlock
+     *            统计记数的 sql 片段，默认为 count(0)
+     */
+    default String getCountSql(String sourceSql, String countSqlBlock) {
+        return getCountSql(sourceSql, "count(0)", ZKModel.Perfect, true);
+    }
+
+    /**
+     * 
+     *
+     * @Title: getCountSql
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Jan 3, 2024 11:23:31 PM
+     * @param sourceSql
+     *            原查询 sql
+     * @param countSqlBlock
+     *            统计记数的 sql 片段，默认为 count(0)
+     * @param model
+     *            生成的 countSql 模式，Simple 模是最简单的模式; 默认：Perfect
+     * @param removeOrderBy
+     *            是否需要删除 orderBy true-是；false-不是；默认 false;
+     * @return String
+     */
+    public String getCountSql(String sourceSql, String countSqlBlock, ZKModel model, boolean removeOrderBy);
+
+    /**
      * 数据库本身是否支持分页当前的分页查询方式 如果数据库不支持的话，则不进行数据库分页
      *
      * @return true：支持当前的分页查询方式
      */
-    public boolean supportsLimit();
+    public boolean supportsPage();
 
+    default String getPageSql(String sourceSql, ZKPage<?> page) {
+        if (this.supportsPage()) {
+            return this.getPageSql(sourceSql, page.getStartRow(), page.getPageSize());
+        }
+        else {
+            return sourceSql;
+        }
+    }
     /**
-     * 将sql转换为分页SQL，分别调用分页sql
+     * 将sql转换为分页SQL
      *
      * @param sql
      *            SQL语句
@@ -46,7 +95,7 @@ public interface ZKDialect {
      *            每页显示多少纪录条数
      * @return 分页查询的sql
      */
-    public String getLimitString(String sql, int offset, int limit);
+    public String getPageSql(String sourceSql, int offset, int limit);
 
     /**
      * 处理 like 查询参数 like 查询参数处理交给数据库函数处理，不用 java 函数做替换。
@@ -54,6 +103,7 @@ public interface ZKDialect {
      * @param sql
      * @return
      */
+    @Deprecated //
     public String replaceLikeParam(String sql);
 
     /**

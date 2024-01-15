@@ -20,7 +20,6 @@ package com.zk.db.helper.dao;
 
 import java.util.List;
 
-import com.zk.db.helper.entity.ZKDBTestSampleEntity;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -29,6 +28,7 @@ import org.apache.ibatis.annotations.Update;
 
 import com.zk.db.annotation.ZKMyBatisDao;
 import com.zk.db.helper.ZKDBColumnsSqlHelper;
+import com.zk.db.helper.entity.ZKDBTestSampleEntity;
 
 /**
  * @ClassName: ZKDBTestDao
@@ -59,44 +59,50 @@ public interface ZKDBTestDao {
     @Delete("<script>DELETE FROM t_zk_db_test <where><if test='id != null and id != \"\"'>c_id = #{id}</if></where></script>")
     int del(@Param("id") String id);
 
-    @Select({"<script>",
-        "SELECT ",
-            ZKDBColumnsSqlHelper.testColumns,
-            "FROM t_zk_db_test t",
-        "<where>",
-            "<if test='id != null and id!=\"\"'> AND t.c_id = #{id} </if>",
-//            "<if test='type != null'> AND t.c_int = #{mInt} </if>",
-            "<if test='mInts != null and mInts.size() > 0'> t.c_int in",
-                "<foreach item=\"mInt\" index=\"index\" collection=\"mInts\" open=\"(\" separator=\",\" close=\")\">" ,
-                    "#{mInt}",
-                "</foreach>",
-            "</if>",
-            "<if test='value != null and value != \"\"'> AND t.c_value like CONCAT('%', REPLACE(REPLACE(REPLACE(#{value}, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%')</if>",
-            "<if test='remarks != null and remarks != \"\"'> AND t.c_remarks = #{remarks} </if>",
-            "<if test='mBoolean != null '> AND t.c_boolean = #{mBoolean} </if>",
-            "<if test='json != null and json.getKeyValues() != null'> AND ",
-                "<foreach item=\"_v\" index=\"_k\" collection=\"json.getKeyValues()\" open=\"\" separator=\"AND \" close=\"\">" ,
-            "JSON_UNQUOTE(JSON_EXTRACT(t.c_json, #{_k})) like CONCAT('%', REPLACE(REPLACE(REPLACE(#{_v}, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%') ",
-                "</foreach>",
-            "</if>",
-        "</where>",
-        "<choose>",
-            "<when test='page != null and page.sorters != null'> ORDER BY ",
-            "<foreach item=\"sort_item\" index=\"sort_index\" collection=\"page.sorters\" open=\"\" separator=\",\" close=\"\">",
-                    "t.${sort_item.columnName} ${sort_item.value}",
-                "</foreach>",
-            "</when>",
-            "<otherwise>",
-                "ORDER BY t.c_id ASC",
-            "</otherwise>",
-        "</choose>",
-        "</script>"})
-    List<ZKDBTestSampleEntity> find(ZKDBTestSampleEntity te);
-
     // 这类 mapper sql 取不到原始 sql？待测试
     @Select({ "<script>", "SELECT ", ZKDBColumnsSqlHelper.testColumns, "FROM t_zk_db_test ",
             "where c_remarks like CONCAT('%', REPLACE(REPLACE(REPLACE(#{remarks}, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%') ",
             "</script>" })
     List<ZKDBTestSampleEntity> findLike(@Param("remarks") String remarks);
+    
+    public static final String findListSqlWhere = 
+            "FROM t_zk_db_test t" +
+            "<where>" +
+            "   <if test='id != null and id!=\"\"'> AND t.c_id = #{id} </if>" +
+//          "   <if test='type != null'> AND t.c_int = #{mInt} </if>" +
+            "   <if test='mInts != null and mInts.size() > 0'> t.c_int in" +
+            "       <foreach item=\"mInt\" index=\"index\" collection=\"mInts\" open=\"(\" separator=\",\" close=\")\">"  +
+            "           #{mInt}" +
+            "       </foreach>" +
+            "   </if>" +
+            "   <if test='value != null and value != \"\"'> AND t.c_value like CONCAT('%', REPLACE(REPLACE(REPLACE(#{value}, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%')</if>" +
+            "   <if test='remarks != null and remarks != \"\"'> AND t.c_remarks = #{remarks} </if>" +
+            "   <if test='mBoolean != null '> AND t.c_boolean = #{mBoolean} </if>" +
+            "   <if test='json != null and json.getKeyValues() != null'> AND " +
+            "      <foreach item=\"_v\" index=\"_k\" collection=\"json.getKeyValues()\" open=\"\" separator=\"AND \" close=\"\">"  +
+            "          JSON_UNQUOTE(JSON_EXTRACT(t.c_json, #{_k})) like CONCAT('%', REPLACE(REPLACE(REPLACE(#{_v}, '\\\\', '\\\\\\\\'), '_', '\\_'), '%', '\\%'), '%') " +
+            "      </foreach>" +
+            "   </if>" +
+            "</where>" +
+            "<choose>" +
+            "   <when test='page != null and page.sorters != null'> ORDER BY " +
+            "      <foreach item=\"sort_item\" index=\"sort_index\" collection=\"page.sorters\" open=\"\" separator=\",\" close=\"\">" +
+            "         t.${sort_item.columnName} ${sort_item.value}" +
+            "      </foreach>" +
+            "   </when>" +
+            "   <otherwise>" +
+            "      ORDER BY t.c_id ASC" +
+            "   </otherwise>" +
+            "</choose>";
+    
+    @Select({ "<script>", "SELECT ", ZKDBColumnsSqlHelper.testColumns, findListSqlWhere, "</script>" })
+    List<ZKDBTestSampleEntity> find(ZKDBTestSampleEntity te);
+
+    // 测试手动编写分页查询，手动写 总数记录查询方法，在查询方法后添加 "Count" 为记录总数查询方法。
+    @Select({ "<script>", "SELECT ", ZKDBColumnsSqlHelper.testColumns, findListSqlWhere, "</script>" })
+    List<ZKDBTestSampleEntity> findListHaveCount(ZKDBTestSampleEntity te);
+
+    @Select({ "<script>", "SELECT ", "count(0)", findListSqlWhere, "</script>" })
+    int findListHaveCountCount(ZKDBTestSampleEntity te);
 
 }

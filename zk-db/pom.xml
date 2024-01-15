@@ -68,12 +68,18 @@
         </dependency>
         <!-- end connection pool -->
 
-        <!-- begin jdbc driver -->
+        <!-- begin jdbc driver 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+        -->
+        <dependency>
+		    <groupId>com.mysql</groupId>
+		    <artifactId>mysql-connector-j</artifactId>
+		    <scope>runtime</scope>
+		</dependency>
         <!-- end jdbc driver -->
 		
 		<!-- ***** other begin -->
@@ -81,6 +87,10 @@
 		    <groupId>com.google.code.gson</groupId>
 		    <artifactId>gson</artifactId>
 		</dependency>
+		<dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+        </dependency>
 		<!-- ##### other end -->
 
 		<!-- ***** begin test -->

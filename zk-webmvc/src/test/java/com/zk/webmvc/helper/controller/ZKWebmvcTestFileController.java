@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,8 +57,8 @@ public class ZKWebmvcTestFileController {
     @Autowired
     ZKFileTransfer zkFileTransfer;
 
-    String targetPath = ZKWebmvcTestFileControllerTest.filePath + File.separator
-            + ZKWebmvcTestFileControllerTest.filePathTarget;
+    String targetPath = ZKWebmvcTestFileControllerTest.uploadFileRootPath + File.separator
+            + ZKWebmvcTestFileControllerTest.upload;
 
     /**
      * 二进制流上传，不需要 MultipartResolver 适配器
@@ -82,8 +81,8 @@ public class ZKWebmvcTestFileController {
                 fileName = new String(fileName.getBytes("ISO-8859-1"), "UTF-8");
             }
             is = hReq.getInputStream();
-            File file = zkFileTransfer.transferFile(is, targetPath, fileName, true, false);
-            return file.getAbsolutePath();
+            String fileAbsolutePath = zkFileTransfer.transferFile(is, targetPath, fileName, true, false);
+            return fileAbsolutePath;
         } finally {
             if (is != null) {
                 ZKStreamUtils.closeStream(is);
@@ -107,18 +106,38 @@ public class ZKWebmvcTestFileController {
      */
     @RequestMapping(path = "uploadMultipart")
     public List<String> uploadMultipart(@RequestParam(value = "f1") MultipartFile mf1,
-            @RequestParam(value = "fs") Collection<MultipartFile> mfs, HttpServletRequest hReq)
+            @RequestParam(value = "fs") List<MultipartFile> mfs, HttpServletRequest hReq)
             throws FileUploadException, IOException {
 
+        System.out.println("[^_^:20230526-1733-001] ===============================================");
+        System.out.println("[^_^:20230526-1733-001] getOriginalFilename: " + mf1.getOriginalFilename());
+        System.out.println("[^_^:20230526-1733-001] getContentType: " + mf1.getContentType());
+        System.out.println("[^_^:20230526-1733-001] getName: " + mf1.getName());
+        System.out.println("[^_^:20230526-1733-001] getResource: " + mf1.getResource());
+
         List<String> fs = new ArrayList<String>();
-        List<File> fileList = this.zkFileTransfer.transferFile(this.targetPath, false, true, Arrays.asList(mf1));
-        for (File f : fileList) {
-            fs.add(f.getAbsolutePath());
+        List<String> fileList = this.zkFileTransfer.transferFile(this.targetPath, false, true, Arrays.asList(mf1));
+        fs.addAll(fileList);
+
+//        for (String fileAbsolutePath : fileList) {
+//            fs.add(fileAbsolutePath);
+//        }
+
+        System.out.println("[^_^:20230526-1733-001] ===============================================");
+        for (MultipartFile item : mfs) {
+            System.out.println(
+                    "[^_^:20230526-1733-001] getOriginalFilename: " + item.getOriginalFilename() + "-----------------");
+            System.out.println("[^_^:20230526-1733-001] getContentType: " + item.getContentType());
+            System.out.println("[^_^:20230526-1733-001] getName: " + item.getName());
+            System.out.println("[^_^:20230526-1733-001] getResource: " + item.getResource());
         }
+
         fileList = this.zkFileTransfer.transferFile(this.targetPath, false, true, mfs);
-        for (File f : fileList) {
-            fs.add(f.getAbsolutePath());
-        }
+        fs.addAll(fileList);
+
+//        for (String fileAbsolutePath : fileList) {
+//            fs.add(fileAbsolutePath);
+//        }
         return fs;
     }
 

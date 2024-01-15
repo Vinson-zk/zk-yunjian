@@ -95,7 +95,7 @@ public enum ZKContentType {
     // 不包含 字符集编码
     @Override
     public String toString() {
-        return contentType;
+        return this.contentType;
     }
 
 //    @Override

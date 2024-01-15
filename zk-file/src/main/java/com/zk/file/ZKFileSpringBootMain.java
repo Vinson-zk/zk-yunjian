@@ -54,7 +54,11 @@ import com.zk.file.configuration.ZKFileSecConfiguration;
 @EnableTransactionManagement(proxyTargetClass = true)
 @ComponentScan(basePackages = { "com.zk.file.*" })
 @EnableFeignClients(basePackages = { "com.zk.**.api" })
-@Import(value = { ZKFileBeforeConfiguration.class, ZKFileAfterConfiguration.class, ZKFileSecConfiguration.class })
+@Import(value = { 
+        ZKFileBeforeConfiguration.class, 
+        ZKFileAfterConfiguration.class,
+        ZKFileSecConfiguration.class 
+})
 public class ZKFileSpringBootMain {
 
     protected static Logger log = LoggerFactory.getLogger(ZKFileSpringBootMain.class);

@@ -38,6 +38,25 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ZKPage<T> {
 
+    public static interface Param_Name {
+        /**
+         * 页面码，自然正整数，从 0 开始
+         */
+        public static final String no = "page.no";
+
+        /**
+         * 每页数据条数。默认是 10
+         */
+        public static final String size = "page.size";
+    }
+
+    public static interface Max_value {
+        /**
+         * 每页数据最大的允许的数量
+         */
+        public static final int size = 999999;
+    }
+
     /**
      * 查询页码; 从 0 开始是第一页；
      */
@@ -69,24 +88,15 @@ public class ZKPage<T> {
     public ZKPage() {
         this.pageNo = 0;
         this.pageSize = 10;
-        this.totalCount = -1L;
+        this.totalCount = 0L;
         this.sorters = null;
         this.result = new ArrayList<T>();
         this.startRow = 0;
     }
 
-    public static interface Param_Name {
-        /**
-         * 页面码，默认是 1；自然正整数，从 1 开始；小 1 会默认从 1 开始。
-         */
-        public static final String no = "page.no";
-
-        /**
-         * 每页数据条数。默认是 10
-         */
-        public static final String size = "page.size";
+    public static <T> ZKPage<T> asPage() {
+        return new ZKPage<T>();
     }
-
     /**
      * 根据请求做 page
      *
@@ -121,7 +131,7 @@ public class ZKPage<T> {
 
     // 分页限制一页最多查询：9999
     public void setPageSize(int pageSize) {
-        this.pageSize = pageSize > 9999 ? 9999 : pageSize;
+        this.pageSize = pageSize > Max_value.size ? Max_value.size : pageSize;
     }
 
 //    public String getOrderBySql() {
@@ -174,6 +184,19 @@ public class ZKPage<T> {
 
     public void setTotalCount(long totalCount) {
         this.totalCount = totalCount;
+    }
+
+    /**
+     * 是否还有下一页
+     *
+     * @Title: hasNextPage
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Dec 20, 2023 10:23:55 AM
+     * @return boolean true-还有下一页；false-无下一页；
+     */
+    public boolean hasNextPage() {
+        return this.getPageNo() < 0 || (this.getPageNo() + 1) * this.getPageSize() < this.getTotalCount();
     }
 
 }

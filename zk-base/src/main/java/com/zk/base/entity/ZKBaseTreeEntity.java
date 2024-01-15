@@ -91,7 +91,9 @@ public abstract class ZKBaseTreeEntity<ID extends Serializable, E extends ZKBase
     /**
      * 查询辅助字段，
      * 
-     * 当 parentId 为null或为空时： parentIdIsEmpty 为 true，指定只查询 c_parent_id 为 null 或为空的根节点; parentIdIsEmpty 为 false, c_parent_id 不会做查询条件；
+     * 当 parentId 为null或为空的情况下： 
+     *      parentIdIsEmpty 为 true，指定只查询 c_parent_id 为 null 或为空的根节点; 
+     *      parentIdIsEmpty 为 false, c_parent_id 不会做查询条件；
      * 
      */
     @XmlTransient

@@ -242,11 +242,11 @@ public class ZKHttpApiUtilsTest {
         }
     }
 
-    private final static String filePath = ZKWebmvcTestFileControllerTest.filePath;
+    private final static String uploadFileRootPath = ZKWebmvcTestFileControllerTest.uploadFileRootPath;
 
-    private final static String filePathSource = ZKWebmvcTestFileControllerTest.filePathSource;
+    private final static String source = ZKWebmvcTestFileControllerTest.source;
 
-    private final static String filePathTarget = ZKWebmvcTestFileControllerTest.filePathTarget;
+    private final static String upload = ZKWebmvcTestFileControllerTest.upload;
 
     @Test
     public void testUploadMultipart() {
@@ -272,7 +272,7 @@ public class ZKHttpApiUtilsTest {
             for (int i = 1; i < fileCount + 1; ++i) {
                 fileName = "API utils uploadMultipart 重载方法1 文件" + i + ".txt";
                 fileContent = "人间清暑殿，天上广寒宫。[" + i + "]";
-                file = ZKFileUtils.createFile(filePath + File.separator + filePathSource, fileName, true);
+                file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
                 ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
                 if (i == 1) {
                     files.put(file, "f1");
@@ -296,7 +296,8 @@ public class ZKHttpApiUtilsTest {
             for (String fStr : fs) {
                 file = new File(fStr);
                 resStr = new String(ZKFileUtils.readFile(file));
-                file = new File(fStr.replace(filePathTarget, filePathSource));
+                file = new File(fStr.replace(File.separator + upload + File.separator,
+                        File.separator + source + File.separator));
                 fileContent = new String(ZKFileUtils.readFile(file));
                 TestCase.assertEquals(fileContent, resStr);
             }
@@ -308,7 +309,7 @@ public class ZKHttpApiUtilsTest {
             for (int i = 1; i < fileCount + 1; ++i) {
                 fileName = "API utils uploadMultipart 重载方法2 文件" + i + ".txt";
                 fileContent = "梁帝讲经同泰寺，汉皇置酒未央宫。[" + i + "]";
-                file = ZKFileUtils.createFile(filePath + File.separator + filePathSource, fileName, true);
+                file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
                 ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
                 if (i == 1) {
                     files.put(file, "f1");
@@ -330,7 +331,8 @@ public class ZKHttpApiUtilsTest {
             for (String fStr : fs) {
                 file = new File(fStr);
                 resStr = new String(ZKFileUtils.readFile(file));
-                file = new File(fStr.replace(filePathTarget, filePathSource));
+                file = new File(fStr.replace(File.separator + upload + File.separator,
+                        File.separator + source + File.separator));
                 fileContent = new String(ZKFileUtils.readFile(file));
                 TestCase.assertEquals(fileContent, resStr);
             }
@@ -360,7 +362,7 @@ public class ZKHttpApiUtilsTest {
             fileName = "API utils uploadStream 文件.txt";
 
             // 创建文件
-            file = ZKFileUtils.createFile(filePath + File.separator + filePathSource, fileName, true);
+            file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
             fileContent = "两岸晓烟扬柳绿，一园春雨杏花红。";
             ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
 
@@ -370,7 +372,7 @@ public class ZKHttpApiUtilsTest {
             TestCase.assertEquals(200, resStatusCode);
             resStr = new String(os.toByteArray());
             System.out.println("[^_^:20191217-2317-002] resStr: " + resStr);
-            file = new File(filePath + File.separator + filePathSource + File.separator + fileName);
+            file = new File(uploadFileRootPath + File.separator + source + File.separator + fileName);
             fileContent = new String(ZKFileUtils.readFile(file));
 //            file = new File(resStr);
             resStr = new String(ZKFileUtils.readFile(file));

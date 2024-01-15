@@ -36,6 +36,21 @@ public interface ZKApiConstants {
     public static interface YunJian_App {
 
         /**
+         * 文件服务
+         */
+        public static interface file {
+            /**
+             * 名称
+             */
+            public static final String name = "yunjian.zk.file";
+
+            /**
+             * api 前缀
+             */
+            public static final String apiPrefix = "/zk/f/v1.0";
+        }
+
+        /**
          * 邮件发送服务
          */
         public static interface mail {
@@ -51,7 +66,7 @@ public interface ZKApiConstants {
         }
 
         /**
-         * 邮件发送服务
+         * 微信平台
          */
         public static interface wechat {
             /**

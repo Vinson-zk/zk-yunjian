@@ -207,7 +207,7 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
      * @return
      */
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    @JsonFormat(pattern = ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss, timezone = timezone)
+    @JsonFormat(pattern = ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss, timezone = timezone) //
     public Date getCreateDate() {
         return createDate;
     }
@@ -228,7 +228,7 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
      * @return
      */
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    @JsonFormat(pattern = ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss, timezone = timezone)
+    @JsonFormat(pattern = ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss, timezone = timezone) //
     public Date getUpdateDate() {
         return updateDate;
     }

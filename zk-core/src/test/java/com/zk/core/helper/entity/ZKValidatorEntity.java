@@ -21,6 +21,7 @@ package com.zk.core.helper.entity;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
@@ -49,6 +50,9 @@ public class ZKValidatorEntity {
 
     @Min(value = 2, message = "{test.data.v.msg.min}")
     private int pMin;
+
+    @Pattern(regexp = "^[a-zA-Z0-9_\\.-][a-zA-Z0-9_\\.-]{1,6}$", message = "{test.data.v.msg.pattern}")
+    private String pPattern;
 
     /**
      * @return pNotNull
@@ -98,7 +102,7 @@ public class ZKValidatorEntity {
     /**
      * @return pRang
      */
-    public int getpRang() {
+    public int getpRange() {
         return pRange;
     }
 
@@ -139,4 +143,20 @@ public class ZKValidatorEntity {
     public void setpMin(int pMin) {
         this.pMin = pMin;
     }
+
+    /**
+     * @return pPattern sa
+     */
+    public String getpPattern() {
+        return pPattern;
+    }
+
+    /**
+     * @param pPattern
+     *            the pPattern to set
+     */
+    public void setpPattern(String pPattern) {
+        this.pPattern = pPattern;
+    }
+
 }

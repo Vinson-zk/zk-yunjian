@@ -32,11 +32,13 @@ import junit.framework.TestCase;
  */
 public class ZKWebmvcTestFileControllerTest {
 
-    public final static String filePath = "src/test/resources/file/fileUpload";
+    public final static String sourceFileRootPath = "src/test/resources/testFile";
 
-    public final static String filePathSource = "source";
+    public final static String uploadFileRootPath = "target/fileUpload";
 
-    public final static String filePathTarget = "target";
+    public final static String source = "source";
+
+    public final static String upload = "upload";
 
     public static boolean deleteFile(File file) {
         if (file.exists()) {
@@ -58,8 +60,8 @@ public class ZKWebmvcTestFileControllerTest {
 
     public static void deleteTestData() {
         try {
-            TestCase.assertTrue(deleteFile(new File(filePath + File.separator + filePathTarget)));
-            TestCase.assertTrue(deleteFile(new File(filePath + File.separator + filePathSource)));
+            TestCase.assertTrue(deleteFile(new File(uploadFileRootPath + File.separator + upload)));
+            TestCase.assertTrue(deleteFile(new File(uploadFileRootPath + File.separator + source)));
         }
         catch(Exception e) {
             e.printStackTrace();

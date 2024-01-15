@@ -99,6 +99,15 @@ public class ZKFileUtils {
         return file;
     }
 
+    // 通过文件名取后缀，包含 .
+    public static String getExtensionName(String fileName) {
+        if (ZKStringUtils.isEmpty(fileName)) {
+            return "";
+        }
+        return fileName.lastIndexOf(".") == -1 ? "" : fileName.substring(fileName.lastIndexOf("."));
+
+    }
+
     /**
      * 创建一个文件，
      * 
@@ -133,7 +142,7 @@ public class ZKFileUtils {
                 // 文件存在
                 if (!isOverride) { // 不覆盖，重命名
                     // 取文件点后缀名，包括字符点
-                    String tEn = fileName.lastIndexOf(".") == -1 ? "" : fileName.substring(fileName.lastIndexOf("."));
+                    String tEn = ZKFileUtils.getExtensionName(fileName);
                     String tFn = fileName.lastIndexOf(".") == -1 ? fileName
                             : fileName.substring(0, fileName.lastIndexOf("."));
                     int i = 1;

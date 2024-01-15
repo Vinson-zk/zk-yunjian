@@ -8,11 +8,12 @@ import java.util.List;
 
 import org.junit.Test;
 
-import junit.framework.TestCase;
-
 import com.zk.base.entity.ZKBaseEntity;
+import com.zk.core.utils.ZKJsonUtils;
 import com.zk.file.entity.ZKFileInfo;
-import com.zk.file.helper.ZKFileTestHelper;
+import com.zk.file.helper.ZKFileTestSpringBootMainHelper;
+
+import junit.framework.TestCase;
 
 /**
  * ZKFileInfoServiceTest
@@ -23,16 +24,21 @@ public class ZKFileInfoServiceTest {
 
 	static ZKFileInfo makeNew() {
         ZKFileInfo e = new ZKFileInfo();
+        e.setGroupCode("t-test-groupCode");
+        e.setCompanyId("-1");
+        e.setCompanyCode("t-test-companyCode");
+        e.afterAttrSet();
         e.setVersion(-1l);
         e.setRemarks("zk.test.data");
         // e.set
+
         return e;
     }
 	
 	@Test
     public void testDml() {
 	
-        ZKFileInfoService s = ZKFileTestHelper.getMainCtx().getBean(ZKFileInfoService.class);
+        ZKFileInfoService s = ZKFileTestSpringBootMainHelper.run().getBean(ZKFileInfoService.class);
 
         List<ZKFileInfo> dels = new ArrayList<>();
 
@@ -55,6 +61,7 @@ public class ZKFileInfoServiceTest {
             /*** 查询 ***/
             e = s.get(e);
             TestCase.assertNotNull(e);
+            System.out.println("[^_^:20231229-0101-001] s.get: " + ZKJsonUtils.writeObjectJson(e));
 
             /*** 删除 ***/
             result = 0;
@@ -71,6 +78,27 @@ public class ZKFileInfoServiceTest {
             dels.forEach(item -> {
                 s.diskDel(item);
             });
+        }
+    }
+
+    @Test
+    public void testGet() {
+
+        ZKFileInfoService s = ZKFileTestSpringBootMainHelper.run().getBean(ZKFileInfoService.class);
+
+        try {
+            ZKFileInfo e = null;
+            String pkId = "6962321432462230016";
+            /*** 查询 ***/
+            e = s.get(new ZKFileInfo(pkId));
+            TestCase.assertNotNull(e);
+            // "createDate":"2023-12-29 11:47:50",
+            System.out.println("[^_^:20231229-0003-001] e: " + ZKJsonUtils.writeObjectJson(e));
+
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            TestCase.assertTrue(false);
         }
     }
 }

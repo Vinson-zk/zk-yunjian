@@ -36,6 +36,8 @@ public class ZKStreamUtils {
 
     protected static Logger log = LoggerFactory.getLogger(ZKStreamUtils.class);
 
+    public static final int ReadLength = 8192;
+
     /**
      * 从输入流写到输出流，不会关闭两个流，两个由提供者自行处理；
      *
@@ -51,7 +53,7 @@ public class ZKStreamUtils {
     public static long readAndWrite(InputStream is, OutputStream os) throws IOException {
         int len = -1;
         long fileSize = 0;
-        byte[] result = new byte[8192];
+        byte[] result = new byte[ReadLength];
         while ((len = is.read(result)) != -1) {
             fileSize += len;
             os.write(result, 0, len);

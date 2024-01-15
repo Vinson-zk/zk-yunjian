@@ -39,7 +39,9 @@ import junit.framework.TestCase;
 */
 public class ZKFileUtilsTest {
 
-    private static final String path = "target/testFileUtilsDir" + File.separator;
+    private static final String writeFileRootPath = "target/testFileUtilsDir" + File.separator;
+
+    private static final String sourceFileRootPath = "src/test/resources/testFile" + File.separator;
 
     // 测试 创建文件
     @Test
@@ -59,7 +61,7 @@ public class ZKFileUtilsTest {
     @Test
     public void testCreateFile() {
         try {
-            String path = ZKFileUtilsTest.path + UUID.randomUUID().toString() + File.separator
+            String path = ZKFileUtilsTest.writeFileRootPath + UUID.randomUUID().toString() + File.separator
                     + UUID.randomUUID().toString();
             String fileName;
             File file;
@@ -115,7 +117,7 @@ public class ZKFileUtilsTest {
     @Test
     public void testReadFile() {
         try {
-            String path = ZKFileUtilsTest.path + "readTest";
+            String path = ZKFileUtilsTest.writeFileRootPath + "readTest";
             String fileName;
             File file;
             byte[] zk;
@@ -140,7 +142,7 @@ public class ZKFileUtilsTest {
     @Test
     public void testWriteFile() {
         try {
-            String path = ZKFileUtilsTest.path + "writeTest";
+            String path = ZKFileUtilsTest.writeFileRootPath + "writeTest";
             String fileName;
             File file;
             byte[] zk;
@@ -171,7 +173,7 @@ public class ZKFileUtilsTest {
     @Test
     public void testGetFileHead() {
         try {
-            String path = ZKFileUtilsTest.path + "getFileHead";
+            String path = ZKFileUtilsTest.writeFileRootPath;
             String fileName;
             File file;
             byte[] zk;
@@ -181,10 +183,49 @@ public class ZKFileUtilsTest {
             fileName = "getFileHead";
             file = ZKFileUtils.createFile(path, fileName, true);
             zk = ZKFileUtils.getFileHead(file);
+            System.out.println("[^_^:20231225-2303-001]    刚写的文件，file head:" + ZKEncodingUtils.encodeHex(zk));
             TestCase.assertEquals(0, zk.length);
             ZKFileUtils.writeFile(content.getBytes(), file, false);
             zk = ZKFileUtils.getFileHead(file);
+            System.out.println("[^_^:20231225-2303-002]    刚写的文件，file head:" + ZKEncodingUtils.encodeHex(zk));
             TestCase.assertTrue(0 < zk.length);
+            
+            path = ZKFileUtilsTest.sourceFileRootPath;
+            fileName = "sort.c";
+            file = new File(path + File.separator + fileName);
+            zk = ZKFileUtils.getFileHead(file);
+            System.out.println("[^_^:20231225-2303-003]       .c 文件 file head:" + ZKEncodingUtils.encodeHex(zk));
+
+//            fileName = "write 文件1.doc";
+//            file = new File(path + File.separator + fileName);
+//            zk = ZKFileUtils.getFileHead(file);
+//            System.out.println("[^_^:20231225-2303-004] 手写 .doc 文件 file head:" + ZKEncodingUtils.encodeHex(zk));
+//
+//            fileName = "write 文件1.txt";
+//            file = new File(path + File.separator + fileName);
+//            zk = ZKFileUtils.getFileHead(file);
+//            System.out.println("[^_^:20231225-2303-005] 手写 .txt 文件 file head:" + ZKEncodingUtils.encodeHex(zk));
+
+            fileName = "test 文件1.doc";
+            file = new File(path + File.separator + fileName);
+            zk = ZKFileUtils.getFileHead(file);
+            System.out.println("[^_^:20231225-2303-004] 手写 .doc 文件 file head:" + ZKEncodingUtils.encodeHex(zk));
+
+            fileName = "test 文件2.docx";
+            file = new File(path + File.separator + fileName);
+            zk = ZKFileUtils.getFileHead(file);
+            System.out.println("[^_^:20231225-2303-006]    .docx 文件 file head:" + ZKEncodingUtils.encodeHex(zk));
+
+            fileName = "test 文件4.txt";
+            file = new File(path + File.separator + fileName);
+            zk = ZKFileUtils.getFileHead(file);
+            System.out.println("[^_^:20231225-2303-007]     .txt 文件 file head:" + ZKEncodingUtils.encodeHex(zk));
+
+            fileName = "test 文件3.jpg";
+            file = new File(path + File.separator + fileName);
+            zk = ZKFileUtils.getFileHead(file);
+            System.out.println("[^_^:20231225-2303-008]     .jpg 文件 file head:" + ZKEncodingUtils.encodeHex(zk));
+
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -196,7 +237,7 @@ public class ZKFileUtilsTest {
     @Test
     public void testGetFileType() {
         try {
-            String path = ZKFileUtilsTest.path + "getFileType";
+            String path = ZKFileUtilsTest.writeFileRootPath + "getFileType";
             String fileName;
             File file;
             ZKFileType ft;
@@ -241,7 +282,7 @@ public class ZKFileUtilsTest {
     @Test
     public void testCompressFile() {
         try {
-            String rootPath = ZKFileUtilsTest.path + "compressFileTest";
+            String rootPath = ZKFileUtilsTest.writeFileRootPath + "compressFileTest";
             File file1, file2;
             String content = "test write \r\n 测试";
             String dir1 = "compressFile", dir2 = "childDir";

@@ -33,5 +33,5 @@ public class ZKDBColumnsSqlHelper {
             + "c_json AS json, "
             + "c_date AS mDate, "
             + "c_boolean AS mBoolean";
-
+    
 }

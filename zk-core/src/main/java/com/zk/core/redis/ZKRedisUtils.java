@@ -21,6 +21,8 @@ package com.zk.core.redis;
 import com.zk.core.utils.ZKObjectUtils;
 import com.zk.core.utils.ZKStringUtils;
 
+import redis.clients.jedis.JedisPool;
+
 /**
  * @ClassName: ZKRedisUtils
  * @Description: TODO(simple description this class what to do. )
@@ -65,6 +67,29 @@ public class ZKRedisUtils {
 //            }
 //        }
 //        return null;
+    }
+
+    public static void printJedisPoolInfo(String className, JedisPool jedisPool) {
+        System.out.println("[^_^:20231226-2301-001] -------------------------------------------------- ");
+        System.out.println("[^_^:20231226-2301-001] className: " + className);
+        System.out.println("[^_^:20231226-2301-001] isClosed: " + jedisPool.isClosed());
+        System.out.println("[^_^:20231226-2301-001] getBorrowedCount: " + jedisPool.getBorrowedCount());
+        System.out.println("[^_^:20231226-2301-001] getCreatedCount: " + jedisPool.getCreatedCount());
+//        System.out.println("[^_^:20231226-2301-001] getCreationStackTrace: " + jedisPool.getCreationStackTrace());
+        System.out.println("[^_^:20231226-2301-001] getDestroyedByBorrowValidationCount: "
+                + jedisPool.getDestroyedByBorrowValidationCount());
+        System.out.println(
+                "[^_^:20231226-2301-001] getDestroyedByEvictorCount: " + jedisPool.getDestroyedByEvictorCount());
+        System.out.println("[^_^:20231226-2301-001] getDestroyedCount: " + jedisPool.getDestroyedCount());
+        System.out.println(
+                "[^_^:20231226-2301-001] getMaxBorrowWaitTimeMillis: " + jedisPool.getMaxBorrowWaitTimeMillis());
+        System.out.println("[^_^:20231226-2301-001] getMaxIdle: " + jedisPool.getMaxIdle());
+        System.out.println("[^_^:20231226-2301-001] getMaxTotal: " + jedisPool.getMaxTotal());
+        System.out.println("[^_^:20231226-2301-001] getMeanActiveTimeMillis: " + jedisPool.getMeanActiveTimeMillis());
+        System.out.println(
+                "[^_^:20231226-2301-001] getMeanBorrowWaitTimeMillis: " + jedisPool.getMeanBorrowWaitTimeMillis());
+        System.out.println("[^_^:20231226-2301-001] getMeanIdleTimeMillis: " + jedisPool.getMeanIdleTimeMillis());
+
     }
 
 }

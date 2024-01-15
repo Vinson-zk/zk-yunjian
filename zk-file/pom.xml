@@ -78,6 +78,12 @@
 			<groupId>com.zk</groupId>
 			<artifactId>zk-webmvc</artifactId>
 			<version>${version.zk.webmvc}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.zk</groupId>
+					<artifactId>zk-mongo</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.zk</groupId>

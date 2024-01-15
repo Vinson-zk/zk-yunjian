@@ -385,6 +385,7 @@ public class ZKJedisOperatorByte {
     public Jedis getResource() throws JedisException {
         Jedis jedis = null;
         try {
+//            ZKRedisUtils.printJedisPoolInfo(this.getClass().getName(), this.getJedisPool());
             jedis = this.getJedisPool().getResource();
         }
         catch(JedisException e) {

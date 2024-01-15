@@ -38,7 +38,7 @@ CREATE TABLE `t_dt_code_gen_module` (
   `c_spare2` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '备用字段 2',
   `c_spare3` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '备用字段 3',
   `c_spare_json` json DEFAULT NULL COMMENT '备用字段 json',
-  `c_db_driver` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '数据库驱动；默认：com.mysql.cj.jdbc.Driver',
+  `c_db_driver` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '数据库驱动；默认：com.mysql.jdbc.Driver',
   `c_db_url` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '数据库连接 uri',
   `c_db_username` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '数据库用户名；',
   `c_db_pwd` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '数据库密码；',

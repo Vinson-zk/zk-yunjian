@@ -17,7 +17,6 @@ import org.apache.ibatis.mapping.FetchType;
 import com.zk.base.dao.ZKBaseTreeDao;
 import com.zk.base.myBaits.provider.ZKMyBatisTreeSqlProvider;
 import com.zk.db.annotation.ZKMyBatisDao;
-import com.zk.file.entity.ZKFileDirectory;
 import com.zk.file.entity.ZKFileInfo;
 
 /**
@@ -44,12 +43,22 @@ public interface ZKFileInfoDao extends ZKBaseTreeDao<String, ZKFileInfo> {
      */
     @SelectProvider(type = ZKMyBatisTreeSqlProvider.class, method = "selectTreeDetail")
     @Results(value = {
-            @Result(column = "{pkId=parentId}", property = "parent", javaType = ZKFileDirectory.class, one = @One(select = "com.zk.file.dao.ZKFileInfoDao.getDetail", fetchType = FetchType.EAGER)) })
+            @Result(column = "{pkId=parentId}", property = "parent", javaType = ZKFileInfo.class, one = @One(select = "com.zk.file.dao.ZKFileInfoDao.getDetail", fetchType = FetchType.EAGER)) })
     ZKFileInfo getDetail(ZKFileInfo fileInfo);
 
     @Select({ "SELECT ${_zkSql.cols} FROM ${_zkSql.tn} ${_zkSql.ta} ",
             "WHERE ${_zkSql.ta}.c_company_code = #{companyCode} AND ${_zkSql.ta}.c_code = #{code} " })
+    @Results(value = {
+            @Result(column = "{pkId=parentId}", property = "parent", javaType = ZKFileInfo.class, one = @One(select = "com.zk.file.dao.ZKFileInfoDao.getDetail", fetchType = FetchType.EAGER)) })
     ZKFileInfo getByCode(@Param("companyCode") String companyCode, @Param("code") String code);
+
+    @Select({ "SELECT ${_zkSql.cols} FROM ${_zkSql.tn} ${_zkSql.ta} ",
+            "WHERE ${_zkSql.ta}.c_save_uuid = #{saveUuid} " })
+    ZKFileInfo getBySaveUuid(@Param("saveUuid") String saveUuid);
+
+    @Select({ "SELECT ${_zkSql.cols} FROM ${_zkSql.tn} ${_zkSql.ta} ",
+            "WHERE ${_zkSql.ta}.c_company_code = #{companyCode} AND ${_zkSql.ta}.c_name = #{name} " })
+    ZKFileInfo getByName(@Param("companyCode") String companyCode, @Param("name") String name);
 
     /**
      * 查询指定公司下，指定目录下，最大的排序值
@@ -60,4 +69,5 @@ public interface ZKFileInfoDao extends ZKBaseTreeDao<String, ZKFileInfo> {
             "<if test=\"parentId != null and parentId != '' \">AND ${_zkSql.ta}.c_parent_id = #{parentId}</if>",
             "</where></script>" })
     Integer selectMaxSort(@Param("companyCode") String companyCode, @Param("parentId") String parentId);
+
 }

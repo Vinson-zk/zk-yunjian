@@ -44,7 +44,7 @@ public interface ZKMailSendApi {
 
     @RequestMapping(method = RequestMethod.POST, consumes = {
             MediaType.MULTIPART_FORM_DATA_VALUE }, path = ZKApiConstants.YunJian_App.mail.apiPrefix
-            + "/mailSend/mailSend/{typeCode}")
+                    + "/mailSend/mailSend/{typeCode}")
     ZKMsgRes mailSendByTypeCode(@PathVariable(value = "typeCode") String typeCode,
             @RequestParam(value = "sendFlag", required = false) String sendFlag,
             @RequestParam(value = "sendMailAddr", required = false) String sendMailAddr,

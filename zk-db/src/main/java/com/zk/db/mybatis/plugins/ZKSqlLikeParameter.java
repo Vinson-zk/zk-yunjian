@@ -23,6 +23,7 @@ import java.util.Properties;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
@@ -35,9 +36,10 @@ import org.slf4j.LoggerFactory;
 
 import com.zk.core.utils.ZKStringUtils;
 import com.zk.db.mybatis.ZKMybatisSqlHelper;
+import com.zk.db.mybatis.commons.ZKSqlSource;
 
 /**
- * 不建议使用
+ * 不建议使用，自行在 sql 中处理。
  * 
  * @ClassName: ZKSqlLikeParameter
  * @Description: TODO(simple description this class what to do.)
@@ -75,12 +77,12 @@ public class ZKSqlLikeParameter implements Interceptor {
             logger.info("[^_^:2180109-0028-001] sql->{}", sql);
             sql = ZKMybatisSqlHelper.getDialect().replaceLikeParam(sql);
             logger.info("[^_^:2180109-0028-002] sql->{}", sql);
-            BoundSql newBoundSql = new BoundSql(ms.getConfiguration(), sql, boundSql.getParameterMappings(),
-                    boundSql.getParameterObject());
-            // 解决MyBatis 分页foreach 参数失效
-            ZKMybatisSqlHelper.validForeachParams(boundSql, newBoundSql);
-            MappedStatement newMs = ZKMybatisSqlHelper.copyFromMappedStatement(ms,
-                    new ZKMybatisSqlHelper.BoundSqlSqlSource(newBoundSql));
+
+            // 解决MyBatis 分页foreach 参数失效 begin
+            SqlSource sqlSource = new ZKSqlSource(ms.getConfiguration(), sql, boundSql);
+            MappedStatement newMs = ZKMybatisSqlHelper.newMappedStatement(ms.getId(), ms, sqlSource,
+                    ms.getResultMaps());
+            // 解决MyBatis 分页foreach 参数失效 end
             invocation.getArgs()[0] = newMs;
         }
         return invocation.proceed();
