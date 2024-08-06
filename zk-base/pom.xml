@@ -1,0 +1,91 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.zk</groupId>
+		<artifactId>zk-parent</artifactId>
+		<version>3.0.1</version>
+		<relativePath>../zk-parent</relativePath>
+	</parent>
+	<!-- <groupId>com.zk</groupId> -->
+	<artifactId>zk-base</artifactId>
+	<version>${version.zk.base}</version>
+	<name>zk-base</name>
+	<description>Vinson project zk-base</description>
+	
+	<properties>
+		<!-- 可以从 parent 中继承 -->
+	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.zk</groupId>
+				<artifactId>zk-dependencies</artifactId>
+				<version>${version.zk.dependencies}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-core</artifactId>
+			<version>${version.zk.core}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-mongo</artifactId>
+		    <scope>provided</scope>
+			<version>${version.zk.mongo}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-db</artifactId>
+			<version>${version.zk.db}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-security</artifactId>
+			<version>${version.zk.security}</version>
+		</dependency>
+        
+        <!-- begin test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <!-- end test -->
+        
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<!-- spring boot 运行插件 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+			    	<mainClass>com.zk.base.helper.ZKBaseHelperCtx</mainClass>
+				</configuration>
+            </plugin>
+            <plugin>
+	            <artifactId>maven-jar-plugin</artifactId>
+	            <executions>
+	                <execution>
+	                    <phase>package</phase>
+	                    <goals>
+	                        <goal>test-jar</goal>
+	                    </goals>
+	                </execution>
+	            </executions>
+	        </plugin>
+		</plugins>
+		
+	</build>
+	
+</project>

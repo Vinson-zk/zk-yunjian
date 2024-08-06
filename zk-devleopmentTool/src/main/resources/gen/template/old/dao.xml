@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zkCodeTemplateInfo>
+	<name>dao</name>
+	<filePath>src/main/java/${zkTableInfo.packagePrefix}/${zkTableInfo.moduleName}/dao/${zkTableInfo.subModuleName?uncap_first}</filePath>
+	<fileName>${zkTableInfo.className}Dao.java</fileName>
+	<content><![CDATA[
+/**
+ * Copyright &copy; All rights reserved.
+ */
+package ${zkTableInfo.packagePrefix}.${zkTableInfo.moduleName}.dao<#if zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>;
+
+import com.zk.db.annotation.ZKMyBatisDao;
+import com.zk.base.dao.ZKBaseDao;
+import ${zkTableInfo.packagePrefix}.${zkTableInfo.moduleName}.entity<#if zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.${zkTableInfo.className};
+
+/**
+ * ${zkTableInfo.className}DAO接口
+ * @author 
+ * @version  
+ */
+@ZKMyBatisDao
+public interface ${zkTableInfo.className}Dao extends ZKBaseDao<${zkTableInfo.pkCodeType}, ${zkTableInfo.className}> {
+	
+}]]>
+	</content>
+</zkCodeTemplateInfo>
+

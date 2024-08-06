@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	">
+	
+	<!-- 
+    一、shiro 三大核心组件
+    1、Subject ：当前用户的操作
+	2、SecurityManager：用于管理所有的Subject
+	3、Realms：用于进行权限信息的验证
+	解释：
+	Subject：即当前用户，在权限管理的应用程序里往往需要知道谁能够操作什么，谁拥有操作该程序的权利，shiro中则需要通过Subject来提供基础的当前用户信息，
+			Subject 不仅仅代表某个用户，也可以是第三方进程、后台帐户（Daemon Account）或其他类似事物。
+	SecurityManager：即所有Subject的管理者，这是Shiro框架的核心组件，可以把他看做是一个Shiro框架的全局管理组件，用于调度各种Shiro框架的服务。
+	Realms：Realms则是用户的信息认证器和用户的权限人证器，我们需要自己来实现Realms来自定义的管理我们自己系统内部的权限规则。
+	
+	二、在shiro的用户权限认证过程中其通过两个方法来实现：
+	1、Authentication：是验证用户身份的过程。
+	2、Authorization：是授权访问控制，用于对用户进行的操作进行人证授权，证明该用户是否允许进行当前操作，如访问某个链接，某个资源文件等。
+	
+	三、其他组件：
+	除了以上几个组件外，Shiro还有几个其他组件：
+	1、SessionManager【会话管理】：Shiro为任何应用提供了一个会话编程范式。
+	2、CacheManager :对Shiro的其他组件提供缓存支持。 
+     -->
+	
+    <description>spring web shiro configuration</description>
+	
+	<!-- 开启shiro的注解;  depends-on="lifecycleBeanPostProcessor"
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/> -->
+    <!-- 
+    <bean id="advisorAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+        <property name="proxyTargetClass" value="true"></property>
+    </bean>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor" >
+    	<property name="securityManager" ref="securityManager"></property>
+    </bean>
+	 -->
+	 
+	<!-- 注入自定义的 Realm -->
+    <!-- <bean id="zkSerCenUserSampleRealm" class="com.zk.server.central.security.ZKSerCenUserSampleRealm"></bean> -->
+    
+    <!-- 权限管理 Bean -->
+    <!-- <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="zkSerCenUserSampleRealm"></property>
+    </bean> -->
+    
+    <!-- 自定义 Token 创建 Filter -->
+    <!-- <bean id="zkSerCenAuthenticationFilter" class="com.zk.server.central.security.ZKSerCenAuthenticationFilter"></bean> -->
+    
+    <!-- shiro 过滤路径定义 -->
+    <!-- <bean name="shiroFilterChainDefinitions" class="java.lang.String">
+    	<constructor-arg>
+    		<value>
+    			url/path = anon
+    			url/** = user
+    		</value>
+    	</constructor-arg>
+    </bean> -->
+    
+    <!-- 配置 ShiroFilter -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"></property>
+        <!-- 登入 api 接口 -->
+        <property name="loginUrl" value="/${zk.path.admin}/${zk.path.serCen}/l/login"></property>
+        <!-- 登入成功页面 -->
+        <property name="successUrl" value="/${zk.path.admin}/${zk.path.serCen}"/> 
+        <property name="filters">
+            <map>
+                <!-- 认证 token 创建过虑器 -->
+                <entry key="authc" value-ref="zkSerCenAuthenticationFilter" />
+            </map>
+        </property>
+        <!-- URL的拦截 -->
+        <property name="filterChainDefinitions" >
+        	<ref bean="shiroFilterChainDefinitions" />
+        </property>
+    </bean>
+	
+</beans>
+

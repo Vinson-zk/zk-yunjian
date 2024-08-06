@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+  version="2.0">
+    
+  <description>JSTL 1.1 functions library</description>
+  <display-name>JSTL functions cms</display-name>
+  <tlib-version>1.1</tlib-version>
+  <short-name>zkLocale</short-name>
+  <!-- <uri>http://java.sun.com/jsp/jstl/functionsc</uri> -->
+  <uri>/tlds/zkLocale.tld</uri>
+
+  <function>
+    <description>取当前国际化语言；暂未使用</description>
+    <name>getLocale</name>
+    <function-class>com.zk.core.utils.ZKLocaleUtils</function-class>
+    <function-signature>java.util.Locale getLocale(javax.servlet.http.HttpServletRequest)</function-signature>
+    <example>${zkLocale:getLocale(hReq)}</example>  
+  </function>
+
+</taglib>

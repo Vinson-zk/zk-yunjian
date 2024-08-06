@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zkCodeTemplate>
+	<content><![CDATA[
+/**
+ * 
+ */
+package ${zkModule.packagePrefix}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.service;
+ 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.zk.base.service.ZKBaseTreeService;
+import com.zk.core.commons.data.ZKPage;
+import ${zkModule.packagePrefix}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.entity.${zkTableInfo.className};
+import ${zkModule.packagePrefix}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.dao.${zkTableInfo.className}Dao;
+
+/**
+ * ${zkTableInfo.className}Service
+ * @author 
+ * @version 
+ */
+@Service
+@Transactional(readOnly = true)
+public class ${zkTableInfo.className}Service extends ZKBaseTreeService<${zkTableInfo.pkAttrType}, ${zkTableInfo.className}, ${zkTableInfo.className}Dao> {
+
+	/**
+	 * 查询详情，包含父节点
+	 */
+    public ${zkTableInfo.className} getDetail(${zkTableInfo.className} ${zkTableInfo.funcName?uncap_first}) {
+        return this.dao.getDetail(${zkTableInfo.funcName?uncap_first});
+    }
+	
+}]]>
+	</content>
+</zkCodeTemplate>
+

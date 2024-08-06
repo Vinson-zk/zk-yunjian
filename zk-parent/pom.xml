@@ -1,0 +1,560 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>com.zk</groupId>
+	<artifactId>zk-parent</artifactId>
+	<version>3.0.1</version><!-- RELEASE  .0-SNAPSHOT -->
+	<packaging>pom</packaging>
+	<name>zk-parent</name>
+	<description>Vinson project zk-parent</description>
+	
+	<!-- 
+	${basedir} 项目根目录
+	${project.build.directory} 构建目录，缺省为target
+	${project.build.outputDirectory} 构建过程输出目录，缺省为target/classes
+	${project.build.finalName} 产出物名称，缺省为${project.artifactId}-${project.version}
+	${project.packaging} 打包类型，缺省为jar
+	${project.xxx} 当前pom文件的任意节点的内容
+	 -->
+	 
+	 <profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<package.env>dev</package.env>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>zkDev</id>
+			<properties>
+				<package.env>zkDev</package.env>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<package.env>prod</package.env>
+			</properties>
+		</profile>
+	</profiles>
+
+	<properties>
+        <!-- 1.8  21 -->
+        <java.version>21</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
+         
+		<zk.resources.path>../</zk.resources.path>
+		<isDeploy>false</isDeploy>
+	
+		<downloadSources>true</downloadSources>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+		<!-- zk 项目的依赖的版本，可由 zk 项目自行决定，这里只是统一定义一个默认值 -->
+		<version.zk.base>3.0.1</version.zk.base>
+		<version.zk.cache>3.0.1</version.zk.cache>
+		<version.zk.core>3.0.1</version.zk.core>
+		<version.zk.db>3.0.1</version.zk.db>
+		<version.zk.demo>3.0.1</version.zk.demo>
+		<version.zk.dependencies>3.0.1</version.zk.dependencies>
+		<version.zk.devleopmentTool>3.0.1</version.zk.devleopmentTool>
+		<version.zk.file>3.0.1</version.zk.file>
+		<version.zk.framework>3.0.1</version.zk.framework>
+		<version.zk.gateway>3.0.1</version.zk.gateway>
+		<version.zk.log>3.0.1</version.zk.log>
+		<version.zk.mail>3.0.1</version.zk.mail>
+		<version.zk.mongo>3.0.1</version.zk.mongo>
+		<version.zk.security>3.0.1</version.zk.security>
+		<version.zk.serverCentral>3.0.1</version.zk.serverCentral>
+		<version.zk.system>3.0.1</version.zk.system>
+		<version.zk.system.api>3.0.1</version.zk.system.api>
+		<version.zk.test>3.0.1</version.zk.test>
+		<version.zk.webmvc>3.0.1</version.zk.webmvc>
+		<version.zk.wechat>3.0.1</version.zk.wechat>
+		
+		<!-- maven 插件版本 -->
+		<!-- <plugin.version.maven.clean>2.6.1</plugin.version.maven.clean>
+		<plugin.version.maven.compiler>3.5.1</plugin.version.maven.compiler>
+		<plugin.version.maven.surefire>2.18.1</plugin.version.maven.surefire>
+		<plugin.version.maven.jar>2.4</plugin.version.maven.jar>
+		<plugin.version.maven.source>3.2.1</plugin.version.maven.source>
+		<plugin.version.maven.war>2.6</plugin.version.maven.war>
+		<plugin.version.maven.install>2.5.2</plugin.version.maven.install>
+		<plugin.version.maven.deploy>2.8.2</plugin.version.maven.deploy>
+		<plugin.version.maven.resources>2.6</plugin.version.maven.resources>
+		<plugin.version.maven.spring.boot>2.1.3.RELEASE</plugin.version.maven.spring.boot>
+		<plugin.version.maven.build.helper>3.0.0</plugin.version.maven.build.helper>
+		
+		<plugin.version.maven.clean>3.0.0</plugin.version.maven.clean>
+		<plugin.version.maven.compiler>3.7.0</plugin.version.maven.compiler>
+		<plugin.version.maven.surefire>2.21.0</plugin.version.maven.surefire>
+		<plugin.version.maven.jar>3.0.2</plugin.version.maven.jar>
+		<plugin.version.maven.source>3.2.1</plugin.version.maven.source>
+		<plugin.version.maven.war>2.6</plugin.version.maven.war>
+		<plugin.version.maven.install>2.5.2</plugin.version.maven.install>
+		<plugin.version.maven.deploy>2.8.2</plugin.version.maven.deploy>
+		<plugin.version.maven.resources>3.0.2</plugin.version.maven.resources>
+		<plugin.version.maven.spring.boot>1.4.2.RELEASE</plugin.version.maven.spring.boot>
+		<plugin.version.maven.build.helper>3.0.0</plugin.version.maven.build.helper>
+		 -->
+		
+		<plugin.version.maven.shade>3.5.2</plugin.version.maven.shade>
+		<plugin.version.maven.clean>3.3.2</plugin.version.maven.clean>
+		<plugin.version.maven.compiler>3.12.1</plugin.version.maven.compiler>
+		<plugin.version.maven.surefire>3.2.5</plugin.version.maven.surefire>
+		<plugin.version.maven.jar>3.3.0</plugin.version.maven.jar>
+		<plugin.version.maven.source>3.3.0</plugin.version.maven.source>
+		<plugin.version.maven.war>3.4.0</plugin.version.maven.war>
+		<plugin.version.maven.install>3.1.1</plugin.version.maven.install>
+		<plugin.version.maven.deploy>3.1.1</plugin.version.maven.deploy>
+		<plugin.version.maven.resources>3.1.0</plugin.version.maven.resources> <!-- 3.3.1 -->
+		<plugin.version.maven.spring.boot>3.3.0</plugin.version.maven.spring.boot> <!-- 1.4.2.RELEASE 3.2.3 3.3.0 -->
+		<plugin.version.maven.build.helper>3.5.0</plugin.version.maven.build.helper>
+		
+	</properties>
+	
+	<!--  -->
+	<modules>
+		<module>../zk-dependencies</module>
+		<module>../zk-core</module>
+		<module>../zk-base</module>
+		<module>../zk-cache</module>
+		<module>../zk-db</module>
+		<module>../zk-demo</module>
+		<module>../zk-mongo</module>
+		<module>../zk-security</module>
+		<module>../zk-serverCentral</module>
+		<module>../zk-framework</module>
+		<module>../zk-devleopmentTool</module>
+		<module>../zk-test</module>
+		<module>../zk-system</module>
+		<module>../zk-webmvc</module>
+		<module>../zk-wechat</module>
+		<module>../zk-system-api</module>
+		<module>../zk-mail</module>
+		<module>../zk-log</module>
+		<module>../zk-file</module>
+		<module>../zk-gateway</module>
+		<module>../zk-webflux</module>
+	</modules> 
+	 
+	<dependencyManagement></dependencyManagement>
+
+	<!-- 上传到 isprint 私服 
+	<distributionManagement>
+		<repository>
+			<id>mvn-isprint-nexus</id>
+            <name>local private nexus</name>
+            <url>http://172.16.10.209:8081/nexus/content/repositories/releases/</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+		</repository>
+		<snapshotRepository>
+			<id>mvn-isprint-nexus</id>
+            <name>local private nexus</name>
+            <url>http://172.16.10.209:8081/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement> 
+	-->
+	<!-- 上传到 gxfz 私服 -->
+	<distributionManagement>
+		<repository>
+			<id>mvn-gf-nexus</id>
+			<name>gxfz Nexus Release Repository</name>
+			<url>http://10.0.34.48:8081/repository/mvn-gf-release/</url>
+		</repository>
+		<snapshotRepository>
+			<!-- 上传快照版本时，在版本后面加上 [-SNAPSHOT]；不加时，会上传到 release 中 -->
+			<id>mvn-gf-nexus</id>
+			<name>gxfz Nexus Snapshot Repository</name>
+			<url>http://10.0.34.48:8081/repository/mvn-gf-snapshot/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+	<build>
+		<!-- 
+		阶段	处理	描述
+		验证 validate	验证项目	验证项目是否正确且所有必须信息是可用的
+		编译 compile	执行编译	源代码编译在此阶段完成
+		测试 Test	测试	使用适当的单元测试框架（例如JUnit）运行测试。
+		包装 package	打包	创建JAR/WAR包如在 pom.xml 中定义提及的包
+		检查 verify	检查	对集成测试的结果进行检查，以保证质量达标
+		安装 install	安装	安装打包的项目到本地仓库，以供其他项目使用
+		部署 deploy	部署	拷贝最终的工程包到远程仓库中，以共享给其他开发人员和工程
+		 -->
+		<finalName>${project.name}</finalName>
+		
+		<!-- 
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/main/resources</directory>
+				<includes>
+					<include>**/*.yml</include>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>true</filtering>
+				<directory>${zk.resources.path}/default</directory>
+				<includes>
+					<include>**/*.yml</include>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+		 -->
+		
+		<!--  
+		<resources>  
+			<resource>  
+				<!-s- 指定 resources 插件处理哪个目录下的资源文件 -s->  
+			    <directory>src/main/resources</directory>
+			    <!-s- 指定 目标目录  
+			    <targetPath></targetPath> -s->
+			    <includes>  
+			        <include>**/**</include>  
+			    </includes>  
+			</resource>  
+            
+            <!-s- 打包时将jsp文件拷贝到META-INF目录下-s->  
+			<resource>  
+                <directory>src/main/jsp</directory>  
+                <!-s- 注意此次必须要放在此目录下才能被访问到 -s->
+                <!-s- META-INF/resources 为 spring boot jar 时查找 jsp 的根目录？未研究透 -s->  
+                <targetPath>META-INF/resources/jsp</targetPath>  
+                <includes>  
+                    <include>**/**</include>  
+                </includes>  
+            </resource>  
+            <resource>  
+                <directory>src/main/jsp</directory>  
+                <targetPath>WEB-INF/jsp</targetPath>  
+                <includes>  
+                    <include>**/**</include>  
+                </includes>  
+            </resource> 
+        </resources>   -->
+	
+		<pluginManagement>
+			<plugins>
+				<!--<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>${plugin.version.maven.shade}</version>
+					<executions>
+						<execution>
+							<id>jakarta</id>
+							<phase>package</phase>
+							<goals>
+								<goal>shade</goal>
+							</goals>
+							<configuration>
+								<minimizeJar>false</minimizeJar>
+								<shadedArtifactAttached>true</shadedArtifactAttached>
+								<shadedClassifierName>jakarta</shadedClassifierName>
+								<createDependencyReducedPom>false</createDependencyReducedPom>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>-->
+				<!-- clean 插件 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>${plugin.version.maven.clean}</version>
+				</plugin>
+				<!-- compiler 编译 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${plugin.version.maven.compiler}</version>
+					<configuration>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
+					</configuration>
+				</plugin>
+				<!-- 测试插件 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${plugin.version.maven.surefire}</version>
+					<configuration>
+						<!-- 指定运行的测试文件 -->
+						<includes>
+							<include>com/zk/**/*Test.java</include>
+						</includes>
+						<!-- 过滤文件 -->
+						<excludes>
+							<exclude></exclude>
+						</excludes>
+						<skip>false</skip>
+					</configuration>
+				</plugin>
+				<!-- plugin 生成可引用 jar -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>${plugin.version.maven.jar}</version>
+					<configuration>
+						<finalName>${project.artifactId}-${project.version}</finalName>
+					</configuration>
+					<executions>
+						<execution>
+							<id>default</id>
+						</execution>
+					</executions>
+				</plugin>
+				<!-- plugin 生成源文件 jar -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${plugin.version.maven.source}</version>
+					<configuration>
+						<attach>true</attach>
+						<skipSource>false</skipSource>
+						<finalName>${project.artifactId}-${project.version}</finalName>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<!-- war 包插件 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<configuration>
+						<!-- 打包lib文件夹的jar包 -->
+						<!-- 注意增加这两行，在打包时相关的类会被独立打成jar -->
+						<classesClassifier>api</classesClassifier>
+						<attachClasses>true</attachClasses>
+						<!-- 释放将项目的类文件打成jar放到lib目录中。 打成jar的好处是：只修改class时，可以只更新jar。 -->
+						<archiveClasses>false</archiveClasses>
+						
+						<!-- <dependentWarExcludes>
+							WEB-INF/classes/message/**
+							message/**
+						</dependentWarExcludes>
+						<excludes>
+							WEB-INF/classes/message/**
+						</excludes>
+						<packagingExcludes>
+							WEB-INF/classes/message
+						</packagingExcludes> -->
+						
+						<!-- <packagingExcludes>WEB-INF/classes/*.properties</packagingExcludes> -->
+						
+					</configuration>
+				</plugin>
+				<!-- install 插件 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>${plugin.version.maven.install}</version>
+				</plugin>
+				<!-- plugin 发布 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>${plugin.version.maven.deploy}</version>
+					<configuration></configuration>
+				</plugin>
+				<!-- spring boot 运行插件 -->
+	            <plugin>
+	                <groupId>org.springframework.boot</groupId>
+	                <artifactId>spring-boot-maven-plugin</artifactId>
+	                <version>${plugin.version.maven.spring.boot}</version>
+	                <configuration>
+	                	<skip>${isDeploy}</skip>
+	                	<!--<finalName>${artifactId}-${version}</finalName>-->
+	                	<finalName>${project.artifactId}-${project.version}</finalName>
+						<executable>false</executable>
+						<classifier>exec</classifier>
+						<!-- 
+						<mainClass>com.zk.${startClass}</mainClass>
+						-->
+				    </configuration> 
+				    <executions>
+						<execution>
+							<goals>
+								<goal>repackage</goal>
+							</goals><!-- repackage, run, start, stop, build-info -->
+							<configuration>
+								<executable>false</executable>
+							</configuration>
+						</execution>
+					</executions>
+	            </plugin>
+	            <!-- plugin 资源配置文件处理 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${plugin.version.maven.resources}</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+						<!-- 输出目录 配置 executions 需要配置 -->
+						<!-- <outputDirectory>${basedir}/target/classes</outputDirectory> -->
+						<!-- <outputDirectory>${project.build.directory}/classes</outputDirectory> -->
+						<!-- 替换配置文件中的 @key@ 变量，需要 resources 中和 filtering 配合使用 filtering 为 false 时，不会替换 -->
+						<!-- useDefaultDelimiters 为 
+							true 时，可替换 @propertyName@ 和 ${propertyName} 
+							false 时，根据 delimiter 定义的通配符来替换；
+						-->
+						<useDefaultDelimiters>true</useDefaultDelimiters>
+						<delimiters>
+							<delimiter>${*}</delimiter><!-- ${*}-可替换 ${propertyName} -->
+						</delimiters>
+						<!-- 默认只替换 ${basedir}/src/main/resources 下的 yml 和 properties 文件，如需要替换其他文件，请在子项目中自己定制 -->
+						<resources>
+							<resource>
+								<filtering>true</filtering>
+								<directory>${basedir}/src/main/resources</directory>
+								<targetPath>${project.build.directory}/classes</targetPath>
+								<!-- <includes>
+									<include>**/*.yml</include>
+									<include>**/*.properties</include>
+								</includes> -->
+							</resource>
+							<resource>
+								<filtering>true</filtering>
+								<directory>${basedir}/src/env/${package.env}</directory>
+								<targetPath>${project.build.directory}/classes</targetPath>
+							</resource>
+							<resource>
+								<filtering>true</filtering>
+								<directory>${basedir}/src/test/resources</directory>
+								<targetPath>${project.build.directory}/test-classes</targetPath>
+							</resource>
+						</resources>
+						<!-- 过虑不进行参数替换的资源文件；证书资源文件、样式资源文件 等 -->
+						<nonFilteredFileExtensions>
+							<!-- 证书资源文件 -->
+							<nonFilteredFileExtension>pem</nonFilteredFileExtension>
+							<nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+							<nonFilteredFileExtension>crt</nonFilteredFileExtension>
+							<nonFilteredFileExtension>cer</nonFilteredFileExtension>
+							<nonFilteredFileExtension>P12</nonFilteredFileExtension>
+							<nonFilteredFileExtension>p12</nonFilteredFileExtension>
+							<!-- 样式资源文件 -->
+	                        <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+	                        <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+	                        <nonFilteredFileExtension>eot</nonFilteredFileExtension>
+	                        <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+	                        <nonFilteredFileExtension>svg</nonFilteredFileExtension>
+	                    </nonFilteredFileExtensions>  
+					</configuration>
+					<!-- 引入外部资源文件 -->
+					<executions>
+						<execution>
+						 	<id>copy-extra-assets</id>
+				            <phase>process-sources</phase><!-- validate process-sources compile -->
+							<goals>
+								<goal>copy-resources</goal> <!-- copy-resources -->
+							</goals>
+							<configuration>
+								<outputDirectory>${project.build.outputDirectory}</outputDirectory>
+								<resources>
+									<resource>
+										<directory>${zk.resources.path}/public-assets/default</directory>
+										<targetPath>${project.build.directory}/classes</targetPath>
+										<filtering>true</filtering>
+										<includes>
+											<include>**</include>
+										</includes>
+									</resource>
+								</resources>
+								<nonFilteredFileExtensions>
+		                            <!-- 证书资源文件 -->
+									<nonFilteredFileExtension>pem</nonFilteredFileExtension>
+									<nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+									<nonFilteredFileExtension>crt</nonFilteredFileExtension>
+									<nonFilteredFileExtension>cer</nonFilteredFileExtension>
+									<nonFilteredFileExtension>P12</nonFilteredFileExtension>
+									<nonFilteredFileExtension>p12</nonFilteredFileExtension>
+									<!-- 样式资源文件 -->
+			                        <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+			                        <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+			                        <nonFilteredFileExtension>eot</nonFilteredFileExtension>
+			                        <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+			                        <nonFilteredFileExtension>svg</nonFilteredFileExtension>
+		                        </nonFilteredFileExtensions>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<!-- 打包项目外部配置文件； 虽然直接在 resources 下也可实现，但在 Maven update project 时， 会报错误：mvn 
+					update Could not update project xxx configuration java.lang.NullPointerE -->
+				<!-- <plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>${plugin.version.maven.build.helper}</version>
+				</plugin> -->
+				<!-- <plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>${plugin.version.maven.build.helper}</version>
+					<configuration>
+						<resources>
+							<resource>
+								<directory>src/main/resources</directory>
+								<filtering>false</filtering>
+								<includes>
+									<include>**/license/**</include>
+									<include>**/mappers/**</include>
+									<include>**/message/**</include>
+									<include>**/shiro/**</include>
+									<include>**/spring_*.xml</include>
+								</includes>
+							</resource>
+						</resources>
+					</configuration>
+					<executions>
+						<execution>
+							<id>my-own-very-cool-id-for-this-step</id>
+							<phase>generate-resources</phase>
+							<goals>
+								<goal>add-resource</goal>
+							</goals>
+							<configuration>
+								<resources>
+									<resource>
+										<directory>${zk.resources.path}/${project.environment}</directory>
+										<filtering>false</filtering>
+										<includes>
+											<include>**/am5/**</include>
+						                    <include>**/datasource/**</include>
+						                    <include>**/mail/**</include>
+						                    <include>**/mongo/**</include>
+						                    <include>**/mybatis/**</include>
+						                    <include>**/shiro/**</include>
+						                    <include>core.properties</include>
+							                <include>log.properties</include>
+							                <include>log4j.properties</include>
+							                <include>developer.properties</include>
+							                <include>verify.properties</include>
+										</includes>
+									</resource>
+								</resources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin> -->
+			</plugins>
+		</pluginManagement>
+
+	</build>
+
+</project>

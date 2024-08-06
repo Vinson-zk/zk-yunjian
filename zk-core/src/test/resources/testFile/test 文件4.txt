@@ -1,0 +1,10 @@
+切换投影：  control + command + P
+设置：      fn + command + I
+锁屏：      command + L
+运行：      command + R
+开始、桌面：command
+显示设置、设备、共享和搜索等：fn + command + c
+显示桌面：command + D
+我的电脑：command + E
+轻松使用设置中心：fn + command + U
+

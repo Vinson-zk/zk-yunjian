@@ -1,0 +1,285 @@
+/** 
+* Copyright (c) 2012-2024 ZK-Vinson Technologies, Inc.
+* address: 
+* All rights reserved. 
+* 
+* This software is the confidential and proprietary information of 
+* ZK-Vinson Technologies, Inc. ("Confidential Information"). You shall not 
+* disclose such Confidential Information and shall use it only in 
+* accordance with the terms of the license agreement you entered into 
+* with ZK-Vinson. 
+*
+* @Title: ZKRestTemplateTransportClientFactory.java 
+* @author Vinson 
+* @Package com.zk.framework.serCen.eureka 
+* @Description: TODO(simple description this file what to do. ) 
+* @date Jun 15, 2024 10:36:32 PM 
+* @version V1.0 
+*/
+package com.zk.framework.serCen.eureka;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.configuration.SSLContextFactory;
+import org.springframework.cloud.configuration.TlsProperties;
+import org.springframework.cloud.netflix.eureka.http.DefaultEurekaClientHttpRequestFactorySupplier;
+import org.springframework.cloud.netflix.eureka.http.EurekaClientHttpRequestFactorySupplier;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.support.BasicAuthenticationInterceptor;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.DefaultResponseErrorHandler;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.fasterxml.jackson.databind.BeanDescription;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.SerializationConfig;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
+import com.fasterxml.jackson.databind.ser.std.BeanSerializerBase;
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.converters.jackson.mixin.ApplicationsJsonMixIn;
+import com.netflix.discovery.converters.jackson.mixin.InstanceInfoJsonMixIn;
+import com.netflix.discovery.converters.jackson.serializer.InstanceInfoJsonBeanSerializer;
+import com.netflix.discovery.shared.Applications;
+import com.netflix.discovery.shared.resolver.EurekaEndpoint;
+import com.netflix.discovery.shared.transport.EurekaHttpClient;
+import com.netflix.discovery.shared.transport.TransportClientFactory;
+import com.zk.framework.serCen.ZKSerCenEncrypt;
+
+/** 
+* @ClassName: ZKRestTemplateTransportClientFactory 
+* @Description: TODO(simple description this class what to do. ) 
+* @author Vinson 
+* @version 1.0 
+*/
+//public class ZKRestTemplateTransportClientFactory extends RestTemplateTransportClientFactory {
+public class ZKRestTemplateTransportClientFactory implements TransportClientFactory {
+
+    private ZKSerCenEncrypt zkSerCenEncrypt;
+
+    private final Optional<SSLContext> sslContext;
+
+    private final Optional<HostnameVerifier> hostnameVerifier;
+
+    private final EurekaClientHttpRequestFactorySupplier eurekaClientHttpRequestFactorySupplier;
+
+    private final Supplier<RestTemplateBuilder> restTemplateBuilderSupplier;
+
+    public ZKRestTemplateTransportClientFactory(ZKSerCenEncrypt zkSerCenEncrypt, TlsProperties tlsProperties,
+            EurekaClientHttpRequestFactorySupplier eurekaClientHttpRequestFactorySupplier,
+            Supplier<RestTemplateBuilder> restTemplateBuilderSupplier) {
+        this.sslContext = context(tlsProperties);
+        this.hostnameVerifier = Optional.empty();
+        this.eurekaClientHttpRequestFactorySupplier = eurekaClientHttpRequestFactorySupplier;
+        this.restTemplateBuilderSupplier = restTemplateBuilderSupplier;
+        this.zkSerCenEncrypt = zkSerCenEncrypt;
+    }
+
+    public ZKRestTemplateTransportClientFactory(ZKSerCenEncrypt zkSerCenEncrypt, Optional<SSLContext> sslContext,
+            Optional<HostnameVerifier> hostnameVerifier,
+            EurekaClientHttpRequestFactorySupplier eurekaClientHttpRequestFactorySupplier,
+            Supplier<RestTemplateBuilder> restTemplateBuilderSupplier) {
+        this.sslContext = sslContext;
+        this.hostnameVerifier = hostnameVerifier;
+        this.eurekaClientHttpRequestFactorySupplier = eurekaClientHttpRequestFactorySupplier;
+        this.restTemplateBuilderSupplier = restTemplateBuilderSupplier;
+        this.zkSerCenEncrypt = zkSerCenEncrypt;
+    }
+
+    public ZKRestTemplateTransportClientFactory(ZKSerCenEncrypt zkSerCenEncrypt, TlsProperties tlsProperties,
+            EurekaClientHttpRequestFactorySupplier eurekaClientHttpRequestFactorySupplier) {
+        this(zkSerCenEncrypt, tlsProperties, eurekaClientHttpRequestFactorySupplier, RestTemplateBuilder::new);
+    }
+
+    public ZKRestTemplateTransportClientFactory(ZKSerCenEncrypt zkSerCenEncrypt, Optional<SSLContext> sslContext,
+            Optional<HostnameVerifier> hostnameVerifier,
+            EurekaClientHttpRequestFactorySupplier eurekaClientHttpRequestFactorySupplier) {
+
+        this(zkSerCenEncrypt, sslContext, hostnameVerifier, eurekaClientHttpRequestFactorySupplier,
+                RestTemplateBuilder::new);
+    }
+
+    @Deprecated
+    public ZKRestTemplateTransportClientFactory(ZKSerCenEncrypt zkSerCenEncrypt) {
+        this(zkSerCenEncrypt, Optional.empty(), Optional.empty(), new DefaultEurekaClientHttpRequestFactorySupplier());
+    }
+
+    @Override
+    public EurekaHttpClient newClient(EurekaEndpoint serviceUrl) {
+        return new ZKRestTemplateEurekaHttpClient(this.zkSerCenEncrypt, restTemplate(serviceUrl.getServiceUrl()),
+                stripUserInfo(serviceUrl.getServiceUrl()));
+    }
+
+    private Optional<SSLContext> context(TlsProperties properties) {
+        if (properties == null || !properties.isEnabled()) {
+            return Optional.empty();
+        }
+        try {
+            return Optional.of(new SSLContextFactory(properties).createSSLContext());
+        }
+        catch(Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    // apache http client 5.2 fails with non-null userinfo
+    // basic auth added in restTemplate() below
+    private String stripUserInfo(String serviceUrl) {
+        return UriComponentsBuilder.fromUriString(serviceUrl).userInfo(null).toUriString();
+    }
+
+    private RestTemplate restTemplate(String serviceUrl) {
+        ClientHttpRequestFactory requestFactory = this.eurekaClientHttpRequestFactorySupplier
+                .get(this.sslContext.orElse(null), this.hostnameVerifier.orElse(null));
+
+        RestTemplate restTemplate;
+
+        if (restTemplateBuilderSupplier != null && restTemplateBuilderSupplier.get() != null) {
+            restTemplate = restTemplateBuilderSupplier.get().requestFactory(() -> requestFactory).build();
+        }
+        else {
+            restTemplate = new RestTemplate(requestFactory);
+        }
+
+        try {
+            URI serviceURI = new URI(serviceUrl);
+            if (serviceURI.getUserInfo() != null) {
+                String[] credentials = serviceURI.getUserInfo().split(":");
+                if (credentials.length == 2) {
+                    restTemplate.getInterceptors()
+                            .add(new BasicAuthenticationInterceptor(credentials[0], credentials[1]));
+                }
+            }
+        }
+        catch(URISyntaxException ignore) {
+
+        }
+
+        restTemplate.getMessageConverters().add(0, mappingJacksonHttpMessageConverter());
+        restTemplate.setErrorHandler(new ErrorHandler());
+
+        restTemplate.getInterceptors().add((request, body, execution) -> {
+            ClientHttpResponse response = execution.execute(request, body);
+            if (!response.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+                return response;
+            }
+            return new NotFoundHttpResponse(response);
+        });
+
+        return restTemplate;
+    }
+
+    /**
+     * Provides the serialization configurations required by the Eureka Server. JSON content exchanged with eureka requires a root node matching the entity
+     * being serialized or deserialized. Achived with {@link SerializationFeature#WRAP_ROOT_VALUE} and {@link DeserializationFeature#UNWRAP_ROOT_VALUE}.
+     * {@link PropertyNamingStrategies.SnakeCaseStrategy} is applied to the underlying {@link ObjectMapper}.
+     * 
+     * @return a {@link MappingJackson2HttpMessageConverter} object
+     */
+    public MappingJackson2HttpMessageConverter mappingJacksonHttpMessageConverter() {
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE));
+
+        SimpleModule jsonModule = new SimpleModule();
+        jsonModule.setSerializerModifier(createJsonSerializerModifier());
+        converter.getObjectMapper().registerModule(jsonModule);
+
+        converter.getObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, true);
+        converter.getObjectMapper().configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
+        converter.getObjectMapper().addMixIn(Applications.class, ApplicationsJsonMixIn.class);
+        converter.getObjectMapper().addMixIn(InstanceInfo.class, InstanceInfoJsonMixIn.class);
+
+        return converter;
+    }
+
+    public static BeanSerializerModifier createJsonSerializerModifier() {
+        return new BeanSerializerModifier() {
+            @Override
+            public JsonSerializer<?> modifySerializer(SerializationConfig config, BeanDescription beanDesc,
+                    JsonSerializer<?> serializer) {
+                if (beanDesc.getBeanClass().isAssignableFrom(InstanceInfo.class)) {
+                    return new InstanceInfoJsonBeanSerializer((BeanSerializerBase) serializer, false);
+                }
+                return serializer;
+            }
+        };
+    }
+
+    @Override
+    public void shutdown() {
+    }
+
+    /**
+     * Response that ignores body, specifically for 404 errors.
+     */
+    private static class NotFoundHttpResponse implements ClientHttpResponse {
+
+        private final ClientHttpResponse response;
+
+        NotFoundHttpResponse(ClientHttpResponse response) {
+            this.response = response;
+        }
+
+        @Override
+        public HttpStatusCode getStatusCode() throws IOException {
+            return response.getStatusCode();
+        }
+
+        @Override
+        public String getStatusText() throws IOException {
+            return response.getStatusText();
+        }
+
+        @Override
+        public void close() {
+            response.close();
+        }
+
+        @Override
+        public InputStream getBody() throws IOException {
+            // ignore body on 404 for heartbeat, see gh-4145
+            return null;
+        }
+
+        @Override
+        public HttpHeaders getHeaders() {
+            return response.getHeaders();
+        }
+
+    }
+
+    class ErrorHandler extends DefaultResponseErrorHandler {
+
+        @Override
+        protected boolean hasError(HttpStatusCode statusCode) {
+            /**
+             * When the Eureka server restarts and a client tries to sent a heartbeat the server will respond with a 404. By default RestTemplate will throw an
+             * exception in this case. What we want is to return the 404 to the upstream code so it will send another registration request to the server.
+             */
+            if (statusCode.is4xxClientError()) {
+                return false;
+            }
+            return super.hasError(statusCode);
+        }
+
+    }
+
+}

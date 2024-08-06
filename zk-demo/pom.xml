@@ -1,0 +1,207 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.zk</groupId>
+		<artifactId>zk-parent</artifactId>
+		<version>3.0.1</version>
+		<relativePath>../zk-parent</relativePath>
+	</parent>
+	<!-- <groupId>com.zk</groupId> -->
+	<artifactId>zk-demo</artifactId>
+	<version>${version.zk.demo}</version>
+	<name>zk-demo</name>
+	<description>Vinson project zk-demo</description>
+	
+	<properties>
+		<!-- 可以从 parent 中继承 -->
+		<maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.zk</groupId>
+				<artifactId>zk-dependencies</artifactId>
+				<version>${version.zk.dependencies}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-core</artifactId>
+			<version>${version.zk.core}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-framework</artifactId>
+			<version>${version.zk.framework}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-db</artifactId>
+			<version>${version.zk.db}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-webmvc</artifactId>
+			<version>${version.zk.webmvc}</version>
+		</dependency>
+		
+		<!-- ***** shiro begin -->
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-spring</artifactId>
+			<classifier>jakarta</classifier>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-core</artifactId>
+			<classifier>jakarta</classifier>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-web</artifactId>
+			<classifier>jakarta</classifier>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-ehcache</artifactId>
+		</dependency>
+		<!--
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-cas</artifactId>
+			<classifier>jakarta</classifier>
+		</dependency>
+		
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		-->
+		<!-- ##### shiro end -->
+		
+	    <!-- ***** cxf begin -->
+		<dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+            <exclusions>
+				<exclusion>
+					<groupId>javax.validation</groupId>
+   					<artifactId>validation-api</artifactId>
+				</exclusion>
+			</exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http-jetty</artifactId>
+        </dependency>
+       	<!-- ##### cxf end -->
+	
+		<!-- ***** redis test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
+		<!-- ##### redis end -->
+		
+		<!-- ***** redis test -->
+		<dependency>
+			<groupId>cn.dev33</groupId>
+			<artifactId>sa-token-spring-boot-starter</artifactId>
+		</dependency>
+		<!-- ##### redis end -->
+		
+		<!-- ***** begin test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+   			<artifactId>junit</artifactId>
+		</dependency>
+		<!-- ##### end test -->
+		<dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <classifier>jdk15</classifier>
+        </dependency>
+        
+		<dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>cglib</groupId>
+		    <artifactId>cglib</artifactId>
+		</dependency>
+
+		
+	</dependencies>
+	
+	<build>
+	
+		<plugins>
+			<!-- plugin 发布 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<!--<executions>
+                    <execution>
+                        <configuration>
+                        	<classifier>jakarta</classifier>
+                        </configuration>
+                    </execution>
+                </executions>-->
+			</plugin>
+			<!-- spring boot 运行插件 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- 在此处配置不生效，要在引用项目中配置 -->
+                <configuration>
+			        <mainClass>com.zk.demo.${mainClass}</mainClass>
+			    </configuration>
+            </plugin>
+            
+            <!--<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>org.apache.shiro.spring</Bundle-SymbolicName>
+						<Export-Package>org.apache.shiro.spring*;version=${project.version}</Export-Package>
+						<Import-Package> org.apache.shiro*;version="${shiro.osgi.importRange}", org.aopalliance*;version="[1.0.0, 2.0.0)", org.springframework*;version="[4.0.0, 6.0.0)", * </Import-Package>
+						<_removeheaders>Bnd-LastModified</_removeheaders>
+						<_reproducible>true</_reproducible>
+					</instructions>
+				</configuration>
+			</plugin>-->
+			
+		</plugins>
+		
+	</build>
+	
+</project>

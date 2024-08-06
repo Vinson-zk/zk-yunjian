@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:mongo="http://www.springframework.org/schema/data/mongo"  
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+    http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd  
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    ">  
+ 
+    <!-- 获取配置资源 -->  
+   	<context:property-placeholder file-encoding="UTF-8" ignore-unresolvable="true" location="classpath*:mongo/test_mongodb.properties" />
+	
+	<!-- 集群是使用这个配置  -->
+    <!-- <mongo:mongo id="mongo" host="${zk.mongodb.url}" replica-set="${zk.mongodb.url}" >  -->
+    <mongo:mongo id="mongo"  host="${zk.mongodb.url}" port="${zk.mongodb.port}" >  
+   		<!-- <mongo:repositories base-package="com.zk.sample.mongodb.repository"></mongo:repositories> -->
+    	<!--  
+         connections-per-host: 每个主机答应的连接数（每个主机的连接池大小），当连接池被用光时，会被阻塞住   
+         max-wait-time: 被阻塞线程从连接池获取连接的最长等待时间（ms）  
+         connect-timeout:在建立（打开）套接字连接时的超时时间（ms）  
+         socket-timeout:套接字超时时间;该值会被传递给Socket.setSoTimeout(int)  
+         slave-ok:指明是否答应驱动从次要节点或者奴隶节点读取数据  
+         -->
+    	<mongo:options 
+    		connections-per-host="20"
+			threads-allowed-to-block-for-connection-multiplier="10"
+			connect-timeout="10000" 
+			max-wait-time="120000" 
+			auto-connect-retry="false"
+			socket-keep-alive="false" 
+			socket-timeout="0" 
+			slave-ok="true"
+			write-number="1" 
+			write-timeout="0" 
+			write-fsync="true" />
+    </mongo:mongo>  
+    
+    <!-- 设置使用的数据库 名-->  
+    <mongo:db-factory dbname="${zk.mongodb.dbname}" mongo-ref="mongo" username="${zk.mongodb.username}"  password="${zk.mongodb.password}" />  
+    
+    <!-- 指定 mongo key 转换替换字符 -->
+    <bean id="mongoMoxydomainConverter" class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
+    	<constructor-arg index="0" ref="mongoDbFactory" />
+   		<constructor-arg index="1">
+           <bean class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />
+   		</constructor-arg>
+  		<property name="mapKeyDotReplacement" value="\\+" />
+	</bean>
+
+    <!-- spring mongodb 的模板 -->    
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">  
+    	<constructor-arg index="0" name="mongoDbFactory" ref="mongoDbFactory"/>  
+    	<constructor-arg index="1" name="mongoConverter" ref="mongoMoxydomainConverter"/>  
+    </bean>  
+    
+</beans> 
+
+
+

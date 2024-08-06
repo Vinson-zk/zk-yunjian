@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+	xmlns:jee="http://www.springframework.org/schema/jee" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+	
+	<description>spring myBaits dynamic data source config</description>
+    
+    <!-- begin spring 事务管理配置 -->
+     <!-- 定义事务 
+	<bean id="dynamicTransactionManager" class="com.zk.db.dynamic.spring.transaction.ZKDynamicTransactionManager">
+		<property name="dataSource" ref="zkDynamicDataSource" />
+	</bean>
+	-->
+	
+	<!-- 配置 Annotation 驱动，扫描@Transactional注解的类定义事务，
+		通过 @EnableTransactionManagement(proxyTargetClass = true) 来配置
+	<tx:annotation-driven transaction-manager="dynamicTransactionManager" proxy-target-class="true"/>  
+	-->
+    <!-- begin spring 事务管理配置 -->
+	
+	<!-- begin mybatis 配置
+	org.mybatis.spring.SqlSessionFactoryBean
+	com.zk.db.mybatis.spring.ZKDBSqlSessionFactoryBean
+	-->
+    <bean id="sqlSessionFactory" class="com.zk.db.mybatis.spring.ZKDBSqlSessionFactoryBean">
+        <property name="dataSource" ref="zkDynamicDataSource"/>
+        <property name="typeAliasesPackage" value="com.**.entity"></property>
+        <property name="typeAliasesSuperType" value="com.zk.base.entity.ZKBaseEntity"></property>
+        <property name="mapperLocations" value="classpath:mappers/**/*.xml"/>
+		<property name="configLocation" value="classpath:xmlConfig/mybatis/mybatis_config.xml"></property>
+		<property name="plugins">
+			<array>
+				<bean class="com.zk.db.dynamic.mybatis.ZKDynamicDataSourcePlugin" />
+			</array>
+		</property>
+    </bean>
+    
+    <!-- 扫描basePackage下所有以@MyBatisDao注解的接口 com.zk.common.annotation.ZKMyBatisDao -->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+        <property name="basePackage" value="com.zk.**.dao"/>
+        <property name="annotationClass" value="com.zk.db.annotation.ZKMyBatisDao"/>
+    </bean>
+    <!-- end mybatis 配置  -->
+    
+</beans>
+
+
+
+
+
+
+

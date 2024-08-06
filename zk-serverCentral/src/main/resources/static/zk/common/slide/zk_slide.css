@@ -1,0 +1,86 @@
+/*
+* @Author: Vinson
+* @Date:   2020-02-02 15:10:46
+* @Last Modified by:   Vinson
+* @Last Modified time: 2020-03-06 17:27:15
+* 
+* 
+* 
+*/
+/*** slide css  ***/
+.zk_slide {
+	width: 200px;
+	/*min-height: 100%;*/
+	padding: 1px;
+	z-index: 850;
+	-webkit-transition: -webkit-transform .3s ease-in-out,width .3s ease-in-out;
+	transition: transform .3s ease-in-out, width .3s ease-in-out;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
+	-webkit-flex-direction: column;
+	border-right: 1px solid;
+	/*overflow-x:hidden;*/
+	/*overflow-y:auto;*/
+	overflow: hidden;
+	background-color: var(--background-color);
+	border-color: var(--background-border-color);
+}
+.zk_slide_collapse {
+	/*width: 50px;*/
+	width: 50px!important;
+	-webkit-transform: translate(0,0);
+    transform: translate(0,0);
+    z-index: 850;
+}
+
+.zk_slide_close {
+
+}
+.zk_slide_panel {
+	width: 199px;
+	/*display: flex;*/
+	flex: 1 1 auto;
+	-webkit-flex: 1 1 auto;
+	/*display: -webkit-flex;*/
+	position: relative;
+	padding: 0px;
+	margin: 0px;
+}
+.zk_slide_header {
+	width: 199px;
+	display: flex;
+	display: -webkit-flex;
+	/*flex: 1 1 auto;*/
+	position: relative;
+	padding: 0px;
+	margin: 0px;
+	border-bottom: 1px solid;
+	border-color: var(--background-border-color);
+}
+.zk_slide_switch {
+	/*flex: 1 0 auto;*/
+	/*-webkit-flex: 1 0 auto;*/
+	text-align: center;
+	position:absolute;
+	right: 6px;
+	/*padding: 5px 12px 5px 15px;*/
+	line-height: 1; 
+	align-self: center;
+}
+.zk_slide_switch:hover {
+	cursor: pointer;
+}
+
+.zk_slide_close .zk_slide_switch i {
+	transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+.zk_slide_collapse .zk_slide_switch{
+	display: none;
+}
+
+
+
+

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>zk-tab-test-html</title>
+
+	<script type="text/javascript">
+		var ctxStatic = 'serCen';
+		var locale = "";
+	</script>
+	<script type="text/javascript" src="../../include.js"></script>
+
+	<script type="text/javascript">
+		$(function(){
+			var zkSwitch = $zk('#testSwitch').zkSwitch();
+		});
+
+		var msgI = 0;
+        function f_showMsg(){
+            var orientation = ['', 'top', 'top-left', 'top-right', 'bottom-right'];
+            var type = ['', 'error', 'info', 'warning', 'success', 'info'];
+            $zk.zkShowMsg("测试消息显示", type[msgI%6], 5000, orientation[msgI%5]);
+            ++msgI;
+
+            // $zk.zkShowMsg("测试消息显示", 'success', 50000, 'top-right');
+            // $zk.zkShowMsg("测试消息显示", 'error', 50000, 'top-right');
+            // $zk.zkShowMsg("测试消息显示", 'info', 50000, 'top-right');
+            // $zk.zkShowMsg("测试消息显示", 'warning', 50000, 'top-right');
+        }
+
+        function f_confirm(){
+            $zk.zkConfirm({
+                type:'warning',
+                msg: 'test'
+            });
+        }	
+        function f_addTestTab(){
+        	parent.f_addTab('func-test', true);
+        }	
+	</script>
+	<style type="text/css">
+		body {
+			padding: 9px;
+			position: relative;
+		}
+		.f_showMsg {
+			position: absolute;
+			bottom: 20px;
+			left: 10px;
+		}
+
+		.f_confirm {
+			position: absolute;
+			bottom: 20px;
+			left: 120px;
+		}
+	</style>
+</head>
+<body class="zk_layout_body_scroll">
+	<h1>Welcome zk html </h1>
+	<div id="testSwitch"></div><br />
+	<br />
+	<button onclick="f_showMsg()" class="f_showMsg" >showMsg</button><br />
+    <br />
+	<button onclick="f_confirm()" class="f_confirm" >confirm</button><br />
+	<br />
+	<button onclick="f_addTestTab()" class="" >addTestTab</button><br />
+
+
+    <br /><br /><br /><br /><br /><br /><br />
+    <br /><br /><br /><br /><br /><br /><br />
+    <br /><br /><br /><br /><br /><br /><br />
+    T
+
+</body>
+</html>

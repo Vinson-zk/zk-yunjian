@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zkCodeTemplate>
+	<content><![CDATA[
+	
+/*** 菜单 - 生成测试的静态菜单  ***/
+tMenu = {
+    pkId: "test_${zkTableInfo.funcName}", code: "${zkTableInfo.funcName}", name: { "zh-CN": "${zkTableInfo.label}", "en-US": "${zkTableInfo.funcName}" },
+    path: "${zkTableInfo.funcName?uncap_first}", navCode: navCode, funcModuleCode: "${zkModule.moduleNameUncap}",
+    funcName: '${zkTableInfo.funcName?uncap_first}Index',
+    isIndex: 0, exact: true, isFrame: 0, isShow: 1, icon: "${zkTableInfo.icon}", sort: 300,
+	/* permission:,*/ parentId: null, //children:null
+}
+menus.push(tMenu);
+tMenu = {
+    pkId: "test_${zkTableInfo.funcName}_detail", code: "${zkTableInfo.funcName}_detail", name: { "zh-CN": "明细", "en-US": "Detail" },
+    path: "detail/:pkId", navCode: navCode, funcModuleCode: "${zkModule.moduleNameUncap}",
+    funcName: '${zkTableInfo.funcName?uncap_first}Detail',
+    isIndex: 0, exact: false, isFrame: 0, isShow: 0, icon: "ToolOutlined", sort: 0,
+	/* permission:,*/ parentId: "test_${zkTableInfo.funcName}", //children:null
+}
+menus.push(tMenu);
+<#if zkTableInfo.getIsTree() == true>
+tMenu = {
+    pkId: "test_${zkTableInfo.funcName}_edit", code: "${zkTableInfo.funcName}_edit", name: { "zh-CN": "编辑", "en-US": "Edit" },
+    path: "edit/:parentId/:pkId", navCode: navCode, funcModuleCode: "${zkModule.moduleNameUncap}",
+    funcName: '${zkTableInfo.funcName?uncap_first}Edit',
+    isIndex: 0, exact: false, isFrame: 0, isShow: 0, icon: "ToolOutlined", sort: 0,
+	/* permission:,*/ parentId: "test_${zkTableInfo.funcName}", //children:null
+}
+<#else>
+tMenu = {
+    pkId: "test_${zkTableInfo.funcName}_edit", code: "${zkTableInfo.funcName}_edit", name: { "zh-CN": "编辑", "en-US": "Edit" },
+    path: "edit/:pkId", navCode: navCode, funcModuleCode: "${zkModule.moduleNameUncap}",
+    funcName: '${zkTableInfo.funcName?uncap_first}Edit',
+    isIndex: 0, exact: false, isFrame: 0, isShow: 0, icon: "ToolOutlined", sort: 0,
+	/* permission:,*/ parentId: "test_${zkTableInfo.funcName}", //children:null
+}
+</#if>
+menus.push(tMenu);
+
+]]>
+	</content>
+</zkCodeTemplate>
+
+
+

@@ -1,0 +1,120 @@
+/*
+* @Author: Vinson
+* @Date:   2020-02-14 18:05:07
+* @Last Modified by:   Vinson
+* @Last Modified time: 2020-02-29 22:14:11
+* 
+* 
+* 
+*/
+
+/*** ***/
+.zk_menu {
+	width: 100%;
+	padding: 6px 0px 6px 0px;
+	margin: 0px 0px 0px 0px;
+}
+.zk_menu>ul>li>a {
+	/*padding-left: 12px;*/
+}
+.zk_treeview_ul {
+	padding: 0px;
+	margin: 0px;
+	/*display: none;*/
+}
+.zk_treeview_ul li {
+	position: relative;
+	display: list-item;
+    text-align: -webkit-match-parent;
+	list-style: none;
+}
+.zk_treeview_item>a{
+	padding-left: 12px;
+}
+.zk_treeview_item .zk_treeview_item>a{
+	padding-left: 20px;
+}
+.zk_treeview_item .zk_treeview_item .zk_treeview_item>a{
+	padding-left: 32px;
+}
+.zk_treeview_item {
+	padding: 0px;
+	margin: 0px;
+}
+.zk_treeview_item>a {
+	/*left: 20px;*/
+	/*padding: 9px 12px 9px 23px;*/
+	padding-top: 9px;
+	padding-bottom: 9px;
+	padding-right: 12px;
+	margin: 0px;
+	position: relative;
+	overflow: hidden;
+    text-overflow: ellipsis;
+	text-decoration: none;
+	display: block;
+	font-weight: 400;
+	color: var(--background-font-color);
+}
+.zk_treeview_item>a:hover{
+	font-weight: 600;
+}
+.zk_treeview_item_active>a{
+	font-weight: 400;
+    border-right: 3px solid;
+	color: var(--background-a-font-color);
+	background-color: var(--background-a-color);
+    border-color: var(--background-a-border-color);
+}
+.zk_treeview {
+	/*font-weight: 600;*/
+}
+.zk_treeview>a:hover{
+	font-weight: 700;
+}
+.zk_treeview>.zk_treeview_ul{
+	display:none;
+}
+.zk_treeview_active>a{
+	font-weight: 600;
+	color: var(--background-a-font-color);
+}
+.zk_treeview_open {
+
+}
+.zk_treeview_open>.zk_treeview_ul {
+	display: block;
+}
+.pull-right-container>.fa-angle-left{
+	-webkit-transition: transform .5s ease;
+    -o-transition: transform .5s ease;
+    transition: transform .5s ease;
+}
+.zk_treeview_open>a>.pull-right-container>.fa-angle-left{
+	-webkit-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+	-webkit-transition: transform .5s ease;
+    -o-transition: transform .5s ease;
+    transition: transform .5s ease;
+}
+
+.pull-right-container {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    margin-top: -7px;
+}
+
+.zk_slide_collapse .zk_treeview_item .zk_treeview_ul{
+	display:none;
+}
+
+.zk_slide_collapse .zk_treeview_item>a>span{
+	display:none;
+}
+
+
+
+

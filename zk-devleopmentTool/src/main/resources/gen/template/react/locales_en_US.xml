@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zkCodeTemplate>
+	<content><![CDATA[
+/**
+ * 国际化信息定义
+ * @Author: 
+ * @Date: 
+ * @Last 
+ * @Last 
+ */
+ 
+ 
+module.exports = {
+<#if zkTableInfo.getIsTree() == true >
+	"${zkModule.modulePrefixLower}.${zkModule.moduleNameUncap}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.${zkTableInfo.funcName}.parentName":"Parent Name",
+	"${zkModule.modulePrefixLower}.${zkModule.moduleNameUncap}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.${zkTableInfo.funcName}._top":"Root",
+</#if>
+	// 字段标签；
+<#list zkTableInfo.cols as zkCol>
+	<#if zkCol.attrIsBaseField == false >
+	"${zkModule.modulePrefixLower}.${zkModule.moduleNameUncap}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.${zkTableInfo.funcName}.${zkCol.attrName?uncap_first}":"${zkCol.attrName?cap_first}",     
+	</#if>
+</#list>
+	// 输入提示 placeholder, 生成时使用表字段说明；
+<#list zkTableInfo.cols as zkCol>
+	<#if zkCol.attrIsBaseField == false >
+	"${zkModule.modulePrefixLower}.${zkModule.moduleNameUncap}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.${zkTableInfo.funcName}.${zkCol.attrName?uncap_first}.placeholder":"${zkCol.colComments}",     
+	</#if>
+</#list>
+}
+
+<#-- 国际化信息引用；生成国际化信息的两种不同命名方式 
+import msg<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">_${zkTableInfo.subModuleName?uncap_first}</#if>_${zkTableInfo.funcName?uncap_first} from "./msg<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">/${zkTableInfo.subModuleName?uncap_first}</#if>/${zkTableInfo.funcName?uncap_first}/en_US";
+import msg_${zkTableInfo.funcName?uncap_first} from "./msg<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">/${zkTableInfo.subModuleName?uncap_first}</#if>/${zkTableInfo.funcName?uncap_first}/en_US";
+-->
+import msg_${zkTableInfo.funcName?uncap_first} from "./msg<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">/${zkTableInfo.subModuleName?uncap_first}</#if>/${zkTableInfo.funcName?uncap_first}/en_US";
+
+
+]]>
+	</content>
+</zkCodeTemplate>
+
+
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zkCodeTemplate>
+	<content><![CDATA[
+/**
+ * Copyright &copy; All rights reserved.
+ */
+package ${zkModule.packagePrefix}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Many;
+import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.mapping.FetchType;
+import org.apache.ibatis.annotations.SelectProvider;
+
+import com.zk.base.dao.ZKBaseTreeDao;
+import com.zk.db.annotation.ZKMyBatisDao;
+import com.zk.base.myBaits.provider.ZKMyBatisTreeSqlProvider;
+import ${zkModule.packagePrefix}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.entity.${zkTableInfo.className};
+
+/**
+ * ${zkTableInfo.className}DAO接口
+ * @author 
+ * @version  1.0
+ */
+@ZKMyBatisDao
+public interface ${zkTableInfo.className}Dao extends ZKBaseTreeDao<${zkTableInfo.pkAttrType}, ${zkTableInfo.className}> {
+
+	/**
+     * 树形查询，此方法为递归查询树型节点；1.不支持子节点过虑; 2.仅支持根节点过滤与分页；
+     * fetchType = FetchType.EEAGER 不能改为懒加截，不然会报错：com.linde.wms.dto.BinGroupInfoDto_$$_jvst38e_0["handler"])
+     * 虽然可以用 @JsonIgnoreProperties(value = "handler") 解决报错，但查出的数据还是错的；
+     */
+    @SelectProvider(type = ZKMyBatisTreeSqlProvider.class, method = "selectTree")
+    @Results(id = "treeResult", value = {
+            @Result(column = "{parentId=pkId}", property = "children", javaType = List.class, many = @Many(select = "${zkModule.packagePrefix}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.dao.${zkTableInfo.className}Dao.findTree", fetchType = FetchType.EAGER)) })
+    List<${zkTableInfo.className}> findTree(${zkTableInfo.className} ${zkTableInfo.funcName?uncap_first});
+
+	/**
+     * 查询详情，包含父节点 fetchType = FetchType.EEAGER
+     */
+    @SelectProvider(type = ZKMyBatisTreeSqlProvider.class, method = "selectTreeDetail")
+    @Results(value = {
+            @Result(column = "{pkId=parentId}", property = "parent", javaType = ${zkTableInfo.className}.class, one = @One(select = "${zkModule.packagePrefix}<#if zkTableInfo.subModuleName??&zkTableInfo.subModuleName != "">.${zkTableInfo.subModuleName?uncap_first}</#if>.dao.${zkTableInfo.className}Dao.getDetail", fetchType = FetchType.EAGER)) })
+    ${zkTableInfo.className} getDetail(${zkTableInfo.className} ${zkTableInfo.funcName?uncap_first});
+	
+}]]>
+	</content>
+</zkCodeTemplate>
+

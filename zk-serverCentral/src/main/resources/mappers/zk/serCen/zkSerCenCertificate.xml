@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.server.central.dao.ZKSerCenCertificateDao">
+<!-- 
+	// 查询结果集
+	<sql id="columns">
+		t.c_create_user_id AS "createUserId",
+		t.c_update_user_id AS "updateUserId",
+		t.c_create_date AS "createDate",
+		t.c_update_date AS "updateDate",
+		t.c_del_flag AS "delFlag",
+		t.c_version AS "version",
+		t.c_remarks AS "remarks",
+		t.c_spare1 AS "spare1",
+		t.c_spare2 AS "spare2",
+		t.c_spare3 AS "spare3",
+		t.c_spare_json AS "spareJson",
+		t.c_valid_start_date AS "validStartDate",
+		t.c_valid_end_date AS "validEndDate",
+		t.c_status AS "status",
+		t.c_server_name AS "serverName",
+		t.c_private_key AS "privateKey",
+		t.c_public_key AS "publicKey",
+		t.c_pk_id AS "pkId"
+	</sql>
+	
+	<sql id="selectWhere">
+		<where>
+			<if test="pkId != null">
+				AND t.c_pk_id = #{pkId}
+			</if>
+			<if test="createUserId != null">
+				AND t.c_create_user_id = #{createUserId}
+			</if>
+			<if test="updateUserId != null">
+				AND t.c_update_user_id = #{updateUserId}
+			</if>
+			<if test="createDate != null">
+				AND t.c_create_date = #{createDate}
+			</if>
+			<if test="updateDate != null">
+				AND t.c_update_date = #{updateDate}
+			</if>
+			<if test="delFlag != null">
+				AND t.c_del_flag = #{delFlag}
+			</if>
+			<if test="serverName != null and serverName != ''">
+				AND t.c_server_name like CONCAT('%', REPLACE(REPLACE(REPLACE(#{serverName}, '\\\\\\\\', '\\\\\\\\\\\\\\\\'), '_', '\\\\_'), '%', '\\\\%'), '%')
+			</if>
+			<if test="status != null">
+				AND t.c_status = #{status}
+			</if>
+			<choose>
+				<when test="extraParams.validStartDateBegin != null and extraParams.validStartDateEnd != null ">
+					AND t.c_valid_start_date between #{extraParams.validStartDateBegin} and #{extraParams.validStartDateEnd}
+				</when>
+				<otherwise>
+					<if test="extraParams.validStartDateBegin != null">
+						AND t.c_valid_start_date &gt;= #{extraParams.validStartDateBegin}
+					</if>
+					<if test="extraParams.validStartDateEnd != null">
+						AND t.c_valid_start_date &lt;= #{extraParams.validStartDateEnd}
+					</if>
+				</otherwise>
+			</choose>
+			<if test="extraParams.validEndDateBegin != null">
+				AND t.c_valid_end_date &gt;= #{extraParams.validEndDateBegin}
+			</if>
+			<if test="extraParams.validEndDateEnd != null">
+				AND t.c_valid_end_date &lt;= #{extraParams.validEndDateEnd}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="pageOrder">
+		<choose>
+            <when test='page != null and page.sort != null'> ORDER BY 
+                <foreach item="sort_item" index="sort_index" collection="page.sort" open="" separator="," close="">
+                    t.${sort_item.columnName} ${sort_item.value}
+                </foreach>
+            </when>
+            <otherwise>
+                ORDER BY t.c_pk_id ASC
+            </otherwise>
+        </choose>
+	</sql>
+
+	// 按ID查询
+	<select id="get" resultType="ZKSerCenCertificate">
+		SELECT
+		<include refid="columns" />
+		FROM t_sc_server_certificate t
+		WHERE t.c_pk_id = #{pkId}
+	</select>
+	
+	// 一般查询
+	<select id="findList" resultType="ZKSerCenCertificate">
+		SELECT
+		<include refid="columns" />
+		FROM t_sc_server_certificate t
+		<include refid="selectWhere" />
+		<include refid="pageOrder" />
+	</select>
+	
+	// 插入
+	<insert id="insert">
+		INSERT INTO t_sc_server_certificate(
+			c_pk_id,
+			c_create_user_id,
+			c_update_user_id,
+			c_create_date,
+			c_update_date,
+			c_del_flag,
+			c_version,
+			c_remarks,
+			c_spare1,
+			c_spare2,
+			c_spare3,
+			c_spare_json,
+			c_valid_start_date,
+			c_valid_end_date,
+			c_status,
+			c_server_name,
+			c_private_key,
+			c_public_key
+		) VALUES (
+			#{pkId},
+			#{createUserId},
+			#{updateUserId},
+			#{createDate},
+			#{updateDate},
+			#{delFlag},
+			#{version},
+			#{remarks},
+			#{spare1},
+			#{spare2},
+			#{spare3},
+			#{spareJson},
+			#{validStartDate},
+			#{validEndDate},
+			#{status},
+			#{serverName},
+			#{privateKey},
+			#{publicKey}
+		)
+	</insert>
+	
+	修改
+	<update id="update">
+		UPDATE t_sc_server_certificate SET 	
+			// c_del_flag = #{delFlag},
+			c_version = #{version},
+			c_remarks = #{remarks},
+			c_spare1 = #{spare1},
+			c_spare2 = #{spare2},
+			c_spare3 = #{spare3},
+			c_spare_json = JSON_MERGE_PATCH(c_spare_json, #{spareJson}),
+			c_valid_start_date = #{validStartDate},
+			c_valid_end_date = #{validEndDate},
+			// c_status = #{status},
+			c_update_user_id = #{updateUserId},
+			c_update_date = #{updateDate}
+		WHERE c_pk_id = #{pkId}
+	</update>
+	
+	// 逻辑删除
+	<update id="delete">
+		UPDATE t_sc_server_certificate 
+		SET c_del_flag = #{delFlag}, 
+			c_update_user_id = #{updateUserId},
+			c_update_date = #{updateDate}
+		WHERE c_pk_id = #{pkId}
+	</update>
+	
+	// 物理删除
+	<update id="diskDelete">
+		DELETE FROM t_sc_server_certificate WHERE c_pk_id = #{pkId}
+	</update> -->
+
+</mapper>
+
+
