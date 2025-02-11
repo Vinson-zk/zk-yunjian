@@ -66,6 +66,12 @@
 			<groupId>com.zk</groupId>
 			<artifactId>zk-framework</artifactId>
 			<version>${version.zk.framework}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.cloud</groupId>
+  					<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.zk</groupId>

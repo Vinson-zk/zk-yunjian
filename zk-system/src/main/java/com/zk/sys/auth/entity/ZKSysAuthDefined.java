@@ -3,8 +3,6 @@
  */
 package com.zk.sys.auth.entity;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Transient;
@@ -31,6 +29,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 定义权限
@@ -209,7 +208,8 @@ public class ZKSysAuthDefined extends ZKBaseEntity<String, ZKSysAuthDefined> {
 	 * 根据主键类型，重写主键生成；
 	 */
 	@Override
-	protected String genId() {
+	@JsonIgnore
+	public String genId() {
         return ZKIdUtils.genLongStringId();
     }
 

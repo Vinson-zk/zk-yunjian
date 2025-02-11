@@ -85,10 +85,13 @@ public class ZKWechatSecConfiguration {
 
         // 过虑路径设置
         LinkedHashMap<String, String> setFilterChainMap = new LinkedHashMap<>();
+        setFilterChainMap.put("/favicon.ico", "anon");
         String prefix = String.format("/%s/%s/%s", this.pathAdmin, this.pathWechat, this.pathVersion);
-        setFilterChainMap.put(prefix, "anon");
-        setFilterChainMap.put(prefix + "/", "anon");
-        setFilterChainMap.put(prefix + "/index", "anon");
+//        setFilterChainMap.put(prefix, "anon");
+//        setFilterChainMap.put(prefix + "/", "anon");
+//        setFilterChainMap.put(prefix + "/index", "anon");
+        setFilterChainMap.put("/", "anon");
+        setFilterChainMap.put("/index", "anon");
         setFilterChainMap.put(prefix + "/wx/**", "anon");
         setFilterChainMap.put(prefix + "/officialAccounts/officialAccountsUser/officialAccountsUser", "serverOrUser");
         setFilterChainMap.put("/**", "user");

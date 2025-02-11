@@ -164,6 +164,7 @@ public class ZKDiskFileTransfer extends ZKAbstractFileTransfer {
      */
 //    @Override
     public File getFile(String fileId) {
+        log.info("[^_^:20250120-1816-001] getFile: {}", fileId);
         File file = new File(fileId);
         if (file.exists() && file.isFile()) {
             return file;

@@ -30,10 +30,12 @@ import com.zk.core.utils.ZKStringUtils;
 import com.zk.security.ticket.ZKSecTicket;
 import com.zk.security.utils.ZKSecSecurityUtils;
 import com.zk.sys.org.entity.ZKSysOrgUser;
-import com.zk.sys.org.entity.ZKSysOrgUserEditLog.ZKUserEditFlag;
+import com.zk.sys.org.entity.ZKSysOrgUserOptLog.ZKUserOptTypeFlag;
 import com.zk.sys.org.service.ZKSysOrgUserOptService;
 import com.zk.sys.org.service.ZKSysOrgUserService;
 import com.zk.sys.utils.ZKSysUtils;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /** 
 * @ClassName: ZKSysOrgUserPasswordController 
@@ -42,7 +44,7 @@ import com.zk.sys.utils.ZKSysUtils;
 * @version 1.0 
 */
 @RestController
-@RequestMapping(value = "${zk.path.admin}/${zk.path.sys}/${zk.sys.version}/org/upwd")
+@RequestMapping(value = "${zk.path.admin}/${zk.path.sys}/${zk.sys.version}/${zk.path.sys.org}/upwd")
 public class ZKSysOrgUserPasswordController {
 
     @Autowired
@@ -57,41 +59,54 @@ public class ZKSysOrgUserPasswordController {
     /**
      * 忘记密码，发送邮件验证码
      *
-     * @Title: sendMailVerifiyCode
+     * @Title: sendMailVerifyCode
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
      * @date Jul 14, 2024 10:17:34 PM
      * @param companyCode
      *            不传时，默认从拥有者公司的个人用户下查找
-     * @param account
-     *            账号、手机号、邮箱
+     * @param mail
+     *            邮箱
      * @return
      * @return ZKMsgRes
      */
-    @RequestMapping(value = "n/fp/sendMailVerifiyCode", method = RequestMethod.POST)
-    public ZKMsgRes fpSendMailVerifiyCode(@RequestParam(value = "companyCode", required = false) String companyCode,
-            @RequestParam("account") String account) {
+    @RequestMapping(value = "n/fp/sendMailVerifyCode", method = RequestMethod.POST)
+    public ZKMsgRes fpSendMailVerifyCode(@RequestParam(value = "companyCode", required = false) String companyCode,
+            @RequestParam("mail") String mail) {
         ZKSecTicket t = ZKSecSecurityUtils.getTikcet(true);
-        sysOrgUserOptService.fpSendMailVerifiyCode(companyCode, account, t);
+        if (ZKStringUtils.isEmpty(companyCode)) {
+            companyCode = ZKSysUtils.getOwnerCompanyCode();
+        }
+        sysOrgUserOptService.fpSendMailVerifyCode(companyCode, mail, t);
         return ZKMsgRes.asOk();
     }
 
     // 发送手机验证码
-    @RequestMapping(value = "n/fp/sendPhoneVerifiyCode", method = RequestMethod.POST)
-    public ZKMsgRes fpSendPhoneVerifiyCode(@RequestParam(value = "companyCode", required = false) String companyCode,
-            @RequestParam("account") String account) {
+    @RequestMapping(value = "n/fp/sendPhoneVerifyCode", method = RequestMethod.POST)
+    public ZKMsgRes fpSendPhoneVerifyCode(@RequestParam(value = "companyCode", required = false) String companyCode,
+            @RequestParam("phoneNum") String phoneNum) {
         ZKSecTicket t = ZKSecSecurityUtils.getTikcet(true);
-        sysOrgUserOptService.fpSendPhoneVerifiyCode(companyCode, account, t);
+        if (ZKStringUtils.isEmpty(companyCode)) {
+            companyCode = ZKSysUtils.getOwnerCompanyCode();
+        }
+        sysOrgUserOptService.fpSendPhoneVerifyCode(companyCode, phoneNum, t);
+        return ZKMsgRes.asOk();
+    }
+
+    @RequestMapping(value = "n/fp/sendVerifyCodeAgain")
+    public ZKMsgRes sendVerifyCodeAgain(@RequestParam("againFlag") int againFlag) {
+        ZKSecTicket tk = ZKSecSecurityUtils.getTikcet();
+        this.sysOrgUserOptService.sendVerifyCodeAgainByUser(tk, againFlag);
         return ZKMsgRes.asOk();
     }
 
     // 忘记密码，校验验证码和修改密码
-    @RequestMapping(value = "n/fp/submitVerifiyCode", method = RequestMethod.POST)
-    public ZKMsgRes fpSubmitVerifiyCode(@RequestParam("verifiyCode") String verifiyCode,
-            @RequestParam("newPassword") String newPassword) {
+    @RequestMapping(value = "n/fp/submitVerifyCode", method = RequestMethod.POST)
+    public ZKMsgRes fpSubmitVerifyCode(@RequestParam("verifyCode") String verifyCode,
+            @RequestParam("newPassword") String newPassword, HttpServletRequest req) {
         // 验证验证码，请求需要带追踪令牌；
         ZKSecTicket t = ZKSecSecurityUtils.getTikcet();
-        sysOrgUserOptService.fpSubmitVerifiyCode(t, verifiyCode, newPassword);
+        sysOrgUserOptService.fpSubmitVerifyCode(t, verifyCode, newPassword, req);
         return ZKMsgRes.asOk();
     }
 
@@ -101,9 +116,9 @@ public class ZKSysOrgUserPasswordController {
     // 新密码
     @RequestMapping(value = "changePassword", method = RequestMethod.POST)
     public ZKMsgRes changePassword(@RequestParam("oldPassword") String oldPassword,
-            @RequestParam("newPassword") String newPassword) {
+            @RequestParam("newPassword") String newPassword, HttpServletRequest req) {
         ZKSysOrgUser sysOrgUser = this.sysOrgUserService.get((String) ZKSecSecurityUtils.getUserId());
-        this.sysOrgUserOptService.changePassword(sysOrgUser, oldPassword, newPassword);
+        this.sysOrgUserOptService.changePassword(sysOrgUser, oldPassword, newPassword, req);
         return ZKMsgRes.asOk();
     }
 
@@ -111,12 +126,14 @@ public class ZKSysOrgUserPasswordController {
     @RequestMapping(value = "resetPwd", method = RequestMethod.POST)
     @ResponseBody
     public ZKMsgRes resetPwd(@RequestParam("userId") String userId,
-            @RequestParam(value = "pwd", required = false) String pwd) {
+            @RequestParam(value = "pwd", required = false) String pwd, HttpServletRequest req) {
         int count = 0;
         if (ZKStringUtils.isEmpty(pwd)) {
             pwd = ZKSysUtils.getUserDefaultPwd();
         }
-        this.sysOrgUserService.updatePwd(userId, pwd, ZKUserEditFlag.Pwd.company);
+        this.sysOrgUserService.updatePwd(userId, pwd, ZKUserOptTypeFlag.Pwd.company, req);
         return ZKMsgRes.asOk(null, count);
     }
 }
+
+

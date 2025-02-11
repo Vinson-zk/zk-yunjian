@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zk.base.service.ZKBaseService;
 import com.zk.core.exception.ZKBusinessException;
+import com.zk.core.exception.ZKValidatorException;
 import com.zk.devleopment.tool.gen.action.ZKCodeGenConstant;
 import com.zk.devleopment.tool.gen.action.ZKConvertUtils;
 import com.zk.devleopment.tool.gen.action.tableInfo.ZKGetTableInfoUtils;
@@ -52,6 +53,22 @@ public class ZKTableInfoService extends ZKBaseService<String, ZKTableInfo, ZKTab
     ZKColInfoService zkColInfoService;
 
     // ------------------------------------------------------
+    /**
+     * 更新表信息
+     *
+     * @Title: makeTableInfo
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date Dec 27, 2024 2:18:57 PM
+     * @param isForce
+     *            是否强制更新？true-强制更新；false-当表信息已存在时，不强制更新；
+     * @param moduleId
+     *            模块ID
+     * @param targetTableNames
+     *            指定生成的目标表，为空或为 null 时，制作模块下所有的表信息
+     * @return
+     * @return List<ZKTableInfo>
+     */
     protected List<ZKTableInfo> makeTableInfo(boolean isForce, String moduleId, String... targetTableNames) {
         // module 是否存在
         ZKModule module = this.zkModuleService.get(new ZKModule(moduleId));
@@ -109,7 +126,6 @@ public class ZKTableInfoService extends ZKBaseService<String, ZKTableInfo, ZKTab
                 }
             }
         }
-
         return res;
     }
 
@@ -168,7 +184,7 @@ public class ZKTableInfoService extends ZKBaseService<String, ZKTableInfo, ZKTab
     // 更新表列表；更新表列表；从模块的数据库中读取表列表，更新到代码生成的表列表中；
     @Transactional(readOnly = false)
     public List<ZKTableInfo> updateTableList(String moduleId) {
-        List<ZKTableInfo> res = this.makeTableInfo(false, moduleId, (String) null);
+        List<ZKTableInfo> res = this.makeTableInfo(false, moduleId);
         this.saveBatch(res);
         return res;
     }
@@ -223,6 +239,21 @@ public class ZKTableInfoService extends ZKBaseService<String, ZKTableInfo, ZKTab
 //        this.saveBatch(res);
 //        return res.get(0);
 //    }
+
+    /**
+     * 保存数据（插入或更新）
+     * 
+     * @param entity
+     * @throws ZKValidatorException
+     */
+    @Transactional(readOnly = false)
+    public int save(ZKTableInfo entity) throws ZKValidatorException {
+        ZKTableInfo old = this.getByTableName(entity.getModuleId(), entity.getTableName());
+        if (old != null) {
+            entity.setPkId(old.getPkId());
+        }
+        return super.save(entity);
+    }
 
     /**
      * 根据表名，取表信息；注：不包含表的字段信息

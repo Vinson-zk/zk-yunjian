@@ -21,8 +21,6 @@ package com.zk.base.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +32,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zk.core.commons.ZKValidationGroup;
 import com.zk.core.commons.data.ZKJson;
-import com.zk.core.exception.base.ZKUnknownException;
 import com.zk.core.utils.ZKClassUtils;
 import com.zk.core.utils.ZKDateUtils;
 import com.zk.core.utils.ZKIdUtils;
@@ -42,10 +39,9 @@ import com.zk.db.annotation.ZKColumn;
 import com.zk.db.annotation.ZKQuery;
 import com.zk.db.annotation.ZKUpdate;
 import com.zk.db.entity.ZKDBEntity;
-import com.zk.security.service.ZKSecPrincipalService;
-import com.zk.security.utils.ZKSecPrincipalUtils;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * @ClassName: ZKBaseEntity
@@ -430,54 +426,54 @@ public abstract class ZKBaseEntity<ID extends Serializable, E extends ZKBaseEnti
         this.isNewRecord = isNewRecord;
     }
 
-    /**
-     * 插入之前执行方法，子类实现
-     */
-    public void preInsert() {
-        // 不限制ID为UUID，调用 setIsNewRecord() 使用自定义ID
-        if (this.getPkId() == null || "".equals(pkId.toString())) {
-            this.setPkId(this.genId());
-        }
-        ZKSecPrincipalService zkSecPrincipalService = ZKSecPrincipalUtils.getSecPrincipalService();
-        if (zkSecPrincipalService != null) {
-            try {
-                this.createUserId = zkSecPrincipalService.getUserId();
-            }
-            catch(ZKUnknownException e) {
-                log.error("[>_<:20240617-0034-001] 插入数据时，获取当前用户信息失败，但不影响运行！");
-                e.printStackTrace();
-            }
-        }
-        this.updateUserId = this.createUserId;
-        this.createDate = new Date();
-        this.updateDate = this.createDate;
-        this.version = 0L;
-    }
+//    /**
+//     * 插入之前执行方法，子类实现
+//     */
+//    public void preInsert() {
+//        // 不限制ID为UUID，调用 setIsNewRecord() 使用自定义ID
+//        if (this.getPkId() == null || "".equals(pkId.toString())) {
+//            this.setPkId(this.genId());
+//        }
+//        ZKSecPrincipalService zkSecPrincipalService = ZKSecPrincipalUtils.getSecPrincipalService();
+//        if (zkSecPrincipalService != null) {
+//            try {
+//                this.createUserId = zkSecPrincipalService.getUserId();
+//            }
+//            catch(ZKUnknownException e) {
+//                log.error("[>_<:20240617-0034-001] 插入数据时，获取当前用户信息失败，但不影响运行！");
+//                e.printStackTrace();
+//            }
+//        }
+//        this.updateUserId = this.createUserId;
+//        this.createDate = new Date();
+//        this.updateDate = this.createDate;
+//        this.version = 0L;
+//    }
 
     @Transient
     @XmlTransient
     @JsonIgnore
     @SuppressWarnings("unchecked")
-    protected ID genId() {
+    public ID genId() {
         return (ID) ZKIdUtils.genLongStringId();
     }
 
-    /**
-     * 更新之前执行方法，子类实现
-     */
-    public void preUpdate() {
-        ZKSecPrincipalService zkSecPrincipalService = ZKSecPrincipalUtils.getSecPrincipalService();
-        if (zkSecPrincipalService != null) {
-            try {
-                this.updateUserId = zkSecPrincipalService.getUserId();
-            }
-            catch(ZKUnknownException e) {
-                log.error("[>_<:20240617-0034-001] 修改数据时，获取当前用户信息失败，但不影响运行！");
-                e.printStackTrace();
-            }
-        }
-        this.updateDate = new Date();
-    }
+//    /**
+//     * 更新之前执行方法，子类实现
+//     */
+//    public void preUpdate() {
+//        ZKSecPrincipalService zkSecPrincipalService = ZKSecPrincipalUtils.getSecPrincipalService();
+//        if (zkSecPrincipalService != null) {
+//            try {
+//                this.updateUserId = zkSecPrincipalService.getUserId();
+//            }
+//            catch(ZKUnknownException e) {
+//                log.error("[>_<:20240617-0034-001] 修改数据时，获取当前用户信息失败，但不影响运行！");
+//                e.printStackTrace();
+//            }
+//        }
+//        this.updateDate = new Date();
+//    }
 
     @SuppressWarnings("unchecked")
     @Transient

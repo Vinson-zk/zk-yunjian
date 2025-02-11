@@ -5,8 +5,6 @@ package com.zk.wechat.officialAccounts.entity;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
@@ -31,6 +29,7 @@ import com.zk.wechat.wx.officialAccounts.msgBean.ZKWXUserAuthAccessToken;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 账号的用户
@@ -655,7 +654,8 @@ public class ZKOfficialAccountsUser extends ZKBaseEntity<String, ZKOfficialAccou
 	 * 根据主键类型，重写主键生成；
 	 */
 	@Override
-	protected String genId() {
+	@JsonIgnore
+	public String genId() {
         return ZKIdUtils.genLongStringId();
     }
 	

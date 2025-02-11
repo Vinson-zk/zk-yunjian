@@ -3,9 +3,6 @@
  */
 package com.zk.sys.org.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +16,10 @@ import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.security.utils.ZKSecSecurityUtils;
 import com.zk.sys.org.entity.ZKSysOrgUserType;
-import com.zk.sys.org.service.ZKSysOrgUserTypeService;       
+import com.zk.sys.org.service.ZKSysOrgUserTypeService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;       
 
 /**
  * ZKSysOrgUserTypeController
@@ -27,7 +27,7 @@ import com.zk.sys.org.service.ZKSysOrgUserTypeService;
  * @version 
  */
 @RestController
-@RequestMapping(value = "${zk.path.admin}/${zk.path.sys}/${zk.sys.version}/org/sysOrgUserType")
+@RequestMapping(value = "${zk.path.admin}/${zk.path.sys}/${zk.sys.version}/${zk.path.sys.org}/sysOrgUserType")
 public class ZKSysOrgUserTypeController extends ZKBaseController {
 
 	@Autowired

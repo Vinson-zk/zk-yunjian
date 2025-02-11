@@ -20,11 +20,14 @@ package com.zk.sys.configuration;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 
 import com.zk.cache.redis.ZKRedisCacheManager;
+import com.zk.core.configuration.ZKCoreThreadPoolProperties;
 import com.zk.core.configuration.ZKEnableCoreServlet;
 import com.zk.core.redis.ZKJedisOperatorStringKey;
 import com.zk.core.redis.configuration.ZKEnableRedis;
@@ -79,6 +82,13 @@ public class ZKSysAfterConfiguration {
         ZKFeignSpringFormEncoder feignSpringFormEncoder = new ZKFeignSpringFormEncoder(
                 new SpringEncoder(messageConverters));
         return feignSpringFormEncoder;
+    }
+
+    @ConditionalOnMissingBean(name = { "userOptLogThreadPoolProperties" })
+    @ConfigurationProperties(prefix = "zk.sys.user.opt.log.thread.pool")
+    @Bean("userOptLogThreadPoolProperties")
+    ZKCoreThreadPoolProperties userOptLogThreadPoolProperties() {
+        return new ZKCoreThreadPoolProperties();
     }
 
 

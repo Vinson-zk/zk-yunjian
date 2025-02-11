@@ -88,18 +88,27 @@ public interface ZKSysOrgCompanyDao extends ZKBaseTreeDao<String, ZKSysOrgCompan
             "c_status = #{company.status}, ", //
             "c_name = #{company.name}, ", //
             "c_short_desc = #{company.shortDesc}, ", //
-            "c_logo = #{company.logo}, ", //
+//            "c_logo = #{company.logo}, ", //
             "c_legal_person = #{company.legalPerson}, ", //
             "c_legal_cert_type = #{company.legalCertType}, ", //
             "c_legal_cert_num = #{company.legalCertNum}, ", //
-            "c_legal_cert_photo = #{company.legalCertPhoto}, ", //
+//            "c_legal_cert_photo = #{company.legalCertPhoto}, ", //
             "c_register_date = #{company.registerDate}, ", //
             "c_company_cert_type = #{company.companyCertType}, ", //
             "c_company_cert_num = #{company.companyCertNum}, ", //
-            "c_company_cert_photo = #{company.companyCertPhoto}, ", //
+//            "c_company_cert_photo = #{company.companyCertPhoto}, ", //
             "c_update_date = #{company.updateDate} ", //
             "WHERE c_pk_id = #{company.pkId} " })
     int updateAuditContent(@Param("tn") String tn, @Param("company") ZKSysOrgCompany company);
+
+    // 修改证件照片及logo
+    @Update({ " UPDATE ${tn} SET ", //
+            "c_logo = #{company.logo}, ", //
+            "c_legal_cert_photo = #{company.legalCertPhoto}, ", //
+            "c_company_cert_photo = #{company.companyCertPhoto}, ", //
+            "c_update_date = #{company.updateDate} ", //
+            "WHERE c_pk_id = #{company.pkId} " })
+    int updateCertPhoto(@Param("tn") String tn, @Param("company") ZKSysOrgCompany company);
 
 	
 }

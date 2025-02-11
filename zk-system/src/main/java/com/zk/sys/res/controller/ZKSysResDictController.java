@@ -3,8 +3,6 @@
  */
 package com.zk.sys.res.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +15,9 @@ import com.zk.base.controller.ZKBaseController;
 import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.sys.res.entity.ZKSysResDict;
-import com.zk.sys.res.service.ZKSysResDictService;       
+import com.zk.sys.res.service.ZKSysResDictService;
+
+import jakarta.servlet.http.HttpServletRequest;       
 
 /**
  * ZKSysResDictController
@@ -70,6 +70,14 @@ public class ZKSysResDictController extends ZKBaseController {
     // 分页列表查询
     @RequestMapping(value = "sysResDicts", method = RequestMethod.GET)
     public ZKMsgRes sysResDicts(ZKSysResDict sysResDict, HttpServletRequest hReq) {
+
+        ZKPage<ZKSysResDict> resPage = ZKPage.asPage(hReq);
+        resPage = this.sysResDictService.findPage(resPage, sysResDict);
+        return ZKMsgRes.asOk(null, resPage);
+    }
+
+    @RequestMapping(value = "n/sysResDicts", method = RequestMethod.GET)
+    public ZKMsgRes nSysResDicts(ZKSysResDict sysResDict, HttpServletRequest hReq) {
 
         ZKPage<ZKSysResDict> resPage = ZKPage.asPage(hReq);
         resPage = this.sysResDictService.findPage(resPage, sysResDict);

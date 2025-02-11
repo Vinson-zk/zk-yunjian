@@ -55,7 +55,7 @@ public class ZKMongoConfiguration {
 
     @ConditionalOnMissingBean(name = { "mongodbServerAddress" })
     @Bean("mongodbServerAddress")
-    public List<ServerAddress> mongodbServerAddress(ZKMongoProperties zkMongoProperties) {
+    List<ServerAddress> mongodbServerAddress(ZKMongoProperties zkMongoProperties) {
         System.out.println(ZKEnableMongo.printLog + "mongodbServerAddress --- [" + this.getClass().getSimpleName() + "] " + this.hashCode());
         Assert.notNull(zkMongoProperties.getUrl(), "[>_<: 20190822-1509-001] AccessReal: mongodb url must not be null!");
         return Arrays.asList(ServerAddressHelper.createServerAddress(zkMongoProperties.getUrl()));
@@ -118,7 +118,7 @@ public class ZKMongoConfiguration {
 
     @ConditionalOnMissingBean(value = { MongoClient.class })
     @Bean("mongoClient")
-    public MongoClient mongoClient(MongoClientSettings mongoClientSettings) {
+    MongoClient mongoClient(MongoClientSettings mongoClientSettings) {
         System.out.println(ZKEnableMongo.printLog + "mongoClient --- [" + this.getClass().getSimpleName() + "] " + this.hashCode());
 //        MongoClientFactoryBean mongo = new MongoClientFactoryBean();
         MongoClient mongoClient = MongoClients.create(mongoClientSettings);
@@ -127,7 +127,7 @@ public class ZKMongoConfiguration {
 
     @ConditionalOnMissingBean(value = { MongoDatabaseFactory.class })
     @Bean("mongoDatabaseFactory")
-    public SimpleMongoClientDatabaseFactory mongoDatabaseFactory(MongoClient mongoClient,
+    SimpleMongoClientDatabaseFactory mongoDatabaseFactory(MongoClient mongoClient,
             ZKMongoProperties properties) {
         System.out.println(ZKEnableMongo.printLog + "mongoDatabaseFactory --- [" + this.getClass().getSimpleName() + "] " + this.hashCode());
         return new SimpleMongoClientDatabaseFactory(mongoClient, properties.getDbname());
@@ -135,7 +135,7 @@ public class ZKMongoConfiguration {
 
     @ConditionalOnMissingBean(value = { MappingMongoConverter.class })
     @Bean("mongoMoxydomainConverter")
-    public MappingMongoConverter mongoMoxydomainConverter(MongoDatabaseFactory mongoDatabaseFactory) {
+    MappingMongoConverter mongoMoxydomainConverter(MongoDatabaseFactory mongoDatabaseFactory) {
         System.out.println(ZKEnableMongo.printLog + "mongoMoxydomainConverter --- [" + this.getClass().getSimpleName() + "] " + this.hashCode());
         DbRefResolver dbRefResolver = new DefaultDbRefResolver(mongoDatabaseFactory);
         MappingMongoConverter mappingConverter = new MappingMongoConverter(dbRefResolver, new MongoMappingContext());
@@ -146,7 +146,7 @@ public class ZKMongoConfiguration {
 
     @ConditionalOnMissingBean(value = { MongoTemplate.class })
     @Bean("mongoTemplate")
-    public MongoTemplate mongoTemplate(MongoDatabaseFactory mongoDatabaseFactory,
+    MongoTemplate mongoTemplate(MongoDatabaseFactory mongoDatabaseFactory,
             MappingMongoConverter mongoMoxydomainConverter) {
         System.out.println(ZKEnableMongo.printLog + "mongoTemplate --- [" + this.getClass().getSimpleName() + "] " + this.hashCode());
         return new MongoTemplate(mongoDatabaseFactory, mongoMoxydomainConverter);

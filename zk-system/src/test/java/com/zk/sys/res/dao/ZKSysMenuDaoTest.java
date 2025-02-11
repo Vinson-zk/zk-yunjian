@@ -26,6 +26,7 @@ import org.junit.Test;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.sys.helper.ZKSysTestHelper;
 import com.zk.sys.res.entity.ZKSysMenu;
+import com.zk.sys.res.service.ZKSysMenuService;
 
 import junit.framework.TestCase;
 
@@ -41,6 +42,7 @@ public class ZKSysMenuDaoTest {
     public void testDml() {
 
         ZKSysMenuDao zkSysMenuDao = ZKSysTestHelper.getMainCtx().getBean(ZKSysMenuDao.class);
+        ZKSysMenuService zkSysMenuService = ZKSysTestHelper.getMainCtx().getBean(ZKSysMenuService.class);
 
         List<ZKSysMenu> dels = new ArrayList<>();
 
@@ -62,7 +64,8 @@ public class ZKSysMenuDaoTest {
             zkSysMenu.setExact(false);
             zkSysMenu.setSort(1);
             result = 0;
-            zkSysMenu.preInsert();
+//            zkSysMenu.preInsert();
+            zkSysMenuService.preInsert(zkSysMenu);
             result = zkSysMenuDao.insert(zkSysMenu);
             TestCase.assertEquals(1, result);
             dels.add(zkSysMenu);

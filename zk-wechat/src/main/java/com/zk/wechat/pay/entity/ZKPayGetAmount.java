@@ -18,8 +18,6 @@
 */
 package com.zk.wechat.pay.entity;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Transient;
@@ -33,6 +31,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import com.zk.wechat.pay.enumType.ZKPayCurrency;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 微信支付-收款金额表

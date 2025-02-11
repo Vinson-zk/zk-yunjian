@@ -54,7 +54,7 @@ public class ZKSysUtils {
         public static final String envModel = "zk.sys.env.model";
 
         // 通用验证码邮件
-        public static final String mailVerifyCode = "zk.sys.mail.type.code.verify.code";// mail.verifiy.code
+        public static final String mailVerifyCode = "zk.sys.mail.type.code.verify.code";// mail.verify.code
         // 公司注册邮件
 
         public static final String mailCompanyRegister = "zk.sys.mail.type.code.company.register"; // mail.company.register
@@ -134,7 +134,7 @@ public class ZKSysUtils {
     public static String getMailVerifyCode() {
         if (configMap.get(ConfigKey.mailVerifyCode) == null) {
             configMap.put(ConfigKey.mailVerifyCode,
-                    ZKEnvironmentUtils.getString(ConfigKey.mailVerifyCode, "mail.verifiy.code"));
+                    ZKEnvironmentUtils.getString(ConfigKey.mailVerifyCode, "mail.verify.code"));
         }
         return configMap.get(ConfigKey.mailVerifyCode);
     }

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zk.core.commons.ZKMsgRes;
+import com.zk.core.commons.data.ZKJson;
 import com.zk.core.exception.base.ZKCodeException;
 import com.zk.core.web.utils.ZKServletUtils;
 import com.zk.security.common.ZKSecConstants;
@@ -36,7 +37,9 @@ import com.zk.security.subject.ZKSecSubject;
 import com.zk.security.ticket.ZKSecTicket;
 import com.zk.security.utils.ZKSecSecurityUtils;
 import com.zk.sys.org.entity.ZKSysOrgUser;
+import com.zk.sys.org.entity.ZKSysOrgUserOptLog;
 import com.zk.sys.org.service.ZKSysOrgCompanyService;
+import com.zk.sys.org.service.ZKSysOrgUserOptLogService;
 import com.zk.sys.org.service.ZKSysOrgUserService;
 import com.zk.sys.sec.common.ZKSysSecConstants;
 
@@ -63,6 +66,9 @@ public class ZKSysSecIndexController {
 
     @Autowired
     ZKSysOrgUserService orgUserService;
+
+    @Autowired
+    ZKSysOrgUserOptLogService sysOrgUserOptLogService;
 
     /**
      * 查询当前登录信息
@@ -99,24 +105,29 @@ public class ZKSysSecIndexController {
         ZKSecSubject subject = ZKSecSecurityUtils.getSubject();
         ZKSecTicket tk = subject.getTicket();
 //        if (subject != null && subject.isAuthenticated() && subject.isAuthcUser()) {
-        if (subject != null && subject.isAuthcUser()) {
-            if (tk != null) {
-                log.info("[^_^:20220420-1641-001] 用户[{}]登录登录成功！", ZKSecSecurityUtils.getUserPrincipal().getUsername());
-                Map<String, Object> resMap = new HashMap<>();
-                resMap.put(ZKSecConstants.PARAM_NAME.TicketId, tk.getTkId().toString());
-//                ZKSecUserPrincipal<String> principal = ZKSecSecurityUtils.getUserPrincipal();
-//                ZKSysOrgUser user = this.orgUserService.getDetail(principal.getPkId());
-//                resMap.put(ZKSysSecConstants.KeyWebLogin.company, company);
-//                resMap.put(ZKSysSecConstants.KeyWebLogin.user, user);
-                return ZKMsgRes.asOk(null, resMap);
-            }
+        if (subject != null && subject.isAuthcUser() && tk != null) {
+            sysOrgUserOptLogService.optLogLogin(ZKSecSecurityUtils.getUserId(),
+                    ZKSysOrgUserOptLog.ZKUserOptTypeFlag.Login.self, ZKJson.parse("{\"resFlag\": 1}"), hReq);
+            log.info("[^_^:20220420-1641-001] 用户[{}]登录登录成功！", ZKSecSecurityUtils.getUserPrincipal().getUsername());
+            Map<String, Object> resMap = new HashMap<>();
+            resMap.put(ZKSecConstants.PARAM_NAME.TicketId, tk.getTkId().toString());
+//            ZKSecUserPrincipal<String> principal = ZKSecSecurityUtils.getUserPrincipal();
+//            ZKSysOrgUser user = this.orgUserService.getDetail(principal.getPkId());
+//            resMap.put(ZKSysSecConstants.KeyWebLogin.company, company);
+//            resMap.put(ZKSysSecConstants.KeyWebLogin.user, user);
+            return ZKMsgRes.asOk(null, resMap);
         }
+
+        // resFlag = -1，登录失败
         String username = ZKServletUtils.getCleanParam(hReq, ZKSecConstants.PARAM_NAME.Username);
+        sysOrgUserOptLogService.optLogLogin(username, ZKSysOrgUserOptLog.ZKUserOptTypeFlag.Login.self,
+                ZKJson.parse("{\"resFlag\": -1}"), hReq);
         log.info("[^_^:20220420-1641-002] 用户 [{}] 登录失败！", username);
         ZKCodeException se = (ZKCodeException) hReq.getAttribute(ZKSecConstants.SEC_KEY.SecException);
         if (se != null) {
             return ZKMsgRes.as(null, se);
         }
+
         return ZKMsgRes.asSysErr();
     }
 

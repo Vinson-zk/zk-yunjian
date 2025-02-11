@@ -3,17 +3,22 @@
  */
 package com.zk.sys.org.service;
  
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Maps;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.base.service.ZKBaseTreeService;
+import com.zk.core.commons.ZKMsgRes;
+import com.zk.core.commons.ZKValidationGroup;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.core.exception.ZKBusinessException;
@@ -22,6 +27,13 @@ import com.zk.core.utils.ZKDateUtils;
 import com.zk.core.utils.ZKLocaleUtils;
 import com.zk.core.utils.ZKMsgUtils;
 import com.zk.core.utils.ZKStringUtils;
+import com.zk.core.utils.ZKValidatorsBeanUtils;
+import com.zk.framework.file.ZKFileUploadUtils;
+import com.zk.framework.file.api.ZKFileUploadApi;
+import com.zk.framework.file.entity.ZKFileInfo;
+import com.zk.security.common.ZKSecConstants;
+import com.zk.security.ticket.ZKSecTicket;
+import com.zk.security.ticket.ZKSecTicketManager;
 import com.zk.security.utils.ZKSecSecurityUtils;
 import com.zk.sys.auth.entity.ZKSysAuthCompany;
 import com.zk.sys.auth.service.ZKSysAuthCompanyService;
@@ -29,11 +41,13 @@ import com.zk.sys.org.dao.ZKSysOrgCompanyDao;
 import com.zk.sys.org.entity.ZKSysOrgCompany;
 import com.zk.sys.org.entity.ZKSysOrgRole;
 import com.zk.sys.org.entity.ZKSysOrgUser;
-import com.zk.sys.org.entity.ZKSysOrgUserEditLog.ZKUserEditFlag;
+import com.zk.sys.org.entity.ZKSysOrgUserOptLog.ZKUserOptTypeFlag;
 import com.zk.sys.res.entity.ZKSysResDict;
 import com.zk.sys.res.service.ZKSysResDictService;
 import com.zk.sys.sec.common.ZKSysSecConstants;
 import com.zk.sys.utils.ZKSysUtils;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * ZKSysOrgCompanyService
@@ -65,17 +79,35 @@ public class ZKSysOrgCompanyService extends ZKBaseTreeService<String, ZKSysOrgCo
     @Autowired
     ZKSysResDictService sysResDictService;
 
+    @Autowired
+    ZKFileUploadApi fileUploadApi;
+
+    @Autowired(required = false)
+    ZKSecTicketManager ticketManager;
+
+    @Value("${zk.default.max.page.size:9999}")
+    int defaultMaxPageSize = 9999;
+
     /********************************************************/
     /** 公司 的一些修改 ****/
     /********************************************************/
 
-    // 修改需要审核的内容
+    // 提交公司审核信息
     @Transactional(readOnly = false)
-    public int updateAuditContent(ZKSysOrgCompany company) {
+    public int updateAuditContent(ZKSysOrgCompany company, MultipartFile _p_logo, MultipartFile _p_legalCertPhotoFront,
+            MultipartFile _p_legalCertPhotoBack, MultipartFile _p_companyCertPhoto) {
+
         if (ZKStringUtils.isEmpty(company.getPkId())) {
             return 0;
         }
         
+        if (company.getStatus() == null || ZKSysOrgCompany.KeyStatus.waitSubmit != company.getStatus().intValue()) {
+            // 公司状态不为待提交审核信息状态，不能提交审核信息
+            log.error("[>_<:20250122-1652-001] zk.sys.010035=公司[{}-{}]状态不为待提交审核状态，不能提交审核信息", company.getPkId(),
+                    company.getCode());
+            throw ZKBusinessException.as(" zk.sys.010035", company);
+        }
+
         // 判断法人证件字典是否存在
 //        ZKSysResDict legalCertType = sysResDictService.getByTypeCodeAndDictCode(ZKSysUtils.getDictTypeCertType(),
 //                company.getLegalCertType());
@@ -93,14 +125,120 @@ public class ZKSysOrgCompanyService extends ZKBaseTreeService<String, ZKSysOrgCo
             throw ZKBusinessException.as("zk.sys.010027", null, company.getCompanyCertType());
         }
 
-        company.setStatus(ZKSysOrgCompany.KeyStatus.waitSubmit);
         company.setStatus(company.statusNext());
-        return this.dao.updateAuditContent(ZKSysOrgCompany.sqlHelper().getTableName(), company);
+        // 校验输入内容
+        ZKValidatorsBeanUtils.validateWithException(validator, company, ZKValidationGroup.Audit.class);
+        int r = this.dao.updateAuditContent(ZKSysOrgCompany.sqlHelper().getTableName(), company);
+
+        if (r > 0) { // 上传证件照片
+            // MultipartFile legalCertPhotoFront, MultipartFile legalCertPhotoBack, MultipartFile companyCertPhoto
+            // 第一次上传审核信息时，2张法人证件照、1张公司证件照、1张公司 logo 都必须上传；
+            // 其他修改审核信息场景，可更新或不更新证件照片；
+            if (_p_legalCertPhotoFront == null //
+                    || _p_legalCertPhotoBack == null //
+                    || _p_companyCertPhoto == null //
+                    || _p_logo == null) {
+                // 其中有一个为 null 时，则需要核验证件照片的字段内容是否存在，如果不是第一次上传审核信息，实体中需要包含之前证件照片的上传信息；
+                // 这里需要校验实体照片字段的值，不能为空；防止第一次提交审核信息时，没有上传照片。
+                ZKValidatorsBeanUtils.validateWithException(validator, company, ZKValidationGroup.AuditTwo.class);
+            }
+
+            if (_p_legalCertPhotoFront != null //
+                    || _p_legalCertPhotoBack != null //
+                    || _p_companyCertPhoto != null //
+                    || _p_logo != null) {
+                // 做一个文件上传下载的 自定义令牌， 用户ID，公司代码；
+                ZKSecTicket tk = this.ticketManager.createSecTicket();
+                tk.put(ZKSecConstants.PARAM_NAME.CompanyCode, company.getCode());
+                // 将公司ID做为上传公司文件的用户ID
+                tk.put(ZKSecConstants.PARAM_NAME.UserId, company.getPkId());
+                
+                // 有上传证件照片，不管是新增还是更新，都处理所有证件照片
+                ZKMsgRes resMsg = null;
+                List<ZKFileInfo> infos = null;
+                ZKFileInfo finfo = null;
+                // 公司 法人证件照片 处理
+                if (_p_legalCertPhotoFront != null || _p_legalCertPhotoBack != null) {
+                    // 上传法人证件照片
+                    String[] legalCerts = null;
+                    if (ZKStringUtils.isEmpty(company.getLegalCertPhoto())) {
+                        legalCerts = new String[2];
+                    }
+                    else {
+                        legalCerts = company.getLegalCertPhoto().split(ZKSysOrgCompany.certSeparator);
+                        // if (legalCerts.length < 2) {
+                        // log.error("[>_<:20240823-1753-001] 法人照片内容管理异常；");
+                        // }
+                    }
+                    if (_p_legalCertPhotoFront != null) {
+                        resMsg = fileUploadApi.uploadMultipartTK(tk.getTkId().toString(), null, null, null, null, 1, 0,
+                                0, 100, Arrays.asList(_p_legalCertPhotoFront));
+                        checkCertUploadResMsg(resMsg);
+                        infos = ZKFileUploadUtils.getFileInfos(resMsg.getDataStr());
+                        checkCertUploadResult(infos);
+                        finfo = infos.get(0);
+                        legalCerts[0] = finfo.getSaveUuid();
+                    }
+                    if (_p_legalCertPhotoBack != null) {
+                        resMsg = fileUploadApi.uploadMultipartTK(tk.getTkId().toString(), null, null, null, null, 1, 0,
+                                0, 100, Arrays.asList(_p_legalCertPhotoBack));
+                        checkCertUploadResMsg(resMsg);
+                        infos = ZKFileUploadUtils.getFileInfos(resMsg.getDataStr());
+                        checkCertUploadResult(infos);
+                        finfo = infos.get(0);
+                        legalCerts[1] = finfo.getSaveUuid();
+                    }
+                    StringBuffer sb = new StringBuffer();
+                    sb = sb.append(legalCerts[0]);
+                    sb = sb.append(ZKSysOrgCompany.certSeparator);
+                    sb = sb.append(legalCerts[1]);
+                    company.setLegalCertPhoto(sb.toString());
+                }
+                // 公司证件照片 处理
+                if (_p_companyCertPhoto != null) {
+                    // 上传公司证件照片
+                    resMsg = fileUploadApi.uploadMultipartTK(tk.getTkId().toString(), null, null, null, null, 1, 0, 0,
+                            100, Arrays.asList(_p_companyCertPhoto));
+                    checkCertUploadResMsg(resMsg);
+                    infos = ZKFileUploadUtils.getFileInfos(resMsg.getDataStr());
+                    checkCertUploadResult(infos);
+                    finfo = infos.get(0);
+                    company.setCompanyCertPhoto(finfo.getSaveUuid());
+                }
+                // 公司 logo 处理
+                if (_p_logo != null) {
+                    // 上传公司证件照片
+                    resMsg = fileUploadApi.uploadMultipartTK(tk.getTkId().toString(), null, null, null, null, 1, 0, 0,
+                            100, Arrays.asList(_p_logo));
+                    checkCertUploadResMsg(resMsg);
+                    infos = ZKFileUploadUtils.getFileInfos(resMsg.getDataStr());
+                    checkCertUploadResult(infos);
+                    finfo = infos.get(0);
+                    company.setLogo(finfo.getSaveUuid());
+                }
+
+                this.dao.updateCertPhoto(ZKSysOrgCompany.sqlHelper().getTableName(), company);
+            }
+        }
+        return r;
     }
+
+    private void checkCertUploadResMsg(ZKMsgRes resMsg) {
+        // zk.sys.010030=上传证件照片失败
+        if (!resMsg.isOk()) {
+            log.error("[>_<:20250121-1502-001] zk.sys.010030=上传证件照片失败: {}", resMsg.toString());
+            throw ZKBusinessException.as("zk.sys.010030", resMsg.getData());
+        }
+    }
+
+    private void checkCertUploadResult(List<ZKFileInfo> infos) {
+        // zk.sys.010030=上传证件照片失败
+    }
+
 
     // 编辑公司
     @Transactional(readOnly = false)
-    public int editCompany(ZKSysOrgCompany company, String pwd) {
+    public int editCompany(ZKSysOrgCompany company, String pwd, HttpServletRequest req) {
         boolean isNewReacord = company.isNewRecord();
         int count = this.save(company);
         if (count > 0 && isNewReacord) {
@@ -108,7 +246,7 @@ public class ZKSysOrgCompanyService extends ZKBaseTreeService<String, ZKSysOrgCo
                 pwd = ZKSysUtils.getUserDefaultPwd();
             }
             // 新增公司，初始化公司
-            this.initCompanyCreateAdminUser(company, pwd);
+            this.initCompanyCreateAdminUser(company, pwd, req);
             // 2、分配公司默认权限
             this.initCompanyAuth(company);
             // 3、创建 superAdmin 角色
@@ -155,7 +293,7 @@ public class ZKSysOrgCompanyService extends ZKBaseTreeService<String, ZKSysOrgCo
 
     // 1、创建 admin 用户
     @Transactional(readOnly = false)
-    protected ZKSysOrgUser initCompanyCreateAdminUser(ZKSysOrgCompany company, String pwd) {
+    protected ZKSysOrgUser initCompanyCreateAdminUser(ZKSysOrgCompany company, String pwd, HttpServletRequest req) {
         ZKSysOrgUser adminUser = new ZKSysOrgUser();
         adminUser.setGroupCode(company.getGroupCode());
         adminUser.setCompanyCode(company.getCode());
@@ -167,7 +305,7 @@ public class ZKSysOrgCompanyService extends ZKBaseTreeService<String, ZKSysOrgCo
         adminUser.setSex(ZKSysUtils.getSexUnknownDictCode()); // 字典项值
         adminUser.setStatus(ZKSysOrgUser.KeyStatus.normal);
         this.sysOrgUserService.save(adminUser);
-        this.sysOrgUserService.updatePwd(adminUser.getPkId(), pwd, ZKUserEditFlag.Pwd.self);
+        this.sysOrgUserService.updatePwd(adminUser.getPkId(), pwd, ZKUserOptTypeFlag.Pwd.self, req);
         return adminUser;
     }
     // 2、分配公司默认权限
@@ -192,9 +330,9 @@ public class ZKSysOrgCompanyService extends ZKBaseTreeService<String, ZKSysOrgCo
         ac.setDefaultToChild(ZKSysAuthCompany.KeyDefaultToChild.transfer);
         // 未删除
         ac.setDelFlag(ZKBaseEntity.DEL_FLAG.normal);
-        // 一次处理 999 条
+        // 一次处理 defaultMaxPageSize 条
         ZKPage<ZKSysAuthCompany> page = ZKPage.asPage();
-        page.setPageSize(999);
+        page.setPageSize(defaultMaxPageSize);
         
         int count = 0;
         do {

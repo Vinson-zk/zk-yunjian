@@ -105,7 +105,7 @@ public class ZKMsgRes {
     }
 
     public static ZKMsgRes asOk(Locale locale, Object data) {
-        return new ZKMsgRes(ResCodeType.general, "zk.0", ZKMsgUtils.getMessage(locale, "zk.0", (Object) null), data);
+        return new ZKMsgRes(ResCodeType.general, "zk.0", ZKMsgUtils.getMessage(locale, "zk.0"), data);
     }
 
     public static ZKMsgRes asSysErr() {
@@ -117,7 +117,7 @@ public class ZKMsgRes {
     }
 
     public static ZKMsgRes asSysErr(Locale locale, Object data) {
-        return new ZKMsgRes(ResCodeType.system, "zk.1", ZKMsgUtils.getMessage(locale, "zk.1", (Object) null), data);
+        return new ZKMsgRes(ResCodeType.system, "zk.1", ZKMsgUtils.getMessage(locale, "zk.1"), data);
     }
 
     // -------------------------------------------------------------------
@@ -130,7 +130,7 @@ public class ZKMsgRes {
     }
 
     public static ZKMsgRes asCode(Locale locale, int resCodeType, String code) {
-        return asCode(locale, ResCodeType.system, code, null, (Object[]) null);
+        return asCode(locale, ResCodeType.system, code, null);
     }
 
     public static ZKMsgRes asCode(Locale locale, int resCodeType, String code, Object data, Object... msgArgs) {
@@ -139,7 +139,7 @@ public class ZKMsgRes {
 
     // -------------------------------------------------------------------
     public static ZKMsgRes as(Locale locale, ZKBusinessException be) {
-        return new ZKMsgRes(ResCodeType.busniness, be.getCode(), be.getMsgByLocale(locale), be.getMessage());
+        return new ZKMsgRes(ResCodeType.busniness, be.getCode(), be.getMsgByLocale(locale), be.getData());
     }
 
     public static ZKMsgRes as(Locale locale, ZKValidatorException ve) {

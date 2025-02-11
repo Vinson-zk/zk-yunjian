@@ -59,7 +59,7 @@
 		<version.springloaded>1.2.8.RELEASE</version.springloaded>
 		<version.redis.redisson>3.5.5</version.redis.redisson>
 		<version.redis.jedis>4.3.1</version.redis.jedis>
-		<version.rabbitmq.amqp.client>5.6.0</version.rabbitmq.amqp.client>
+		<version.rabbitmq.amqp.client>5.21.0</version.rabbitmq.amqp.client>
 		<version.junit>4.13.2</version.junit>
 		<version.springfox>2.9.2</version.springfox>
 		<version.slf4j>2.1.0-alpha1</version.slf4j><!-- 1.7.25 -->
@@ -274,7 +274,12 @@
 			    <artifactId>spring-boot-starter-security</artifactId>
 			    <version>${version.spring.boot}</version>
 			</dependency>
-
+			<!-- RabbitMQ -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-amqp</artifactId>
+			    <version>${version.spring.boot}</version>
+			</dependency>
 			<!-- ##### spring boot end -->
 			
 			<!-- ***** spring cloud begin -->
@@ -762,6 +767,11 @@
 			</dependency> 
 			-->
 			<dependency>
+			    <groupId>com.rabbitmq</groupId>
+			    <artifactId>amqp-client</artifactId>
+			    <version>${version.rabbitmq.amqp.client}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.freemarker</groupId>
 				<artifactId>freemarker</artifactId>
 				<version>${version.freemarker}</version>
@@ -821,11 +831,6 @@
 			    <groupId>com.alibaba.fastjson2</groupId>
 			    <artifactId>fastjson2</artifactId>
 			    <version>${version.alibaba.fastjson}</version>
-			</dependency>
-			<dependency>
-			    <groupId>com.rabbitmq</groupId>
-			    <artifactId>amqp-client</artifactId>
-			    <version>${version.rabbitmq.amqp.client}</version>
 			</dependency>		
 			<dependency>
 				<groupId>io.github.openfeign</groupId>
@@ -913,12 +918,12 @@
 			    <artifactId>jaxb-core</artifactId>
 			    <version>4.0.5</version>
 			</dependency>
+			<!--
 			<dependency>
 			    <groupId>javax.xml.bind</groupId>
 			    <artifactId>jaxb-api</artifactId>
 			    <version>2.3.1</version>
 			</dependency>
-			<!--
 			<dependency>
 			    <groupId>com.sun.xml.bind</groupId>
 			    <artifactId>jaxb-core</artifactId>

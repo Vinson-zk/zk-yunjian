@@ -13,6 +13,7 @@ import com.zk.sys.auth.entity.ZKSysAuthDefined;
 import com.zk.sys.auth.entity.ZKSysAuthRole;
 import com.zk.sys.helper.ZKSysTestHelper;
 import com.zk.sys.org.entity.ZKSysOrgRole;
+import com.zk.sys.org.service.ZKSysOrgRoleService;
 import com.zk.sys.org.service.ZKSysOrgRoleServiceTest;
 
 import junit.framework.TestCase;
@@ -96,6 +97,8 @@ public class ZKSysAuthRoleServiceTest {
     public void testAddRelationByAuthDefined() {
 
         ZKSysAuthRoleService s = ZKSysTestHelper.getMainCtx().getBean(ZKSysAuthRoleService.class);
+        ZKSysOrgRoleService roleS = ZKSysTestHelper.getMainCtx().getBean(ZKSysOrgRoleService.class);
+        ZKSysAuthDefinedService authDefinedS = ZKSysTestHelper.getMainCtx().getBean(ZKSysAuthDefinedService.class);
 
         List<ZKSysAuthRole> dels = new ArrayList<>();
 
@@ -104,8 +107,8 @@ public class ZKSysAuthRoleServiceTest {
             ZKSysOrgRole role = ZKSysOrgRoleServiceTest.makeNew();
             ZKSysAuthDefined authDefined = ZKSysAuthDefinedServiceTest.makeNew();
 
-            role.preInsert();
-            authDefined.preInsert();
+            roleS.preInsert(role);
+            authDefinedS.preInsert(authDefined);
 
             dels.addAll(s.allotAuthToRole(role, Arrays.asList(authDefined)));
             dels.addAll(s.allotAuthToRole(role, Arrays.asList(authDefined)));

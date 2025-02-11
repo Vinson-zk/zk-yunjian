@@ -6,6 +6,7 @@ package com.zk.wechat.officialAccounts.entity;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.commons.ZKCoreConstants.ValidationRegexp;
 import com.zk.core.commons.data.ZKJson;
@@ -553,7 +554,8 @@ public class ZKOfficialAccounts extends ZKBaseEntity<String, ZKOfficialAccounts>
 	 * 根据主键类型，重写主键生成；
 	 */
 	@Override
-	protected String genId() {
+	@JsonIgnore
+	public String genId() {
         return ZKIdUtils.genLongStringId();
     }
 	

@@ -35,7 +35,8 @@ import com.zk.core.web.utils.ZKWebUtils;
  * @version 1.0
  */
 @RestController
-@RequestMapping("${zk.path.admin}/${zk.path.gateway}/${zk.gateway.version}")
+//@RequestMapping("${zk.path.admin}/${zk.path.gateway}/${zk.gateway.version}")
+@RequestMapping("/")
 public class ZKGatewayIndexController {
 
     @RequestMapping({ "", "index" })

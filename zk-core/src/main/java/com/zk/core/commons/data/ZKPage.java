@@ -22,10 +22,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.zk.core.web.utils.ZKWebUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -111,8 +112,16 @@ public class ZKPage<T> {
      */
     public static <T> ZKPage<T> asPage(HttpServletRequest hReq) {
         ZKPage<T> zkPage = new ZKPage<T>();
-        zkPage.setPageNo(ServletRequestUtils.getIntParameter(hReq, ZKPage.Param_Name.no, 0));
-        zkPage.setPageSize(ServletRequestUtils.getIntParameter(hReq, ZKPage.Param_Name.size, 10));
+        zkPage.setPageNo(ZKWebUtils.getIntParameter(hReq, ZKPage.Param_Name.no, 0));
+        zkPage.setPageSize(ZKWebUtils.getIntParameter(hReq, ZKPage.Param_Name.size, 10));
+        zkPage.setSorters(ZKOrder.asOrder(hReq));
+        return zkPage;
+    }
+
+    public static <T> ZKPage<T> asPage(ServerHttpRequest hReq) {
+        ZKPage<T> zkPage = new ZKPage<T>();
+        zkPage.setPageNo(ZKWebUtils.getIntParameter(hReq, ZKPage.Param_Name.no, 0));
+        zkPage.setPageSize(ZKWebUtils.getIntParameter(hReq, ZKPage.Param_Name.size, 10));
         zkPage.setSorters(ZKOrder.asOrder(hReq));
         return zkPage;
     }

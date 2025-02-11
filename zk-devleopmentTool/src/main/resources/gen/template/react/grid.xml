@@ -16,7 +16,7 @@ const { ZKPopconfirm, ZKButton } = ZKOriginalComponents;
 const { ZKOptRow, ZKScrollTable } = ZKCustomComponents;
 const { zkToolsMsg } = zkTools;
 
-import zkStyles from 'zkFramework/css/styles.less';
+import zkStyles from 'zkFramework/style/zk.styles.less';
 
 /**
  * 取 table 列表
@@ -175,12 +175,12 @@ class CInit${zkTableInfo.funcName}Grid extends React.Component {
 				rowNum = {{'textAlign': 'center', 'fixed': 'left', width: 40}}
 				columns = {tableColumns}
 				scroll = {{ x:1440, y: this.state.sh }}
-				pagination = {m${zkTableInfo.funcName}.page||{}}
+				pagination = {m${zkTableInfo.funcName}.pagination||{}}
 				// pagination = {{position: ['topRight'], ...page}}
                 dataSource = {m${zkTableInfo.funcName}.gridData||[]}
                 // (pagination, filters, sorter, extra: { currentDataSource: [] })
                 onChange = {this.f_changeGrid}
-				className = {zkStyles.flex}
+				className = {zkStyles.zk_f_display_flex}
 			>
 				<ZKOptRow>
 					<ZKOptRow.OptGroup>

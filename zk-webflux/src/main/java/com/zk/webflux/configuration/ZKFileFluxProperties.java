@@ -25,12 +25,16 @@ package com.zk.webflux.configuration;
 */
 public class ZKFileFluxProperties {
 
+    // 允许的最大内存操作大小，单位KB；设置为-1时，不限制；默认-256K；
     private int maxInMemorySize = 256 * 1024;
 
+    // 请求头大小，单位KB；
     private int maxHeadersSize = 10 * 1024;
 
+    // 最大的磁盘空间；默认 -1，不限制；
     private long maxDiskUsagePerPart = -1;
 
+    // 最大文件个数；默认 -1，不限制；
     private int maxParts = -1;
 
     /**

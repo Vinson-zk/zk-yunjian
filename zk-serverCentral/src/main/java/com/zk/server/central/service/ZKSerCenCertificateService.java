@@ -32,6 +32,7 @@ import com.zk.core.utils.ZKJsonUtils;
 import com.zk.server.central.commons.ZKSerCenCerCipherManager;
 import com.zk.server.central.dao.ZKSerCenCertificateDao;
 import com.zk.server.central.entity.ZKSerCenCertificate;
+import com.zk.server.central.entity.ZKSerCenCertificate.StatusType;
 
 /** 
 * @ClassName: ZKSerCenCertificateService 
@@ -51,7 +52,8 @@ public class ZKSerCenCertificateService extends ZKBaseService<String, ZKSerCenCe
     @Transactional(readOnly = false)
     public int updateStatus(ZKSerCenCertificate serCenCertificate) {
 //        serCenCertificate.setStatus(ZKSerCenCertificate.StatusType.Disabled);
-        serCenCertificate.preUpdate();
+//        serCenCertificate.preUpdate();
+        this.preUpdate(serCenCertificate);
         return this.dao.updateStatus(serCenCertificate);
     }
 
@@ -96,4 +98,22 @@ public class ZKSerCenCertificateService extends ZKBaseService<String, ZKSerCenCe
         }
     }
 
+    @Override
+    public void preInsert(ZKSerCenCertificate entity) {
+        super.preInsert(entity);
+        if (entity.getStatus() == null) {
+            entity.setStatus(StatusType.Enable);
+        }
+    }
+
+    @Override
+    public void preUpdate(ZKSerCenCertificate entity) {
+        super.preUpdate(entity);
+        if (entity.getStatus() == null) {
+            entity.setStatus(StatusType.Enable);
+        }
+    }
+
 }
+
+

@@ -36,6 +36,7 @@ import com.zk.core.utils.ZKExceptionsUtils;
 import com.zk.core.utils.ZKLocaleUtils;
 import com.zk.core.utils.ZKStreamUtils;
 import com.zk.core.utils.ZKStringUtils;
+import com.zk.core.web.support.webFlux.request.ZKRequestContextHolder;
 
 import reactor.core.publisher.Mono;
 
@@ -49,32 +50,68 @@ public class ZKReactiveUtils {
 
     protected static Logger log = LogManager.getLogger(ZKReactiveUtils.class);
 
+    public static interface ZKReqHeaderKey {
+
+        public static final String AddrXForwardedIP = "X-Forwarded-For";
+
+        public static final String AddrProxyClientIP = "Proxy-Client-IP";
+
+        public static final String AddrWLProxyClientIP = "WL-Proxy-Client-IP";
+
+        public static final String AddrHttpClientIp = "HTTP_CLIENT_IP";
+
+        public static final String AddrHttpXForwardedFor = "HTTP_X_FORWARDED_FOR";
+
+        public static final String AddrXRealIP = "X-Real-IP";
+
+        public static final String AddrHost = "Host";
+
+        public static final String UserAgent = "user-agent";
+    }
+
     public static String getPathWithinApplication(ServerHttpRequest request) {
         return request.getPath().pathWithinApplication().value();
     }
 
-    public static String getRemoteAddr(ServerHttpRequest request) {
-        String remoteAddr = request.getHeaders().getFirst("X-Real-IP");
+    protected static String getRemoteAddr(ServerHttpRequest request) {
+//        return ZKStringUtils.isNotBlank(remoteAddr) ? remoteAddr : request.getRemoteAddress().toString();
+
+        String remoteAddr = request.getHeaders().getFirst(ZKReqHeaderKey.AddrXForwardedIP);
+
         if (ZKStringUtils.isBlank(remoteAddr)) {
-            remoteAddr = request.getHeaders().getFirst("X-Forwarded-For");
+            remoteAddr = request.getHeaders().getFirst(ZKReqHeaderKey.AddrProxyClientIP);
         }
         if (ZKStringUtils.isBlank(remoteAddr)) {
-            remoteAddr = request.getHeaders().getFirst("Proxy-Client-IP");
+            remoteAddr = request.getHeaders().getFirst(ZKReqHeaderKey.AddrWLProxyClientIP);
         }
         if (ZKStringUtils.isBlank(remoteAddr)) {
-            remoteAddr = request.getHeaders().getFirst("WL-Proxy-Client-IP");
+            remoteAddr = request.getHeaders().getFirst(ZKReqHeaderKey.AddrHttpClientIp);
         }
         if (ZKStringUtils.isBlank(remoteAddr)) {
-            remoteAddr = request.getHeaders().getFirst("Host");
+            remoteAddr = request.getHeaders().getFirst(ZKReqHeaderKey.AddrHttpXForwardedFor);
         }
-        return ZKStringUtils.isNotBlank(remoteAddr) ? remoteAddr : request.getRemoteAddress().toString();
+        if (ZKStringUtils.isBlank(remoteAddr)) {
+            remoteAddr = request.getHeaders().getFirst(ZKReqHeaderKey.AddrXRealIP);
+        }
+        if (ZKStringUtils.isBlank(remoteAddr)) {
+            remoteAddr = request.getHeaders().getFirst(ZKReqHeaderKey.AddrHost);
+        }
+        if (ZKStringUtils.isBlank(remoteAddr)) {
+            remoteAddr = request.getRemoteAddress().toString();
+        }
+
+        return remoteAddr;
     }
 
-    public static void get() {
-
+    public static String getUserAgent(ServerHttpRequest request) {
+        return request.getHeaders().getFirst(ZKReqHeaderKey.UserAgent);
     }
 
     /* 5.国际化系列 *****************************************************************/
+    public static Locale getLocale() {
+        return getLocale(ZKRequestContextHolder.getRequest());
+    }
+
     public static Locale getLocale(ServerHttpRequest request) {
         if (request != null) {
             return getLocaleByRequest(request);

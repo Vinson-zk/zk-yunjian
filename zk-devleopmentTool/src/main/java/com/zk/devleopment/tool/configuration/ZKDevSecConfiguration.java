@@ -79,11 +79,16 @@ public class ZKDevSecConfiguration {
 
         // 过虑路径设置
         LinkedHashMap<String, String> setFilterChainMap = new LinkedHashMap<>();
-        String prefix = String.format("/%s/%s/%s", this.pathAdmin, this.pathDevTool, this.pathVersion);
-        setFilterChainMap.put(prefix, "anon");
-        setFilterChainMap.put(prefix + "/", "anon");
-        setFilterChainMap.put(prefix + "/index", "anon");
-        setFilterChainMap.put(prefix + "/user", "user");
+        setFilterChainMap.put("/favicon.ico", "anon");
+
+//        String prefix = String.format("/%s/%s/%s", this.pathAdmin, this.pathDevTool, this.pathVersion);
+//        setFilterChainMap.put(prefix, "anon");
+//        setFilterChainMap.put(prefix + "/", "anon");
+//        setFilterChainMap.put(prefix + "/index", "anon");
+//        setFilterChainMap.put(prefix + "/user", "user");
+        setFilterChainMap.put("/", "anon");
+        setFilterChainMap.put("/index", "anon");
+        setFilterChainMap.put("/user", "user");
         setFilterChainMap.put("/**", "anon");
         zkSecFilterFactoryBean.setFilterChainDefinitionMap(setFilterChainMap);
 

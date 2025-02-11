@@ -18,14 +18,19 @@
 */
 package com.zk.core.configuration;
 
-import org.springframework.boot.autoconfigure.web.servlet.ConditionalOnMissingFilterBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 
 import com.zk.core.web.ZKWebConstants.ZKFilterLevel;
 import com.zk.core.web.support.servlet.filter.ZKExceptionHandlerFilter;
+import com.zk.core.web.support.servlet.servlet.ZKFaviconServlet;
 
 import jakarta.servlet.Filter;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRegistration.Dynamic;
 
 /**
  * @ClassName: ZKCoreServletAutoConfiguration
@@ -35,7 +40,8 @@ import jakarta.servlet.Filter;
  */
 public class ZKCoreServletAutoConfiguration {
 
-    @ConditionalOnMissingFilterBean(value = ZKExceptionHandlerFilter.class)
+//    @ConditionalOnMissingFilterBean(value = ZKExceptionHandlerFilter.class)
+    @ConditionalOnMissingBean(name = { "exceptionHandlerFilter", "zkExceptionHandlerFilter" })
     @Bean({ "exceptionHandlerFilter", "zkExceptionHandlerFilter" })
     FilterRegistrationBean<Filter> zkExceptionHandlerFilter() {
         System.out.println("[^_^:20230211-1022-001] ----- zkExceptionHandlerFilter 配置 异常处理拦截器 Filter --- ["
@@ -49,4 +55,17 @@ public class ZKCoreServletAutoConfiguration {
         return filterRegistrationBean;
     }
 
+    @Bean
+    ServletContextInitializer coreServletContextInit() {
+        return new ServletContextInitializer() {
+            @Override
+            public void onStartup(ServletContext servletContext) throws ServletException {
+                Dynamic dynamicServlet = servletContext.addServlet("zkFaviconServlet", ZKFaviconServlet.class);
+                dynamicServlet.addMapping("/favicon.ico");
+            }
+        };
+    }
+
 }
+
+

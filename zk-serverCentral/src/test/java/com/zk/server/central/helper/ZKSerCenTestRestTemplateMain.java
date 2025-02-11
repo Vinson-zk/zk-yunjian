@@ -68,7 +68,7 @@ public class ZKSerCenTestRestTemplateMain {
     public static void main(String[] args) {
         try {
             System.out.println("[^_^:20190628-1708-001]====================================================");
-            System.out.println("[^_^:20190628-1708-001]=== zk ZKSerCenTestRestTemplateMain 启动 ... ... ");
+            System.out.println("[^_^:20190628-1708-001]=== zk ZKSerCenTestRestTemplateMain test 启动 ... ... ");
             System.out.println("[^_^:20190628-1708-001]====================================================");
             run(args);
             System.out.println("[^_^:20190628-1708-001]----------------------------------------------------");

@@ -7,10 +7,12 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +22,9 @@ import com.zk.core.commons.data.ZKPage;
 import com.zk.file.entity.ZKFileInfo;
 import com.zk.file.entity.ZKFileInfo.ValueKey;
 import com.zk.file.service.ZKFileInfoService;
+import com.zk.security.common.ZKSecConstants;
+import com.zk.security.ticket.ZKSecTicket;
+import com.zk.security.ticket.ZKSecTicketManager;
 import com.zk.security.utils.ZKSecSecurityUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +41,9 @@ public class ZKFileInfoController extends ZKBaseController {
 
 	@Autowired
 	private ZKFileInfoService fileInfoService;
+
+    @Autowired(required = false)
+    private ZKSecTicketManager ticketManager;
 
     // 文件或目录记录处理 ================================================================================================
     // 文件或目录记录处理.目录 -----------------------------------------------------------------------------------
@@ -109,7 +117,7 @@ public class ZKFileInfoController extends ZKBaseController {
     }
 
     /********************************************************/
-    /** 文件上传 - 需要用户身份 ****/
+    /** 文件上传下载 - 需要用户身份 ****/
     /********************************************************/
 //    protected static interface ParamName {
 //        public static final String pFileName = "fileName";
@@ -164,48 +172,55 @@ public class ZKFileInfoController extends ZKBaseController {
      */
     @RequestMapping(path = "f/upload", method = RequestMethod.POST)
     public ZKMsgRes uploadMultipart(
-//            @RequestParam(name = "companyCode", required = true) String companyCode,
             @RequestParam(name = "parentCode", required = false) String parentCode,
             @RequestParam(name = "saveGroupCode", required = false) String saveGroupCode,
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "code", required = false) String code,
             @RequestParam(name = "status", required = false, defaultValue = "0") int status,
-            @RequestParam(name = "securityType", required = false, defaultValue = "1") int securityType,
+            @RequestParam(name = "securityType", required = false, defaultValue = "0") int securityType,
             @RequestParam(name = "actionScope", required = false, defaultValue = "0") int actionScope,
             @RequestParam(name = "sort", required = false) Integer sort,
-            @RequestParam(value = "mfs") List<MultipartFile> mfs) throws IOException {
+            @RequestPart(value = "mfs") List<MultipartFile> mfs) throws IOException {
         String companyCode = ZKSecSecurityUtils.getCompanyCode();
-        List<ZKFileInfo> res = this.fileInfoService.uploadFileBatch(companyCode, parentCode, saveGroupCode, name, code,
-                status, securityType, actionScope, sort, mfs.toArray(new MultipartFile[mfs.size()]));
+        String userId = ZKSecSecurityUtils.getUserId();
+        List<ZKFileInfo> res = this.fileInfoService.uploadFileBatch(companyCode, userId, parentCode, saveGroupCode,
+                name, code, status, securityType, actionScope, sort, true, mfs.toArray(new MultipartFile[mfs.size()]));
         return ZKMsgRes.asOk(null, res);
     }
 
     /**
      * 下载或查看文件详情(获取文件的输出流);
+     * 
+     * 可以根据【保存ID】或【保存的分组及排序号】取文件详情
      *
      * @Title: getFile
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
-     * @date Dec 25, 2023 5:44:57 PM
+     * @date Dec 11, 2024 6:06:38 PM
      * @param pkId
+     *            pkId 和 saveUuid 传入一个即可。
+     * @param saveUuid
      * @param isDownload
+     *            是否下载；false-不是；true-下载；默认：false;
+     * @param securityType
+     *            下载文件权限；0-私有[需要有身份才获取]；1-开放[可以通过开放的接口获取]；
      * @param res
      * @return void
+     * @throws IOException
      */
     @RequestMapping(value = "f/getFile", method = RequestMethod.GET) //
-    public void getFile(@RequestParam("pkId") String pkId,
+    public void getFile(@RequestParam(value = "pkId", required = false) String pkId,
+            @RequestParam(value = "saveUuid", required = false) String saveUuid,
             @RequestParam(value = "isDownload", required = false, defaultValue = "false") boolean isDownload,
-            HttpServletResponse res) {
-        try {
-            this.fileInfoService.getFile(isDownload, pkId, res, null, ZKFileInfo.ValueKey.SecurityType.limit);
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
+            @RequestParam(value = "securityType", required = false, defaultValue = "0") int securityType,
+            HttpServletResponse res, HttpServletRequest req) throws IOException {
+        ZKFileInfo zkFileInfo = this.fileInfoService.getFileByIdOrSaveUUID(pkId, saveUuid);
+        this.fileInfoService.printFileToRes(isDownload, zkFileInfo, res, req, ZKSecSecurityUtils.getUserId(),
+                securityType);
     }
 
     /********************************************************/
-    /** 文件上传 - 不需要用户身份 ****/
+    /** 文件上传下载 - 不需要用户身份 ****/
     /********************************************************/
     @RequestMapping(path = "n/f/upload", method = RequestMethod.POST)
     public ZKMsgRes uploadMultipartN(@RequestParam(name = "companyCode", required = true) String companyCode,
@@ -214,24 +229,67 @@ public class ZKFileInfoController extends ZKBaseController {
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "code", required = false) String code,
             @RequestParam(name = "status", required = false, defaultValue = "0") int status,
-            @RequestParam(name = "securityType", required = false, defaultValue = "1") int securityType,
             @RequestParam(name = "actionScope", required = false, defaultValue = "0") int actionScope,
             @RequestParam(name = "sort", required = false) Integer sort,
-            @RequestParam(value = "mfs") List<MultipartFile> mfs) throws IOException {
-        List<ZKFileInfo> res = this.fileInfoService.uploadFileBatch(companyCode, parentCode, saveGroupCode, name, code,
-                status, securityType, actionScope, sort, mfs.toArray(new MultipartFile[mfs.size()]));
+            @RequestPart(value = "mfs") List<MultipartFile> mfs) throws IOException {
+        List<ZKFileInfo> res = this.fileInfoService.uploadFileBatch(companyCode, null, parentCode, saveGroupCode, name,
+                code, status, ZKFileInfo.ValueKey.SecurityType.open, actionScope, sort, true,
+                mfs.toArray(new MultipartFile[mfs.size()]));
         return ZKMsgRes.asOk(null, res);
     }
+
     @RequestMapping(value = "n/f/getFile", method = RequestMethod.GET) //
-    public void getFileN(@RequestParam("pkId") String pkId,
+    public void getFileN(@RequestParam(value = "pkId", required = false) String pkId,
+            @RequestParam(value = "saveUuid", required = false) String saveUuid,
             @RequestParam(value = "isDownload", required = false, defaultValue = "false") boolean isDownload,
-            HttpServletResponse res) {
-        try {
-            this.fileInfoService.getFile(isDownload, pkId, res, null, ZKFileInfo.ValueKey.SecurityType.limit);
+            HttpServletResponse res, HttpServletRequest req) throws IOException {
+        ZKFileInfo zkFileInfo = this.fileInfoService.getFileByIdOrSaveUUID(pkId, saveUuid);
+        this.fileInfoService.printFileToRes(isDownload, zkFileInfo, res, req, null,
+                ZKFileInfo.ValueKey.SecurityType.open);
+    }
+
+    /********************************************************/
+    /** 文件上传下载 - 令牌自定义 用户ID，公司代码；在不想让令牌有用户身份时，进行身份传递 ****/
+    /********************************************************/
+    @RequestMapping(path = "n/f/uploadTk/{tkid}", method = RequestMethod.POST)
+    public ZKMsgRes uploadMultipartTK(@PathVariable(name = "tkid") String tkid,
+            @RequestParam(name = "parentCode", required = false) String parentCode,
+            @RequestParam(name = "saveGroupCode", required = false) String saveGroupCode,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "code", required = false) String code,
+            @RequestParam(name = "status", required = false, defaultValue = "0") int status,
+            @RequestParam(name = "securityType", required = false, defaultValue = "0") int securityType,
+            @RequestParam(name = "actionScope", required = false, defaultValue = "0") int actionScope,
+            @RequestParam(name = "sort", required = false) Integer sort,
+            @RequestPart(value = "mfs") List<MultipartFile> mfs) throws IOException {
+        String companyCode = null;
+        String userId = null;
+
+        ZKSecTicket tk = ticketManager.getTicket(tkid);
+        if (tk != null) {
+            companyCode = tk.get(ZKSecConstants.PARAM_NAME.CompanyCode);
+            userId = tk.get(ZKSecConstants.PARAM_NAME.UserId);
         }
-        catch(Exception e) {
-            e.printStackTrace();
+
+        List<ZKFileInfo> res = this.fileInfoService.uploadFileBatch(companyCode, userId, parentCode, saveGroupCode,
+                name, code, status, securityType, actionScope, sort, false, mfs.toArray(new MultipartFile[mfs.size()]));
+        return ZKMsgRes.asOk(null, res);
+    }
+
+    @RequestMapping(value = "n/f/getFileTk/{tkid}", method = RequestMethod.GET) //
+    public void getFileTk(@PathVariable(name = "tkid") String tkid,
+            @RequestParam(value = "pkId", required = false) String pkId,
+            @RequestParam(value = "saveUuid", required = false) String saveUuid,
+            @RequestParam(value = "isDownload", required = false, defaultValue = "false") boolean isDownload,
+            @RequestParam(value = "securityType", required = false, defaultValue = "0") int securityType,
+            HttpServletResponse res, HttpServletRequest req) throws IOException {
+        String userId = null;
+        ZKSecTicket tk = ticketManager.getTicket(tkid);
+        if (tk != null) {
+            userId = tk.get(ZKSecConstants.PARAM_NAME.UserId);
         }
+        ZKFileInfo zkFileInfo = this.fileInfoService.getFileByIdOrSaveUUID(pkId, saveUuid);
+        this.fileInfoService.printFileToRes(isDownload, zkFileInfo, res, req, userId, securityType);
     }
 
 }

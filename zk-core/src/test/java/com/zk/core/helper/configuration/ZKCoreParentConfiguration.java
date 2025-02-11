@@ -28,7 +28,6 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import com.zk.core.commons.ZKFileTransfer;
 import com.zk.core.commons.ZKValidatorMessageInterpolator;
@@ -75,17 +74,17 @@ public class ZKCoreParentConfiguration {
 
     @Bean("redisProperties")
     @ConfigurationProperties(prefix = "zk.core.redis")
-    public ZKRedisProperties redisProperties() {
+    ZKRedisProperties redisProperties() {
         return new ZKRedisProperties();
     }
 
     @Bean
-    public ZKFileTransfer zkFileTransfer() {
+    ZKFileTransfer zkFileTransfer() {
         return new ZKDiskFileTransfer(-1, -1, -1, null);
     }
 
     @Bean
-    public ResourceBundleMessageSource messageSource() {
+    ResourceBundleMessageSource messageSource() {
         System.out.println(ZKEnableCore.printLog + "ResourceBundleMessageSource --- [" + this.getClass().getSimpleName()
                 + "] " + this.hashCode());
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -95,25 +94,6 @@ public class ZKCoreParentConfiguration {
         messageSource.setCacheSeconds(3600);
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
-    }
-
-//    @Bean
-//    public CommonsMultipartResolver multipartResolver() {
-//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-//        multipartResolver.setDefaultEncoding("UTF-8");
-//        multipartResolver.setMaxUploadSize(20971520);
-//        multipartResolver.setMaxInMemorySize(40960);
-//        return multipartResolver;
-//    }
-    
-
-    @Bean
-    public StandardServletMultipartResolver multipartResolver() {
-        StandardServletMultipartResolver multipartResolver = new StandardServletMultipartResolver();
-//        multipartResolver.setDefaultEncoding("UTF-8");
-//        multipartResolver.setMaxUploadSize(20971520);
-//        multipartResolver.setMaxInMemorySize(40960);
-        return multipartResolver;
     }
 
     /**
@@ -129,7 +109,7 @@ public class ZKCoreParentConfiguration {
      * @return Validator
      */
     @Bean
-    public Validator validator(MessageSource messageSource, ApplicationContext applicationContext) {
+    Validator validator(MessageSource messageSource, ApplicationContext applicationContext) {
         LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
         ZKValidatorMessageInterpolator zkValidatorMessageInterpolator = new ZKValidatorMessageInterpolator(
                 messageSource);

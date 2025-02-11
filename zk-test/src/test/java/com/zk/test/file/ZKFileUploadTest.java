@@ -33,6 +33,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import com.zk.core.commons.ZKContentType;
+import com.zk.core.utils.ZKEncodingUtils;
 import com.zk.core.utils.ZKFileUtils;
 import com.zk.core.utils.ZKJsonUtils;
 import com.zk.core.utils.ZKStringUtils;
@@ -120,7 +121,6 @@ public class ZKFileUploadTest {
             String resStr;
 
             String fileContent = null;
-//            String contentType = null;
             String fileName = null;
             File file = null;
 
@@ -150,17 +150,18 @@ public class ZKFileUploadTest {
             // 写成文件，方便上传测试 对比断言
             file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + source, fileName, true);
             ZKFileUtils.writeFile(fileContent.getBytes(), file, false);
-            // 上传开始 boundary
+            // 报文开始 boundary
             strBuf.append("--").append(boundary).append("\r\n");
             // 请求头
             strBuf.append("Content-Disposition: form-data;")
                     .append(String.format("name=\"%s\"; filename=\"%s\"", f1Name, fileName))
                     .append("\r\n");
-            strBuf.append("Content-Type:" + ZKContentType.TEXT_PLAIN_UTF8.toContentTypeStr() + "\r\n");
+            strBuf.append("Content-Type:" + ZKContentType.TEXT_PLAIN_UTF8.toContentTypeStr()).append("\r\n");
             // 请求头结束
             strBuf.append("\r\n");
             // 请求内容
             strBuf.append(fileContent);
+            // 本段请求内容结束
             strBuf.append("\r\n");
 
             /* 文件 fs ---------------------------- */
@@ -173,7 +174,7 @@ public class ZKFileUploadTest {
             strBuf.append("--").append(boundary).append("\r\n");
             strBuf.append("Content-Disposition: form-data;")
                     .append(String.format("name=\"%s\"; filename=\"%s\"", fsName, fileName)).append("\r\n");
-            strBuf.append("Content-Type:" + ZKContentType.TEXT_PLAIN_UTF8.toContentTypeStr() + "\r\n");
+            strBuf.append("Content-Type:" + ZKContentType.TEXT_PLAIN_UTF8.toContentTypeStr()).append("\r\n");
             strBuf.append("\r\n");
             strBuf.append(fileContent);
             strBuf.append("\r\n");
@@ -186,11 +187,11 @@ public class ZKFileUploadTest {
             strBuf.append("--").append(boundary).append("\r\n");
             strBuf.append("Content-Disposition: form-data;")
                     .append(String.format("name=\"%s\"; filename=\"%s\"", fsName, fileName)).append("\r\n");
-            strBuf.append("Content-Type:" + ZKContentType.TEXT_PLAIN_UTF8.toContentTypeStr() + "\r\n");
+            strBuf.append("Content-Type:" + ZKContentType.TEXT_PLAIN_UTF8.toContentTypeStr()).append("\r\n");
             strBuf.append("\r\n");
             strBuf.append(fileContent);
             strBuf.append("\r\n");
-            // 上传文件 结尾
+            // 报文文件 结尾
             strBuf.append("--").append(boundary).append("--").append("\r\n");
 
             requestEntity = new HttpEntity<>(strBuf.toString(), headers);
@@ -281,7 +282,7 @@ public class ZKFileUploadTest {
             String fileContent = null;
             String fileName = null;
 
-
+            String url;
             StringBuffer strBuf = null;
             List<String> fs = new ArrayList<>();
             String contentType = null;
@@ -303,7 +304,7 @@ public class ZKFileUploadTest {
             strBuf.append("\r\n").append("--").append(boundary);
             strBuf.append("\r\n").append(
                     String.format("Content-Disposition: form-data;name=\"%s\";filename=\"%s\"", f1Name, fileName));
-            strBuf.append("\r\n").append("Content-Type:" + contentType + "\r\n");
+            strBuf.append("\r\n").append("Content-Type:" + contentType).append("\r\n");
             strBuf.append("\r\n").append(fileContent);
             // 上传文件 结尾
             strBuf.append("\r\n").append("--").append(boundary).append("--");
@@ -320,14 +321,28 @@ public class ZKFileUploadTest {
 
             // 下载
             ResponseEntity<byte[]> responseBytes;
-            urlGet = urlGet + "?fName=" + fileName; // ZKHtmlUtils.urlEncode(fileName)
-            responseBytes = testRestTemplate.getForEntity(urlGet, byte[].class);
+
+            url = urlGet + "?fName=" + fileName; // ZKHtmlUtils.urlEncode(fileName)
+            responseBytes = testRestTemplate.getForEntity(url, byte[].class);
             resStatusCode = responseBytes.getStatusCode().value();
             System.out.println("[^_^:20240204-2238-024] resStatusCode: " + resStatusCode);
             TestCase.assertEquals(200, resStatusCode);
             resStr = ZKStringUtils.toString(responseBytes.getBody());
 //            resStr = new String(resStr.getBytes("ISO-8859-1"));
             System.out.println("[^_^:20240204-2238-025] resStr: " + resStr);
+            TestCase.assertEquals(fileContent, resStr);
+
+            url = urlGet + "?fName=" + fileName + "&isDownload=true"; // ZKHtmlUtils.urlEncode(fileName)
+            responseBytes = testRestTemplate.getForEntity(url, byte[].class);
+            resStatusCode = responseBytes.getStatusCode().value();
+            System.out.println("[^_^:20240204-2238-026] resStatusCode: " + resStatusCode);
+            TestCase.assertEquals(200, resStatusCode);
+            String downloadFileName = responseBytes.getHeaders().get("Content-Disposition").get(0);
+            downloadFileName = downloadFileName.substring(downloadFileName.indexOf("filename=") + 9);
+            downloadFileName = ZKEncodingUtils.urlDecoder(downloadFileName);
+            TestCase.assertEquals(fileName, downloadFileName);
+            resStr = ZKStringUtils.toString(responseBytes.getBody());
+            System.out.println("[^_^:20240204-2238-027] resStr: " + resStr);
             TestCase.assertEquals(fileContent, resStr);
 
         }

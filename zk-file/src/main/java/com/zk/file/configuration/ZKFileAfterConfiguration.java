@@ -18,7 +18,9 @@
 */
 package com.zk.file.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -37,6 +39,8 @@ import com.zk.security.configuration.ZKEnableSecurity;
 import com.zk.security.ticket.ZKSecTicketManager;
 import com.zk.webmvc.configuration.ZKEnableWebmvc;
 
+import jakarta.servlet.MultipartConfigElement;
+
 /** 
 * @ClassName: ZKFileAfterConfiguration 
 * @Description: TODO(simple description this class what to do. ) 
@@ -54,43 +58,21 @@ public class ZKFileAfterConfiguration implements WebMvcConfigurer {
     @Value("${spring.application.name}")
     private String appName;
 
-    // # 文件上传，最大上传大小，需要比邮件附件单个的文件大小配置值要大；50M=52428800
-    @Value("${zk.file.upload.multipartResolver.maxInMemorySize:52428800}")
-    long maxUploadSize;
+    @Value("${zk.core.servlet.file.upload.multipartconfigelement.tempFilePath:tmp/spittr/uploads}")
+    String tempFilePath;
 
-    // # 文件上传，最大处理内存大小； 1M=1048576
-    @Value("${zk.file.upload.multipartResolver.maxInMemorySize:1048576}")
-    int maxInMemorySize;
+    @Value("${zk.core.servlet.file.upload.multipartconfigelement.maxFileSize}")
+    long maxFileSize;
 
-    // # 文件上传，单个文件上传最大大小； 10M=10485760
-    @Value("${zk.file.upload.multipartResolver.maxUploadSizePerFile:10485760}")
-    int maxUploadSizePerFile;
+    @Value("${zk.core.servlet.file.upload.multipartconfigelement.maxRequestSize}")
+    long maxRequestSize;
 
-    // # 文件上传，处理字符集
-    @Value("${zk.file.upload.multipartResolver.defaultEncoding:UTF-8}")
-    String defaultEncoding;
-
-    /**
-     * 文件上传 适配器
-     *
-     * @Title: multipartResolver
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date May 27, 2022 10:13:32 AM
-     * @return
-     * @return CommonsMultipartResolver
-     */
-//    @Bean
-//    CommonsMultipartResolver multipartResolver() {
-//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-//        multipartResolver.setDefaultEncoding(this.defaultEncoding);
-//        // 设置总上传数据总大小
-//        multipartResolver.setMaxUploadSize(this.maxUploadSize);
-//        multipartResolver.setMaxInMemorySize(this.maxInMemorySize);
-//        // 设置单个文件最大大小
-//        multipartResolver.setMaxUploadSizePerFile(maxUploadSizePerFile);
-//        return multipartResolver;
-//    }
+    @Autowired
+    public void dispatcherServletRegistrationBean(DispatcherServletRegistrationBean registration) {
+        MultipartConfigElement multipartConfigElement = new MultipartConfigElement(tempFilePath, maxFileSize,
+                maxRequestSize, 0);
+        registration.setMultipartConfig(multipartConfigElement);
+    }
 
     @Bean
     ZKFeignRequestInterceptor feignRequestInterceptor(ZKSecTicketManager redisTicketManager) {

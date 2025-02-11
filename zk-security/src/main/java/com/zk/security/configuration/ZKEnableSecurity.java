@@ -29,7 +29,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.support.AbstractResourceBasedMessageSource;
 
@@ -46,7 +45,6 @@ public @interface ZKEnableSecurity {
 
     public class ZKSecurityInit {
         
-        @Autowired
         public ZKSecurityInit(AbstractResourceBasedMessageSource messageSource, ZKSecPrincipalService zkSecPrincipalService) {
             System.out.println(printLog + "init [" + this.getClass().getSimpleName() + ":" + this.hashCode()
                     + "] =================================");

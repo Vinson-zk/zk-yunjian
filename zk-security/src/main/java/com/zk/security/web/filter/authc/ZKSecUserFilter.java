@@ -59,11 +59,11 @@ public class ZKSecUserFilter extends ZKSecBaseControlFilter {
         if (isHaveTicket != null && ((boolean) isHaveTicket) == true) {
             log.error("[^_^:20221013-1703-001] 用户登录过期，请重新登录；{}", server);
             // 请求中带有令牌，抛出异常； zk.sec.000020=登录已过期，请重新登录
-            throw ZKSecAuthenticationException.as("zk.sec.000020", null);
+            throw ZKSecAuthenticationException.as("zk.sec.000020", request.getPathWithinApplication());
         }else {
             log.error("[^_^:20221013-1703-001] 用户未登录；{}", server);
             // 用户未登录，抛出异常；zk.sec.000004=用户未登录
-            throw ZKSecAuthenticationException.as("zk.sec.000004", null);
+            throw ZKSecAuthenticationException.as("zk.sec.000004", request.getPathWithinApplication());
         }
     }
 

@@ -55,7 +55,7 @@ public class ZKCodeGenController {
             HttpServletRequest hReq, HttpServletResponse hRes) throws Exception {
 //        System.out.println("======== 代码生成；tableIds" + ZKJsonUtils.toJsonStr(tableIds));
         String filePath = codeGenService.genCode(moduleId, tableIds);
-        ZKServletUtils.downloadFile(hRes, filePath);
+        ZKServletUtils.downloadFile(hRes, hReq, filePath);
         ZKFileUtils.deleteFile(new File(filePath));
     }
 

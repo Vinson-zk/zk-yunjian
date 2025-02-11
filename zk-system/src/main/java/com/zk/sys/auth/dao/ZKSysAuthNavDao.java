@@ -56,6 +56,7 @@ public interface ZKSysAuthNavDao extends ZKBaseDao<String, ZKSysAuthNav> {
             "       SELECT distinct(t.c_nav_id) FROM ${authNavTn} t WHERE t.c_del_flag = 0 AND t.c_auth_id in ", //
             "           <foreach item=\"_v\" index=\"index\" collection=\"authIds\" open=\"(\" separator=\",\" close=\")\">#{_v}</foreach>", //
             "   )", //
+            " ORDER BY ${navAlias}.c_sort ASC, ${navAlias}.c_create_date DESC ", //
             "</script>" })
     List<ZKSysNav> findNavByAuthIds(@Param("navTn") String navTn, @Param("navAlias") String navAlias,
             @Param("navSelCols") String navSelCols, @Param("authNavTn") String authNavTn,

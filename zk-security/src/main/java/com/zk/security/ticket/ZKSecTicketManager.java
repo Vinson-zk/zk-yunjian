@@ -45,6 +45,8 @@ public interface ZKSecTicketManager extends ZKDestroyable {
     /**
      * 生成一个普通令牌
      */
+    public ZKSecTicket createTicket();
+
     public ZKSecTicket createTicket(Serializable identification);
 
     /**
@@ -65,6 +67,8 @@ public interface ZKSecTicketManager extends ZKDestroyable {
     /**
      * 生成一个权限令牌；默认用户权限令牌
      */
+    public ZKSecTicket createSecTicket();
+
     public ZKSecTicket createSecTicket(Serializable identification);
 
     /**

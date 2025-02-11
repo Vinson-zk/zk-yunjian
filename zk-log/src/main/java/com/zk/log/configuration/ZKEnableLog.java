@@ -23,12 +23,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.AbstractResourceBasedMessageSource;
 
+import com.zk.core.configuration.ZKCoreThreadPoolProperties;
 import com.zk.log.configuration.ZKEnableLog.ZKLogInit;
 
 /**
@@ -48,7 +51,6 @@ public @interface ZKEnableLog {
     @ComponentScan(basePackages = { "com.zk.log.*" })
     public class ZKLogInit {
 
-        @Autowired
         public ZKLogInit(AbstractResourceBasedMessageSource messageSource) {
             System.out.println(printLog + "init [" + this.getClass().getSimpleName() + ":" + this.hashCode()
                     + "] =================================");
@@ -60,7 +62,14 @@ public @interface ZKEnableLog {
                     + "] ---------------------------------");
         }
 
-    }
+        @ConditionalOnMissingBean(name = { "logThreadPoolProperties" })
+        @ConfigurationProperties(prefix = "zk.log.save.thread.pool")
+        @Bean("logThreadPoolProperties")
+        ZKCoreThreadPoolProperties logThreadPoolProperties() {
+            return new ZKCoreThreadPoolProperties();
+        }
 
+    }
+    
 }
 

@@ -5,8 +5,6 @@ package com.zk.file.entity;
 
 import java.util.UUID;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Transient;
@@ -29,6 +27,7 @@ import com.zk.db.commons.ZKSqlConvertDelegating;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 文件信息明细
@@ -124,6 +123,11 @@ public class ZKFileInfo extends ZKBaseTreeEntity<String, ZKFileInfo> {
              * 1-个人
              */
             public static final int personal = 1;
+
+            /**
+             * 2-公司
+             */
+            public static final int company = 2;
         }
 
     }
@@ -166,6 +170,7 @@ public class ZKFileInfo extends ZKBaseTreeEntity<String, ZKFileInfo> {
     @Pattern(regexp = ValidationRegexp.code, message = "{zk.core.data.validation.code}")
     @ZKColumn(name = "c_parent_code", isInsert = true, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     String parentCode;  
+
     /**
      * 文件名称 
      */
@@ -514,7 +519,8 @@ public class ZKFileInfo extends ZKBaseTreeEntity<String, ZKFileInfo> {
      * 根据主键类型，重写主键生成；
      */
     @Override
-    protected String genId() {
+	@JsonIgnore
+	public String genId() {
         return ZKIdUtils.genLongStringId();
     }
     

@@ -20,8 +20,6 @@ package com.zk.wechat.pay.entity;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Transient;
@@ -42,6 +40,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 支付关系组；其对象，绑定对应的商户号 mchid 和 应用ID appid

@@ -76,7 +76,7 @@ public class ZKDBMapperScannerConfiguration {
      */
     @ConditionalOnMissingBean(value = { MapperScannerConfigurer.class })
     @Bean("mapperScannerConfigurer")
-    public MapperScannerConfigurer mapperScannerConfigurer() {
+    MapperScannerConfigurer mapperScannerConfigurer() {
         System.out.println(ZKEnableDB.printLog + "mapperScannerConfigurer --- [" + this.getClass().getSimpleName()
                 + "] " + this.hashCode());
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();

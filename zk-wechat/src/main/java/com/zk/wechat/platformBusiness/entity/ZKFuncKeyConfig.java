@@ -3,8 +3,6 @@
  */
 package com.zk.wechat.platformBusiness.entity;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Transient;
@@ -26,6 +24,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 微信平台，功能 key 配置；网页授权成功后，会根据这个 key 重定向到业务功能；
@@ -255,7 +254,8 @@ public class ZKFuncKeyConfig extends ZKBaseEntity<String, ZKFuncKeyConfig> {
 	 * 根据主键类型，重写主键生成；
 	 */
 	@Override
-	protected String genId() {
+	@JsonIgnore
+	public String genId() {
         return ZKIdUtils.genLongStringId();
     }
 	

@@ -79,7 +79,7 @@ public class ZKSysTestHelper {
     public static ConfigurableApplicationContext getMainCtx() {
         if (ctx == null) {
             log.info("[^_^:20200805-1508-001]========================================");
-            log.info("[^_^:20200805-1508-001]=== zk system  启动测试 ... ... ");
+            log.info("[^_^:20200805-1508-001]=== zk system test 启动测试 ... ... ");
             log.info("[^_^:20200805-1508-001]========================================");
             ctx = run(new String[] {});
             log.info("[^_^:20200805-1508-001]----------------------------------------");

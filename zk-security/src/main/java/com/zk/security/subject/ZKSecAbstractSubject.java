@@ -23,6 +23,7 @@ import java.util.concurrent.Callable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.zk.core.exception.ZKSecAuthenticationException;
 import com.zk.core.exception.ZKSystemException;
 import com.zk.core.exception.base.ZKUnknownException;
 import com.zk.security.annotation.ZKSecApiCode;
@@ -207,8 +208,10 @@ public abstract class ZKSecAbstractSubject implements ZKSecSubject {
         if (this.ticket != null) {
             if (this.ticket.getStatus() == ZKSecTicket.KeyStatus.Stop) {
                 if (this.ticket.get(ZKSecTicket.KeyTicketInfo.stop_info_code) != null) {
-                    throw ZKSystemException.as("zk.1",
-                            this.ticket.get(ZKSecTicket.KeyTicketInfo.stop_info_code).toString());
+//                    throw ZKSystemException.as("zk.1",
+//                            this.ticket.get(ZKSecTicket.KeyTicketInfo.stop_info_code).toString());
+                    throw ZKSecAuthenticationException
+                            .as(this.ticket.get(ZKSecTicket.KeyTicketInfo.stop_info_code).toString());
                 }
                 // 未知的令牌禁用原因
                 throw ZKSystemException.as("zk.sec.000008", null);//

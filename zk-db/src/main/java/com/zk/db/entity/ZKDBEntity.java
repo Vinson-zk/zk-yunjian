@@ -21,8 +21,6 @@ package com.zk.db.entity;
 import java.io.Serializable;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.springframework.data.annotation.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,6 +32,8 @@ import com.zk.db.commons.ZKDBMapInfo;
 import com.zk.db.commons.ZKDBQueryWhere;
 import com.zk.db.commons.ZKSqlConvert;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
+
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * @ClassName: ZKDBEntity

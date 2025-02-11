@@ -20,8 +20,6 @@ package com.zk.devleopment.tool.gen.entity;
 
 import java.io.File;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Transient;
 
@@ -37,6 +35,7 @@ import com.zk.db.commons.ZKSqlConvertDelegating;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 功能模块信息

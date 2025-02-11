@@ -34,7 +34,8 @@ import com.zk.core.web.utils.ZKWebUtils;
 * @version 1.0 
 */
 @RestController
-@RequestMapping(value = "${zk.path.admin}/${zk.path.mail}/${zk.mail.version}")
+//@RequestMapping(value = "${zk.path.admin}/${zk.path.mail}/${zk.mail.version}")
+@RequestMapping("/")
 public class ZKMailIndexController extends ZKBaseController {
 
     @RequestMapping({ "", "index" })

@@ -36,6 +36,7 @@ import com.zk.core.commons.ZKFileTransfer;
 import com.zk.core.utils.ZKStreamUtils;
 import com.zk.core.utils.ZKStringUtils;
 import com.zk.core.web.utils.ZKHtmlUtils;
+import com.zk.core.web.utils.ZKServletUtils;
 import com.zk.test.file.ZKFileUploadTest;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -160,13 +161,17 @@ public class ZKWebmvcTestFileController {
      * @return void
      */
     @RequestMapping(path = "getFile")
-    public void getFile(@RequestParam(value = "fName") String fName, HttpServletResponse hRes)
-            throws FileUploadException, IOException {
+    public void getFile(@RequestParam(value = "fName") String fName,
+            @RequestParam(value = "isDownload", required = false, defaultValue = "false") boolean isDownload,
+            HttpServletResponse hRes, HttpServletRequest hReq) throws FileUploadException, IOException {
+//        System.out.println("[^_^:20240822-0012-001] fName: " + fName);
+        // 下载文件，浏览器自动转为下载时，需要添加下面这一句。
+        if (isDownload) {
+            ZKServletUtils.setDownloadFileHeader(hRes, hReq, fName);
+        }
         
         String fileId = this.targetPath + File.separator + fName;
 
-        // 下载文件，浏览器自动转为下载时，需要添加下面这一句。
-//        hRes.setHeader("Content-Disposition", "attachment;fileName=" + fName);
         OutputStream os = null;
         try {
             os = hRes.getOutputStream();

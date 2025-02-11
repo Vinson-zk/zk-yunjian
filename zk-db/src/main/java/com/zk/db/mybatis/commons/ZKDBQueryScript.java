@@ -32,10 +32,6 @@ public class ZKDBQueryScript extends ZKDBQuery{
      * @date Apr 15, 2022 11:48:38 AM
      * @param queryCondition
      *            需要包裹查询条件，一般为 ZKDBQueryCol；
-     * @param attrName
-     *            java 属性名; 这里会添加 #{}
-     * @param javaClassz
-     *            查询字段的 java 数据类型
      * @param testRule
      *            isForce 为 true 时，此参数无效；fasle 时，是否做查询条件的判断规则；
      *            0 - 不为 null 且 不为空；为空根据 javaClass 自动判断；!= ""/0/isEmpty/false/
@@ -43,7 +39,10 @@ public class ZKDBQueryScript extends ZKDBQuery{
      *            2 - 不为 null
      *            3 - 为 null
      *            4 - 为 null 或 为空；为空根据 javaClass 自动判断；== ""/0/isEmpty/false/
-     * @return
+     * @param attrName
+     *            java 属性名; 这里会添加 #{}
+     * @param javaClassz
+     *            查询字段的 java 数据类型
      * @return ZKDBQueryConditionCol
      */
     public static ZKDBQueryScript asIf(ZKDBQuery queryCondition, int testRule, String attrName,

@@ -40,7 +40,7 @@ import com.zk.sys.ZKSysSpringBootMain;
 import com.zk.sys.auth.service.ZKSysAuthCompanyService;
 import com.zk.sys.org.entity.ZKSysOrgCompany;
 import com.zk.sys.org.entity.ZKSysOrgUser;
-import com.zk.sys.org.entity.ZKSysOrgUserEditLog.ZKUserEditFlag;
+import com.zk.sys.org.entity.ZKSysOrgUserOptLog.ZKUserOptTypeFlag;
 import com.zk.sys.org.service.ZKSysOrgCompanyService;
 import com.zk.sys.org.service.ZKSysOrgRoleService;
 import com.zk.sys.org.service.ZKSysOrgUserService;
@@ -130,24 +130,25 @@ public class ZKSysOrgUserPasswordControllerTest {
         ZKSysOrgCompany company = sysOrgCompanyService.getByCode(companyCode);
         TestCase.assertNotNull(company);
 
-        String account = "test";
+        String mail = "testUser@126.com";
+        String phoneNum = "13825658080";
         String newPassword = "test";
 
         ZKSysOrgUser user;
 
         try {
-            // 先修改掉 用户的邮箱
-            user = sysOrgUserService.getUserSmartByCompanyCode(companyCode, account);
+            // 先修改掉 用户的密码
+            user = sysOrgUserService.getUserSmartByCompanyCode(companyCode, mail);
             TestCase.assertNotNull(user);
-            sysOrgUserService.updatePwd(user.getPkId(), "not-pwd", ZKUserEditFlag.Mail.company);
+            sysOrgUserService.updatePwd(user.getPkId(), "not-pwd", ZKUserOptTypeFlag.Mail.company, null);
 
             // 邮箱找回
-            this.testForgotPwdByMail(company, account, newPassword);
+            this.testForgotPwdByMail(company, mail, newPassword);
             user = sysOrgUserService.get(user.getPkId());
             sysOrgUserService.checkUserPassword(user, newPassword);
 
             // 手机找回
-            this.testForgotPwdByPhoneNum(company, account, newPassword);
+            this.testForgotPwdByPhoneNum(company, phoneNum, newPassword);
             user = sysOrgUserService.get(user.getPkId());
             sysOrgUserService.checkUserPassword(user, newPassword);
 
@@ -167,7 +168,7 @@ public class ZKSysOrgUserPasswordControllerTest {
         String tkId;
         /** 1 - 注册用户，发送验证码 *****************************************************/
         url = this.baseUrl
-                + String.format("/n/fp/sendMailVerifiyCode?companyCode=%s&account=%s", company.getCode(), account);
+                + String.format("/n/fp/sendMailVerifyCode?companyCode=%s&mail=%s", company.getCode(), account);
         // body
         response = testRestTemplate.postForEntity(url, null, String.class);
         resStr = response.getBody();
@@ -178,7 +179,7 @@ public class ZKSysOrgUserPasswordControllerTest {
         TestCase.assertNotNull(tkId);
 
         /** 2 - 提交验证码并完成注册 *****************************************************/
-        this.testForgotPwdSubmitVerifiyCode(tkId, "9527", newPassword);
+        this.testForgotPwdSubmitVerifyCode(tkId, "9527", newPassword);
     }
 
     protected void testForgotPwdByPhoneNum(ZKSysOrgCompany company, String phoneNum, String newPassword) {
@@ -190,7 +191,7 @@ public class ZKSysOrgUserPasswordControllerTest {
         String tkId;
         /** 1 - 注册用户，发送验证码 *****************************************************/
         url = this.baseUrl
-                + String.format("/n/fp/sendPhoneVerifiyCode?companyCode=%s&account=%s", company.getCode(), phoneNum);
+                + String.format("/n/fp/sendPhoneVerifyCode?companyCode=%s&phoneNum=%s", company.getCode(), phoneNum);
         // body
         response = testRestTemplate.postForEntity(url, null, String.class);
         resStr = response.getBody();
@@ -201,11 +202,11 @@ public class ZKSysOrgUserPasswordControllerTest {
         TestCase.assertNotNull(tkId);
 
         /** 2 - 提交验证码并完成注册 *****************************************************/
-        this.testForgotPwdSubmitVerifiyCode(tkId, "9527", newPassword);
+        this.testForgotPwdSubmitVerifyCode(tkId, "9527", newPassword);
     }
 
     // 提交验证码
-    protected void testForgotPwdSubmitVerifiyCode(String tkId, String verifiyCode, String newPassword) {
+    protected void testForgotPwdSubmitVerifyCode(String tkId, String verifyCode, String newPassword) {
         String url = "";
         ResponseEntity<String> response = null;
         HttpHeaders requestHeaders = null;
@@ -214,8 +215,8 @@ public class ZKSysOrgUserPasswordControllerTest {
         String resStr = "";
         ZKMsgRes res = null;
 
-        /** 2 - 提交验证码并完成注册 *****************************************************/
-        url = this.baseUrl + "/n/fp/submitVerifiyCode?verifiyCode=" + verifiyCode + "&newPassword=" + newPassword;
+        /** 2 - 提交验证码并完成修改 *****************************************************/
+        url = this.baseUrl + "/n/fp/submitVerifyCode?verifyCode=" + verifyCode + "&newPassword=" + newPassword;
         // headers
         requestHeaders = new HttpHeaders();
         requestHeaders.add(ZKSecConstants.PARAM_NAME.TicketId, tkId);

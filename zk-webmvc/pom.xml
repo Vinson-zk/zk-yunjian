@@ -39,6 +39,12 @@
 			<artifactId>zk-core</artifactId>
 			<version>${version.zk.core}</version>
 			<!-- <scope>compile</scope>有引用测试代码，需要 compile  -->
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-webflux</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!--<dependency>
 			<groupId>com.zk</groupId>

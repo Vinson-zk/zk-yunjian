@@ -39,7 +39,7 @@ import com.zk.security.common.ZKSecConstants;
 import com.zk.sys.ZKSysSpringBootMain;
 import com.zk.sys.org.entity.ZKSysOrgCompany;
 import com.zk.sys.org.entity.ZKSysOrgUser;
-import com.zk.sys.org.entity.ZKSysOrgUserEditLog.ZKUserEditFlag;
+import com.zk.sys.org.entity.ZKSysOrgUserOptLog.ZKUserOptTypeFlag;
 import com.zk.sys.org.service.ZKSysOrgCompanyService;
 import com.zk.sys.org.service.ZKSysOrgUserService;
 import com.zk.sys.sec.controller.ZKSysSecIndexControllerTest;
@@ -171,6 +171,27 @@ public class ZKSysOrgUserControllerTest {
     }
 
     protected ZKSysOrgUser testRegisterPersonalUserByMail(ZKSysOrgCompany company, String mail, String pwd) {
+        String tkId;
+        ZKSysOrgUser user = null;
+        /** 1 - 注册用户，发送验证码 *****************************************************/
+        tkId = this.testDoingSendRegisterMail(company == null ? null : company.getCode(), mail, pwd);
+        /** 2 - 提交验证码并完成注册 *****************************************************/
+        user = this.testDoingSubmitVerifyCode(tkId, "9527");
+        return user;
+    }
+
+    protected ZKSysOrgUser testRegisterPersonalUserByPhoneNum(ZKSysOrgCompany company, String phoneNum, String pwd) {
+        String tkId;
+        ZKSysOrgUser user = null;
+        /** 1 - 注册用户，发送验证码 *****************************************************/
+        tkId = this.testDoingSendRegisterPhone(company == null ? null : company.getCode(), phoneNum, pwd);
+        /** 2 - 提交验证码并完成注册 *****************************************************/
+        user = this.testDoingSubmitVerifyCode(tkId, "9527");
+        return user;
+    }
+
+    // 发送邮箱验证码
+    protected String testDoingSendRegisterMail(String companyCode, String mail, String pwd) {
         String url = "";
         ResponseEntity<String> response = null;
         HttpHeaders requestHeaders = null;
@@ -181,7 +202,13 @@ public class ZKSysOrgUserControllerTest {
         String tkId;
         ZKSysOrgUser user = null;
         /** 1 - 注册用户，发送验证码 *****************************************************/
-        url = this.baseUrl + String.format("/n/sendRegisterMail/%s", company.getCode()); // n/sendRegisterMail/{companyCode}
+        if (ZKStringUtils.isEmpty(companyCode)) {
+            url = this.baseUrl + "/n/sendRegisterMail";
+        }
+        else {
+            url = this.baseUrl + String.format("/n/sendRegisterMail/%s", companyCode);
+        }
+
         // headers
         requestHeaders = new HttpHeaders();
 //        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -192,18 +219,17 @@ public class ZKSysOrgUserControllerTest {
         requestEntity = new HttpEntity<Object>(user, requestHeaders);
         response = testRestTemplate.postForEntity(url, requestEntity, String.class);
         resStr = response.getBody();
-        System.out.println("[^_^:20240725-2359-001.01] resStr: " + resStr);
+        System.out.println("[^_^:20240725-2358-001.01] resStr: " + resStr);
         res = ZKJsonUtils.parseObject(resStr, ZKMsgRes.class);
         TestCase.assertTrue(res.isOk());
         tkId = response.getHeaders().getFirst(ZKSecConstants.PARAM_NAME.TicketId);
         TestCase.assertNotNull(tkId);
-        
-        /** 2 - 提交验证码并完成注册 *****************************************************/
-        user = this.testRegisterSubmitVerifiyCode(tkId, "9527");
-        return user;
+
+        return tkId;
     }
 
-    protected ZKSysOrgUser testRegisterPersonalUserByPhoneNum(ZKSysOrgCompany company, String phoneNum, String pwd) {
+    // 发送手机验证码
+    protected String testDoingSendRegisterPhone(String companyCode, String phoneNum, String pwd) {
         String url = "";
         ResponseEntity<String> response = null;
         HttpHeaders requestHeaders = null;
@@ -214,7 +240,13 @@ public class ZKSysOrgUserControllerTest {
         String tkId;
         ZKSysOrgUser user = null;
         /** 1 - 注册用户，发送验证码 *****************************************************/
-        url = this.baseUrl + String.format("/n/sendRegisterPhone/%s", company.getCode()); // n/sendRegisterPhone/{companyCode}
+        if (ZKStringUtils.isEmpty(companyCode)) {
+            url = this.baseUrl + "/n/sendRegisterPhone";
+        }
+        else {
+            url = this.baseUrl + String.format("/n/sendRegisterPhone/%s", companyCode);
+        }
+
         // headers
         requestHeaders = new HttpHeaders();
 //        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -231,13 +263,38 @@ public class ZKSysOrgUserControllerTest {
         tkId = response.getHeaders().getFirst(ZKSecConstants.PARAM_NAME.TicketId);
         TestCase.assertNotNull(tkId);
 
-        /** 2 - 提交验证码并完成注册 *****************************************************/
-        user = this.testRegisterSubmitVerifiyCode(tkId, "9527");
-        return user;
+        return tkId;
+    }
+
+    // 重新发送验证码
+    protected String testDoingSendVerifyCodeAgain(String tkId, int againFlag) {
+        String url = "";
+        ResponseEntity<String> response = null;
+        HttpHeaders requestHeaders = null;
+        HttpEntity<Object> requestEntity = null;
+
+        String resStr = "";
+        ZKMsgRes res = null;
+        /** 1 - 注册用户，发送验证码 *****************************************************/
+        url = this.baseUrl + "/n/sendVerifyCodeAgain?againFlag=" + againFlag;
+        // headers
+        requestHeaders = new HttpHeaders();
+        requestHeaders.add(ZKSecConstants.PARAM_NAME.TicketId, tkId);
+
+        requestEntity = new HttpEntity<Object>(null, requestHeaders);
+        response = testRestTemplate.postForEntity(url, requestEntity, String.class);
+        resStr = response.getBody();
+        System.out.println("[^_^:20250205-0940-001.01] resStr: " + resStr);
+        res = ZKJsonUtils.parseObject(resStr, ZKMsgRes.class);
+        TestCase.assertTrue(res.isOk());
+        tkId = response.getHeaders().getFirst(ZKSecConstants.PARAM_NAME.TicketId);
+        TestCase.assertNotNull(tkId);
+
+        return tkId;
     }
 
     // 提交验证码
-    protected ZKSysOrgUser testRegisterSubmitVerifiyCode(String tkId, String verifiyCode) {
+    protected ZKSysOrgUser testDoingSubmitVerifyCode(String tkId, String verifyCode) {
         String url = "";
         ResponseEntity<String> response = null;
         HttpHeaders requestHeaders = null;
@@ -248,7 +305,7 @@ public class ZKSysOrgUserControllerTest {
         ZKSysOrgUser user = null;
         
         /** 2 - 提交验证码并完成注册 *****************************************************/
-        url = this.baseUrl + "/n/submitVerifiyCode?verifiyCode=" + verifiyCode;
+        url = this.baseUrl + "/n/submitVerifyCode?verifyCode=" + verifyCode;
         // headers
         requestHeaders = new HttpHeaders();
         requestHeaders.add(ZKSecConstants.PARAM_NAME.TicketId, tkId);
@@ -287,7 +344,7 @@ public class ZKSysOrgUserControllerTest {
             // 先修改掉 用户的邮箱
             user = sysOrgUserService.getUserSmartByCompanyCode(companyCode, account);
             TestCase.assertNotNull(user);
-            sysOrgUserService.updateMail(user, "not-Mail", ZKUserEditFlag.Mail.company);
+            sysOrgUserService.updateMail(user, "not-Mail", ZKUserOptTypeFlag.Mail.company, null);
 
             String url = "";
             ResponseEntity<String> response = null;
@@ -308,7 +365,7 @@ public class ZKSysOrgUserControllerTest {
             tkId = response.getHeaders().getFirst(ZKSecConstants.PARAM_NAME.TicketId);
 
             /** 1 - 发送验证邮件验证码 *****************************************************/
-            url = this.baseUrl + "/cm/sendMailVerifiyCode?newMail=" + mail;
+            url = this.baseUrl + "/cm/sendVerifyCode?newMail=" + mail;
             // headers
             requestHeaders = new HttpHeaders();
             requestHeaders.add(ZKSecConstants.PARAM_NAME.TicketId, tkId);
@@ -321,7 +378,7 @@ public class ZKSysOrgUserControllerTest {
             TestCase.assertTrue(res.isOk());
 
             /** 2 - 提交验证码，并修改邮箱 *****************************************************/
-            url = this.baseUrl + "/cm/submitVerifiyCode?verifiyCode=9527";
+            url = this.baseUrl + "/cm/submitVerifyCode?verifyCode=9527";
             // headers
             requestHeaders = new HttpHeaders();
             requestHeaders.add(ZKSecConstants.PARAM_NAME.TicketId, tkId);
@@ -365,9 +422,9 @@ public class ZKSysOrgUserControllerTest {
             // 先修改掉 用户的邮箱
             user = sysOrgUserService.getUserSmartByCompanyCode(companyCode, account);
             TestCase.assertNotNull(user);
-            sysOrgUserService.updatePhoneNum(user, "123", ZKUserEditFlag.Mail.company);
+            sysOrgUserService.updatePhoneNum(user, "123", ZKUserOptTypeFlag.Mail.company, null);
 
-//            sysOrgUserService.updatePwd(user.getPkId(), pwd, ZKUserEditFlag.Pwd.company);
+//            sysOrgUserService.updatePwd(user.getPkId(), pwd, ZKUserOptTypeFlag.Pwd.company);
 
             String url = "";
             ResponseEntity<String> response = null;
@@ -388,7 +445,7 @@ public class ZKSysOrgUserControllerTest {
             tkId = response.getHeaders().getFirst(ZKSecConstants.PARAM_NAME.TicketId);
 
             /** 1 - 发送验证邮件验证码 *****************************************************/
-            url = this.baseUrl + "/cp/sendPhoneVerifiyCode?newPhoneNum=" + phoneNum;
+            url = this.baseUrl + "/cp/sendVerifyCode?newPhoneNum=" + phoneNum;
             // headers
             requestHeaders = new HttpHeaders();
             requestHeaders.add(ZKSecConstants.PARAM_NAME.TicketId, tkId);
@@ -401,7 +458,7 @@ public class ZKSysOrgUserControllerTest {
             TestCase.assertTrue(res.isOk());
 
             /** 2 - 提交验证码，并修改邮箱 *****************************************************/
-            url = this.baseUrl + "/cp/submitVerifiyCode?verifiyCode=9527";
+            url = this.baseUrl + "/cp/submitVerifyCode?verifyCode=9527";
             // headers
             requestHeaders = new HttpHeaders();
             requestHeaders.add(ZKSecConstants.PARAM_NAME.TicketId, tkId);
@@ -424,5 +481,86 @@ public class ZKSysOrgUserControllerTest {
         }
     }
 
+    /********************************************************/
+    /** 测试 注销账号，先注册，再注销 ****/
+    /********************************************************/
+    @Test
+    public void testCloseAccount() {
+
+        String companyCode = ZKSysUtils.getOwnerCompanyCode();
+        TestCase.assertFalse(ZKStringUtils.isEmpty(companyCode));
+
+        String mail = "testCloseAccountMail@126.com";
+        String phoneNum = "13825650001";
+        String pwd = "testCloseAccount";
+
+        ZKSysOrgUser user;
+
+        try {
+            ResponseEntity<String> response = null;
+
+            String resStr = "";
+            String tkId;
+            ZKMsgRes res = null;
+
+            // 邮箱注册
+            user = this.testRegisterPersonalUserByMail(null, mail, pwd);
+            TestCase.assertNotNull(user);
+            // 登录
+            response = ZKSysSecIndexControllerTest.secLogin(testRestTemplate, this.baseLoginUrl, "", mail, pwd);
+            resStr = response.getBody();
+            System.out.println("[^_^:20240725-2059-001.01] resStr: " + resStr);
+            res = ZKJsonUtils.parseObject(resStr, ZKMsgRes.class);
+            TestCase.assertTrue(res.isOk());
+            tkId = response.getHeaders().getFirst(ZKSecConstants.PARAM_NAME.TicketId);
+            // 注销
+            this.testDoingCloseAccount(tkId);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            TestCase.assertTrue(false);
+        } finally {
+            user = sysOrgUserService.getUserSmartByCompanyCode(companyCode, mail);
+            if (user != null) {
+                sysOrgUserService.diskDel(user);
+            }
+            user = sysOrgUserService.getUserSmartByCompanyCode(companyCode, phoneNum);
+            if (user != null) {
+                sysOrgUserService.diskDel(user);
+            }
+        }
+    }
+
+    // 注销账号
+    protected int testDoingCloseAccount(String tkId) {
+        String url = "";
+        ResponseEntity<String> response = null;
+        HttpHeaders requestHeaders = null;
+        HttpEntity<Object> requestEntity = null;
+
+        String resStr = "";
+        ZKMsgRes res = null;
+        int resInt = 0;
+
+        /** 2 - 提交验证码并完成注册 *****************************************************/
+        url = this.baseUrl + "/closeAccount";
+        // headers
+        requestHeaders = new HttpHeaders();
+        requestHeaders.add(ZKSecConstants.PARAM_NAME.TicketId, tkId);
+        // body
+        requestEntity = new HttpEntity<Object>(null, requestHeaders);
+        response = testRestTemplate.postForEntity(url, requestEntity, String.class);
+        resStr = response.getBody();
+        System.out.println("[^_^:20250210-0210-001] resStr: " + resStr);
+        res = ZKJsonUtils.parseObject(resStr, ZKMsgRes.class);
+        TestCase.assertTrue(res.isOk());
+
+        resInt = res.getDataByClass(Integer.class);
+        TestCase.assertEquals(1, resInt);
+        return resInt;
+    }
 
 }
+
+
+

@@ -20,8 +20,6 @@ package com.zk.server.central.entity;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Transient;
@@ -40,6 +38,7 @@ import com.zk.db.commons.ZKSqlConvertDelegating;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /** 
 * @ClassName: ZKSerCenCertificate 
@@ -247,20 +246,20 @@ public class ZKSerCenCertificate extends ZKBaseEntity<String, ZKSerCenCertificat
         this.privateKey = privateKey;
     }
 
-    @Override
-    public void preInsert() {
-        super.preInsert();
-        if (this.status == null) {
-            this.status = StatusType.Enable;
-        }
-    }
-
-    @Override
-    public void preUpdate() {
-        super.preUpdate();
-        if (this.status == null) {
-            this.status = StatusType.Enable;
-        }
-    }
+//    @Override
+//    public void preInsert() {
+//        super.preInsert();
+//        if (this.status == null) {
+//            this.status = StatusType.Enable;
+//        }
+//    }
+//
+//    @Override
+//    public void preUpdate() {
+//        super.preUpdate();
+//        if (this.status == null) {
+//            this.status = StatusType.Enable;
+//        }
+//    }
 
 }

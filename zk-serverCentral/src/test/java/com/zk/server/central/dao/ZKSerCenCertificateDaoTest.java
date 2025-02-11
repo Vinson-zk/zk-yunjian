@@ -32,6 +32,7 @@ import com.zk.core.utils.ZKDateUtils;
 import com.zk.core.utils.ZKJsonUtils;
 import com.zk.server.central.ZKSerCenSpringBootMain;
 import com.zk.server.central.entity.ZKSerCenCertificate;
+import com.zk.server.central.service.ZKSerCenCertificateService;
 
 import junit.framework.TestCase;
 
@@ -54,6 +55,7 @@ public class ZKSerCenCertificateDaoTest {
         ZKSerCenCertificateDao dao = null;
         try {
             dao = ctx.getBean(ZKSerCenCertificateDao.class);
+            ZKSerCenCertificateService s = ctx.getBean(ZKSerCenCertificateService.class);
             TestCase.assertNotNull(dao);
 
             int result = 0;
@@ -67,7 +69,8 @@ public class ZKSerCenCertificateDaoTest {
 
             /*** 插入 ***/
             result = 0;
-            zkSC.preInsert();
+//            zkSC.preInsert();
+            s.preInsert(zkSC);
             result = dao.insert(zkSC);
             pkIdList.add(zkSC.getPkId()); // 保存下创建的 pkId，待测试完成，删除测试数据
             TestCase.assertEquals(1, result);
@@ -80,7 +83,8 @@ public class ZKSerCenCertificateDaoTest {
             zkScResult.setValidStartDate(ZKDateUtils.parseDate("2019-08-08", ZKDateUtils.DF_yyyy_MM_dd));
             zkScResult.setServerName("test_dao_name_UPDATE");
             zkScResult.setStatus(4);
-            zkScResult.preUpdate();
+//            zkScResult.preUpdate();
+            s.preUpdate(zkScResult);
             result = 0;
             result = dao.update(zkScResult);
             TestCase.assertEquals(1, result);
@@ -115,7 +119,8 @@ public class ZKSerCenCertificateDaoTest {
             zkSC.setValidStartDate(ZKDateUtils.parseDate("2019-08-09", ZKDateUtils.DF_yyyy_MM_dd));
             zkSC.setValidEndDate(ZKDateUtils.parseDate("2019-10-08", ZKDateUtils.DF_yyyy_MM_dd));
             result = 0;
-            zkSC.preInsert();
+//            zkSC.preInsert();
+            s.preInsert(zkSC);
             result = dao.insert(zkSC);
             pkIdList.add(zkSC.getPkId()); // 保存下创建的 pkId，待测试完成，删除测试数据
             TestCase.assertEquals(1, result);
@@ -127,7 +132,8 @@ public class ZKSerCenCertificateDaoTest {
             zkSC.setValidStartDate(ZKDateUtils.parseDate("2019-08-10", ZKDateUtils.DF_yyyy_MM_dd));
             zkSC.setValidEndDate(ZKDateUtils.parseDate("2019-11-08", ZKDateUtils.DF_yyyy_MM_dd));
             result = 0;
-            zkSC.preInsert();
+//            zkSC.preInsert();
+            s.preInsert(zkSC);
             result = dao.insert(zkSC);
             pkIdList.add(zkSC.getPkId()); // 保存下创建的 pkId，待测试完成，删除测试数据
             TestCase.assertEquals(1, result);

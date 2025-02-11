@@ -18,6 +18,9 @@
 */
 package com.zk.mail.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletRegistrationBean;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.zk.core.configuration.ZKEnableCoreServlet;
@@ -26,6 +29,8 @@ import com.zk.db.configuration.ZKEnableDB;
 import com.zk.log.configuration.ZKEnableLog;
 import com.zk.security.configuration.ZKEnableSecurity;
 import com.zk.webmvc.configuration.ZKEnableWebmvc;
+
+import jakarta.servlet.MultipartConfigElement;
 
 /** 
 * @ClassName: ZKMailAfterConfiguration 
@@ -42,6 +47,20 @@ import com.zk.webmvc.configuration.ZKEnableWebmvc;
 public class ZKMailAfterConfiguration implements WebMvcConfigurer {
 
 
+    @Value("${zk.core.servlet.file.upload.multipartconfigelement.tempFilePath:tmp/spittr/uploads}")
+    String tempFilePath;
 
+    @Value("${zk.core.servlet.file.upload.multipartconfigelement.maxFileSize}")
+    long maxFileSize;
+
+    @Value("${zk.core.servlet.file.upload.multipartconfigelement.maxRequestSize}")
+    long maxRequestSize;
+
+    @Autowired
+    public void dispatcherServletRegistrationBean(DispatcherServletRegistrationBean registration) {
+        MultipartConfigElement multipartConfigElement = new MultipartConfigElement(tempFilePath, maxFileSize,
+                maxRequestSize, 0);
+        registration.setMultipartConfig(multipartConfigElement);
+    }
 
 }

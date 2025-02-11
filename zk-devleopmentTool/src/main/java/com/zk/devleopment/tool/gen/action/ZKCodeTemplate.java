@@ -18,7 +18,7 @@
 */
 package com.zk.devleopment.tool.gen.action;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * 代码模板信息读取

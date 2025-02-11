@@ -28,7 +28,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * @version 
  */
 @RestController
-@RequestMapping(value = "${zk.path.admin}/${zk.path.sys}/${zk.sys.version}/org/sysOrgDept")
+@RequestMapping(value = "${zk.path.admin}/${zk.path.sys}/${zk.sys.version}/${zk.path.sys.org}/sysOrgDept")
 public class ZKSysOrgDeptController extends ZKBaseController {
 
 	@Autowired

@@ -15,7 +15,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import ${i};
 </#list>
 
-import javax.xml.bind.annotation.XmlTransient;
+// import javax.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlTransient;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Transient;
 
@@ -101,7 +102,8 @@ public class ${zkTableInfo.className} extends ZKBaseTreeEntity<${zkTableInfo.pkA
 	 * 根据主键类型，重写主键生成；
 	 */
 	@Override
-	protected String genId() {
+	@JsonIgnore
+	public String genId() {
         return ZKIdUtils.genLongStringId();
     }
     <#elseif zkTableInfo.pkAttrType == "Long" >
@@ -109,7 +111,7 @@ public class ${zkTableInfo.className} extends ZKBaseTreeEntity<${zkTableInfo.pkA
 	 * 根据主键类型，重写主键生成；
 	 */
     @Override
-	protected Long genId() {
+	public Long genId() {
         return ZKIdUtils.genLongId();
     }
     </#if>

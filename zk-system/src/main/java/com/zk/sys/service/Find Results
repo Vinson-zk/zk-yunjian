@@ -1,0 +1,80 @@
+Searching 3066 files for "verifiyCode"
+
+/Users/vinson/bs/bs_ws/ws_sts4/zk/zk-yunjian/nohup:
+    File too large, skipping
+
+/Users/vinson/bs/bs_ws/ws_sts4/zk/zk-yunjian/zk-mail/src/test/java/com/zk/mail/feignclient/ZKMailSendApiTest.java:
+   91                      ZKDateUtils.formatDate(ZKDateUtils.getToday(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss));
+   92              contentParams.put("userName", "华安");
+   93:             contentParams.put("verifiyCode", "test9527");
+   94              contentParams.put("codeType", "测试发送");
+   95              res = sApi.mailSendByTypeCode(mailType, null, null, recipientMailAddr, null, null, contentParams,
+
+/Users/vinson/bs/bs_ws/ws_sts4/zk/zk-yunjian/zk-mail/src/test/java/com/zk/mail/service/ZKMailSendServiceTest.java:
+   72  
+   73      @Test
+   74:     public void testSendMailVerifiyCode() {
+   75          String mailType = "mail.verifiy.code";
+   76          ZKMailSendService s = ZKMailTestHelper.getMainCtx().getBean(ZKMailSendService.class);
+   ..
+   82                      ZKDateUtils.formatDate(ZKDateUtils.getToday(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss));
+   83              contentParams.put("userName", "华安");
+   84:             contentParams.put("verifiyCode", "test9527");
+   85              contentParams.put("codeType", "测试发送");
+   86              s.send(true, null, recipientMailAddr, null, mailType, null, null, contentParams,
+
+/Users/vinson/bs/bs_ws/ws_sts4/zk/zk-yunjian/zk-system-api/src/main/java/com/zk/sys/org/entity/ZKSysOrgCompany.java:
+  121  //         * 5-待验证验证码，此状态不会入库
+  122  //         */
+  123: //        public static final int waitVerifiyCode = 5;
+  124  
+  125      }
+
+/Users/vinson/bs/bs_ws/ws_sts4/zk/zk-yunjian/zk-system/src/main/java/com/zk/sys/service/ZKSysSendMailMsgService.java:
+  111       * @param codeType
+  112       * @param userName
+  113:      * @param verifiyCode
+  114       * @param recipientMailAddr
+  115       * @return
+  116       * @return ZKMsgRes
+  117       */
+  118:     public ZKMsgRes sendMailCode(String codeType, String userName, String verifiyCode, String recipientMailAddr) {
+  119:         // userName\verifiyCode\timeStr\codeType
+  120          this.setIntervalTime(recipientMailAddr);
+  121          String timeStr = ZKDateUtils.formatDate(ZKDateUtils.getToday(), ZKDateUtils.DF_yyyy_MM_dd_HH_mm_ss);
+  ...
+  123          mailParams.put("timeStr", timeStr);
+  124          mailParams.put("userName", ZKStringUtils.isEmpty(userName) ? "" : userName);
+  125:         mailParams.put("verifiyCode", verifiyCode);
+  126          mailParams.put("codeType", ZKMsgUtils.getMessage("zk.sys.msg.code.type.mail." + codeType));
+  127  
+
+/Users/vinson/bs/bs_ws/ws_sts4/zk/zk-yunjian/zk-system/src/main/java/com/zk/sys/service/ZKSysSendPhoneMsgService.java:
+   88      }
+   89  
+   90:     public ZKMsgRes sendPhoneCode(String codeType, String phoneNum, String verifiyCode) {
+   91  
+   92          this.setIntervalTime(phoneNum);
+
+/Users/vinson/bs/bs_ws/ws_sts4/zk/zk-yunjian/zk-system/src/test/java/com/zk/sys/service/ZKSysSendMailMsgServiceTest.java:
+   42          try {
+   43              String recipientMailAddr = "binary_space@126.com";
+   44:             String userName, verifiyCode;
+   45              ZKMsgRes res;
+   46  
+   47              userName = null;
+   48:             verifiyCode = "test9527";
+   49:             res = s.sendMailCode(ZKCodeType.changeMail, userName, verifiyCode, recipientMailAddr);
+   50              System.out.println("[^_^:20240715-0023-001] res: " + res.toString());
+   51              TestCase.assertTrue(res.isOk());
+   52  
+   53              userName = "华安";
+   54:             verifiyCode = "test9527";
+   55:             res = s.sendMailCode(ZKCodeType.restPassword, userName, verifiyCode, recipientMailAddr);
+   56              System.out.println("[^_^:20240715-0023-002] res: " + res.toString());
+   57              TestCase.assertTrue(res.isOk());
+
+/Users/vinson/bs/bs_ws/ws_sts4/zk/zk-yunjian/zk-webflux/src/test/resources/testFile/jdk-21.0.2_linux-x64_bin.tar.gz:
+    File too large, skipping
+
+15 matches across 6 files

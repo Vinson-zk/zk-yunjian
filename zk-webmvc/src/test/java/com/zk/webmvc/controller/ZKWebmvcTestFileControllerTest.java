@@ -26,12 +26,19 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.zk.core.commons.ZKContentType;
+import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.utils.ZKEnvironmentUtils;
+import com.zk.core.utils.ZKJsonUtils;
 import com.zk.test.file.ZKFileUploadTest;
 import com.zk.webmvc.helper.ZKWebmvcTestHelperMvcSpringBootMain;
 
@@ -58,6 +65,12 @@ public class ZKWebmvcTestFileControllerTest {
         }
 
     }
+
+    @Value("${zk.webmvc.file.upload.maxFileSize}")
+    long maxFileSize;
+
+    @Value("${zk.webmvc.file.upload.maxRequestSize}")
+    long maxRequestSize;
 
     @LocalServerPort
     private int port;
@@ -164,6 +177,141 @@ public class ZKWebmvcTestFileControllerTest {
         files.put(file, "fs");
 
         ZKFileUploadTest.testZKHttpApiUtils(url, files);
+    }
+
+    // 测试 文件过大
+    @Test
+    public void testMaxFileSize() {
+
+        final String boundary = "7678sadfasdfaf9876ad7f8a";
+
+        try {
+
+            HttpEntity<String> requestEntity;
+            ResponseEntity<String> response;
+            HttpHeaders headers = null;
+            int resStatusCode;
+            String resStr;
+            ZKMsgRes msg = null;
+
+            String contentType = null;
+//            String fileContent = null;
+
+            String f1Name = null;
+            String fileName = null;
+
+            StringBuffer strBuf = null;
+
+            String url = baseUrl + "/uploadMultipart";
+
+            contentType = ZKContentType.MULTIPART_FORM_DATA_UTF8.toContentTypeStr();
+
+            headers = new HttpHeaders();
+            headers.set("Content-Type", contentType + "; boundary=" + boundary);
+
+            /* 1、单个文件过大 ****************************************/
+            f1Name = "f1";
+            fileName = "testMaxSize文件.txt";
+            strBuf = new StringBuffer();
+            // 上传开始 boundary
+            strBuf.append("--").append(boundary).append("\r\n");
+            // 请求头
+            strBuf.append("Content-Disposition: form-data;")
+                    .append(String.format("name=\"%s\"; filename=\"%s\"", f1Name, fileName)).append("\r\n");
+            strBuf.append("Content-Type:" + ZKContentType.TEXT_PLAIN_UTF8.toContentTypeStr() + "\r\n");
+            // 请求头结束
+            strBuf.append("\r\n");
+            // 请求内容
+            for (long i = 0; i < this.maxFileSize; ++i) {
+                strBuf.append('a');
+            }
+            strBuf.append('a');
+            strBuf.append("\r\n");
+            // 上传文件 结尾
+            strBuf.append("--").append(boundary).append("--").append("\r\n");
+
+            requestEntity = new HttpEntity<>(strBuf.toString(), headers);
+            response = testRestTemplate.postForEntity(url, requestEntity, String.class);
+            resStatusCode = response.getStatusCode().value();
+            TestCase.assertEquals(200, resStatusCode);
+            System.out.println("[^_^:20240821-2212-001] resStatusCode: " + resStatusCode);
+            resStr = response.getBody();
+            System.out.println("[^_^:20240821-2212-002] response: " + resStr);
+            msg = ZKJsonUtils.parseObject(resStr, ZKMsgRes.class);
+            TestCase.assertEquals("zk.1", msg.getCode());
+
+            /* 2、文件整体过大 ****************************************/
+            f1Name = "f1";
+            fileName = "testMaxSize文件.txt";
+            strBuf = new StringBuffer();
+            
+            // 上传开始 boundary
+            strBuf.append("--").append(boundary).append("\r\n");
+            // 请求头
+            strBuf.append("Content-Disposition: form-data;")
+                    .append(String.format("name=\"%s\"; filename=\"%s\"", f1Name, fileName)).append("\r\n");
+            strBuf.append("Content-Type:" + ZKContentType.TEXT_PLAIN_UTF8.toContentTypeStr() + "\r\n");
+            // 请求头结束
+            strBuf.append("\r\n");
+            // 请求内容
+            long i = 0;
+            for (; i < this.maxFileSize; ++i) {
+                strBuf.append('a');
+            }
+            strBuf.append("\r\n");
+            System.out.println("[^_^:20240821-2215-001]----------------- i: " + i);
+            f1Name = "fs";
+            fileName = "testMaxSize文件";
+            long s = this.maxFileSize + 332;
+            for (; s < this.maxRequestSize; s = s + this.maxFileSize) {
+                // 上传开始 boundary
+                strBuf.append("--").append(boundary).append("\r\n");
+                // 请求头
+                strBuf.append("Content-Disposition: form-data;")
+                        .append(String.format("name=\"%s\"; filename=\"%s\"", f1Name, fileName + s + ".txt"))
+                        .append("\r\n");
+                strBuf.append("Content-Type:" + ZKContentType.TEXT_PLAIN_UTF8.toContentTypeStr() + "\r\n");
+                // 请求头结束
+                strBuf.append("\r\n");
+                // 请求内容
+                for (i = 0; i < this.maxFileSize; ++i) {
+                    strBuf.append('a');
+                }
+                strBuf.append("\r\n");
+            }
+            System.out.println("[^_^:20240821-2215-002]----------------- s: " + s);
+
+            // 上传开始 boundary
+            strBuf.append("--").append(boundary).append("\r\n");
+            // 请求头
+            strBuf.append("Content-Disposition: form-data;")
+                    .append(String.format("name=\"%s\"; filename=\"%s\"", f1Name, fileName + "last.txt"))
+                    .append("\r\n");
+            strBuf.append("Content-Type:" + ZKContentType.TEXT_PLAIN_UTF8.toContentTypeStr() + "\r\n");
+            // 请求头结束
+            strBuf.append("\r\n");
+            // 请求内容
+            strBuf.append('a');
+            strBuf.append("\r\n");
+
+            // 上传文件 结尾
+            strBuf.append("--").append(boundary).append("--").append("\r\n");
+
+            requestEntity = new HttpEntity<>(strBuf.toString(), headers);
+            response = testRestTemplate.postForEntity(url, requestEntity, String.class);
+            resStatusCode = response.getStatusCode().value();
+            TestCase.assertEquals(200, resStatusCode);
+            System.out.println("[^_^:20240821-2212-001.1] resStatusCode: " + resStatusCode);
+            resStr = response.getBody();
+            System.out.println("[^_^:20240821-2212-001.2] response: " + resStr);
+            msg = ZKJsonUtils.parseObject(resStr, ZKMsgRes.class);
+            TestCase.assertEquals("zk.1", msg.getCode());
+
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            TestCase.assertTrue(false);
+        }
     }
 
 //    /**

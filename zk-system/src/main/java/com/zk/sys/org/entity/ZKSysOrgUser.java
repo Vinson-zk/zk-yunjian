@@ -5,8 +5,6 @@ package com.zk.sys.org.entity;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Transient;
@@ -33,6 +31,7 @@ import com.zk.framework.security.userdetails.ZKUser;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 用户表
@@ -186,7 +185,7 @@ public class ZKSysOrgUser extends ZKBaseEntity<String, ZKSysOrgUser> implements 
     /**
      * 用户密码，用户密码不能为空，但保存时，不处理密码，由事务中通过修改密码方法来设置密码
      */
-    @NotNull(message = "{zk.core.data.validation.notNull}")
+//    @NotNull(message = "{zk.core.data.validation.notNull}")
     @Length(min = 1, max = 64, message = "{zk.core.data.validation.length.max}")
     @ZKColumn(name = "c_password", isInsert = false, javaType = String.class)
     String password;
@@ -199,15 +198,21 @@ public class ZKSysOrgUser extends ZKBaseEntity<String, ZKSysOrgUser> implements 
     @ZKColumn(name = "c_status", isInsert = true, javaType = Long.class, // update = @ZKUpdate(true),
         query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     Integer status;
-
     /**
-     * 真实姓名
+     * 姓
      */
     @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.CustomModel.class })
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
-    @ZKColumn(name = "c_real_name", isInsert = true, javaType = String.class, update = @ZKUpdate(true),
+    @ZKColumn(name = "c_family_name", isInsert = true, javaType = String.class, update = @ZKUpdate(true), query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
+    String familyName;
+    /**
+     * 名
+     */
+    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.CustomModel.class })
+    @Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
+    @ZKColumn(name = "c_second_name", isInsert = true, javaType = String.class, update = @ZKUpdate(true),
         query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
-    String realName;
+    String secondName;
     /**
      * 昵称
      */
@@ -531,18 +536,34 @@ public class ZKSysOrgUser extends ZKBaseEntity<String, ZKSysOrgUser> implements 
     }
 
     /**
-     * @return realName sa
+     * @return familyName sa
      */
-    public String getRealName() {
-        return realName;
+    public String getFamilyName() {
+        return familyName;
     }
 
     /**
-     * @param realName
-     *            the realName to set
+     * @param familyName
+     *            the familyName to set
      */
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
+    }
+
+    /**
+     * @return secondName sa
+     */
+    public String getSecondName() {
+        return secondName;
+    }
+
+
+    /**
+     * @param secondName
+     *            the secondName to set
+     */
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 
     /**
@@ -816,8 +837,8 @@ public class ZKSysOrgUser extends ZKBaseEntity<String, ZKSysOrgUser> implements 
      * 根据主键类型，重写主键生成；
      */
     @Override
-    @JsonIgnore
-    protected String genId() {
+	@JsonIgnore
+	public String genId() {
         return ZKIdUtils.genLongStringId();
     }
 

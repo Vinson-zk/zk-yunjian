@@ -21,6 +21,10 @@ package com.zk.core.web.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.http.HttpResponse;
@@ -29,10 +33,16 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
 
 import com.zk.core.utils.ZKEnvironmentUtils;
 import com.zk.core.utils.ZKLocaleUtils;
 import com.zk.core.utils.ZKStringUtils;
+import com.zk.core.utils.ZKUtils;
+import com.zk.core.web.net.ZKGetIpDesc;
+import com.zk.core.web.net.ZKIpDesc;
+import com.zk.core.web.net.IpDesc.ZKGetIpDescIpApiImpl;
 import com.zk.core.web.resolver.ZKLocaleResolver;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -133,7 +143,7 @@ public class ZKWebUtils extends org.springframework.web.util.WebUtils {
         }
         else {
             if (ZKEnvironmentUtils.getWebApplicationType() == WebApplicationType.REACTIVE) {
-                return ZKReactiveUtils.getLocale(null);
+                return ZKReactiveUtils.getLocale();
             }
         }
         return ZKLocaleUtils.getDefautLocale();
@@ -243,6 +253,279 @@ public class ZKWebUtils extends org.springframework.web.util.WebUtils {
 
         // Return the normalized path that we have completed
         return (normalized);
+
+    }
+    
+    public static String getRemoteAddr(HttpServletRequest request) {
+        String remoteAddr = ZKServletUtils.getRemoteAddr(request);
+        return cleanInetAddressByRemoteAddr(remoteAddr);
+    }
+
+    public static String getRemoteAddr(ServerHttpRequest request) {
+        String remoteAddr = ZKReactiveUtils.getRemoteAddr(request);
+        return cleanInetAddressByRemoteAddr(remoteAddr);
+    }
+
+    public static String cleanInetAddressByRemoteAddr(String ip) {
+        // 本机访问
+        if ("localhost".equalsIgnoreCase(ip) || "127.0.0.1".equalsIgnoreCase(ip)
+                || "0:0:0:0:0:0:0:1".equalsIgnoreCase(ip)) {
+            // 根据网卡取本机配置的IP
+            InetAddress inet;
+            try {
+                inet = InetAddress.getLocalHost();
+                ip = inet.getHostAddress();
+            }
+            catch(UnknownHostException e) {
+                log.error("[>_<:20250208-1706-001] 读取本机IP失败；errMsg: {}", e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+        if (null != ip && ip.length() > 15) {
+            if (ip.indexOf(",") > 15) {
+                ip = ip.substring(0, ip.indexOf(","));
+            }
+        }
+        return ip;
+    }
+
+    protected static ZKGetIpDesc getIpDesc = null;
+
+    protected static ZKGetIpDesc getGetIpDescImpl() {
+        if (getIpDesc == null) {
+            getIpDesc = new ZKGetIpDescIpApiImpl();
+        }
+        return getIpDesc;
+    }
+
+    public static void setGetIpDescImpl(ZKGetIpDesc getIpDescImpl) {
+        getIpDesc = getIpDescImpl;
+    }
+
+    // 取IP归属地
+    public static ZKIpDesc getIpDesc(String ip) {
+        return getGetIpDescImpl().getIpDesc(ip, getLocale());
+    }
+
+    // 取参数 =================================================
+    // HttpServletRequest -----------------
+    public static Boolean getBooleanParameter(HttpServletRequest hReq, String parmaName, Boolean defaultValue) {
+        if (defaultValue == null) {
+            try {
+                return ServletRequestUtils.getBooleanParameter(hReq, parmaName);
+            }
+            catch(ServletRequestBindingException e) {
+                e.printStackTrace();
+                return null;
+            }
+         }
+        return ServletRequestUtils.getBooleanParameter(hReq, parmaName, defaultValue);
+    }
+
+    public static String getStringParameter(HttpServletRequest hReq, String parmaName, String defaultValue) {
+        if (defaultValue == null) {
+            try {
+                return ServletRequestUtils.getStringParameter(hReq, parmaName);
+            }
+            catch(ServletRequestBindingException e) {
+                e.printStackTrace();
+                return null;
+            }
+         }
+        return ServletRequestUtils.getStringParameter(hReq, parmaName, defaultValue);
+    }
+
+    public static Integer getIntParameter(HttpServletRequest hReq, String parmaName, Integer defaultValue) {
+        if (defaultValue == null) {
+            try {
+                return ServletRequestUtils.getIntParameter(hReq, parmaName);
+            }
+            catch(ServletRequestBindingException e) {
+                e.printStackTrace();
+                return null;
+            }
+         }
+        return ServletRequestUtils.getIntParameter(hReq, parmaName, defaultValue);
+    }
+
+    public static Long getLongParameter(HttpServletRequest hReq, String parmaName, Long defaultValue) {
+        if (defaultValue == null) {
+            try {
+                return ServletRequestUtils.getLongParameter(hReq, parmaName);
+            }
+            catch(ServletRequestBindingException e) {
+                e.printStackTrace();
+                return null;
+            }
+         }
+        return ServletRequestUtils.getLongParameter(hReq, parmaName, defaultValue);
+    }
+
+    public static Float getFloatParameter(HttpServletRequest hReq, String parmaName, Float defaultValue) {
+        if (defaultValue == null) {
+            try {
+                return ServletRequestUtils.getFloatParameter(hReq, parmaName);
+            }
+            catch(ServletRequestBindingException e) {
+                e.printStackTrace();
+                return null;
+            }
+         }
+        return ServletRequestUtils.getFloatParameter(hReq, parmaName, defaultValue);
+    }
+
+    public static Double getDoubleParameter(HttpServletRequest hReq, String parmaName, Double defaultValue) {
+        if (defaultValue == null) {
+            try {
+                return ServletRequestUtils.getDoubleParameter(hReq, parmaName);
+            }
+            catch(ServletRequestBindingException e) {
+                e.printStackTrace();
+                return null;
+            }
+         }
+        return ServletRequestUtils.getDoubleParameter(hReq, parmaName, defaultValue);
+    }
+
+    // ---
+    public static boolean[] getBooleanParameters(HttpServletRequest hReq, String parmaName) {
+        return ServletRequestUtils.getBooleanParameters(hReq, parmaName);
+    }
+
+    public static String[] getStringParameters(HttpServletRequest hReq, String parmaName) {
+        return ServletRequestUtils.getStringParameters(hReq, parmaName);
+    }
+
+    public static int[] getIntParameters(HttpServletRequest hReq, String parmaName) {
+        return ServletRequestUtils.getIntParameters(hReq, parmaName);
+    }
+
+    public static long[] getLongParameters(HttpServletRequest hReq, String parmaName) {
+        return ServletRequestUtils.getLongParameters(hReq, parmaName);
+    }
+
+    public static float[] getFloatParameters(HttpServletRequest hReq, String parmaName) {
+        return ServletRequestUtils.getFloatParameters(hReq, parmaName);
+    }
+
+    public static double[] getDoubleParameters(HttpServletRequest hReq, String parmaName) {
+        return ServletRequestUtils.getDoubleParameters(hReq, parmaName);
+    }
+
+    // ServerHttpRequest -----------------
+    public static Boolean getBooleanParameter(ServerHttpRequest hReq, String parmaName, Boolean defaultValue) {
+        String v = hReq.getQueryParams().getFirst(parmaName);
+        if (v == null) {
+            return defaultValue;
+        }
+        else {
+            return ZKUtils.isTrue(v);
+        }
+    }
+
+    public static String getStringParameter(ServerHttpRequest hReq, String parmaName, String defaultValue) {
+        String v = hReq.getQueryParams().getFirst(parmaName);
+        if (v == null) {
+            return defaultValue;
+        }
+        else {
+            return v;
+        }
+    }
+
+    public static Integer getIntParameter(ServerHttpRequest hReq, String parmaName, Integer defaultValue) {
+        String v = hReq.getQueryParams().getFirst(parmaName);
+        if (v == null) {
+            return defaultValue;
+        }
+        else {
+            return Integer.parseInt(v);
+        }
+    }
+
+    public static Long getLongParameter(ServerHttpRequest hReq, String parmaName, Long defaultValue) {
+        String v = hReq.getQueryParams().getFirst(parmaName);
+        if (v == null) {
+            return defaultValue;
+        }
+        else {
+            return Long.parseLong(v);
+        }
+    }
+
+    public static Float getFloatParameter(ServerHttpRequest hReq, String parmaName, Float defaultValue) {
+        String v = hReq.getQueryParams().getFirst(parmaName);
+        if (v == null) {
+            return defaultValue;
+        }
+        else {
+            return Float.parseFloat(v);
+        }
+    }
+
+    public static Double getDoubleParameter(ServerHttpRequest hReq, String parmaName, Double defaultValue) {
+        String v = hReq.getQueryParams().getFirst(parmaName);
+        if (v == null) {
+            return defaultValue;
+        }
+        else {
+            return Double.parseDouble(v);
+        }
+     }
+
+     // ---
+     public static List<Boolean> getBooleanParameters(ServerHttpRequest hReq, String parmaName) {
+         List<String> vs = hReq.getQueryParams().get(parmaName);
+         List<Boolean> rs = new ArrayList<>();
+         for (String v : vs) {
+             rs.add(ZKUtils.isTrue(v));
+         }
+         return rs;
+     }
+
+     public static List<String> getStringParameters(ServerHttpRequest hReq, String parmaName) {
+         return hReq.getQueryParams().get(parmaName);
+     }
+
+     public static List<Integer> getIntParameters(ServerHttpRequest hReq, String parmaName) {
+         List<String> vs = hReq.getQueryParams().get(parmaName);
+         List<Integer> rs = new ArrayList<>();
+         for (String v : vs) {
+             rs.add(Integer.parseInt(v));
+         }
+         return rs;
+     }
+
+     public static List<Long> getLongParameters(ServerHttpRequest hReq, String parmaName) {
+         List<String> vs = hReq.getQueryParams().get(parmaName);
+         List<Long> rs = new ArrayList<>();
+         for (String v : vs) {
+             rs.add(Long.parseLong(v));
+         }
+         return rs;
+     }
+
+     public static List<Float> getFloatParameters(ServerHttpRequest hReq, String parmaName) {
+         List<String> vs = hReq.getQueryParams().get(parmaName);
+         List<Float> rs = new ArrayList<>();
+         for (String v : vs) {
+             rs.add(Float.parseFloat(v));
+         }
+         return rs;
+     }
+
+     public static List<Double> getDoubleParameters(ServerHttpRequest hReq, String parmaName) {
+         List<String> vs = hReq.getQueryParams().get(parmaName);
+         List<Double> rs = new ArrayList<>();
+         for (String v : vs) {
+             rs.add(Double.parseDouble(v));
+         }
+         return rs;
+     }
+
+    // =================================================
+    public static void test() {
 
     }
 

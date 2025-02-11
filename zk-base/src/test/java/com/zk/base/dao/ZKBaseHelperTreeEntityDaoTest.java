@@ -27,6 +27,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import com.zk.base.helper.ZKBaseHelperCtx;
 import com.zk.base.helper.dao.ZKBaseHelperTreeEntityDao;
 import com.zk.base.helper.entity.ZKBaseHelperTreeEntity;
+import com.zk.base.helper.service.ZKBaseHelperTreeEntityService;
 import com.zk.core.commons.data.ZKJson;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.core.utils.ZKClassUtils;
@@ -211,24 +212,28 @@ public class ZKBaseHelperTreeEntityDaoTest {
 
     public static List<ZKBaseHelperTreeEntity> makeTestMenu(ZKBaseHelperTreeEntityDao dao, ZKBaseHelperTreeEntity e,
             String namePrefix, String parentName, int nodeCount) {
+
         List<ZKBaseHelperTreeEntity> ms = new ArrayList<>();
         ZKBaseHelperTreeEntity tempE = null;
 
+        ZKBaseHelperTreeEntityService s = new ZKBaseHelperTreeEntityService();
+
         for (int i = 0; i < nodeCount; ++i) {
-            tempE = ZKBaseHelperTreeEntityDaoTest.newMenu(namePrefix + parentName + ".n" + i);
+            tempE = ZKBaseHelperTreeEntityDaoTest.newEntity(namePrefix + parentName + ".n" + i);
             if (e != null) {
                 tempE.setParentId(e.getPkId());
             }
             tempE.setmInt(i * 1l);
             tempE.setRemarks(parentName + ".n" + i);
-            tempE.preInsert();
+//            tempE.preInsert();
+            s.preInsert(tempE);
             dao.insert(tempE);
             ms.add(tempE);
         }
         return ms;
     }
 
-    public static ZKBaseHelperTreeEntity newMenu(String name) {
+    public static ZKBaseHelperTreeEntity newEntity(String name) {
         ZKBaseHelperTreeEntity e = new ZKBaseHelperTreeEntity();
         e.setValue(name);
         e.setJson(ZKJson.parse("{}"));

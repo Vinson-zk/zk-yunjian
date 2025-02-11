@@ -34,6 +34,8 @@ import org.springframework.context.annotation.Bean;
 
 import com.zk.core.commons.ZKEnvironment;
 import com.zk.core.utils.ZKEnvironmentUtils;
+import com.zk.webmvc.helper.configuration.ZKWebmvcChildConfiguration;
+import com.zk.webmvc.helper.configuration.ZKWebmvcParentConfiguration;
 
 /**
  * @ClassName: ZKWebmvcTestHelperMvcSpringBootMain
@@ -54,7 +56,7 @@ public class ZKWebmvcTestHelperMvcSpringBootMain {
 
     public static void main(String[] args) {
         System.out.println("[^_^:20210812-1730-001]=========================================================");
-        System.out.println("[^_^:20210812-1730-001]=== zk Core ZKWebmvcTestHelperMvcSpringBootMain 测试启动 ... ...");
+        System.out.println("[^_^:20210812-1730-001]=== zk ZKWebmvc test 测试启动 ... ...");
         System.out.println("[^_^:20210812-1730-001]=========================================================");
         run(args);
         System.out.println("[^_^:20210812-1730-001]---------------------------------------------------------");
@@ -73,7 +75,7 @@ public class ZKWebmvcTestHelperMvcSpringBootMain {
 //        appCtxBuilder = appCtxBuilder.properties("spring.config.location=classpath:/test.zk.webmvc.properties");
         appCtxBuilder = appCtxBuilder.properties("spring.config.location=classpath:/");
 //      // 定义配置文件名；默认：applicaiton；添加下面这一行后，不会读取 application.properties/yml 配置文件
-        appCtxBuilder = appCtxBuilder.properties("spring.config.name=test.zk.webmvc");
+        appCtxBuilder = appCtxBuilder.properties("spring.config.name=zk,test.zk.webmvc");
 
 //        appCtxBuilder = appCtxBuilder.parent(ZKCoreParentConfiguration.class);
 //        appCtxBuilder = appCtxBuilder.child(ZKCoreChildConfiguration.class);
@@ -102,7 +104,7 @@ public class ZKWebmvcTestHelperMvcSpringBootMain {
     }
 
     @Bean
-    public TestRestTemplate testRestTemplate(HttpMessageConverters messageConverters) {
+    TestRestTemplate testRestTemplate(HttpMessageConverters messageConverters) {
         TestRestTemplate trt = new TestRestTemplate();
         trt.getRestTemplate().setMessageConverters(messageConverters.getConverters());
         return trt;

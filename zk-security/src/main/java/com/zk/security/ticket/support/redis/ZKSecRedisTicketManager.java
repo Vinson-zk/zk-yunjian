@@ -776,6 +776,10 @@ public class ZKSecRedisTicketManager extends ZKSecAbstractTicketManager implemen
      */
     @Override
     public boolean remove(Serializable identification, String key) {
+        return this.removeValue(identification, AttrKeyName.valueKey_prefix + key);
+    }
+
+    private boolean removeValue(Serializable identification, String key) {
         return this.getJedisOperator().hdel(identification.toString(), key) != null;
     }
 

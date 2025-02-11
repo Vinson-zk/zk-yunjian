@@ -21,9 +21,15 @@ package com.zk.core.configuration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
+import org.springframework.web.reactive.function.server.RequestPredicates;
+import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.RouterFunctions;
+import org.springframework.web.reactive.function.server.ServerResponse;
 
 import com.zk.core.web.ZKWebConstants.ZKFilterLevel;
 import com.zk.core.web.support.webFlux.filter.ZKExceptionHandlerWebFilter;
+import com.zk.core.web.support.webFlux.filter.ZKRequestContextWebFilter;
+import com.zk.core.web.support.webFlux.handler.function.ZKCoreHandlerFunction;
 
 /**
  * @ClassName: ZKCoreReactiveAutoConfiguration
@@ -47,13 +53,36 @@ public class ZKCoreReactiveAutoConfiguration {
 //        return filterRegistrationBean;
 //    }
 
-    @Order(ZKFilterLevel.Exception.HIGHEST)
+    @Order(ZKFilterLevel.Exception.HIGHEST + 100)
     @ConditionalOnMissingBean(value = ZKExceptionHandlerWebFilter.class)
     @Bean({ "exceptionHandlerFilter", "fluxExceptionFilter", "zkFluxExceptionFilter" })
     ZKExceptionHandlerWebFilter zkFluxExceptionFilter() {
         ZKExceptionHandlerWebFilter filter = new ZKExceptionHandlerWebFilter();
+        filter.setOrder(ZKFilterLevel.Exception.HIGHEST + 100);
+        return filter;
+    }
+
+    @Order(ZKFilterLevel.Exception.HIGHEST)
+    @ConditionalOnMissingBean(value = ZKRequestContextWebFilter.class)
+    @Bean({ "requestContextWebFilter", "zkRequestContextWebFilter" })
+    ZKRequestContextWebFilter zkRequestContextWebFilter() {
+        ZKRequestContextWebFilter filter = new ZKRequestContextWebFilter();
         filter.setOrder(ZKFilterLevel.Exception.HIGHEST);
         return filter;
     }
 
+    // webFlux 一些统一处理端点(controller)
+    @Bean
+    ZKCoreHandlerFunction coreHandlerFunction() {
+        return new ZKCoreHandlerFunction();
+    }
+
+    // webFlux 一些统一处理端点(controller) 的路由配置
+    @Bean
+    RouterFunction<ServerResponse> initRouter(ZKCoreHandlerFunction coreHandlerFunction) {
+        return RouterFunctions.route(RequestPredicates.GET("/favicon.ico"), coreHandlerFunction::handleFavicon);
+    }
+
 }
+
+

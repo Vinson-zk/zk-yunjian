@@ -31,6 +31,23 @@ import com.zk.webmvc.configuration.ZKEnableWebmvc;
 @ZKEnableWebmvc
 public class ZKSysMvcConfiguration implements WebMvcConfigurer{ 
 
-
+//    public ZKSysMvcConfiguration() {
+//        System.out.println("[^_^:20230211-1022-001] ----- 实例化 -----" + this.getClass().getSimpleName());
+//    }
+//
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        // 静态文件访问映射；如：将 /static/** 访问映射到 classpath: /mystatic/
+////        registry.addResourceHandler("/**").addResourceLocations("/","classpath:templates/");
+////        registry.addResourceHandler("/static/**").addResourceLocations("/static/**", "classpath:/static/");
+////        registry.addResourceHandler("/eureka/**").addResourceLocations("classpath:/static/eureka/");
+//
+////      registry.addResourceHandler("/favicon.ico").addResourceLocations("/");
+////        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+//    }
 
 }
+
+
+
+

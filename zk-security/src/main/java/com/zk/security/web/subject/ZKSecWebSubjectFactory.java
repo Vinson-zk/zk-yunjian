@@ -19,6 +19,7 @@
 package com.zk.security.web.subject;
 
 import com.zk.security.mgt.ZKSecSecurityManager;
+import com.zk.security.subject.ZKSecDefaultSubject;
 import com.zk.security.subject.ZKSecSubject;
 import com.zk.security.subject.ZKSecSubjectFactory;
 import com.zk.security.ticket.ZKSecTicket;
@@ -41,7 +42,7 @@ public class ZKSecWebSubjectFactory implements ZKSecSubjectFactory {
      */
     @Override
     public ZKSecSubject createSubject(ZKSecSecurityManager securityManager, ZKSecTicket tk) {
-        return null;
+        return new ZKSecDefaultSubject(securityManager, tk);
     }
 
     public ZKSecWebSubject createSubject(ZKSecWebSecurityManager securityManager, ZKSecRequestWrapper zkReq,

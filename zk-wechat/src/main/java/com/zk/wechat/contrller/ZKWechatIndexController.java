@@ -33,7 +33,8 @@ import com.zk.core.web.utils.ZKWebUtils;
 * @version 1.0 
 */
 @RestController
-@RequestMapping("${zk.path.admin}/${zk.path.wechat}/${zk.wechat.version}")
+//@RequestMapping("${zk.path.admin}/${zk.path.wechat}/${zk.wechat.version}")
+@RequestMapping("/")
 public class ZKWechatIndexController {
 
     @RequestMapping({ "", "index" })

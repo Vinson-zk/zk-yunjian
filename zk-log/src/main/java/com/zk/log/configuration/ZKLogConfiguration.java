@@ -36,7 +36,7 @@ public class ZKLogConfiguration {
 
     // 访问日志记录 过虑器; 没有 ZKLogAccessCustomConfig bean 时，才注入 logAccessFilter；
     @Bean("logAccessFilterRegistrationBean")
-    public FilterRegistrationBean<Filter> logAccessFilterRegistrationBean() {
+    FilterRegistrationBean<Filter> logAccessFilterRegistrationBean() {
         System.out.println(ZKEnableLog.printLog + " logAccessFilterRegistrationBean 配置 zk 日志过滤器 Filter --- ["
                 + this.getClass().getSimpleName() + "] " + this.hashCode());
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<Filter>();
@@ -50,3 +50,4 @@ public class ZKLogConfiguration {
     }
 
 }
+

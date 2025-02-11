@@ -41,9 +41,8 @@ public class ZKWebFilterDelegatingProxyServlet implements ZKWebFilter {
 //        ServerHttpResponse res = exchange.getResponse();
 //        MultiValueMap<String, HttpCookie> cs = req.getCookies();
         
-        chain.filter(exchange);
+        return chain.filter(exchange);
 
-        return null;
     }
 
 }

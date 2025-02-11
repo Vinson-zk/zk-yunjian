@@ -75,18 +75,18 @@ public class ZKFileBeforeConfiguration extends ZKWebmvcConfiguration{
 
     @Bean("zkDBProperties")
     @ConfigurationProperties(prefix = "zk.file.db.dynamic.jdbc")
-    public ZKDBProperties zkDBProperties() {
+    ZKDBProperties zkDBProperties() {
         return new ZKDBProperties();
     }
 
     @Bean("redisProperties")
     @ConfigurationProperties(prefix = "zk.file.cache.redis")
-    public ZKRedisProperties redisProperties() {
+    ZKRedisProperties redisProperties() {
         return new ZKRedisProperties();
     }
 
     @Bean
-    public ResourceBundleMessageSource messageSource() {
+    ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.addBasenames("msg/zkMsg_file");
         messageSource.setUseCodeAsDefaultMessage(true);
@@ -106,7 +106,7 @@ public class ZKFileBeforeConfiguration extends ZKWebmvcConfiguration{
      * @return ZKSerCenSampleCipher
      */
     @Bean
-    public ZKSerCenEncrypt zkSerCenEncrypt() {
+    ZKSerCenEncrypt zkSerCenEncrypt() {
         return new ZKSerCenSampleCipher();
     }
 
@@ -119,7 +119,7 @@ public class ZKFileBeforeConfiguration extends ZKWebmvcConfiguration{
 
     // 日志拦截器
     @Bean("logAccessFilterRegistrationBean")
-    public FilterRegistrationBean<Filter> logAccessFilterRegistrationBean() {
+    FilterRegistrationBean<Filter> logAccessFilterRegistrationBean() {
         System.out.println("[^_^:20230211-1022-001] ----- slogAccessFilterRegistrationBean 配置 zk 日志过滤器 Filter --- ["
                 + this.getClass().getSimpleName() + "] " + this.hashCode());
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<Filter>();
@@ -133,7 +133,7 @@ public class ZKFileBeforeConfiguration extends ZKWebmvcConfiguration{
     }
 
     @Bean
-    public FilterRegistrationBean<Filter> zkCrosFilterRegistrationBean() {
+    FilterRegistrationBean<Filter> zkCrosFilterRegistrationBean() {
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<Filter>();
         ZKCrosFilter zkCrosFilter = new ZKCrosFilter();
         filterRegistrationBean.setFilter(zkCrosFilter);
@@ -162,7 +162,7 @@ public class ZKFileBeforeConfiguration extends ZKWebmvcConfiguration{
      * @return Validator
      */
     @Bean
-    public Validator validator(MessageSource messageSource) {
+    Validator validator(MessageSource messageSource) {
 
         /*
          * 重写这个方法比较好
@@ -183,7 +183,7 @@ public class ZKFileBeforeConfiguration extends ZKWebmvcConfiguration{
 
     @Bean
     @LoadBalanced
-    public RestTemplate restTemplate() {
+    RestTemplate restTemplate() {
         return new RestTemplate();
     }
 

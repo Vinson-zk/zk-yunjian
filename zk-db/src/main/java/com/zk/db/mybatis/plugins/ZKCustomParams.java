@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -15,8 +16,8 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.zk.db.commons.ZKDBConstants;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
@@ -35,6 +36,8 @@ import com.zk.db.mybatis.session.ZKDBMybatisConfiguration;
  * @DATE 2022-09-29 23:00:09
  **/
 @Intercepts({
+//        @Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }),
+//        @Signature(type = Executor.class, method = "batch", args = { MappedStatement.class, Object.class }),
 //        @Signature(type = ParameterHandler.class, method = "setParameters", args = { PreparedStatement.class }),
         @Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class, RowBounds.class,
                 ResultHandler.class, CacheKey.class, BoundSql.class }),
@@ -49,31 +52,43 @@ public class ZKCustomParams implements Interceptor {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private Object wrapCollection(ZKDBMybatisConfiguration zkConfiguration, String mappedStatementId,
             final Object parameter) {
-
-        log.info("[^_^:20221007-1026-001] parameter.class:{}", parameter.getClass());
         log.info("[^_^:20221007-1026-001] mappedStatementId:{}", mappedStatementId);
-
         ZKDBSqlHelper sqlHelper = zkConfiguration.getSqlHelper(mappedStatementId);
-        if(parameter instanceof Map){
-            if(sqlHelper != null){
-                ((Map) parameter).put(ZKDBConstants.Mybatis_Param_Name.sqlHelper,
-                        ZKDBSqlParams.as(sqlHelper));
-            }else{
-                log.info("[^_^:20221007-1029-001] mappedStatementId:{}, sqlHelper is null", mappedStatementId);
+
+        if (sqlHelper != null) {
+            if (parameter == null) {
+                log.info("[^_^:20250106-0951-001] parameter is null");
+                MapperMethod.ParamMap<Object> ps = new MapperMethod.ParamMap<Object>();
+                ps.put(ZKDBConstants.Mybatis_Param_Name.sqlHelper, ZKDBSqlParams.as(sqlHelper));
+                return ps;
             }
+            else {
+                log.info("[^_^:20221007-1026-001] parameter.class:{}", parameter.getClass());
+                if (parameter instanceof Map) {
+                    ((Map) parameter).put(ZKDBConstants.Mybatis_Param_Name.sqlHelper, ZKDBSqlParams.as(sqlHelper));
+                }
+            }
+        }
+        else {
+            log.info("[^_^:20221007-1029-001] mappedStatementId:{}, sqlHelper is null", mappedStatementId);
         }
         return parameter;
     }
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
+        Object target = invocation.getTarget();
+        log.info("[^_^:20180305-0847-001-1] invocation -> target class: " + target.getClass().getName());
+        log.info("[^_^:20180305-0847-001-2] invocation -> method name: " + invocation.getMethod().getName());
+
         Object[] objs = invocation.getArgs();
         MappedStatement ms = (MappedStatement)objs[0];
         Configuration configuration = ms.getConfiguration();
         log.info("[^_^:20221007-1027-001] Configuration:{}", configuration.getClass());
         if (configuration instanceof ZKDBMybatisConfiguration) {
             Object parameter = objs[1];
-            this.wrapCollection((ZKDBMybatisConfiguration) configuration, ms.getId(), parameter);
+            parameter = this.wrapCollection((ZKDBMybatisConfiguration) configuration, ms.getId(), parameter);
+            objs[1] = parameter;
         }
         return invocation.proceed();
     }

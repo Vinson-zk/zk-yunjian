@@ -21,8 +21,6 @@ package com.zk.log.entity;
 import java.util.Date;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Transient;
 
@@ -39,6 +37,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /*
  CREATE TABLE `t_log_access` (

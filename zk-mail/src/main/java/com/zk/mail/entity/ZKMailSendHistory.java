@@ -5,8 +5,6 @@ package com.zk.mail.entity;
 
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Transient;
 
@@ -27,6 +25,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 邮件发送历史
@@ -328,7 +327,8 @@ public class ZKMailSendHistory extends ZKBaseEntity<String, ZKMailSendHistory> {
 	 * 根据主键类型，重写主键生成；
 	 */
 	@Override
-	protected String genId() {
+	@JsonIgnore
+	public String genId() {
         return ZKIdUtils.genLongStringId();
     }
 	

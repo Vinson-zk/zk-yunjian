@@ -18,7 +18,7 @@
 */
 package com.zk.core.helper.entity;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /** 
 * @ClassName: ZKCoreEntity 

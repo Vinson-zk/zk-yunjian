@@ -161,7 +161,8 @@ public class ZKPayGetOrderService extends ZKBaseService<String, ZKPayGetOrder, Z
         payGetOrder.setBusinessCode(businessType.getCode());
         payGetOrder.setBusinessNo(businessNo);
         payGetOrder.setNewRecord(true);
-        payGetOrder.preInsert();
+//        payGetOrder.preInsert();
+        this.preInsert(payGetOrder);
 
         payGetOrder.setNotifyUrl(ZKStringUtils.replaceByPoint(notifyUrl, 0, payGetOrder.getPkId()));
 

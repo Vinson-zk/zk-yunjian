@@ -67,6 +67,16 @@ public interface ZKSysOrgUserDao extends ZKBaseDao<String, ZKSysOrgUser> {
     int updateStatus(@Param("tn") String tn, @Param("pkId") String pkId, @Param("status") int status,
             @Param("updateDate") Date date);
 
+    // 注销账号
+    @Update({ "UPDATE ${tn} SET", //
+            "c_account = #{account}, c_mail = null, c_phone_num = null, c_tel_num = null, c_address = null, c_qq = null, c_wechat = null,", //
+            "c_family_name = null, c_second_name = null, c_nickname = null, c_head_photo = null, c_head_photo_original = null,", //
+            "c_status = #{status}, c_del_flag = #{delFlag}, c_leave_date = #{updateDate}, c_update_date = #{updateDate}", //
+            "WHERE c_pk_id = #{pkId} " })
+    int closeAccount(@Param("tn") String tn, @Param("pkId") String pkId, @Param("account") String account,
+            @Param("status") int status, @Param("delFlag") int delFlag, @Param("updateUserId") String updateUserId,
+            @Param("updateDate") Date date);
+
     /**
      * 根据账号查询用户；公司下账号唯一；
      *
@@ -157,3 +167,7 @@ public interface ZKSysOrgUserDao extends ZKBaseDao<String, ZKSysOrgUser> {
     int diskDelByCompanyId(@Param("tn") String tn, @Param("companyId") String companyId);
 	
 }
+
+
+
+

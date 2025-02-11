@@ -74,7 +74,7 @@ public class ZKMvcBaseHelperSpringBootMain {
 
     public static void main(String[] args) {
         System.out.println("[^_^:20190816-1008-001]=========================================================");
-        System.out.println("[^_^:20190816-1008-001]=== zk base ZKMvcBaseHelperSpringBootMain 启动 ... ...");
+        System.out.println("[^_^:20190816-1008-001]=== zk ZKMvcBase base test 启动 ... ...");
         System.out.println("[^_^:20190816-1008-001]=========================================================");
         run(args);
         System.out.println("[^_^:20190816-1008-001]---------------------------------------------------------");

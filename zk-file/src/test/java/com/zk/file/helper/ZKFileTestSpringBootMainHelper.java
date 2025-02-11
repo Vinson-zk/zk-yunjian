@@ -37,7 +37,11 @@ import com.zk.file.configuration.ZKFileAfterConfiguration;
 import com.zk.file.configuration.ZKFileBeforeConfiguration;
 import com.zk.file.configuration.ZKFileSecConfiguration;
 import com.zk.file.helper.sysApi.ZKSysOrgCompanyApiImpl;
+import com.zk.file.helper.sysApi.ZKSysOrgUserApiImpl;
+import com.zk.file.helper.sysApi.ZKSysSecAuthcApiImpl;
 import com.zk.framework.serCen.eureka.ZKEurekaClientAutoConfiguration;
+import com.zk.sys.org.api.ZKSysOrgUserApi;
+import com.zk.sys.sec.api.ZKSysSecAuthcApi;
 
 import junit.framework.TestCase;
 
@@ -67,7 +71,7 @@ public class ZKFileTestSpringBootMainHelper {
     public static void main(String[] args) {
         try {
             log.info("[^_^:20220621-1410-001]========================================");
-            log.info("[^_^:20220621-1410-001]=== zk fiile  启动 ... ... ");
+            log.info("[^_^:20220621-1410-001]=== zk fiile test  启动 ... ... ");
             log.info("[^_^:20220621-1410-001]========================================");
             run(args);
             log.info("[^_^:20220621-1410-001]----------------------------------------");
@@ -118,8 +122,18 @@ public class ZKFileTestSpringBootMainHelper {
      */
 
     @Bean
-    public ZKSysOrgCompanyApiImpl sysOrgCompanyApi() {
+    ZKSysOrgCompanyApiImpl sysOrgCompanyApi() {
         return new ZKSysOrgCompanyApiImpl();
+    }
+
+    @Bean
+    ZKSysSecAuthcApi sysSecAuthcApi() {
+        return new ZKSysSecAuthcApiImpl();
+    }
+
+    @Bean
+    ZKSysOrgUserApi sysOrgUserApi() {
+        return new ZKSysOrgUserApiImpl();
     }
 
     // ============================================================================

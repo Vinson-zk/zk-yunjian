@@ -32,7 +32,8 @@ import com.zk.core.web.utils.ZKWebUtils;
  * @version 1.0
  */
 @RestController
-@RequestMapping("${zk.path.admin}/${zk.path.dev.tool}/${zk.dev.tool.version}")
+//@RequestMapping("${zk.path.admin}/${zk.path.dev.tool}/${zk.dev.tool.version}")
+@RequestMapping("/")
 public class ZKDevToolIndexController {
 
     @RequestMapping({ "", "index" })

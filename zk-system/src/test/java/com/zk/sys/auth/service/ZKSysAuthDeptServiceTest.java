@@ -15,6 +15,7 @@ import com.zk.sys.auth.entity.ZKSysAuthDept;
 import com.zk.sys.auth.entity.ZKSysAuthFuncApi;
 import com.zk.sys.helper.ZKSysTestHelper;
 import com.zk.sys.org.entity.ZKSysOrgDept;
+import com.zk.sys.org.service.ZKSysOrgDeptService;
 import com.zk.sys.org.service.ZKSysOrgDeptServiceTest;
 
 import junit.framework.TestCase;
@@ -100,6 +101,8 @@ public class ZKSysAuthDeptServiceTest {
     public void testAddRelationByAuthDefined() {
 
         ZKSysAuthDeptService s = ZKSysTestHelper.getMainCtx().getBean(ZKSysAuthDeptService.class);
+        ZKSysOrgDeptService deptS = ZKSysTestHelper.getMainCtx().getBean(ZKSysOrgDeptService.class);
+        ZKSysAuthDefinedService authDefinedS = ZKSysTestHelper.getMainCtx().getBean(ZKSysAuthDefinedService.class);
 
         List<ZKSysAuthDept> dels = new ArrayList<>();
 
@@ -108,8 +111,8 @@ public class ZKSysAuthDeptServiceTest {
             ZKSysOrgDept dept = ZKSysOrgDeptServiceTest.makeNew();
             ZKSysAuthDefined authDefined = ZKSysAuthDefinedServiceTest.makeNew();
 
-            dept.preInsert();
-            authDefined.preInsert();
+            deptS.preInsert(dept);
+            authDefinedS.preInsert(authDefined);
 
             dels.addAll(s.allotAuthToDept(dept, Arrays.asList(authDefined)));
             dels.addAll(s.allotAuthToDept(dept, Arrays.asList(authDefined)));

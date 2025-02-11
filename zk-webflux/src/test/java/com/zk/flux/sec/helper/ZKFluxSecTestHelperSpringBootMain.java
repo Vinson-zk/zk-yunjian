@@ -64,7 +64,7 @@ public class ZKFluxSecTestHelperSpringBootMain {
     public static void main(String[] args) {
         try {
             log.info("[^_^:20240123-0009-001]========================================");
-            log.info("[^_^:20240123-0009-001]=== zk ZKFluxSecTestHelperSpringBootMain 启动 ... ... ");
+            log.info("[^_^:20240123-0009-001]=== zk ZKFluxSec sec test 启动 ... ... ");
             log.info("[^_^:20240123-0009-001]========================================");
             run(args);
             log.info("[^_^:20240123-0009-001]----------------------------------------");

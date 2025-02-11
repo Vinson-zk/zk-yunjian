@@ -39,11 +39,11 @@ public abstract class ZKSecAuthenticationFilter extends ZKSecAccessControlFilter
     protected abstract ZKSecAuthenticationToken createToken(ZKSecRequestWrapper zkReq, ZKSecResponseWrapper zkRes)
             throws Exception;
 
-    protected String getCompanyCode(ZKSecRequestWrapper zkReq) {
+    public static String getCompanyCode(ZKSecRequestWrapper zkReq) {
         return zkReq.getCleanParam(ZKSecConstants.PARAM_NAME.CompanyCode);
     }
 
-    protected long getOsType(ZKSecRequestWrapper zkReq) {
+    public static long getOsType(ZKSecRequestWrapper zkReq) {
         long osType = 0;
         try {
             String dtStr = zkReq.getCleanParam(ZKSecConstants.PARAM_NAME.OsType);
@@ -61,11 +61,11 @@ public abstract class ZKSecAuthenticationFilter extends ZKSecAccessControlFilter
         return osType;
     }
 
-    protected String getUdid(ZKSecRequestWrapper zkReq) {
+    public static String getUdid(ZKSecRequestWrapper zkReq) {
         return zkReq.getCleanParam(ZKSecConstants.PARAM_NAME.DriverUdid);
     }
 
-    protected long getAppType(ZKSecRequestWrapper zkReq) {
+    public static long getAppType(ZKSecRequestWrapper zkReq) {
         long appType = 0;
         try {
             String dtStr = zkReq.getCleanParam(ZKSecConstants.PARAM_NAME.AppType);
@@ -83,7 +83,7 @@ public abstract class ZKSecAuthenticationFilter extends ZKSecAccessControlFilter
         return appType;
     }
 
-    protected String getAppId(ZKSecRequestWrapper zkReq) {
+    public static String getAppId(ZKSecRequestWrapper zkReq) {
         return zkReq.getCleanParam(ZKSecConstants.PARAM_NAME.appId);
     }
 

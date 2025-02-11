@@ -30,13 +30,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.commons.ZKMsgRes.ResCodeType;
-import com.zk.core.exception.ZKSystemException;
+import com.zk.core.exception.ZKBusinessException;
 import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.webmvc.helper.entity.ZKWebmvcTestEntity;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import reactor.core.publisher.Mono;
 
 /**
  * @ClassName: ZKWebmvcTestController
@@ -84,7 +83,7 @@ public class ZKWebmvcTestController {
      * @return
      * @return String
      */
-    @RequestMapping("get")
+    @RequestMapping(value = "get", method = RequestMethod.GET)
     public String get(@RequestParam("param") String param) {
         System.out.println("[^_^:20191213-1144-001] ZKHttpApiUtilsController.get -> param:" + param);
         return msg_index + param;
@@ -102,7 +101,7 @@ public class ZKWebmvcTestController {
      * @return String
      */
     @RequestMapping(value = "post", method = RequestMethod.POST)
-    public String post(@RequestParam("param") String param) {
+    public String post(@RequestParam("param") String param, HttpServletResponse hRes) {
         System.out.println("[^_^:20191213-1144-002] ZKHttpApiUtilsController.post -> param:" + param);
         return msg_index + param;
     }
@@ -214,7 +213,7 @@ public class ZKWebmvcTestController {
     }
 
     @RequestMapping(value = "exception")
-    public Mono<String> exception(@RequestParam("errCode") String errCode) throws Exception {
+    public ZKMsgRes exception(@RequestParam("errCode") String errCode) throws Exception {
         System.out.println("[^_^:20240106-0014-011] ZKWebfluxTestController.errCode -> errCode:" + errCode);
         /*
          * zk.0=Successful. 
@@ -227,7 +226,8 @@ public class ZKWebmvcTestController {
          */
         for (String s : new String[] { "zk.0", "zk.1", "zk.000003" }) {
             if (s.equals(errCode)) {
-                throw ZKSystemException.as(errCode, null);
+//                throw ZKSystemException.as(errCode, null);
+                throw ZKBusinessException.as(errCode, null);
             }
         }
         throw new Exception(errCode);

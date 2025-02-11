@@ -66,4 +66,16 @@ public interface ZKValidationGroup {
 
     }
 
+    /**
+     * 多步审核内容校验
+     * 
+     * @ClassName: Audit
+     * @Description: TODO(simple description this class what to do. )
+     * @author Vinson
+     * @version 1.0
+     */
+    public interface AuditTwo {
+
+    }
+
 }

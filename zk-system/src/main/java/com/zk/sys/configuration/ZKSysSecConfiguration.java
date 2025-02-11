@@ -35,10 +35,10 @@ import com.zk.security.configuration.ZKEnableSecurity;
 import com.zk.security.mgt.ZKSecSecurityManager;
 import com.zk.security.ticket.support.redis.ZKSecRedisTicketManager;
 import com.zk.security.web.filter.ZKSecFilter;
-import com.zk.security.web.filter.authc.ZKSecAuthcUserFilter;
 import com.zk.security.web.filter.authc.ZKSecLogoutFilter;
 import com.zk.security.web.filter.authc.ZKSecUserFilter;
 import com.zk.security.web.support.servlet.filter.ZKSecFilterFactoryBean;
+import com.zk.sys.sec.filter.ZKSysAuthcUserFilter;
 import com.zk.sys.sec.realm.ZKSysSecRealm;
 import com.zk.sys.sec.service.ZKSysSecAuthService;
 import com.zk.sys.sec.service.ZKSysSecUserService;
@@ -72,6 +72,9 @@ public class ZKSysSecConfiguration {
     @Value("${spring.application.name}")
     String applicationName;
 
+//    @Value("${${zk.path.sys.org}}")
+//    String org;
+
     /**
      * 权限处理拦截器
      *
@@ -94,21 +97,25 @@ public class ZKSysSecConfiguration {
         // 过滤器配置
         LinkedHashMap<String, ZKSecFilter> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("logout", new ZKSecLogoutFilter());
-        filterChainDefinitionMap.put("login", new ZKSecAuthcUserFilter());
+        filterChainDefinitionMap.put("login", new ZKSysAuthcUserFilter());
         filterChainDefinitionMap.put("user", new ZKSecUserFilter());
         zkSecFilterFactoryBean.setFilters(filterChainDefinitionMap);
 
         // 过虑路径设置
         LinkedHashMap<String, String> setFilterChainMap = new LinkedHashMap<>();
+        setFilterChainMap.put("/favicon.ico", "anon");
         String prefix = String.format("/%s/%s/%s", this.pathAdmin, this.pathSys, this.pathVersion);
-        setFilterChainMap.put(prefix, "anon");
-        setFilterChainMap.put(prefix + "/", "anon");
-        setFilterChainMap.put(prefix + "/index", "anon");
+//        setFilterChainMap.put(prefix, "anon");
+//        setFilterChainMap.put(prefix + "/", "anon");
+//        setFilterChainMap.put(prefix + "/index", "anon");
+        setFilterChainMap.put("/", "anon");
+        setFilterChainMap.put("/index", "anon");
         setFilterChainMap.put(prefix + "/sec/login", "login");
         setFilterChainMap.put(prefix + "/sec/logout", "logout");
         setFilterChainMap.put(prefix + "/org/sysOrgCompany/n/**", "anon");
         setFilterChainMap.put(prefix + "/org/sysOrgUser/n/**", "anon");
         setFilterChainMap.put(prefix + "/org/upwd/n/**", "anon");
+        setFilterChainMap.put(prefix + "/res/sysResDict/n/**", "anon");
         setFilterChainMap.put(prefix + "/org/sysOrgCompany/sysOrgCompanyByCode", "serverOrUser");
         setFilterChainMap.put(prefix + "/sec/authc/getUserAuthc", "serverAndUser");
         setFilterChainMap.put("/**", "user");

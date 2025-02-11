@@ -34,6 +34,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import com.zk.core.commons.ZKValidatorMessageInterpolator;
@@ -67,22 +68,6 @@ import jakarta.validation.Validator;
 public class ZKMailBeforeConfiguration extends ZKWebmvcConfiguration {
 
     protected Logger log = LogManager.getLogger(this.getClass());
-
-//    // # 文件上传，最大上传大小，需要比邮件附件单个的文件大小配置值要大；50M=52428800
-//    @Value("${zk.mail.file.upload.multipartResolver.maxInMemorySize:52428800}")
-//    long maxUploadSize;
-//
-//    // # 文件上传，最大处理内存大小； 1M=1048576
-//    @Value("${zk.mail.file.upload.multipartResolver.maxInMemorySize:40960}")
-//    int maxInMemorySize;
-//
-//    // # 文件上传，单个文件上传最大大小； 10M=10485760
-//    @Value("${zk.mail.file.upload.multipartResolver.maxUploadSizePerFile:10485760}")
-//    int maxUploadSizePerFile;
-//
-//    // # 文件上传，处理字符集
-//    @Value("${zk.mail.file.upload.multipartResolver.defaultEncoding:UTF-8}")
-//    String defaultEncoding;
 
     @Value("${zk.mail.server.host}")
     String host;
@@ -234,30 +219,8 @@ public class ZKMailBeforeConfiguration extends ZKWebmvcConfiguration {
 //        return new RestTemplate();
 //    }
 
-    /**
-     * 文件上传 适配器
-     *
-     * @Title: multipartResolver
-     * @Description: TODO(simple description this method what to do.)
-     * @author Vinson
-     * @date May 27, 2022 10:13:32 AM
-     * @return
-     * @return CommonsMultipartResolver
-     */
-//    @Bean
-//    CommonsMultipartResolver multipartResolver() {
-//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-//        multipartResolver.setDefaultEncoding(this.defaultEncoding);
-//        // 设置总上传数据总大小
-//        multipartResolver.setMaxUploadSize(this.maxUploadSize);
-//        multipartResolver.setMaxInMemorySize(this.maxInMemorySize);
-//        // 设置单个文件最大大小
-//        multipartResolver.setMaxUploadSizePerFile(maxUploadSizePerFile);
-//        return multipartResolver;
-//    }
-
     @Bean
-    StandardServletMultipartResolver multipartResolver() {
+    MultipartResolver multipartResolver() {
         StandardServletMultipartResolver multipartResolver = new StandardServletMultipartResolver();
         return multipartResolver;
     }

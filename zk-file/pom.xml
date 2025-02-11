@@ -120,6 +120,13 @@
 			<groupId>junit</groupId>
    			<artifactId>junit</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.zk</groupId>
+			<artifactId>zk-test</artifactId>
+			<version>${version.zk.test}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
 		<!-- ##### end test -->
 
 	</dependencies>

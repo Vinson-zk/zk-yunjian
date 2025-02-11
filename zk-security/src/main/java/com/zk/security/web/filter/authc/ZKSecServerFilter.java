@@ -46,7 +46,7 @@ public class ZKSecServerFilter extends ZKSecBaseControlFilter {
     @Override
     protected boolean onAccessDenied(ZKSecRequestWrapper request, ZKSecResponseWrapper response, Object mappedValue) {
         log.error("[>_<:20220514-0916-001] zk.sec.000013 无微服务身份");
-        throw ZKSecAuthenticationException.as("zk.sec.000013", null);
+        throw ZKSecAuthenticationException.as("zk.sec.000013", request.getPathWithinApplication());
     }
 
 }

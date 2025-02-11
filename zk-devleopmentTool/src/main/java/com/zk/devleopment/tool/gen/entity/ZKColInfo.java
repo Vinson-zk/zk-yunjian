@@ -23,8 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Transient;
@@ -42,6 +40,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import com.zk.devleopment.tool.gen.action.ZKConvertUtils;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * @ClassName: ZKColInfo

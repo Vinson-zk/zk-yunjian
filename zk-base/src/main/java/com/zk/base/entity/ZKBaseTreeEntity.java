@@ -21,8 +21,6 @@ package com.zk.base.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.springframework.data.annotation.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,6 +36,8 @@ import com.zk.db.commons.ZKDBQueryWhere;
 import com.zk.db.commons.ZKSqlConvert;
 import com.zk.db.mybatis.commons.ZKDBQueryScript;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
+
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 树形实体中有一个 parentIdIsEmpty 属性，用于在 parentId 为空时，只查询 parentId 为 null 或为空的节点；

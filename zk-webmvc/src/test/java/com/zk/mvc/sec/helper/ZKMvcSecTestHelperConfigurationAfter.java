@@ -64,12 +64,11 @@ public class ZKMvcSecTestHelperConfigurationAfter {
 //    /**
 //     * 拦截器 - DelegatingFilterProxyRegistrationBean
 //     *
-//     * @Title: zkServerServletContextInitializer
+//     * @Title: 
 //     * @Description: TODO(simple description this method what to do.)
 //     * @author Vinson
 //     * @date Oct 28, 2019 4:11:07 PM
 //     * @return
-//     * @return ZKServerServletContextInitializer
 //     */
 //    @Bean
 //    public ZKDelegatingFilterProxyRegistrationBean shiroFilterProxyRegistrationBean() {

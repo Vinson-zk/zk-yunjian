@@ -33,7 +33,7 @@ import org.springframework.web.server.ServerWebExchange;
 
 import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.commons.ZKMsgRes.ResCodeType;
-import com.zk.core.exception.ZKSystemException;
+import com.zk.core.exception.ZKBusinessException;
 import com.zk.core.web.utils.ZKWebUtils;
 import com.zk.webflux.helper.entity.ZKWebfluxTestEntity;
 
@@ -219,7 +219,7 @@ public class ZKWebfluxTestController {
          */
         for (String s : new String[] { "zk.0", "zk.1", "zk.000003" }) {
             if (s.equals(errCode)) {
-                throw ZKSystemException.as(errCode, null);
+                throw ZKBusinessException.as(errCode, null);
             }
         }
         throw new Exception(errCode);

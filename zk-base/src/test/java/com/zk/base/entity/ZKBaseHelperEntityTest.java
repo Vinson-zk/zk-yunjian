@@ -101,7 +101,6 @@ public class ZKBaseHelperEntityTest {
 
             System.out.println("[^_^:20190808-1543-008-1] string: " + helperEntityStringDto.toString());
 
-            helperEntityStringDto.preInsert();
             helperEntityStringDto.setRemarks("remarks");
             System.out
                     .println("[^_^:20190808-1543-008-2] string: " + ZKJsonUtils.toJsonStr(helperEntityStringDto));

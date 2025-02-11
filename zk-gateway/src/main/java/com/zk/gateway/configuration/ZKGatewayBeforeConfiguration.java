@@ -19,7 +19,6 @@
 package com.zk.gateway.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
@@ -48,22 +47,6 @@ import com.zk.log.webFilter.ZKLogAccessWebFilter;
 })
 public class ZKGatewayBeforeConfiguration extends ZKCoreConfiguration {
 
-    // # 文件上传，最大上传大小，需要比邮件附件单个的文件大小配置值要大；50M=52428800
-    @Value("${zk.gateway.file.upload.multipartResolver.maxInMemorySize:52428800}")
-    long maxUploadSize;
-
-    // # 文件上传，最大处理内存大小； 1M=1048576
-    @Value("${zk.gateway.file.upload.multipartResolver.maxInMemorySize:40960}")
-    int maxInMemorySize;
-
-    // # 文件上传，单个文件上传最大大小； 10M=10485760
-    @Value("${zk.gateway.file.upload.multipartResolver.maxUploadSizePerFile:10485760}")
-    int maxUploadSizePerFile;
-
-    // # 文件上传，处理字符集
-    @Value("${zk.gateway.file.upload.multipartResolver.defaultEncoding:UTF-8}")
-    String defaultEncoding;
-
     @Autowired
     public void beforeGateway(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
         System.out.println("[^_^:20220614-1940-001] === [" + ZKGatewayBeforeConfiguration.class.getSimpleName() + "] " + this);
@@ -86,6 +69,12 @@ public class ZKGatewayBeforeConfiguration extends ZKCoreConfiguration {
     ZKRedisProperties redisProperties() {
         return new ZKRedisProperties();
     }
+
+//    @Bean("fileFluxProperties")
+//    @ConfigurationProperties(prefix = "zk.core.server.file.upload.parthttpmessagereader")
+//    ZKFileFluxProperties zkFileFluxProperties() {
+//        return new ZKFileFluxProperties();
+//    }
 
     @Bean
     ResourceBundleMessageSource messageSource() {
@@ -144,26 +133,6 @@ public class ZKGatewayBeforeConfiguration extends ZKCoreConfiguration {
 //        return zkExceptionHandlerWebFilter;
 //    }
 
-//    /**
-//     * 文件上传 适配器
-//     *
-//     * @Title: multipartResolver
-//     * @Description: TODO(simple description this method what to do.)
-//     * @author Vinson
-//     * @date May 27, 2022 10:13:32 AM
-//     * @return CommonsMultipartResolver
-//     */
-//    @Bean
-//    public CommonsMultipartResolver multipartResolver() {
-//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-//        multipartResolver.setDefaultEncoding(this.defaultEncoding);
-//        // 设置总上传数据总大小
-//        multipartResolver.setMaxUploadSize(this.maxUploadSize);
-//        multipartResolver.setMaxInMemorySize(this.maxInMemorySize);
-//        // 设置单个文件最大大小
-//        multipartResolver.setMaxUploadSizePerFile(maxUploadSizePerFile);
-//
-//        return multipartResolver;
-//    }
-
 }
+
+

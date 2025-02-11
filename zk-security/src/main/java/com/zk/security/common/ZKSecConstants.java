@@ -113,6 +113,10 @@ public class ZKSecConstants {
          */
         public static final String DefaultCookieNameKey = "SEC_COOKIE";
 
+        /**
+         * 用户ID
+         */
+        public static final String UserId = "userId";
     }
 
     /**
@@ -125,7 +129,7 @@ public class ZKSecConstants {
         public static final String SecException = "Sec_Exception";
 
         /**
-         * 请示是否包含令牌ID
+         * 请求是否包含令牌ID
          */
         public static final String SecIsHaveTicket = "Sec_IsHaveTicket";
 

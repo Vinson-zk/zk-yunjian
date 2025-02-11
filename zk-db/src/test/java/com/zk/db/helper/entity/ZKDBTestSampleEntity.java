@@ -3,8 +3,6 @@ package com.zk.db.helper.entity;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.springframework.data.annotation.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,6 +16,8 @@ import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
 import com.zk.db.entity.ZKDBEntity;
 import com.zk.db.mybatis.commons.ZKDBSqlHelper;
+
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * Copyright (c) 2017-2022 Vinson.

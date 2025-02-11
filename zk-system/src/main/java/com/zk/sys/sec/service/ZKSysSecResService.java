@@ -22,10 +22,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zk.base.entity.ZKBaseEntity;
+import com.zk.core.commons.data.ZKOrder;
+import com.zk.core.commons.data.ZKPage;
+import com.zk.core.commons.data.ZKSortMode;
 import com.zk.sys.auth.service.ZKSysAuthCompanyService;
 import com.zk.sys.auth.service.ZKSysAuthMenuService;
 import com.zk.sys.auth.service.ZKSysAuthNavService;
@@ -68,6 +72,9 @@ public class ZKSysSecResService {
 
     @Autowired
     ZKSysAuthUserRoleService zkSysAuthUserRoleService;
+
+    @Value("${zk.default.max.page.size:9999}")
+    int defaultMaxPageSize = 9999;
 
     public interface AuthType {
         // 1. 拥有者公司、用户账号为 admin 或 用户有 superAdmin 角色；返回所有显示的导航栏
@@ -125,6 +132,12 @@ public class ZKSysSecResService {
             ZKSysNav zkSysNav = new ZKSysNav();
             zkSysNav.setIsShow(ZKSysNav.KeyIsShow.show);
             zkSysNav.setDelFlag(ZKBaseEntity.DEL_FLAG.normal);
+
+            ZKPage<ZKSysNav> page = ZKPage.asPage();
+            page.setPageSize(defaultMaxPageSize);
+            page.setSorters(ZKOrder.asOrder("sort", ZKSortMode.ASC), ZKOrder.asOrder("createDate", ZKSortMode.DESC));
+
+            zkSysNav.setPage(page);
             return this.zkSysNavService.findList(zkSysNav);
         }
 
@@ -147,6 +160,12 @@ public class ZKSysSecResService {
             ZKSysMenu zkSysMenu = new ZKSysMenu();
             zkSysMenu.setDelFlag(ZKBaseEntity.DEL_FLAG.normal);
             zkSysMenu.setNavCode(navCode);
+
+            ZKPage<ZKSysMenu> page = ZKPage.asPage();
+            page.setPageSize(defaultMaxPageSize);
+            page.setSorters(ZKOrder.asOrder("sort", ZKSortMode.ASC), ZKOrder.asOrder("createDate", ZKSortMode.DESC));
+
+            zkSysMenu.setPage(page);
             return this.zkSysMenuService.findList(zkSysMenu);
         }
         List<String> authIds = null;

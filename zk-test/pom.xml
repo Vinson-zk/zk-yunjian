@@ -35,11 +35,21 @@
 			<artifactId>zk-core</artifactId>
 			<version>${version.zk.core}</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.zk</groupId>
-			<artifactId>zk-db</artifactId>
-			<version>${version.zk.db}</version>
-		</dependency>  -->
+			<artifactId>zk-security</artifactId>
+			<version>${version.zk.security}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.zk</groupId>
+					<artifactId>zk-mongo</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.data</groupId>
+					<artifactId>spring-data-mongodb</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
 		<!-- ***** begin test -->
 		<dependency>

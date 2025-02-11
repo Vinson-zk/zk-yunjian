@@ -54,7 +54,7 @@ public class ZKMvcSecTestHelperSpringBootMain {
 
     public static void main(String[] args) {
         System.out.println("[^_^:20210704-1100-001]=========================================================");
-        System.out.println("[^_^:20210704-1100-001]=== zk Security ZKMvcSecTestHelperSpringBootMain 启动 ... ...");
+        System.out.println("[^_^:20210704-1100-001]=== zk ZKMvcSec Security test 启动 ... ...");
         System.out.println("[^_^:20210704-1100-001]=========================================================");
         run(args);
         System.out.println("[^_^:20210704-1100-001]---------------------------------------------------------");

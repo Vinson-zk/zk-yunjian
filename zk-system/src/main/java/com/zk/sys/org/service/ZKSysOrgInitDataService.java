@@ -101,7 +101,8 @@ public class ZKSysOrgInitDataService {
         adminUser.setCompanyId(company.getPkId());
         adminUser.setAccount("admin");
         adminUser.setPassword("admin");
-        adminUser.setRealName("征客");
+        adminUser.setFamilyName("管理员");
+        adminUser.setSecondName("管理员");
         adminUser.setNickname("征客");
         adminUser.setPhoneNum("13825659082");
         adminUser.setMail("binary_spqce@126.com");

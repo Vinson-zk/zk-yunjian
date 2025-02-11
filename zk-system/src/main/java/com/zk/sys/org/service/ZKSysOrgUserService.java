@@ -4,6 +4,7 @@
 package com.zk.sys.org.service;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import com.zk.core.utils.ZKEncodingUtils;
 import com.zk.core.utils.ZKMsgUtils;
 import com.zk.core.utils.ZKStringUtils;
 import com.zk.framework.security.utils.ZKUserCacheUtils;
+import com.zk.security.service.ZKSecPrincipalService;
 import com.zk.security.utils.ZKSecPrincipalUtils;
 import com.zk.sys.auth.service.ZKSysAuthUserRoleService;
 import com.zk.sys.auth.service.ZKSysAuthUserService;
@@ -30,10 +32,12 @@ import com.zk.sys.org.dao.ZKSysOrgUserDao;
 import com.zk.sys.org.entity.ZKSysOrgCompany;
 import com.zk.sys.org.entity.ZKSysOrgDept;
 import com.zk.sys.org.entity.ZKSysOrgUser;
-import com.zk.sys.org.entity.ZKSysOrgUserEditLog;
-import com.zk.sys.org.entity.ZKSysOrgUserEditLog.ZKUserEditFlag;
-import com.zk.sys.org.entity.ZKSysOrgUserEditLog.ZKUserEditType;
+import com.zk.sys.org.entity.ZKSysOrgUserOptLog;
+import com.zk.sys.org.entity.ZKSysOrgUserOptLog.ZKUserOptType;
+import com.zk.sys.org.entity.ZKSysOrgUserOptLog.ZKUserOptTypeFlag;
 import com.zk.sys.utils.ZKSysUtils;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * ZKSysOrgUserService
@@ -58,7 +62,10 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
     ZKSysAuthUserService sysAuthUserService;
 
     @Autowired
-    ZKSysOrgUserEditLogService sysOrgUserEditLogService;
+    ZKSysOrgUserOptLogService sysOrgUserOptLogService;
+
+    @Autowired
+    ZKSecPrincipalService zkSecPrincipalService;
 
     /********************************************************/
     /** 用户 的一些修改 ****/
@@ -73,26 +80,27 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
      * @date Jul 23, 2024 3:47:54 PM
      * @param user
      * @param registerType
-     *            新增用户时生效，不是新增时传入任意值; ZKUserEditFlag.Base 中的值
+     *            新增用户时生效，不是新增时传入任意值; ZKUserOptTypeFlag.Base 中的值
      * @param accountEditFlag
-     *            新增用户时生效，不是新增时传入任意值; 账号的生成类型，ZKUserEditFlag.Account 中的值
+     *            新增用户时生效，不是新增时传入任意值; 账号的生成类型，ZKUserOptTypeFlag.Account 中的值
      * @return int
      */
     @Transactional(readOnly = false)
-    public int editUserSelf(ZKSysOrgUser user, int registerType, int accountEditFlag) {
+    public int editUserSelf(ZKSysOrgUser user, int registerType, int accountEditFlag, HttpServletRequest req) {
         ZKSysOrgCompany company = this.sysOrgCompanyService.get(new ZKSysOrgCompany(user.getCompanyId()));
-        return this.editUserSelf(user, registerType, company, accountEditFlag);
+        return this.editUserSelf(user, registerType, company, accountEditFlag, req);
     }
     
     @Transactional(readOnly = false)
-    public int editUserSelf(ZKSysOrgUser user, int registerType, ZKSysOrgCompany company, int accountEditFlag) {
+    public int editUserSelf(ZKSysOrgUser user, int registerType, ZKSysOrgCompany company, int accountEditFlag,
+            HttpServletRequest req) {
         // 校验 一下账号、邮箱、手机号
         boolean isNewRecord = user.isNewRecord();
-        if (isNewRecord && ZKUserEditFlag.Base.mail == registerType) {
+        if (isNewRecord && ZKUserOptTypeFlag.Base.mail == registerType) {
             // 校验邮箱
             this.beanValidator(user, "mail", ZKValidationGroup.CustomModel.class);
         }
-        if (isNewRecord && ZKUserEditFlag.Base.phoneNum == registerType) {
+        if (isNewRecord && ZKUserOptTypeFlag.Base.phoneNum == registerType) {
             // 校验手机
             this.beanValidator(user, "phoneNum", ZKValidationGroup.CustomModel.class);
         }
@@ -101,14 +109,14 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
         int count = this.save(user);
         if (count > 0) {
             if (isNewRecord) {
-                // 用户注册方式
-                this.sysOrgUserEditLogService.editBase(user.getPkId(), registerType);
-                this.updatePwd(user.getPkId(), user.getPassword(), ZKUserEditFlag.Pwd.self);
-                this.sysOrgUserEditLogService.editAccount(user.getPkId(), accountEditFlag);
+                // 用户注册
+                this.sysOrgUserOptLogService.optLogEditBase(user.getPkId(), registerType, null, req);
+                this.updatePwd(user.getPkId(), user.getPassword(), ZKUserOptTypeFlag.Pwd.self, req);
+                this.sysOrgUserOptLogService.optLogEditAccount(user.getPkId(), accountEditFlag, null, req);
             }
             else {
                 // 用户自己修改
-                this.sysOrgUserEditLogService.editBase(user.getPkId(), ZKUserEditFlag.Base.self);
+                this.sysOrgUserOptLogService.optLogEditBase(user.getPkId(), ZKUserOptTypeFlag.Base.self, null, req);
             }
         }
         return count;
@@ -128,14 +136,14 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
      * @return int
      */
     @Transactional(readOnly = false)
-    public int editUserCompanyOpt(ZKSysOrgUser user) {
+    public int editUserCompanyOpt(ZKSysOrgUser user, HttpServletRequest req) {
         ZKSysOrgCompany company = this.sysOrgCompanyService.get(new ZKSysOrgCompany(user.getCompanyId()));
-        return this.editUserCompanyOpt(user, company);
+        return this.editUserCompanyOpt(user, company, req);
     }
 
     // 核验公司是否可编辑用户
     @Transactional(readOnly = false)
-    public int editUserCompanyOpt(ZKSysOrgUser user, ZKSysOrgCompany company) {
+    public int editUserCompanyOpt(ZKSysOrgUser user, ZKSysOrgCompany company, HttpServletRequest req) {
         // 校验 一下账号、邮箱、手机号
         this.beanValidator(user, ZKValidationGroup.CustomModel.class);
         // 判断公司是否存及公司状态、是否存在、初始化用户公司信息
@@ -143,10 +151,10 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
         boolean isNewRecord = user.isNewRecord();
         int count = this.save(user);
         if (count > 0) {
-            this.sysOrgUserEditLogService.editBase(user.getPkId(), ZKUserEditFlag.Base.company);
+            this.sysOrgUserOptLogService.optLogEditBase(user.getPkId(), ZKUserOptTypeFlag.Base.company, null, req);
             if (isNewRecord) {
                 // 新用户，设置系统默认密码
-                this.updatePwd(user.getPkId(), ZKSysUtils.getUserDefaultPwd(), ZKUserEditFlag.Pwd.system);
+                this.updatePwd(user.getPkId(), ZKSysUtils.getUserDefaultPwd(), ZKUserOptTypeFlag.Pwd.system, req);
             }
         }
         return count;
@@ -237,7 +245,7 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
 
     // 修改账号
     @Transactional(readOnly = false)
-    public int updateAccount(ZKSysOrgUser user, String account, int editFlag) {
+    public int updateAccount(ZKSysOrgUser user, String account, int editFlag, HttpServletRequest req) {
         // 仅个人用户可以修改账号
         if (!ZKSysUtils.getPersonalUserTypeCode().equals(user.getUserTypeCode())) {
             // zk.sys.010028=只允许个人用户可修改账号
@@ -246,9 +254,9 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
         }
         // 用户只能修改掉系统生成的账号，然后不能再修改
         // 取出账号的修改日志
-        ZKSysOrgUserEditLog accountEditLog = this.sysOrgUserEditLogService.getLatestEditLog(user.getPkId(),
-                ZKUserEditType.account);
-        if (accountEditLog == null || accountEditLog.getEditFlag().intValue() != ZKUserEditFlag.Account.system) {
+        ZKSysOrgUserOptLog accountEditLog = this.sysOrgUserOptLogService.getLatestEditLog(user.getPkId(),
+                ZKUserOptType.account);
+        if (accountEditLog == null || accountEditLog.getOptTypeFlag().intValue() != ZKUserOptTypeFlag.Account.system) {
             // 账号上次修改不是系统修改，不允许修改账号
             log.error("[^_^:20220425-1015-003] zk.sys.010029=用户账号非系统生成，不允许修改, userId:{};", user.getPkId());
             throw ZKBusinessException.as("zk.sys.010029");
@@ -258,43 +266,43 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
         int count = this.dao.updateAccount(ZKSysOrgUser.sqlHelper().getTableName(), user.getPkId(), account,
                 ZKDateUtils.getToday());
         if (count > 0) {
-            this.sysOrgUserEditLogService.editAccount(user.getPkId(), editFlag);
+            this.sysOrgUserOptLogService.optLogEditAccount(user.getPkId(), editFlag, null, req);
         }
         return count;
     }
 
     // 修改手机号
     @Transactional(readOnly = false)
-    public int updatePhoneNum(ZKSysOrgUser user, String phoneNum, int editFlag) {
+    public int updatePhoneNum(ZKSysOrgUser user, String phoneNum, int editFlag, HttpServletRequest req) {
         // 判断手机号唯一
         this.checkUniqueByPhoneNum(user.getCompanyId(), phoneNum, user.getPkId());
         int count = this.dao.updatePhoneNum(ZKSysOrgUser.sqlHelper().getTableName(), user.getPkId(), phoneNum,
                 ZKDateUtils.getToday());
         if (count > 0) {
-            this.sysOrgUserEditLogService.editPhone(user.getPkId(), editFlag);
+            this.sysOrgUserOptLogService.optLogEditPhone(user.getPkId(), editFlag, null, req);
         }
         return count;
     }
 
     // 修改邮箱
     @Transactional(readOnly = false)
-    public int updateMail(ZKSysOrgUser user, String mail, int editFlag) {
+    public int updateMail(ZKSysOrgUser user, String mail, int editFlag, HttpServletRequest req) {
         // 判断邮箱唯一
         this.checkUniqueByMail(user.getCompanyId(), mail, user.getPkId());
         int count = this.dao.updateMail(ZKSysOrgUser.sqlHelper().getTableName(), user.getPkId(), mail,
                 ZKDateUtils.getToday());
         if (count > 0) {
-            this.sysOrgUserEditLogService.editMail(user.getPkId(), editFlag);
+            this.sysOrgUserOptLogService.optLogEditMail(user.getPkId(), editFlag, null, req);
         }
         return count;
     }
 
     // 修改状态
     @Update(" UPDATE ${tn} SET c_status = #{status}, c_update_date = #{updateDate} WHERE c_pk_id = #{pkId} ")
-    public int updateStatus(String pkId, int status, int editFlag) {
+    public int updateStatus(String pkId, int status, int editFlag, HttpServletRequest req) {
         int count = this.dao.updateStatus(ZKSysOrgUser.sqlHelper().getTableName(), pkId, status, ZKDateUtils.getToday());
         if(count > 0) {
-            sysOrgUserEditLogService.editStatus(pkId, ZKUserEditFlag.Status.company);
+            sysOrgUserOptLogService.optLogEditStatus(pkId, ZKUserOptTypeFlag.Status.company, null, req);
         }
         return count;
     }
@@ -315,13 +323,28 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
      * @return int
      */
     @Transactional(readOnly = false)
-    public int updatePwd(String userId, String pwd, int editFlag) {
+    public int updatePwd(String userId, String pwd, int editFlag, HttpServletRequest req) {
         int count = this.dao.updatePwd(ZKSysOrgUser.sqlHelper().getTableName(), userId, this.encryptionPwd(pwd),
                 ZKDateUtils.getToday());
         if (count > 0) {
-            sysOrgUserEditLogService.editPwd(userId, editFlag);
+            sysOrgUserOptLogService.optLogEditPwd(userId, editFlag, null, req);
         }
         return count;
+    }
+
+    // 注销账号
+    @Transactional(readOnly = false)
+    public int closeAccount(ZKSysOrgUser user) {
+        // 仅个人用户可以修改账号
+        if (!ZKSysUtils.getPersonalUserTypeCode().equals(user.getUserTypeCode())) {
+            // zk.sys.010028=只允许个人用户可修改账号
+            log.error("[^_^:20250209-1015-001]  zk.sys.010028=只允许个人用户可修改账号, userId:{};", user.getPkId());
+            throw ZKBusinessException.as("zk.sys.010028");
+        }
+        this.del(user);
+        return this.dao.closeAccount(ZKSysOrgUser.sqlHelper().getTableName(), user.getPkId(),
+                UUID.randomUUID().toString(), ZKSysOrgUser.KeyStatus.disabled, ZKBaseEntity.DEL_FLAG.delete,
+                zkSecPrincipalService.getUserId(), ZKDateUtils.getToday());
     }
 
     /********************************************************/
@@ -609,7 +632,7 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
     public int del(ZKSysOrgUser user) {
         sysAuthUserRoleService.diskDelByUserId(user.getPkId());
         sysAuthUserService.diskDelByUserId(user.getPkId());
-        sysOrgUserEditLogService.delByUserId(user.getPkId());
+        sysOrgUserOptLogService.delByUserId(user.getPkId());
         // 清空权限缓存
         ZKUserCacheUtils.cleanAuth(user);
         return super.del(user);
@@ -620,7 +643,7 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
     public int diskDel(ZKSysOrgUser user) {
         sysAuthUserRoleService.diskDelByUserId(user.getPkId());
         sysAuthUserService.diskDelByUserId(user.getPkId());
-        sysOrgUserEditLogService.diskDelByUserId(user.getPkId());
+        sysOrgUserOptLogService.diskDelByUserId(user.getPkId());
         // 清空权限缓存
         ZKUserCacheUtils.cleanAuth(user);
         return super.diskDel(user);
@@ -639,3 +662,5 @@ public class ZKSysOrgUserService extends ZKBaseService<String, ZKSysOrgUser, ZKS
     }
 
 }
+
+

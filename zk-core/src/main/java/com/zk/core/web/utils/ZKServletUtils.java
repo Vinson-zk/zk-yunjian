@@ -68,6 +68,25 @@ public class ZKServletUtils {
 
     protected static Logger log = LogManager.getLogger(ZKServletUtils.class);
 
+    public static interface ZKReqHeaderKey {
+
+        public static final String AddrXForwardedIP = "X-Forwarded-For";
+
+        public static final String AddrProxyClientIP = "Proxy-Client-IP";
+
+        public static final String AddrWLProxyClientIP = "WL-Proxy-Client-IP";
+
+        public static final String AddrHttpClientIp = "HTTP_CLIENT_IP";
+
+        public static final String AddrHttpXForwardedFor = "HTTP_X_FORWARDED_FOR";
+
+        public static final String AddrXRealIP = "X-Real-IP";
+
+        public static final String AddrHost = "Host";
+
+        public static final String UserAgent = "user-agent";
+    }
+
     /* 8.请求基础系列 *****************************************************************/
     /**
      * 取当前请求的 HttpServletRequest
@@ -342,12 +361,18 @@ public class ZKServletUtils {
         ZKServletUtils.write(hRes, str);
     }
 
-    public static HttpServletResponse downloadFile(HttpServletResponse hRes, String filePath) throws IOException {
-        return downloadFile(hRes, new File(filePath));
+    public static HttpServletResponse downloadFile(HttpServletResponse hRes, HttpServletRequest hReq, String filePath)
+            throws IOException {
+        return downloadFile(hRes, hReq, new File(filePath));
     }
 
-    public static HttpServletResponse downloadFile(HttpServletResponse hRes, File file) throws IOException {
-        return downloadFile(hRes, file, file.getName());
+    public static HttpServletResponse downloadFile(HttpServletResponse hRes, HttpServletRequest hReq, File file)
+            throws IOException {
+        String fileName = file.getName();
+        if (file.isDirectory()) {
+            fileName = null;
+        }
+        return downloadFile(hRes, hReq, file, fileName);
     }
 
     /**
@@ -358,7 +383,8 @@ public class ZKServletUtils {
      * @return
      * @throws IOException
      */
-    public static HttpServletResponse downloadFile(HttpServletResponse hRes, File file, String fileName)
+    public static HttpServletResponse downloadFile(HttpServletResponse hRes, HttpServletRequest hReq, File file,
+            String fileName)
             throws IOException {
         if (file == null) {
             log.error("[>_<:20210417-1612-001] 下载文件为 null");
@@ -369,6 +395,10 @@ public class ZKServletUtils {
             // 文件是一个目录，先压缩，再下载，下载后，删除压缩文件；
             log.info("[^_^:20210417-1612-002] 文件是个目录，先压缩，再下载；文件目录是:{}", file.getPath());
             file = ZKFileUtils.compress(file);
+            log.info("[^_^:20210417-1612-003] 文件是个目录，压缩后的文件是:{}", file.getAbsoluteFile());
+            if (fileName == null) {
+                fileName = file.getName();
+            }
             deleteFile = file;
         }
 
@@ -376,7 +406,7 @@ public class ZKServletUtils {
             InputStream is = null;
             try {
                 is = new FileInputStream(file);
-                ZKServletUtils.downloadFile(hRes, is, fileName);
+                ZKServletUtils.downloadFile(hRes, hReq, is, fileName);
             } finally {
                 ZKStreamUtils.closeStream(is);
             }
@@ -391,7 +421,44 @@ public class ZKServletUtils {
         return hRes;
     }
 
-    public static HttpServletResponse downloadFile(HttpServletResponse hRes, InputStream fileIs, String fileName)
+    public static void setDownloadFileHeader(HttpServletResponse hRes, HttpServletRequest hReq, String fileName)
+            throws UnsupportedEncodingException {
+        // 清空response
+        hRes.reset();
+        hRes.setStatus(200);
+
+        hRes.setHeader("Pragma", "No-cache");
+        hRes.setHeader("Cache-Control", "No-cache");
+        hRes.setDateHeader("Expires", 0);
+
+        // 以流的形式下载文件。
+        hRes.setContentType("application/octet-stream");
+        // 如果有输入文件名，会设置响应头的文件名；如果没有文件名，直接出输出文件流
+        // 此处会用URLEncoder.encode方法进行处理，解决中文文件名乱码的问题；
+        if (!ZKStringUtils.isEmpty(fileName)) {
+            // 给文件名进行URL编码
+            hRes.setHeader("Content-Disposition",
+                    "attachment;filename=" + ZKEncodingUtils.urlEncode(fileName, "UTF-8"));
+
+//            String userAgent = hReq == null ? null : ZKServletUtils.getUserAgent(hReq);
+//            if (userAgent != null && userAgent.contains("Firefox")) {
+//                // 是火狐浏览器，使用BASE64编码
+//                fileName = "=?utf-8?b?" + new BASE64Encoder().encode(fileName.getBytes("utf-8")) + "?=";
+//                hRes.setHeader("Content-Disposition", "attachment;filename==?utf-8?b?"
+//                        + ZKEncodingUtils.encodeBase64ToStr(userAgent.getBytes("UTF-8")) + "?=");
+//
+////                (new BASE64Encoder()).encode(fileName.getBytes("utf-8"))
+//            }
+//            else {
+//                // 给文件名进行URL编码
+//                // URLEncoder.encode() 需要两个参数，第一个参数时要编码的字符串，第二个是编码所采用的字符集
+//                hRes.setHeader("Content-Disposition",
+//                        "attachment;filename=" + ZKEncodingUtils.urlEncode(fileName, "UTF-8"));
+//            }
+        }
+    }
+
+    public static HttpServletResponse downloadFile(HttpServletResponse hRes, HttpServletRequest hReq, InputStream fileIs, String fileName)
             throws IOException {
         if (fileIs == null) {
             log.error("[>_<:20210417-1612-001] 下载文件为 null");
@@ -399,22 +466,7 @@ public class ZKServletUtils {
 
         OutputStream toClient = null;
         try {
-            // 清空response
-            hRes.reset();
-            hRes.setStatus(200);
-
-            hRes.setHeader("Pragma", "No-cache");
-            hRes.setHeader("Cache-Control", "No-cache");
-            hRes.setDateHeader("Expires", 0);
-
-            // 以流的形式下载文件。
-            hRes.setContentType("application/octet-stream");
-            // 如果有输入文件名，会设置响应头的文件名；如果没有文件名，直接出输出文件流
-            // 此处会用URLEncoder.encode方法进行处理，解决中文文件名乱码的问题；
-            if (!ZKStringUtils.isEmpty(fileName)) {
-                hRes.setHeader("Content-Disposition",
-                        "attachment;filename=" + ZKEncodingUtils.urlEncode(fileName, "UTF-8"));
-            }
+            setDownloadFileHeader(hRes, hReq, fileName);
 
             toClient = new BufferedOutputStream(hRes.getOutputStream());
             ZKStreamUtils.readAndWrite(fileIs, toClient);
@@ -887,22 +939,69 @@ public class ZKServletUtils {
     /**
      * 获得用户远程地址
      */
-    public static String getRemoteAddr(HttpServletRequest request) {
-        String remoteAddr = request.getHeader("X-Real-IP");
+    protected static String getRemoteAddr(HttpServletRequest request) {
+
+        String remoteAddr = request.getHeader(ZKReqHeaderKey.AddrXForwardedIP);
+
         if (ZKStringUtils.isBlank(remoteAddr)) {
-            remoteAddr = request.getHeader("X-Forwarded-For");
+            remoteAddr = request.getHeader(ZKReqHeaderKey.AddrProxyClientIP);
         }
         if (ZKStringUtils.isBlank(remoteAddr)) {
-            remoteAddr = request.getHeader("Proxy-Client-IP");
+            remoteAddr = request.getHeader(ZKReqHeaderKey.AddrWLProxyClientIP);
         }
         if (ZKStringUtils.isBlank(remoteAddr)) {
-            remoteAddr = request.getHeader("WL-Proxy-Client-IP");
+            remoteAddr = request.getHeader(ZKReqHeaderKey.AddrHttpClientIp);
         }
         if (ZKStringUtils.isBlank(remoteAddr)) {
-            remoteAddr = request.getHeader("Host");
+            remoteAddr = request.getHeader(ZKReqHeaderKey.AddrHttpXForwardedFor);
         }
-        return ZKStringUtils.isNotBlank(remoteAddr) ? remoteAddr : request.getRemoteAddr();
+        if (ZKStringUtils.isBlank(remoteAddr)) {
+            remoteAddr = request.getHeader(ZKReqHeaderKey.AddrXRealIP);
+        }
+        if (ZKStringUtils.isBlank(remoteAddr)) {
+            remoteAddr = request.getHeader(ZKReqHeaderKey.AddrHost);
+        }
+        if (ZKStringUtils.isBlank(remoteAddr)) {
+            remoteAddr = request.getRemoteAddr();
+        }
+
+        return remoteAddr;
     }
+
+//    /** 
+//     * 获取用户真实IP地址，不使用request.getRemoteAddr();的原因是有可能用户使用了代理软件方式避免真实IP地址, 
+//     * 参考文章： http://developer.51cto.com/art/201111/305181.htm 
+//     *  
+//     * 可是，如果通过了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP值，究竟哪个才是真正的用户端的真实IP呢？ 
+//     * 答案是取X-Forwarded-For中第一个非unknown的有效IP字符串。 
+//     *  
+//     * 如：X-Forwarded-For：192.168.1.110, 192.168.1.120, 192.168.1.130, 
+//     * 192.168.1.100 
+//     *  
+//     * 用户真实IP为： 192.168.1.110 
+//     *  
+//     * @param request 
+//     * @return 
+//     */  
+//    public static String getIpAddress(HttpServletRequest request) {  
+//        String ip = request.getHeader("x-forwarded-for");  
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+//            ip = request.getHeader("Proxy-Client-IP");  
+//        }  
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+//            ip = request.getHeader("WL-Proxy-Client-IP");  
+//        }  
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+//            ip = request.getHeader("HTTP_CLIENT_IP");  
+//        }  
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+//            ip = request.getHeader("HTTP_X_FORWARDED_FOR");  
+//        }  
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {  
+//            ip = request.getRemoteAddr();  
+//        }  
+//        return ip;  
+//    }  
 
     /**
      * 支持AJAX的页面跳转
@@ -919,6 +1018,10 @@ public class ZKServletUtils {
         catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getUserAgent(HttpServletRequest request) {
+        return request.getHeader(ZKReqHeaderKey.UserAgent);
     }
 
 }

@@ -20,13 +20,15 @@ package com.zk.core.commons.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.zk.core.web.utils.ZKWebUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -123,19 +125,27 @@ public class ZKOrder implements Serializable {
      * @return List<ZKOrder>
      */
     public static List<ZKOrder> asOrder(HttpServletRequest hReq) {
+        String[] cols = ZKWebUtils.getStringParameters(hReq, Param_Name.column);
+        String[] modes = ZKWebUtils.getStringParameters(hReq, Param_Name.mode);
+        return asOrder(Arrays.asList(cols), Arrays.asList(modes));
+    }
 
-        String[] cols = ServletRequestUtils.getStringParameters(hReq, Param_Name.column);
-        String[] modes = ServletRequestUtils.getStringParameters(hReq, Param_Name.mode);
+    public static List<ZKOrder> asOrder(ServerHttpRequest hReq) {
+        List<String> cols = ZKWebUtils.getStringParameters(hReq, Param_Name.column);
+        List<String> modes = ZKWebUtils.getStringParameters(hReq, Param_Name.mode);
+        return asOrder(cols, modes);
+    }
 
-        if (cols.length > 0) {
+    protected static List<ZKOrder> asOrder(List<String> cols, List<String> modes) {
+        if (cols != null && cols.size() > 0) {
             List<ZKOrder> orders = new ArrayList<ZKOrder>();
-            for (int i = 0; i < cols.length; ++i) {
-                if (i < modes.length) {
-                    orders.add(ZKOrder.asOrder(cols[i], modes[i]));
+            for (int i = 0; i < cols.size(); ++i) {
+                if (i < modes.size()) {
+                    orders.add(ZKOrder.asOrder(cols.get(i), modes.get(i)));
                 }
                 else {
                     // 如果未指定排序模式，默认按升序处理；排序模式与字段按顺序对应
-                    orders.add(ZKOrder.asOrder(cols[i], ZKSortMode.ASC));
+                    orders.add(ZKOrder.asOrder(cols.get(i), ZKSortMode.ASC));
                 }
             }
             return orders;
@@ -144,3 +154,5 @@ public class ZKOrder implements Serializable {
     }
 
 }
+
+

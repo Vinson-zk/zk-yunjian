@@ -41,18 +41,18 @@ public class ZKSysSendMailMsgServiceTest {
 
         try {
             String recipientMailAddr = "binary_space@126.com";
-            String userName, verifiyCode;
+            String userName, verifyCode;
             ZKMsgRes res;
 
             userName = null;
-            verifiyCode = "test9527";
-            res = s.sendMailCode(ZKCodeType.changeMail, userName, verifiyCode, recipientMailAddr);
+            verifyCode = "test9527";
+            res = s.sendMailCode(ZKCodeType.changeMail, userName, verifyCode, recipientMailAddr);
             System.out.println("[^_^:20240715-0023-001] res: " + res.toString());
             TestCase.assertTrue(res.isOk());
 
             userName = "华安";
-            verifiyCode = "test9527";
-            res = s.sendMailCode(ZKCodeType.restPassword, userName, verifiyCode, recipientMailAddr);
+            verifyCode = "test9527";
+            res = s.sendMailCode(ZKCodeType.restPassword, userName, verifyCode, recipientMailAddr);
             System.out.println("[^_^:20240715-0023-002] res: " + res.toString());
             TestCase.assertTrue(res.isOk());
 

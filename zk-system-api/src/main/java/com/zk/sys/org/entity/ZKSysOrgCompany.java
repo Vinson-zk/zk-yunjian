@@ -20,8 +20,6 @@ package com.zk.sys.org.entity;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Transient;
@@ -54,6 +52,7 @@ import com.zk.db.mybatis.commons.ZKDBQueryScript;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /** 
 * @ClassName: ZKSysOrgCompany 
@@ -87,6 +86,8 @@ public class ZKSysOrgCompany extends ZKBaseTreeEntity<String, ZKSysOrgCompany> {
 
     private static final long serialVersionUID = 1L;
 
+    public static final String certSeparator = ",";
+
     /**
      * 公司状态；0-正常；1-禁用；2-上级公司审核中；3-平台审核中；4-待提交；
      */
@@ -112,9 +113,14 @@ public class ZKSysOrgCompany extends ZKBaseTreeEntity<String, ZKSysOrgCompany> {
         public static final int auditPlatformIng = 3;
 
         /**
-         * 4-待提交
+         * 4-待提交审核信息
          */
         public static final int waitSubmit = 4;
+
+//        /**
+//         * 5-待验证验证码，此状态不会入库
+//         */
+//        public static final int waitVerifyCode = 5;
 
     }
 
@@ -156,7 +162,7 @@ public class ZKSysOrgCompany extends ZKBaseTreeEntity<String, ZKSysOrgCompany> {
     /**
      * 公司状态；0-正常；1-禁用；2-上级公司审核中；3-平台审核中；4-待提交；
      */
-    @NotNull(message = "{zk.core.data.validation.notNull}")
+    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.Insert.class })
     @Range(min = 0, max = 999999999, message = "{zk.core.data.validation.rang.int}")
     @ZKColumn(name = "c_status", isInsert = true, javaType = Integer.class, query = @ZKQuery(queryType = ZKDBOptComparison.EQ))
     Integer status;
@@ -220,23 +226,23 @@ public class ZKSysOrgCompany extends ZKBaseTreeEntity<String, ZKSysOrgCompany> {
     /**
      * 公司名称
      */
-    @NotNull(message = "{zk.core.data.validation.notNull}")
-    @NotEmpty(message = "{zk.core.data.validation.notNull}")
+    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.Audit.class })
+    @NotEmpty(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.Audit.class })
     @ZKColumn(name = "c_name", isInsert = true, javaType = ZKJson.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     ZKJson name;
 
     /**
      * 公司简介
      */
-    @NotNull(message = "{zk.core.data.validation.notNull}")
-    @NotEmpty(message = "{zk.core.data.validation.notNull}")
+    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.Audit.class })
+    @NotEmpty(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.Audit.class })
     @ZKColumn(name = "c_short_desc", isInsert = true, javaType = ZKJson.class)
     ZKJson shortDesc;
 
     /**
      * 公司 logo 正常公司不能为空；
      */
-    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.Audit.class })
+    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.AuditTwo.class })
     @Length(min = 0, max = 64, message = "{zk.core.data.validation.length.max}")
     @ZKColumn(name = "c_logo", isInsert = false, javaType = String.class)
     String logo;
@@ -267,9 +273,9 @@ public class ZKSysOrgCompany extends ZKBaseTreeEntity<String, ZKSysOrgCompany> {
     String legalCertNum;
 
     /**
-     * 公司法人证件照片; 1-5张照片；存放文件组UUID；正常公司不能为空；
+     * 公司法人证件照片; 2张照片；存放文件保存UUID，使用英文逗号分隔；正常公司不能为空；
      */
-    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.Audit.class })
+    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.AuditTwo.class })
     @Length(min = 0, max = 1024, message = "{zk.core.data.validation.length.max}")
     @ZKColumn(name = "c_legal_cert_photo", isInsert = false, javaType = String.class)
     String legalCertPhoto;
@@ -300,9 +306,9 @@ public class ZKSysOrgCompany extends ZKBaseTreeEntity<String, ZKSysOrgCompany> {
     String companyCertNum;
 
     /**
-     * 公司证件照片；存放文件组UUID；1-5张照片；
+     * 公司证件照片；存放文件UUID；1张照片；
      */
-    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.Audit.class })
+    @NotNull(message = "{zk.core.data.validation.notNull}", groups = { ZKValidationGroup.AuditTwo.class })
     @Length(min = 0, max = 1024, message = "{zk.core.data.validation.length.max}")
     @ZKColumn(name = "c_company_cert_photo", isInsert = false, javaType = String.class, query = @ZKQuery(queryType = ZKDBOptComparison.LIKE))
     String companyCertPhoto;
@@ -619,7 +625,7 @@ public class ZKSysOrgCompany extends ZKBaseTreeEntity<String, ZKSysOrgCompany> {
      * @return sourceCode sa
      */
     public String getSourceCode() {
-        return sourceCode;
+        return ZKStringUtils.isEmpty(sourceCode) ? null : sourceCode;
     }
 
     /**
@@ -634,7 +640,7 @@ public class ZKSysOrgCompany extends ZKBaseTreeEntity<String, ZKSysOrgCompany> {
      * @return sourceId sa
      */
     public String getSourceId() {
-        return sourceId;
+        return ZKStringUtils.isEmpty(sourceId) ? null : sourceId;
     }
 
     /**
@@ -649,7 +655,8 @@ public class ZKSysOrgCompany extends ZKBaseTreeEntity<String, ZKSysOrgCompany> {
      * 根据主键类型，重写主键生成；
      */
     @Override
-    protected String genId() {
+	@JsonIgnore
+	public String genId() {
         return ZKIdUtils.genLongStringId();
     }
 

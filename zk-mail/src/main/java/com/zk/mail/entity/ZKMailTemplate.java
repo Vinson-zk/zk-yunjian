@@ -5,8 +5,6 @@ package com.zk.mail.entity;
 
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
@@ -28,6 +26,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 发送邮件的模板
@@ -335,7 +334,8 @@ public class ZKMailTemplate extends ZKBaseEntity<String, ZKMailTemplate> {
 	 * 根据主键类型，重写主键生成；
 	 */
 	@Override
-	protected String genId() {
+	@JsonIgnore
+	public String genId() {
         return ZKIdUtils.genLongStringId();
     }
 	

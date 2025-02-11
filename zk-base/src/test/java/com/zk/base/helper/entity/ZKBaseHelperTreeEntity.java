@@ -21,8 +21,6 @@ package com.zk.base.helper.entity;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.springframework.data.annotation.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,6 +35,7 @@ import com.zk.db.commons.ZKDBOptComparison;
 import com.zk.db.commons.ZKSqlConvertDelegating;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /** 
 * @ClassName: ZKBaseHelperTreeEntity 

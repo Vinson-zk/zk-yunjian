@@ -39,17 +39,13 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import com.zk.core.commons.ZKMsgRes;
+import com.zk.core.utils.ZKEncodingUtils;
 import com.zk.core.utils.ZKFileUtils;
 import com.zk.core.utils.ZKJsonUtils;
 import com.zk.file.helper.ZKFileTestSpringBootMainHelper;
 import com.zk.framework.security.realm.ZKDistributedRealm;
-import com.zk.security.common.ZKSecConstants;
 import com.zk.security.mgt.ZKSecSecurityManager;
-import com.zk.security.principal.ZKSecDefaultUserPrincipal;
-import com.zk.security.principal.ZKSecPrincipal;
-import com.zk.security.principal.pc.ZKSecDefaultPrincipalCollection;
-import com.zk.security.principal.pc.ZKSecPrincipalCollection;
-import com.zk.security.ticket.ZKSecTicket;
+import com.zk.test.helper.sec.ZKTestSecHelper;
 
 import junit.framework.TestCase;
 
@@ -135,17 +131,8 @@ public class ZKFileInfoControllerTest {
 //            params.set("securityType", "1");
 //            params.set("actionScope", "2");
 
-            // 创建一个令牌，满足测试权限校验
-            ZKSecTicket tk = securityManager.getTicketManager()
-                    .createSecTicket(securityManager.getTicketManager().generateTkId());
-            ZKSecPrincipalCollection<String> pc = new ZKSecDefaultPrincipalCollection<String>();
-            ZKSecPrincipal<String> p = new ZKSecDefaultUserPrincipal<String>("-1", "test-user", "test-user",
-                    ZKSecPrincipal.OS_TYPE.UNKNOWN, null, ZKSecPrincipal.APP_TYPE.web, null, "test-group-code", "-1",
-                    "test-company-code");
-            pc.add(zkSecRealm.getRealmName(), p);
-            tk.setPrincipalCollection(pc);
-            headers.add(ZKSecConstants.PARAM_NAME.TicketId, tk.getTkId().toString());
-//            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+            // 给请求头添加一个用户身份令牌，满足测试权限校验
+            ZKTestSecHelper.setHeaderUserInfo(securityManager.getTicketManager(), zkSecRealm.getRealmName(), headers);
 
 //            System.out.println("[^_^:20231226-2314-001]" + System.getProperty(ZKCoreConstants.System.userName));
 
@@ -157,14 +144,14 @@ public class ZKFileInfoControllerTest {
             params.add("mfs", new FileSystemResource(file));
 
             // 文件 2；
-            fileName = "test-file.png";
+            fileName = "测试照片-3.14-01.png";
             file = new File(sourceFileRootPath + File.separator + fileName);
             params.add("mfs", new FileSystemResource(file));
             requestEntity = new HttpEntity<>(params, headers);
             response = testRestTemplate.postForEntity(url, requestEntity, String.class);
-            System.out.println("[^_^:20231226-2313-001] response: " + response.getStatusCodeValue());
-            System.out.println("[^_^:20231226-2313-001] response: " + response.getBody());
-            TestCase.assertEquals(200, response.getStatusCodeValue());
+            System.out.println("[^_^:20231226-2313-001] response: " + response.getStatusCode().value());
+            System.out.println("[^_^:20231226-2313-002] response: " + response.getBody());
+            TestCase.assertEquals(200, response.getStatusCode().value());
             msgRes = ZKJsonUtils.parseObject(response.getBody(), ZKMsgRes.class);
             TestCase.assertEquals(true, msgRes.isOk());
 
@@ -188,26 +175,21 @@ public class ZKFileInfoControllerTest {
             // 响应体
             ResponseEntity<byte[]> response;
 
-            // 创建一个令牌，满足测试权限校验
-            ZKSecTicket tk = securityManager.getTicketManager()
-                    .createSecTicket(securityManager.getTicketManager().generateTkId());
-            ZKSecPrincipalCollection<String> pc = new ZKSecDefaultPrincipalCollection<String>();
-            ZKSecPrincipal<String> p = new ZKSecDefaultUserPrincipal<String>("-1", "test-user", "test-user",
-                    ZKSecPrincipal.OS_TYPE.UNKNOWN, null, ZKSecPrincipal.APP_TYPE.web, null, "test-group-code", "-1",
-                    "test-company-code");
-            pc.add(zkSecRealm.getRealmName(), p);
-            tk.setPrincipalCollection(pc);
-            headers.add(ZKSecConstants.PARAM_NAME.TicketId, tk.getTkId().toString());
+            // 给请求头添加一个用户身份令牌，满足测试权限校验
+            ZKTestSecHelper.setHeaderUserInfo(securityManager.getTicketManager(), zkSecRealm.getRealmName(), headers);
+
             requestEntity = new HttpEntity<>(headers);
 
-            filePkId = "6977061496484266496";
+            // 需要取一个正常存于服务器上的文件记录，最好是使用上面的方法上传后，取其ID来进行测试。
+            filePkId = "7306103826522571264";
             url = String.format(this.getBaseUrl() + "/f/getFile?pkId=%s&isDownload=%s", filePkId, true);
             response = testRestTemplate.exchange(url, HttpMethod.GET, requestEntity, byte[].class);
 //            response = testRestTemplate.getForEntity(url, byte[].class);
-            TestCase.assertEquals(200, response.getStatusCodeValue());
+            TestCase.assertEquals(200, response.getStatusCode().value());
             
             fileName = response.getHeaders().get("Content-Disposition").get(0);
-            fileName = fileName.substring(fileName.indexOf(";fileName=") + 10);
+            fileName = fileName.substring(fileName.indexOf("filename=") + 9);
+            fileName = ZKEncodingUtils.urlDecoder(fileName);
             file = ZKFileUtils.createFile(uploadFileRootPath + File.separator + download, fileName, false);
             ZKFileUtils.writeFile(response.getBody(), file, false);
 

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,12 +30,15 @@ import com.zk.core.exception.ZKValidatorException;
 import com.zk.core.utils.ZKMsgUtils;
 import com.zk.core.utils.ZKStreamUtils;
 import com.zk.core.utils.ZKStringUtils;
+import com.zk.core.web.ZKWebConstants.HeaderKey;
+import com.zk.core.web.utils.ZKServletUtils;
 import com.zk.file.dao.ZKFileInfoDao;
 import com.zk.file.entity.ZKFileInfo;
 import com.zk.file.entity.ZKFileInfo.ValueKey;
 import com.zk.sys.org.api.ZKSysOrgCompanyApi;
 import com.zk.sys.org.entity.ZKSysOrgCompany;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
@@ -113,32 +117,6 @@ public class ZKFileInfoService extends ZKBaseTreeService<String, ZKFileInfo, ZKF
                     super.restore(fileInfo);
                 }
             }
-            if (!ZKStringUtils.isEmpty(fileInfo.getCompanyCode())) {
-                // 公司代码不为空，填充公司信息
-                ZKSysOrgCompany company = this.getCompanyByCode(fileInfo.getCompanyCode());
-                if (company == null) {
-                    // 公司不存在
-                    log.error("[^_^:20221010-1450-001] zk.file.010002=公司[{}]不存在；", fileInfo.getCompanyCode());
-                    Map<String, String> validatorMsg = Maps.newHashMap();
-                    validatorMsg.put("companyCode",
-                            ZKMsgUtils.getMessage("zk.file.010001", fileInfo.getCompanyCode()));
-                    throw ZKValidatorException.as(validatorMsg);
-                }
-                else {
-                    if (company.getStatus().intValue() != ZKSysOrgCompany.KeyStatus.normal) {
-                        log.error("[>_<:20221010-1450-002] zk.file.010002=公司[{}]状态异常，请联系管理员；",
-                                fileInfo.getCompanyCode());
-                        Map<String, String> validatorMsg = Maps.newHashMap();
-                        validatorMsg.put("companyCode",
-                                ZKMsgUtils.getMessage("zk.file.010002", fileInfo.getCompanyCode()));
-                        throw ZKValidatorException.as(validatorMsg);
-                    }
-                    else {
-                        fileInfo.setCompanyId(company.getPkId());
-                        fileInfo.setGroupCode(company.getGroupCode());
-                    }
-                }
-            }
             // 初始化默认值
             fileInfo.afterAttrSet();
             // sort 排序
@@ -161,6 +139,42 @@ public class ZKFileInfoService extends ZKBaseTreeService<String, ZKFileInfo, ZKF
             }
         }
         return super.save(fileInfo);
+    }
+
+    @Transactional(readOnly = false)
+    public int saveCheckCompany(ZKFileInfo fileInfo, boolean isCheckCompany) {
+        // 新增时，判断目录代码在公司下是否唯一
+        if (fileInfo.isNewRecord()) {
+            if (!ZKStringUtils.isEmpty(fileInfo.getCompanyCode())) {
+                // 公司代码不为空，填充公司信息
+                ZKSysOrgCompany company = this.getCompanyByCode(fileInfo.getCompanyCode());
+                if (company == null) {
+                    // 公司不存在
+                    log.error("[^_^:20221010-1450-001] zk.file.010002=公司[{}]不存在；", fileInfo.getCompanyCode());
+                    Map<String, String> validatorMsg = Maps.newHashMap();
+                    validatorMsg.put("companyCode",
+                            ZKMsgUtils.getMessage("zk.file.010001", fileInfo.getCompanyCode()));
+                    throw ZKValidatorException.as(validatorMsg);
+                }
+                else {
+                    if (isCheckCompany) { // 有时公司还没审核时，需要上传资料，其公司状态是不正常的；这种一般是由业务系统来调用
+                        if (company.getStatus().intValue() != ZKSysOrgCompany.KeyStatus.normal) {
+                            log.error("[>_<:20221010-1450-002] zk.file.010002=公司[{}]状态异常，请联系管理员；",
+                                    fileInfo.getCompanyCode());
+                            Map<String, String> validatorMsg = Maps.newHashMap();
+                            validatorMsg.put("companyCode",
+                                    ZKMsgUtils.getMessage("zk.file.010002", fileInfo.getCompanyCode()));
+                            throw ZKValidatorException.as(validatorMsg);
+                        }
+                        else {
+                            fileInfo.setCompanyId(company.getPkId());
+                            fileInfo.setGroupCode(company.getGroupCode());
+                        }
+                    }
+                }
+            }
+        }
+        return this.save(fileInfo);
     }
 
     /**
@@ -188,7 +202,6 @@ public class ZKFileInfoService extends ZKBaseTreeService<String, ZKFileInfo, ZKF
             zkFileInfo.setGroupCode(c.getGroupCode());
             zkFileInfo.setCompanyCode(c.getCode());
             zkFileInfo.setCompanyId(c.getPkId());
-
         }
         else {
             ZKFileInfo parentFileInfo = this.getByCode(companyCode, parentCode);
@@ -250,7 +263,8 @@ public class ZKFileInfoService extends ZKBaseTreeService<String, ZKFileInfo, ZKF
     public int del(ZKFileInfo entity) {
         int count = 0;
         entity.setDelFlag(ZKBaseEntity.DEL_FLAG.delete);
-        entity.preUpdate();
+//        entity.preUpdate();
+        this.preUpdate(entity);
         count = dao.del(entity);
 
         // 级联删除
@@ -298,20 +312,20 @@ public class ZKFileInfoService extends ZKBaseTreeService<String, ZKFileInfo, ZKF
 
     // 文件处理 =========================================================
 
-    // 上传 --------------
+    // 上传 --------------------------------------------------------
     // 批量上传
     @Transactional(readOnly = false)
-    public List<ZKFileInfo> uploadFileBatch(String companyCode, String parentCode, String saveGroupCode, String name,
-            String code, Integer stauts, Integer securityType, Integer actionScope, Integer sort,
+    public List<ZKFileInfo> uploadFileBatch(String companyCode, String userId, String parentCode, String saveGroupCode,
+            String name, String code, Integer stauts, Integer securityType, Integer actionScope, Integer sort,
+            boolean isCheckCompany,
             MultipartFile... multipartFiles) throws IOException {
         List<ZKFileInfo> fis = new ArrayList<>();
 
         if (multipartFiles != null) {
             ZKFileInfo fi = null;
             for (MultipartFile mf : multipartFiles) {
-                fi = this.uploadFile(companyCode, parentCode, saveGroupCode, mf.getOriginalFilename(), name, code,
-                        stauts,
-                        securityType, actionScope, sort, mf);
+                fi = this.uploadFile(companyCode, userId, parentCode, saveGroupCode, mf.getOriginalFilename(), name,
+                        code, stauts, securityType, actionScope, sort, mf, isCheckCompany);
                 fis.add(fi);
             }
         }
@@ -327,6 +341,8 @@ public class ZKFileInfoService extends ZKBaseTreeService<String, ZKFileInfo, ZKF
      * @date Dec 28, 2023 4:21:48 PM
      * @param companyCode:
      *            公司代码
+     * @param userId:
+     *            用户ID
      * @param parentCode:
      *            父目录代码；文件不能做父节点；即 c_type = 0 的数据，不能做为父节点；
      * @param saveGroupCode:
@@ -346,25 +362,28 @@ public class ZKFileInfoService extends ZKBaseTreeService<String, ZKFileInfo, ZKF
      * @param sort:
      *            排序
      * @param multipartFile
+     * @param isCheckCompany
+     *            保存时，是否需要校验公司
      * @return ZKFileInfo
      * @throws IOException
      */
     @Transactional(readOnly = false)
-    public ZKFileInfo uploadFile(String companyCode, String parentCode, String saveGroupCode, String originalName,
-            String name, String code, Integer stauts, Integer securityType, Integer actionScope, Integer sort,
-            MultipartFile multipartFile) throws IOException {
+    public ZKFileInfo uploadFile(String companyCode, String userId, String parentCode, String saveGroupCode,
+            String originalName, String name, String code, Integer stauts, Integer securityType, Integer actionScope,
+            Integer sort, MultipartFile multipartFile, boolean isCheckCompany) throws IOException {
         if (multipartFile == null) {
             log.error("[>_<:20231224-1112-001] zk.file.000009=上传文件失败，未发现上传数据。");
             throw ZKBusinessException.as("zk.file.000009", null, parentCode);
         }
         // 1、创建文件上传记录
         ZKFileInfo zkFileInfo = this.createUploadFileInfo(companyCode, parentCode, saveGroupCode, originalName, name,
-                code, stauts,
-                securityType, actionScope, sort);
+                code, stauts, securityType, actionScope, sort);
+        zkFileInfo.setCreateUserId(userId);
+        zkFileInfo.setUpdateUserId(userId);
         // 2、上传文件
         String fileAbsolutePath = this.uploadIngFile(zkFileInfo, multipartFile);
         // 3、保存文件上传记录
-        this.save(zkFileInfo);
+        this.saveCheckCompany(zkFileInfo, isCheckCompany);
         log.info("[^_^:20231226-2345-001] 文件上传成功：{}", fileAbsolutePath);
         return zkFileInfo;
     }
@@ -551,34 +570,49 @@ public class ZKFileInfoService extends ZKBaseTreeService<String, ZKFileInfo, ZKF
         return zkFileInfo;
     }
 
-    // 取 --------------
+    public ZKFileInfo getBySaveUuid(String saveUuid) {
+        return this.dao.getBySaveUuid(saveUuid);
+    }
+
+    // 取文件 --------------------------------------------------------
+    public ZKFileInfo getFileByIdOrSaveUUID(String pkId, String saveUuid) {
+        ZKFileInfo zkFileInfo = null;
+        if (!ZKStringUtils.isEmpty(pkId)) {
+            zkFileInfo = this.get(pkId);
+        }
+
+        if (zkFileInfo == null) {
+            if (!ZKStringUtils.isEmpty(saveUuid)) {
+                zkFileInfo = this.getBySaveUuid(saveUuid);
+            }
+        }
+//        if (zkFileInfo == null) {
+//            log.error("[>_<:20230526-1603-001] zk.file.000006=[{}/{}]不存在", pkId, saveUuid);
+//            throw ZKBusinessException.as("zk.file.000006");
+//        }
+        return zkFileInfo;
+    }
+
     /**
+     * 
      *
-     * @Title: downloadFile
+     * @Title: printFileToRes
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
-     * @date May 27, 2023 10:59:27 AM
+     * @date Jan 17, 2025 10:35:20 AM
      * @param isDownload
-     * @param pkId
+     * @param zkFileInfo
      * @param res
+     * @param req
      * @param userId
      * @param securityType
      * @throws IOException
      * @return void
      */
-    public void getFile(boolean isDownload, String pkId, HttpServletResponse res, String userId, int securityType)
-            throws IOException {
-        ZKFileInfo zkFileInfo = this.get(pkId);
-        if (zkFileInfo == null) {
-            log.error("[>_<:20230526-1603-001] zk.file.000006=[{}]不存在", pkId);
-            throw ZKBusinessException.as("zk.file.000006", null, pkId);
-        }
+    public void printFileToRes(boolean isDownload, ZKFileInfo zkFileInfo, HttpServletResponse res,
+            HttpServletRequest req, String userId, int securityType) throws IOException {
 
-        if (zkFileInfo.getType() != ZKFileInfo.ValueKey.Type.file) {
-            log.error("[>_<:20230526-1603-002] zk.file.000004=[{}-{}]不是文件", zkFileInfo.getCompanyCode(),
-                    zkFileInfo.getCode());
-            throw ZKBusinessException.as("zk.file.000004", null, zkFileInfo.getCode());
-        }
+        this.checkFilePermission(zkFileInfo, userId, securityType);
 
         ZKContentType contentType = ZKContentType.parseByType(zkFileInfo.getContentType());
 
@@ -587,35 +621,48 @@ public class ZKFileInfoService extends ZKBaseTreeService<String, ZKFileInfo, ZKF
         }
         if (isDownload) {
             // 下载文件
-            res.setHeader("Content-Disposition", "attachment;fileName=" + zkFileInfo.getOriginalName());
+            ZKServletUtils.setDownloadFileHeader(res, req, zkFileInfo.getOriginalName());
         }
+
         OutputStream os = null;
         try {
             os = res.getOutputStream();
-            this.getFile(zkFileInfo, os, userId, securityType);
+            long size = this.printFileToStream(zkFileInfo, os);
+            if (size < 0) {
+                log.error("[>_<:20250120-1818-001] zk.file.000006 您访问文件[{}-{}] 不存在", zkFileInfo.getPkId(),
+                        zkFileInfo.getSaveUuid());
+                ZKBusinessException e = ZKBusinessException.as("zk.file.000006");
+                res.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置ContentType
+                res.setCharacterEncoding("UTF-8"); // 避免乱码
+                res.setHeader(HeaderKey.cacheControl, "no-cache, must-revalidate");
+                ZKStreamUtils.readAndWrite(ZKMsgRes.as(null, e).toString().getBytes(), os);
+            }
         } finally {
             ZKStreamUtils.closeStream(os);
         }
     }
 
     /**
-     * 取文件
+     * 校验取文件的权限，无权限时，抛出异常。
      *
-     * @Title: getFile
+     * @Title: checkFilePermission
      * @Description: TODO(simple description this method what to do.)
      * @author Vinson
-     * @date May 27, 2023 10:55:51 AM
+     * @date Jan 20, 2025 5:53:36 PM
      * @param zkFileInfo
-     *            文件记录数据
-     * @param os
-     *            文件输出流
      * @param userId
      *            取文件的用户，当取个人文件，文件创建用户需要与此参数一样，才有权限获取；
      * @param securityType
      *            取文件权限类型；类型为开放的时，不能取受限制的文件；
      * @return void
      */
-    public void getFile(ZKFileInfo zkFileInfo, OutputStream os, String userId, int securityType) {
+    public void checkFilePermission(ZKFileInfo zkFileInfo, String userId, int securityType) {
+        if (zkFileInfo.getType() != ZKFileInfo.ValueKey.Type.file) {
+            log.error("[>_<:20230526-1603-002] zk.file.000004=[{}-{}]不是文件", zkFileInfo.getCompanyCode(),
+                    zkFileInfo.getCode());
+            throw ZKBusinessException.as("zk.file.000004", null, zkFileInfo.getCode());
+        }
+
         if (zkFileInfo.getType() != ZKFileInfo.ValueKey.Type.file) {
             log.error("[>_<:20230526-1603-003] zk.file.000004=[{}-{}]不是文件", zkFileInfo.getCompanyCode(),
                     zkFileInfo.getCode());
@@ -636,7 +683,24 @@ public class ZKFileInfoService extends ZKBaseTreeService<String, ZKFileInfo, ZKF
                 throw ZKBusinessException.as("zk.file.000007");
             }
         }
-        this.fileDisposeService.doGetFile(zkFileInfo, os);
+    }
+
+    /**
+     * 取文件
+     *
+     * @Title: getFile
+     * @Description: TODO(simple description this method what to do.)
+     * @author Vinson
+     * @date May 27, 2023 10:55:51 AM
+     * @param zkFileInfo
+     *            文件记录数据
+     * @param os
+     *            文件输出流
+     * @return void
+     * @throws IOException
+     */
+    protected long printFileToStream(ZKFileInfo zkFileInfo, OutputStream os) throws IOException {
+        return this.fileDisposeService.doGetFile(zkFileInfo, os);
     }
 
 }

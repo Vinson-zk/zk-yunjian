@@ -79,11 +79,6 @@ public @interface ZKEnableWebmvc {
 //        @Value("${zk.servlet.context.resource.sets}")
 //        String[] resourceSets;
 
-//        @Bean
-//        ZKWebmvcServletContextInitializer zkWebmvcServletContextInitializer() {
-//            return new ZKWebmvcServletContextInitializer();
-//        }
-
         @Bean
         ZKWebmvcLifecycleListener zkWebmvcLifecycleListener() {
             ZKWebmvcLifecycleListener zkWebmvcLifecycleListener = new ZKWebmvcLifecycleListener();

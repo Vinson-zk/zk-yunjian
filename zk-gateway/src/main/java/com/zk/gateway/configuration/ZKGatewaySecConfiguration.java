@@ -62,7 +62,6 @@ public class ZKGatewaySecConfiguration {
      * @author Vinson
      * @date Feb 14, 2023 1:54:33 PM
      * @param securityManager
-     * @return
      * @throws Exception
      * @return FilterRegistrationBean<Filter>
      */
@@ -78,7 +77,8 @@ public class ZKGatewaySecConfiguration {
 
         // 过虑路径设置
         LinkedHashMap<String, String> setFilterChainMap = new LinkedHashMap<>();
-        String prefix = String.format("/%s/%s/%s", this.pathAdmin, this.pathGateway, this.pathVersion);
+        setFilterChainMap.put("/favicon.ico", "anon");
+//        String prefix = String.format("/%s/%s/%s", this.pathAdmin, this.pathGateway, this.pathVersion);
 
         setFilterChainMap.put("/test/**", "anon");
         setFilterChainMap.put("/apiSys/**", "anon");
@@ -86,11 +86,12 @@ public class ZKGatewaySecConfiguration {
         setFilterChainMap.put("/apiDevTool/**", "anon");
         setFilterChainMap.put("/apiMail/**", "anon");
         setFilterChainMap.put("/apiFile/**", "anon");
-
-        setFilterChainMap.put(prefix, "anon");
-        setFilterChainMap.put(prefix + "/", "anon");
-        setFilterChainMap.put(prefix + "/index", "anon");
-        setFilterChainMap.put(prefix + "/user", "user");
+        setFilterChainMap.put("/apiIot/**", "anon");
+//        setFilterChainMap.put(prefix, "anon");
+//        setFilterChainMap.put(prefix + "/", "anon");
+//        setFilterChainMap.put(prefix + "/index", "anon");
+        setFilterChainMap.put("/", "anon");
+        setFilterChainMap.put("/index", "anon");
         setFilterChainMap.put("/**", "user");
         zkSecSecurityFilterFactoryBean.setFilterChainDefinitionMap(setFilterChainMap);
 

@@ -52,4 +52,12 @@ public abstract class ZKSecAbstractTicketManager implements ZKSecTicketManager {
         return Key.TK_ID_pack_prefix + (String) tkId;
     }
 
+    public ZKSecTicket createTicket() {
+        return this.createSecTicket(this.generateTkId());
+    }
+
+    public ZKSecTicket createSecTicket() {
+        return this.createSecTicket(this.generateTkId());
+    }
+
 }

@@ -47,7 +47,7 @@ public class ZKSecDevFilter extends ZKSecBaseControlFilter {
     protected boolean onAccessDenied(ZKSecRequestWrapper request, ZKSecResponseWrapper response, Object mappedValue)
             throws Exception {
         log.error("[>_<:20220514-0916-003] zk.sec.000015 无开发者身份");
-        throw ZKSecAuthenticationException.as("zk.sec.000015", null);
+        throw ZKSecAuthenticationException.as("zk.sec.000015", request.getPathWithinApplication());
     }
 
 }

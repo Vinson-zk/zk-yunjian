@@ -35,14 +35,15 @@ import org.springframework.web.reactive.config.WebFluxConfigurerComposite;
 public class ZKWebFluxFileUploadConfiguration extends WebFluxConfigurerComposite {
 
     @Autowired(required = false)
-    ZKFileFluxProperties zkFileFluxProperties;
+    ZKFileFluxProperties fileFluxProperties;
 
     public ZKFileFluxProperties getFileFluxProperties() {
-        if (this.zkFileFluxProperties == null) {
-            this.zkFileFluxProperties = new ZKFileFluxProperties();
+        if (this.fileFluxProperties == null) {
+            this.fileFluxProperties = new ZKFileFluxProperties();
         }
-        return this.zkFileFluxProperties;
+        return this.fileFluxProperties;
     }
+
 
     @Override
     public void configureHttpMessageCodecs(ServerCodecConfigurer configurer) {
@@ -65,24 +66,8 @@ public class ZKWebFluxFileUploadConfiguration extends WebFluxConfigurerComposite
         configurer.defaultCodecs().multipartReader(multipartReader);
     }
 
-//    @Override
-//    public void configureHttpMessageCodecs(ServerCodecConfigurer configurer) {
-////        ObjectMapper mapper = mapper();
-////        configurer.defaultCodecs().jackson2JsonEncoder(new Jackson2JsonEncoder(mapper));
-////        configurer.defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(mapper));
-//        super.configureHttpMessageCodecs(configurer);
-//        // 硬盘的
-//        DefaultPartHttpMessageReader partReader = new DefaultPartHttpMessageReader();
-//        partReader.setMaxParts(5);
-//        partReader.setMaxDiskUsagePerPart(10 * 1024 * 1024);
-////        partReader.setMaxHeadersSize(921600);
-//        partReader.setEnableLoggingRequestDetails(true);
-////        partReader.setStreaming(true);
-//
-//        MultipartHttpMessageReader multipartReader = new MultipartHttpMessageReader(partReader);
-//        multipartReader.setEnableLoggingRequestDetails(false); // true
-//
-//        configurer.defaultCodecs().multipartReader(multipartReader);
-//    }
+    public void test() {
+
+    }
 
 }

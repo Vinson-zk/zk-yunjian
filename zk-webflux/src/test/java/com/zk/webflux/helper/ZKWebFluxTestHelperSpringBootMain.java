@@ -37,6 +37,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.reactive.config.EnableWebFlux;
 
 import com.zk.webflux.configuration.ZKEnableWebFluxFileUpload;
+import com.zk.webflux.helper.configuration.ZKWebfluxChildConfiguration;
+import com.zk.webflux.helper.configuration.ZKWebfluxParentConfiguration;
 
 /**
  * @ClassName: ZKWebFluxTestHelperSpringBootMain
@@ -52,6 +54,8 @@ import com.zk.webflux.configuration.ZKEnableWebFluxFileUpload;
         WebMvcAutoConfiguration.class, //
 //        WebFluxAutoConfiguration.class, //
         ServletWebServerFactoryAutoConfiguration.class, //
+//        EurekaAutoServiceRegistration.class, //
+//        EurekaClientAutoConfiguration.class, //
 })
 @EnableWebFlux
 @EnableTransactionManagement(proxyTargetClass = true)
@@ -65,7 +69,7 @@ public class ZKWebFluxTestHelperSpringBootMain {
     public static void main(String[] args) {
         try {
             log.info("[^_^:20240123-0009-001]========================================");
-            log.info("[^_^:20240123-0009-001]=== zk ZKWebFluxTestHelperSpringBootMain 启动 ... ... ");
+            log.info("[^_^:20240123-0009-001]=== zk ZKWebFlux test 启动 ... ... ");
             log.info("[^_^:20240123-0009-001]========================================");
             run(args);
             log.info("[^_^:20240123-0009-001]----------------------------------------");
@@ -119,7 +123,7 @@ public class ZKWebFluxTestHelperSpringBootMain {
     }
 
     @Bean
-    public TestRestTemplate testRestTemplate(HttpMessageConverters messageConverters) {
+    TestRestTemplate testRestTemplate(HttpMessageConverters messageConverters) {
         TestRestTemplate trt = new TestRestTemplate();
         trt.getRestTemplate().setMessageConverters(messageConverters.getConverters());
         return trt;

@@ -3,8 +3,6 @@
  */
 package com.zk.sys.res.entity;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Transient;
 
@@ -24,6 +22,7 @@ import com.zk.db.mybatis.commons.ZKDBSqlHelper;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 应用系统
@@ -133,7 +132,8 @@ public class ZKSysResApplicationSystem extends ZKBaseEntity<String, ZKSysResAppl
      * 根据主键类型，重写主键生成；
      */
     @Override
-    protected String genId() {
+	@JsonIgnore
+	public String genId() {
         return ZKIdUtils.genLongStringId();
     }
 

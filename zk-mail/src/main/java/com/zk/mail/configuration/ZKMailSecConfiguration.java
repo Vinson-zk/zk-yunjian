@@ -82,10 +82,13 @@ public class ZKMailSecConfiguration {
 
         // 过虑路径设置
         LinkedHashMap<String, String> setFilterChainMap = new LinkedHashMap<>();
+        setFilterChainMap.put("/favicon.ico", "anon");
         String prefix = String.format("/%s/%s/%s", this.pathAdmin, this.pathMail, this.pathVersion);
-        setFilterChainMap.put(prefix, "anon");
-        setFilterChainMap.put(prefix + "/", "anon");
-        setFilterChainMap.put(prefix + "/index", "anon");
+//        setFilterChainMap.put(prefix, "anon");
+//        setFilterChainMap.put(prefix + "/", "anon");
+//        setFilterChainMap.put(prefix + "/index", "anon");
+        setFilterChainMap.put("/", "anon");
+        setFilterChainMap.put("/index", "anon");
         setFilterChainMap.put(prefix + "/mailSend/mailSend/*", "serverOrUser");
         setFilterChainMap.put("/**", "user");
         zkSecFilterFactoryBean.setFilterChainDefinitionMap(setFilterChainMap);

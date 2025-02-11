@@ -3,9 +3,6 @@
  */
 package com.zk.sys.org.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +16,10 @@ import com.zk.core.commons.ZKMsgRes;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.security.utils.ZKSecSecurityUtils;
 import com.zk.sys.org.entity.ZKSysOrgRank;
-import com.zk.sys.org.service.ZKSysOrgRankService;       
+import com.zk.sys.org.service.ZKSysOrgRankService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;       
 
 /**
  * ZKSysOrgRankController
@@ -27,7 +27,7 @@ import com.zk.sys.org.service.ZKSysOrgRankService;
  * @version 
  */
 @RestController
-@RequestMapping(value = "${zk.path.admin}/${zk.path.sys}/${zk.sys.version}/org/sysOrgRank")
+@RequestMapping(value = "${zk.path.admin}/${zk.path.sys}/${zk.sys.version}/${zk.path.sys.org}/sysOrgRank")
 public class ZKSysOrgRankController extends ZKBaseController {
 
 	@Autowired

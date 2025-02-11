@@ -20,8 +20,6 @@ package com.zk.wechat.pay.entity;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Transient;
 
@@ -35,6 +33,7 @@ import com.zk.wechat.pay.enumType.ZKPayGetChannel;
 import com.zk.wechat.pay.enumType.ZKPayStatus;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * 微信支付-收款记录表

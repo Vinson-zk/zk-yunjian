@@ -95,7 +95,7 @@ public class ZKDBSourceConfiguration {
     @DependsOn(value = { "zkDBProperties" })
     @ConditionalOnMissingBean(value = { ZKDynamicDataSource.class })
     @Bean("zkDynamicDataSource")
-    public ZKDynamicDataSource dynamicDataSource(ZKDBProperties zkDBProperties) throws CloneNotSupportedException {
+    ZKDynamicDataSource dynamicDataSource(ZKDBProperties zkDBProperties) throws CloneNotSupportedException {
         System.out.println(ZKEnableDB.printLog + "dynamicDataSource --- [" + this.getClass().getSimpleName() + "] " + this.hashCode());
         if (zkDBProperties.getPublicDruidPool() == null) {
             throw new ZKUnknownException("PublicDruidPool in ZKDBProperties cannot be null");
@@ -149,7 +149,7 @@ public class ZKDBSourceConfiguration {
     @DependsOn(value = { "zkEnvironment" })
     @ConditionalOnMissingBean(value = { SqlSessionFactory.class })
     @Bean("sqlSessionFactory")
-    public ZKDBSqlSessionFactoryBean sqlSessionFactory(ZKDynamicDataSource dynamicDataSource) throws IOException {
+    ZKDBSqlSessionFactoryBean sqlSessionFactory(ZKDynamicDataSource dynamicDataSource) throws IOException {
         System.out.println(ZKEnableDB.printLog + "sqlSessionFactory --- [" + this.getClass().getSimpleName() + "] " + this.hashCode());
         ZKDBSqlSessionFactoryBean sqlSessionFactoryBean = new ZKDBSqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dynamicDataSource);
@@ -187,7 +187,7 @@ public class ZKDBSourceConfiguration {
      */
     @ConditionalOnMissingBean(value = { ZKDynamicTransactionManager.class })
     @Bean("dynamicTransactionManager")
-    public ZKDynamicTransactionManager dynamicTransactionManager(ZKDynamicDataSource dynamicDataSource) {
+    ZKDynamicTransactionManager dynamicTransactionManager(ZKDynamicDataSource dynamicDataSource) {
         System.out.println(ZKEnableDB.printLog + "dynamicTransactionManager --- [" + this.getClass().getSimpleName() + "] " + this.hashCode());
         ZKDynamicTransactionManager zkDynamicTransactionManager = new ZKDynamicTransactionManager();
         zkDynamicTransactionManager.setDataSource(dynamicDataSource);

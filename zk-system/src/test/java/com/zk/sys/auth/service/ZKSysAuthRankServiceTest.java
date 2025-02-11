@@ -15,6 +15,7 @@ import com.zk.sys.auth.entity.ZKSysAuthFuncApi;
 import com.zk.sys.auth.entity.ZKSysAuthRank;
 import com.zk.sys.helper.ZKSysTestHelper;
 import com.zk.sys.org.entity.ZKSysOrgRank;
+import com.zk.sys.org.service.ZKSysOrgRankService;
 import com.zk.sys.org.service.ZKSysOrgRankServiceTest;
 
 import junit.framework.TestCase;
@@ -99,6 +100,8 @@ public class ZKSysAuthRankServiceTest {
     public void testAddRelationByAuthDefined() {
 
         ZKSysAuthRankService s = ZKSysTestHelper.getMainCtx().getBean(ZKSysAuthRankService.class);
+        ZKSysOrgRankService rankS = ZKSysTestHelper.getMainCtx().getBean(ZKSysOrgRankService.class);
+        ZKSysAuthDefinedService authDefinedS = ZKSysTestHelper.getMainCtx().getBean(ZKSysAuthDefinedService.class);
 
         List<ZKSysAuthRank> dels = new ArrayList<>();
 
@@ -107,8 +110,8 @@ public class ZKSysAuthRankServiceTest {
             ZKSysOrgRank rank = ZKSysOrgRankServiceTest.makeNew();
             ZKSysAuthDefined authDefined = ZKSysAuthDefinedServiceTest.makeNew();
 
-            rank.preInsert();
-            authDefined.preInsert();
+            rankS.preInsert(rank);
+            authDefinedS.preInsert(authDefined);
 
             dels.addAll(s.allotAuthToRank(rank, Arrays.asList(authDefined)));
             dels.addAll(s.allotAuthToRank(rank, Arrays.asList(authDefined)));

@@ -15,6 +15,7 @@ import com.zk.sys.auth.entity.ZKSysAuthFuncApi;
 import com.zk.sys.auth.entity.ZKSysAuthUserType;
 import com.zk.sys.helper.ZKSysTestHelper;
 import com.zk.sys.org.entity.ZKSysOrgUserType;
+import com.zk.sys.org.service.ZKSysOrgUserTypeService;
 import com.zk.sys.org.service.ZKSysOrgUserTypeServiceTest;
 
 import junit.framework.TestCase;
@@ -97,9 +98,10 @@ public class ZKSysAuthUserTypeServiceTest {
 	
     @Test
     public void testAddRelationByAuthDefined() {
-        
 
         ZKSysAuthUserTypeService s = ZKSysTestHelper.getMainCtx().getBean(ZKSysAuthUserTypeService.class);
+        ZKSysOrgUserTypeService userTypeS = ZKSysTestHelper.getMainCtx().getBean(ZKSysOrgUserTypeService.class);
+        ZKSysAuthDefinedService authDefinedS = ZKSysTestHelper.getMainCtx().getBean(ZKSysAuthDefinedService.class);
 
         List<ZKSysAuthUserType> dels = new ArrayList<>();
 
@@ -111,8 +113,8 @@ public class ZKSysAuthUserTypeServiceTest {
 //            userType.setPkId("-1");
 //            authDefined.setPkId("-2");
 
-            userType.preInsert();
-            authDefined.preInsert();
+            userTypeS.preInsert(userType);
+            authDefinedS.preInsert(authDefined);
 
             dels.addAll(s.allotAuthToUserType(userType, Arrays.asList(authDefined)));
             dels.addAll(s.allotAuthToUserType(userType, Arrays.asList(authDefined)));

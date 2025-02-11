@@ -33,9 +33,13 @@ import com.zk.base.entity.ZKBaseEntity;
 import com.zk.core.commons.ZKValidationGroup;
 import com.zk.core.commons.data.ZKPage;
 import com.zk.core.exception.ZKValidatorException;
+import com.zk.core.exception.base.ZKUnknownException;
 import com.zk.core.utils.ZKClassUtils;
+import com.zk.core.utils.ZKDateUtils;
 import com.zk.core.utils.ZKExceptionsUtils;
 import com.zk.core.utils.ZKValidatorsBeanUtils;
+import com.zk.security.service.ZKSecPrincipalService;
+import com.zk.security.utils.ZKSecPrincipalUtils;
 
 import jakarta.validation.Validator;
 
@@ -62,6 +66,49 @@ public class ZKBaseService<ID extends Serializable, E extends ZKBaseEntity<ID, E
      */
     @Autowired
     protected D dao;
+
+    @Autowired(required = false)
+    ZKSecPrincipalService zkSecPrincipalService;
+
+    /**
+     * 插入之前执行方法，子类实现
+     */
+    public void preInsert(E entity) {
+        // 不限制ID为UUID，调用 setIsNewRecord() 使用自定义ID
+        if (entity.getPkId() == null || "".equals(entity.toString())) {
+            entity.setPkId(entity.genId());
+        }
+        if (zkSecPrincipalService != null) {
+            try {
+                entity.setCreateUserId(zkSecPrincipalService.getUserId());
+            }
+            catch(ZKUnknownException e) {
+                log.error("[>_<:20240618-0034-001] 插入数据时，获取当前用户信息失败，但不影响运行！");
+                e.printStackTrace();
+            }
+        }
+        entity.setUpdateUserId(entity.getCreateUserId());
+        entity.setCreateDate(ZKDateUtils.getToday());
+        entity.setUpdateDate(entity.getCreateDate());
+        entity.setVersion(0L);
+    }
+
+    /**
+     * 更新之前执行方法，子类实现
+     */
+    public void preUpdate(E entity) {
+        ZKSecPrincipalService zkSecPrincipalService = ZKSecPrincipalUtils.getSecPrincipalService();
+        if (zkSecPrincipalService != null) {
+            try {
+                entity.setUpdateUserId(zkSecPrincipalService.getUserId());
+            }
+            catch(ZKUnknownException e) {
+                log.error("[>_<:20240618-0034-002] 修改数据时，获取当前用户信息失败，但不影响运行！");
+                e.printStackTrace();
+            }
+        }
+        entity.setUpdateDate(ZKDateUtils.getToday());
+    }
 
     /**
      * 服务端参数有效性验证
@@ -115,14 +162,16 @@ public class ZKBaseService<ID extends Serializable, E extends ZKBaseEntity<ID, E
     public int save(E entity) throws ZKValidatorException {
         try {
             if (entity.isNewRecord()) {
-                entity.preInsert();
+//                entity.preInsert();
+                this.preInsert(entity);
                 this.beanValidator(entity);
                 this.beanValidator(entity, ZKValidationGroup.Insert.class);
                 this.beanValidator(entity, ZKValidationGroup.Update.class);
                 return dao.insert(entity);
             }
             else {
-                entity.preUpdate();
+//                entity.preUpdate();
+                this.preUpdate(entity);
                 this.beanValidator(entity);
                 this.beanValidator(entity, ZKValidationGroup.Update.class);
                 return dao.update(entity);
@@ -184,7 +233,6 @@ public class ZKBaseService<ID extends Serializable, E extends ZKBaseEntity<ID, E
      * @return
      */
     public List<E> findList(E entity) {
-//        entity.setPage(null);
         return dao.findList(entity);
     }
 
@@ -210,19 +258,21 @@ public class ZKBaseService<ID extends Serializable, E extends ZKBaseEntity<ID, E
     @Transactional(readOnly = false)
     public int del(E entity) {
         entity.setDelFlag(ZKBaseEntity.DEL_FLAG.delete);
-        entity.preUpdate();
+//        entity.preUpdate();
+        this.preUpdate(entity);
         return dao.del(entity);
     }
 
     /**
-     * 删除数据
+     * 恢复数据
      * 
      * @param entity
      */
     @Transactional(readOnly = false)
     public int restore(E entity) {
         entity.setDelFlag(ZKBaseEntity.DEL_FLAG.normal);
-        entity.preUpdate();
+//        entity.preUpdate();
+        this.preUpdate(entity);
         return dao.del(entity);
     }
 

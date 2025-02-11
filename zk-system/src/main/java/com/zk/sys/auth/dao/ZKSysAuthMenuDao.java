@@ -122,6 +122,7 @@ public interface ZKSysAuthMenuDao extends ZKBaseDao<String, ZKSysAuthMenu> {
             "           <foreach item=\"_v\" index=\"index\" collection=\"authIds\" open=\"(\" separator=\",\" close=\")\">#{_v}</foreach>", //
 //            "   </if>", //
             "   )", //
+            " ORDER BY ${menuAlias}.c_sort ASC, ${menuAlias}.c_create_date DESC ", //
             "</script>" })
     List<ZKSysMenu> findMenuByAuthIds(@Param("menuTn") String menuTn, @Param("menuAlias") String menuAlias,
             @Param("menuSelCols") String menuSelCols, @Param("authMenuTn") String authMenuTn,
